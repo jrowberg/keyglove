@@ -1,0 +1,15 @@
+// NAMED KEYGLOVE TOUCH CONSTANTS
+
+#define TOUCH_AM 1
+#define TOUCH_ABM 2
+#define TOUCH_AB1 10
+#define TOUCH_AB2 11
+#define TOUCH_AB3 12
+#define TOUCH_ACM 3
+#define TOUCH_ADM 4
+#define TOUCH_ABCM 5
+#define TOUCH_ABDM 6
+#define TOUCH_ACDM 7
+#define TOUCH_ABCDM 8
+#define TOUCH_ABCD1 9
+
