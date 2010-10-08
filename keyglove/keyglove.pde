@@ -10,7 +10,7 @@ unsigned char ide_workaround = 0;
 #define BASE_COMBINATIONS   52
 #define DETECT_THRESHOLD    30
 
-//#define ENABLE_PS2
+#define ENABLE_PS2
 //#define ENABLE_USB
 //#define ENABLE_BLUETOOTH
 
@@ -64,7 +64,7 @@ void setup() {
 #ifdef ENABLE_PS2
     Serial.print("PS/2 keyboard emulation starting...\n");
     keyboard = new PS2keyboard(KB_PIN_CLOCK, KB_PIN_DATA);
-    attachInterrupt(0, ps2interrupt, LOW);
+    //attachInterrupt(0, ps2interrupt, LOW);
     keyboard -> initialize();
     Serial.print("PS/2 keyboard initialized\n");
 #endif
@@ -259,6 +259,9 @@ void loop() {
 
     counter++;
     if (counter == 1000) {
+#ifdef ENABLE_PS2
+    keyboard -> keypress(KEY_K);
+#endif
         counter = 0;
         blink_led = !blink_led;
         if (blink_led) digitalWrite(13, HIGH);
