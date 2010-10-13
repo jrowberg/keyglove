@@ -6,8 +6,6 @@
 // http://code.google.com/p/arduino/issues/detail?id=156)
 unsigned char ide_workaround = 0;
 
-#define SENSORS             25
-#define BASE_COMBINATIONS   52
 #define DETECT_THRESHOLD    30
 
 #define ENABLE_PS2
@@ -28,8 +26,7 @@ unsigned char ide_workaround = 0;
 #endif
 
 #include "sensors.h"
-#include "combinations.h"
-#include "chordset.h"
+#include "touchset.h"
 
 unsigned long sensors1 = 0, sensors2 = 0;
 unsigned long detect1 = 0, detect2 = 0;
@@ -54,7 +51,7 @@ void setup() {
     Serial.print("Keyglove device activated\n");
 
     // initialize all 25 I/O pins to INPUT mode and enable internal pullup resistors
-    for (i = 0; i < SENSORS; i++) {
+    for (i = 0; i < KSP_TOTAL_SENSORS; i++) {
         pinMode(pins[i], INPUT);
         digitalWrite(pins[i], HIGH);
     }
@@ -85,7 +82,7 @@ void loop() {
     removing = false;
     
     // loop through every possible 1-to-1 sensor combination and record levels
-    for (i = 0; i < BASE_COMBINATIONS; i++) {
+    for (i = 0; i < KSI_TOTAL_BITS; i++) {
         int s1 = combinations[i][0];
         int s2 = combinations[i][1];
 
@@ -121,128 +118,130 @@ void loop() {
             // actual keypress this time around so test for each possible combination
             Serial.print("AAAAAABBBBBBBBBBCCCCCCCDDDDDDEFGHIJKLMMMMMMMMNNNNNNN\n");
             Serial.print("MNV123MNVWYZ1234MNVZ123MNV123MMMMMMMMWXYZ1456WXYZ456\n");
-            for (i = 0; i < BASE_COMBINATIONS; i++) {
+            for (i = 0; i < KSI_TOTAL_BITS; i++) {
                 if (i < 32) Serial.print(bitRead(sensors1, i));
                 else Serial.print(bitRead(sensors2, i - 32));
             }
             Serial.print("\n");
             Serial.print("Base combination: ");
-            if        (KG_AM) {
-                Serial.print("AM");
-                if      (KG_ABCDM) trigger(TOUCH_ABCDM);
-                else if (KG_ABCM)  trigger(TOUCH_ABCM);
-                else if (KG_ABDM)  trigger(TOUCH_ABDM);
-                else if (KG_ABM)   trigger(TOUCH_ABM);
-                else if (KG_ACDM)  trigger(TOUCH_ACDM);
-                else if (KG_ACM)   trigger(TOUCH_ACM);
-                else if (KG_ADM)   trigger(TOUCH_ADM);
-                else               trigger(TOUCH_AM);
-            } else if (KG_AN) {
-                Serial.print("AN");
-            } else if (KG_AV) {
-                Serial.print("AV");
+            if        (KG_AY) {
+                Serial.print("AY");
             } else if (KG_A1) {
                 Serial.print("A1");
-                if      (KG_ABCD1) trigger(TOUCH_ABCD1);
-                else if (KG_AB1)   trigger(TOUCH_AB1);
-                else if (KG_AB2)   trigger(TOUCH_AB2);
-                else if (KG_AB3)   trigger(TOUCH_AB3);
             } else if (KG_A2) {
                 Serial.print("A2");
             } else if (KG_A3) {
                 Serial.print("A3");
-            } else if (KG_BM) {
-                Serial.print("BM");
-            } else if (KG_BN) {
-                Serial.print("BN");
-            } else if (KG_BV) {
-                Serial.print("BV");
-            } else if (KG_BW) {
-                Serial.print("BW");
+            } else if (KG_A8) {
+                Serial.print("A8");
             } else if (KG_BY) {
                 Serial.print("BY");
-            } else if (KG_BZ) {
-                Serial.print("BZ");
-            } else if (KG_B1) {
-                Serial.print("B1");
-            } else if (KG_B2) {
-                Serial.print("B2");
-            } else if (KG_B3) {
-                Serial.print("B3");
-            } else if (KG_B4) {
-                Serial.print("B4");
-            } else if (KG_CM) {
-                Serial.print("CM");
-            } else if (KG_CN) {
-                Serial.print("CN");
-            } else if (KG_CV) {
-                Serial.print("CV");
-            } else if (KG_CZ) {
-                Serial.print("CZ");
-            } else if (KG_C1) {
-                Serial.print("C1");
-            } else if (KG_C2) {
-                Serial.print("C2");
-            } else if (KG_C3) {
-                Serial.print("C3");
+            } else if (KG_CY) {
+                Serial.print("CY");
+            } else if (KG_MY) {
+                Serial.print("MY");
+            } else if (KG_MZ) {
+                Serial.print("MZ");
+            } else if (KG_NY) {
+                Serial.print("NY");
+            } else if (KG_NZ) {
+                Serial.print("NZ");
+            } else if (KG_OY) {
+                Serial.print("OY");
+            } else if (KG_OZ) {
+                Serial.print("OZ");
+            } else if (KG_Y4) {
+                Serial.print("Y4");
             } else if (KG_DM) {
                 Serial.print("DM");
-            } else if (KG_DN) {
-                Serial.print("DN");
-            } else if (KG_DV) {
-                Serial.print("DV");
+            } else if (KG_DY) {
+                Serial.print("DY");
             } else if (KG_D1) {
                 Serial.print("D1");
             } else if (KG_D2) {
                 Serial.print("D2");
             } else if (KG_D3) {
                 Serial.print("D3");
-            } else if (KG_EM) {
-                Serial.print("EM");
-            } else if (KG_FM) {
-                Serial.print("FM");
-            } else if (KG_GM) {
-                Serial.print("GM");
-            } else if (KG_HM) {
-                Serial.print("HM");
-            } else if (KG_IM) {
-                Serial.print("IM");
-            } else if (KG_JM) {
-                Serial.print("JM");
-            } else if (KG_KM) {
-                Serial.print("KM");
-            } else if (KG_LM) {
-                Serial.print("LM");
-            } else if (KG_MW) {
-                Serial.print("MW");
-            } else if (KG_MX) {
-                Serial.print("MX");
-            } else if (KG_MY) {
-                Serial.print("MY");
-            } else if (KG_MZ) {
-                Serial.print("MZ");
-            } else if (KG_M1) {
-                Serial.print("M1");
-            } else if (KG_M4) {
-                Serial.print("M4");
-            } else if (KG_M5) {
-                Serial.print("M5");
-            } else if (KG_M6) {
-                Serial.print("M6");
-            } else if (KG_NW) {
-                Serial.print("NW");
-            } else if (KG_NX) {
-                Serial.print("NX");
-            } else if (KG_NY) {
-                Serial.print("NY");
-            } else if (KG_NZ) {
-                Serial.print("NZ");
-            } else if (KG_N4) {
-                Serial.print("N4");
-            } else if (KG_N5) {
-                Serial.print("N5");
-            } else if (KG_N6) {
-                Serial.print("N6");
+            } else if (KG_D4) {
+                Serial.print("D4");
+            } else if (KG_D6) {
+                Serial.print("D6");
+            } else if (KG_D8) {
+                Serial.print("D8");
+            } else if (KG_EY) {
+                Serial.print("EY");
+            } else if (KG_FY) {
+                Serial.print("FY");
+            } else if (KG_PY) {
+                Serial.print("PY");
+            } else if (KG_PZ) {
+                Serial.print("PZ");
+            } else if (KG_QY) {
+                Serial.print("QY");
+            } else if (KG_QZ) {
+                Serial.print("QZ");
+            } else if (KG_RY) {
+                Serial.print("RY");
+            } else if (KG_RZ) {
+                Serial.print("RZ");
+            } else if (KG_Y5) {
+                Serial.print("Y5");
+            } else if (KG_GY) {
+                Serial.print("GY");
+            } else if (KG_G1) {
+                Serial.print("G1");
+            } else if (KG_G2) {
+                Serial.print("G2");
+            } else if (KG_G3) {
+                Serial.print("G3");
+            } else if (KG_G7) {
+                Serial.print("G7");
+            } else if (KG_G8) {
+                Serial.print("G8");
+            } else if (KG_HY) {
+                Serial.print("HY");
+            } else if (KG_IY) {
+                Serial.print("IY");
+            } else if (KG_SY) {
+                Serial.print("SY");
+            } else if (KG_TY) {
+                Serial.print("TY");
+            } else if (KG_UY) {
+                Serial.print("UY");
+            } else if (KG_Y6) {
+                Serial.print("Y6");
+            } else if (KG_JY) {
+                Serial.print("JY");
+            } else if (KG_J1) {
+                Serial.print("J1");
+            } else if (KG_J2) {
+                Serial.print("J2");
+            } else if (KG_J3) {
+                Serial.print("J3");
+            } else if (KG_J8) {
+                Serial.print("J8");
+            } else if (KG_KY) {
+                Serial.print("KY");
+            } else if (KG_LY) {
+                Serial.print("LY");
+            } else if (KG_VY) {
+                Serial.print("VY");
+            } else if (KG_WY) {
+                Serial.print("WY");
+            } else if (KG_XY) {
+                Serial.print("XY");
+            } else if (KG_Y7) {
+                Serial.print("Y7");
+            } else if (KG_Y1) {
+                Serial.print("Y1");
+            } else if (KG_Z4) {
+                Serial.print("Z4");
+            } else if (KG_Z5) {
+                Serial.print("Z5");
+            } else if (KG_Z6) {
+                Serial.print("Z6");
+            } else if (KG_Z7) {
+                Serial.print("Z7");
             } else {
                 Serial.print("UNDEFINED");
             }
