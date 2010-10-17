@@ -83,22 +83,22 @@ void loop() {
     
     // loop through every possible 1-to-1 sensor combination and record levels
     for (i = 0; i < KSI_TOTAL_BITS; i++) {
-        int s1 = combinations[i][0];
-        int s2 = combinations[i][1];
+        int p1 = combinations[i][0];
+        int p2 = combinations[i][1];
 
-        pinMode(pins[s1], OUTPUT);    // change to OUTPUT mode
-        digitalWrite(pins[s1], LOW);  // bring LOW (default input level is HIGH)
+        pinMode(p1, OUTPUT);    // change to OUTPUT mode
+        digitalWrite(p1, LOW);  // bring LOW (default input level is HIGH)
         if (i < 32) {
             // write value to sensors1
-            if (digitalRead(pins[s2]) == LOW) bitSet(detect1, i);
+            if (digitalRead(p2) == LOW) bitSet(detect1, i);
             //Serial.print(bitRead(detect1, i));
         } else {
             // write value to sensors2
-            if (digitalRead(pins[s2]) == LOW) bitSet(detect2, i - 32);
+            if (digitalRead(p2) == LOW) bitSet(detect2, i - 32);
             //Serial.print(bitRead(detect2, i - 32));
         }
-        pinMode(pins[s1], INPUT);     // reset to INPUT mode
-        digitalWrite(pins[s1], HIGH); // enable pullup
+        pinMode(p1, INPUT);     // reset to INPUT mode
+        digitalWrite(p1, HIGH); // enable pullup
     }
     //Serial.print("\n");
     
@@ -116,8 +116,8 @@ void loop() {
             removing = true;
 
             // actual keypress this time around so test for each possible combination
-            Serial.print("AAAAAABBBBBBBBBBCCCCCCCDDDDDDEFGHIJKLMMMMMMMMNNNNNNN\n");
-            Serial.print("MNV123MNVWYZ1234MNVZ123MNV123MMMMMMMMWXYZ1456WXYZ456\n");
+            Serial.print("AAAAABCMMNNOOYDDDDDDDDEFPPQQRRYGGGGGGHISTUYJJJJJKLVWXYYZZZZ\n");
+            Serial.print("Y1238YYYZYZYZ4MY123468YYYZYZYZ5Y12378YYYYY6Y1238YYYYY714567\n");
             for (i = 0; i < KSI_TOTAL_BITS; i++) {
                 if (i < 32) Serial.print(bitRead(sensors1, i));
                 else Serial.print(bitRead(sensors2, i - 32));
@@ -259,16 +259,16 @@ void loop() {
     counter++;
     if (counter == 1000) {
 #ifdef ENABLE_PS2
-    keyboard -> keypress(KEY_K);
+    //keyboard -> keypress(KEY_K);
 #endif
         counter = 0;
         blink_led = !blink_led;
         if (blink_led) digitalWrite(13, HIGH);
         else digitalWrite(13, LOW);
-        //Serial.print("1000 iterations: ");
-        //Serial.print(millis() - t);
-        //Serial.print("\n");
-        //t = millis();
+        Serial.print("1000 iterations: ");
+        Serial.print(millis() - t);
+        Serial.print("\n");
+        t = millis();
     }
 }
 
