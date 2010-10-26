@@ -1,11 +1,38 @@
+// Keyglove controller source code - sensor constant definition file
+// 10/1/2010 by Jeff Rowberg <jeff@rowberg.net>
+
+/* ============================================
+Controller code is placed under the MIT license
+Copyright (c) 2010 Jeff Rowberg
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+===============================================
+*/
+
 // === BASE SENSOR PIN NUMBERS (MICROPROCESSOR I/O PIN ASSIGNMENTS)
 // These designate which sensors are plugged into which I/O pins
 
 // KSP is Keyglove Sensor Pin
 #define KSP_TOTAL_SENSORS 34
 
-#define KSP_A 20
-#define KSP_B 21
+#define KSP_A 18
+#define KSP_B 19
 #define KSP_C 22
 #define KSP_D 23
 #define KSP_E 24

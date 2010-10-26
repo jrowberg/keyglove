@@ -39,7 +39,7 @@ int PS2dev::write(unsigned char data) {
     unsigned char i;
     unsigned char parity = 1;
 
-    //Serial.print("sending ");
+    //Serial.print("PS2dev debug: sending ");
     //Serial.println(data, HEX);
     
     if (digitalRead(_ps2clk) == LOW) return -1;

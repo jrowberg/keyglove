@@ -1,5 +1,29 @@
-// keyglove controller source code
+// Keyglove controller source code - Main setup/loop controller
 // 10/1/2010 by Jeff Rowberg <jeff@rowberg.net>
+
+/* ============================================
+Controller code is placed under the MIT license
+Copyright (c) 2010 Jeff Rowberg
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+===============================================
+*/
 
 // fix Arduino IDE regex issue with detecting first non-preprocessor directive
 // (breaks when #ifdef is false and contains non-preprocessor line, see:
@@ -14,9 +38,26 @@ unsigned char ide_workaround = 0;
 
 #ifdef ENABLE_PS2
     #include "ps2keyboard.h"
-    #define KB_PIN_CLOCK    3
-    #define KB_PIN_DATA     2
-    PS2keyboard *keyboard;
+    #include "ps2mouse.h"
+    
+    /*#define KB_PIN_CLOCK    4
+    #define KB_PIN_DATA     5
+    PS2dev ps2k(KB_PIN_CLOCK, KB_PIN_DATA);
+    PS2keyboard keyboard(&ps2k);*/
+    
+    #define MOUSE_PIN_CLOCK 3
+    #define MOUSE_PIN_DATA  2
+    PS2dev ps2m(MOUSE_PIN_CLOCK, MOUSE_PIN_DATA);
+    PS2mouse mouse(&ps2m);
+
+    void ps2keyboardInterrupt() {
+        //keyboard.process_command();
+    }
+    
+    void ps2mouseInterrupt() {
+        mouse.process_command();
+    }
+
 #endif
 
 #ifdef ENABLE_USB
@@ -25,26 +66,28 @@ unsigned char ide_workaround = 0;
 #ifdef ENABLE_BLUETOOTH
 #endif
 
+#include <Wire.h>
+#include "adxl345.h"
 #include "sensors.h"
 #include "touchset.h"
+
+Accelerometer accel;
 
 unsigned long sensors1 = 0, sensors2 = 0;
 unsigned long detect1 = 0, detect2 = 0;
 unsigned long verify1 = 0, verify2 = 0;
+int mx = 640, my = 480;
+int ax = 0, ay = 0, az = 0;
+int abx = 0, aby = 0, abz = 0;
+boolean aset = false;
 
-int counter = 0;
+int counter = 0, ticks = 0;
 unsigned long int t; // time var
 unsigned long int d; // detection timestamp
 long int i; // index var
 boolean adding = false;
 boolean removing = false;
 boolean blink_led = false;
-
-#ifdef ENABLE_PS2
-void ps2interrupt() {
-    keyboard -> process_command();
-}
-#endif
 
 void setup() {
     Serial.begin(115200);
@@ -59,28 +102,54 @@ void setup() {
     digitalWrite(13, LOW);
 
 #ifdef ENABLE_PS2
-    Serial.print("PS/2 keyboard emulation starting...\n");
-    keyboard = new PS2keyboard(KB_PIN_CLOCK, KB_PIN_DATA);
-    //attachInterrupt(0, ps2interrupt, LOW);
-    keyboard -> initialize();
-    Serial.print("PS/2 keyboard initialized\n");
+    //keyboard.initialize();
+    mouse.initialize();
 #endif
 
+    // initialize accelerometer
+    accel.powerOn();
+    
+    // initialize benchmark
     t = millis();
 }
 
 void loop() {
 #ifdef ENABLE_PS2
-    if (digitalRead(KB_PIN_CLOCK) == LOW && digitalRead(KB_PIN_DATA) == LOW) {
-        Serial.print("PS/2 host interrupt\n");
-        ps2interrupt();
+    /*if (digitalRead(KB_PIN_CLOCK) == LOW && digitalRead(KB_PIN_DATA) == LOW) {
+        Serial.print("PS/2 host interrupt (KB)\n");
+        ps2keyboardInterrupt();
+    }*/
+    if (digitalRead(MOUSE_PIN_CLOCK) == LOW && digitalRead(MOUSE_PIN_DATA) == LOW) {
+        Serial.print("PS/2 host interrupt (mouse)\n");
+        ps2mouseInterrupt();
     }
 #endif
+
+    if (counter % 100 == 0) {
+        /*accel.readAccel(&ax, &ay, &az);
+        ax = (float)ax / 256 * 180;
+        ay = (float)ay / 256 * 180;
+        az = (float)az / 256 * 180;
+        if (aset) {
+            mx -= ax - abx;
+            my += ay - aby;
+            Serial.print("mx=");
+            Serial.print(mx);
+            Serial.print("\tmy=");
+            Serial.println(my);
+        }
+        abx = ax;
+        aby = ay;
+        abz = az;
+        aset = true;*/
+        //mouse.move(0, 0);
+        delay(200);
+    }
 
     detect1 = 0;
     detect2 = 0;
     removing = false;
-    
+    /*
     // loop through every possible 1-to-1 sensor combination and record levels
     for (i = 0; i < KSI_TOTAL_BITS; i++) {
         int p1 = combinations[i][0];
@@ -126,6 +195,7 @@ void loop() {
             Serial.print("Base combination: ");
             if        (KG_AY) {
                 Serial.print("AY");
+                trigger(TOUCH_AY);
             } else if (KG_A1) {
                 Serial.print("A1");
             } else if (KG_A2) {
@@ -252,29 +322,31 @@ void loop() {
         sensors1 = verify1;
         sensors2 = verify2;
     }
-    
+    */
     verify1 = detect1;
     verify2 = detect2;
 
     counter++;
     if (counter == 1000) {
 #ifdef ENABLE_PS2
-    //keyboard -> keypress(KEY_K);
+    //keyboard.keypress(KEY_K);
 #endif
         counter = 0;
+        ticks++;
         blink_led = !blink_led;
         if (blink_led) digitalWrite(13, HIGH);
         else digitalWrite(13, LOW);
         Serial.print("1000 iterations: ");
         Serial.print(millis() - t);
         Serial.print("\n");
+        if (ticks > 20) mouse.move(1, 1);
         t = millis();
     }
 }
 
 void trigger(unsigned int keycode) {
 #ifdef ENABLE_PS2
-    keyboard -> keypress(KEY_K);
+    //keyboard.keypress(KEY_K);
 #endif
     switch (keycode) {
         case TOUCH_AM: Serial.print(" (AM)"); break;

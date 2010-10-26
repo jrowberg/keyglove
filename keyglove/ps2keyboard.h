@@ -1,3 +1,29 @@
+// Keyglove controller source code - PS/2 keyboard class library
+// 10/1/2010 by Jeff Rowberg <jeff@rowberg.net>
+
+/* ============================================
+Controller code is placed under the MIT license
+Copyright (c) 2010 Jeff Rowberg
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+===============================================
+*/
 
 #ifndef ps2keyboard_h
 #define ps2keyboard_h
@@ -138,7 +164,7 @@
 
 class PS2keyboard {
     public:
-        PS2keyboard(int clockPin, int dataPin);
+        PS2keyboard(PS2dev *k);
         void keydown(int keycode);
         void keyup(int keycode);
         void keypress(int keycode);
@@ -146,7 +172,7 @@ class PS2keyboard {
         void process_command();
     
     private:
-        PS2dev *kb;
+        PS2dev *keyboard;
         boolean enabled;
         int typematic_delay;
         float typematic_rate;
