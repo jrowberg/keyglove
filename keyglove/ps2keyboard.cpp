@@ -168,9 +168,7 @@ unsigned char scancode_prtsc[5] = { 0xE0, 0x12, 0xE0, 0x7C, 0 };
 unsigned char scancode_pause[9] = { 0xE1, 0x14, 0x77, 0xE1, 0xF0, 0x14, 0xF0, 0x77, 0 };
 
 PS2keyboard::PS2keyboard(PS2dev *k) {
-    Serial.println("Creating PS/2 keyboard device wrapper");
     keyboard = k;
-    Serial.print("PS2 keyboard created successfully\n");
 }
 
 void PS2keyboard::keydown(int keycode) { cmd_keypress(keycode, true); }

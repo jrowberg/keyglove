@@ -30,6 +30,9 @@ THE SOFTWARE.
 // http://code.google.com/p/arduino/issues/detail?id=156)
 unsigned char ide_workaround = 0;
 
+#include <Wire.h>
+#include "adxl345.h"
+
 #define DETECT_THRESHOLD    30
 
 #define ENABLE_PS2
@@ -40,10 +43,10 @@ unsigned char ide_workaround = 0;
     #include "ps2keyboard.h"
     #include "ps2mouse.h"
     
-    /*#define KB_PIN_CLOCK    4
-    #define KB_PIN_DATA     5
+    #define KB_PIN_CLOCK    19
+    #define KB_PIN_DATA     18
     PS2dev ps2k(KB_PIN_CLOCK, KB_PIN_DATA);
-    PS2keyboard keyboard(&ps2k);*/
+    PS2keyboard keyboard(&ps2k);
     
     #define MOUSE_PIN_CLOCK 3
     #define MOUSE_PIN_DATA  2
@@ -51,7 +54,7 @@ unsigned char ide_workaround = 0;
     PS2mouse mouse(&ps2m);
 
     void ps2keyboardInterrupt() {
-        //keyboard.process_command();
+        keyboard.process_command();
     }
     
     void ps2mouseInterrupt() {
@@ -66,8 +69,6 @@ unsigned char ide_workaround = 0;
 #ifdef ENABLE_BLUETOOTH
 #endif
 
-#include <Wire.h>
-#include "adxl345.h"
 #include "sensors.h"
 #include "touchset.h"
 
@@ -91,9 +92,9 @@ boolean blink_led = false;
 
 void setup() {
     Serial.begin(115200);
-    Serial.print("Keyglove device activated\n");
+    Serial.println("Keyglove device activated");
 
-    // initialize all 25 I/O pins to INPUT mode and enable internal pullup resistors
+    // initialize all I/O pins to INPUT mode and enable internal pullup resistors
     for (i = 0; i < KSP_TOTAL_SENSORS; i++) {
         pinMode(pins[i], INPUT);
         digitalWrite(pins[i], HIGH);
@@ -102,7 +103,7 @@ void setup() {
     digitalWrite(13, LOW);
 
 #ifdef ENABLE_PS2
-    //keyboard.initialize();
+    keyboard.initialize();
     mouse.initialize();
 #endif
 
@@ -116,7 +117,7 @@ void setup() {
 void loop() {
 #ifdef ENABLE_PS2
     /*if (digitalRead(KB_PIN_CLOCK) == LOW && digitalRead(KB_PIN_DATA) == LOW) {
-        Serial.print("PS/2 host interrupt (KB)\n");
+        Serial.print("PS/2 host interrupt (keyboard)\n");
         ps2keyboardInterrupt();
     }*/
     if (digitalRead(MOUSE_PIN_CLOCK) == LOW && digitalRead(MOUSE_PIN_DATA) == LOW) {
@@ -132,7 +133,7 @@ void loop() {
         az = (float)az / 256 * 180;
         if (aset) {
             mx -= ax - abx;
-            my += ay - aby;
+            my += ay - aby;kk
             Serial.print("mx=");
             Serial.print(mx);
             Serial.print("\tmy=");
@@ -142,7 +143,7 @@ void loop() {
         aby = ay;
         abz = az;
         aset = true;*/
-        //mouse.move(0, 0);
+        //mouse.move(1, 1);
         delay(200);
     }
 
@@ -329,7 +330,11 @@ void loop() {
     counter++;
     if (counter == 1000) {
 #ifdef ENABLE_PS2
-    //keyboard.keypress(KEY_K);
+        //keyboard.keydown(KEY_LSHIFT);
+        //keyboard.keydown(KEY_K);
+        //keyboard.keyup(KEY_K);
+        //keyboard.keyup(KEY_LSHIFT);
+        //mouse.move(1, 1);
 #endif
         counter = 0;
         ticks++;
@@ -339,7 +344,7 @@ void loop() {
         Serial.print("1000 iterations: ");
         Serial.print(millis() - t);
         Serial.print("\n");
-        if (ticks > 20) mouse.move(1, 1);
+        //if (ticks > 20) mouse.move(1, 1);
         t = millis();
     }
 }
