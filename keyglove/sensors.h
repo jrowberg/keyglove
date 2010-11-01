@@ -31,8 +31,8 @@ THE SOFTWARE.
 // KSP is Keyglove Sensor Pin
 #define KSP_TOTAL_SENSORS 34
 
-#define KSP_A 18
-#define KSP_B 19
+#define KSP_A 16
+#define KSP_B 17
 #define KSP_C 22
 #define KSP_D 23
 #define KSP_E 24

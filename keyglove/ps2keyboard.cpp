@@ -223,14 +223,14 @@ void PS2keyboard::initialize() {
 }
 
 void PS2keyboard::run_bat() {
-    Serial.print("Running Basic Assurance Test (BAT)...\n");
+    Serial.print("Running keyboard Basic Assurance Test (BAT)...\n");
     set_led_numlock(true);
     set_led_capslock(true);
     set_led_scrolllock(true);
     set_defaults();
     enabled = true;
     delay(520);
-    Serial.print("BAT completed, sending success code...\n");
+    Serial.print("Keyboard BAT completed, sending success code...\n");
     cmd_success();
     Serial.print("Finished\n");
 }
