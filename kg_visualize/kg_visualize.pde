@@ -62,6 +62,7 @@ float zaHist[] = new float[angleHistLength];
 
 // mouse x/y/z
 float mx = 0, my = 0;
+float mdx = 0, mdy = 0;
 int mouseHistLength = 20;
 float mxHist[] = new float[mouseHistLength];
 float myHist[] = new float[mouseHistLength];
@@ -104,7 +105,7 @@ void setup() {
 
 void draw() {
     int which;
-    background(51); 
+    background(51);
     
     // basic project info
     fill(0, 120);
@@ -282,6 +283,7 @@ void draw() {
     // update touch release text
     which = frameCount % releaseHistLength;
     releaseHist[which] = release;
+    release = "";
     textAlign(CENTER, CENTER);
     textFont(font128);
     int cStep = 255 / releaseHistLength;
@@ -311,23 +313,23 @@ void serialEvent(int serial) {
         buff = "";
         String cmdType = vs[0].trim();
         try {
-            release = "";
-            if (cmdType.equals("accel") && vs.length >= 7) {
-                x = Integer.parseInt(vs[1].trim());
-                y = Integer.parseInt(vs[2].trim());
-                z = Integer.parseInt(vs[3].trim());
-                xa = Integer.parseInt(vs[4].trim());
-                ya = Integer.parseInt(vs[5].trim());
-                za = Integer.parseInt(vs[6].trim());
-            } else if (cmdType.equals("touch") && vs.length >= 2 && vs[1].length() >= numTouches) {
-                for (int i = 0; i < vs[1].length(); i++) touches[i] = vs[1].charAt(i) == '1' ? (byte)1 : 0;
-            } else if (cmdType.equals("mouse") && vs.length >= 3) {
-                mx = Integer.parseInt(vs[1].trim());
-                my = Integer.parseInt(vs[2].trim());
-            } else if (cmdType.equals("precision") && vs.length >= 4) {
+            if (cmdType.equals("accel") && vs.length >= 10) {
                 px = Integer.parseInt(vs[1].trim());
                 py = Integer.parseInt(vs[2].trim());
                 pz = Integer.parseInt(vs[3].trim());
+                x = Integer.parseInt(vs[4].trim());
+                y = Integer.parseInt(vs[5].trim());
+                z = Integer.parseInt(vs[6].trim());
+                xa = Integer.parseInt(vs[7].trim());
+                ya = Integer.parseInt(vs[8].trim());
+                za = Integer.parseInt(vs[9].trim());
+            } else if (cmdType.equals("touch") && vs.length >= 2 && vs[1].length() >= numTouches) {
+                for (int i = 0; i < vs[1].length(); i++) touches[i] = vs[1].charAt(i) == '1' ? (byte)1 : 0;
+            } else if (cmdType.equals("mouse") && vs.length >= 5) {
+                mx = Integer.parseInt(vs[1].trim());
+                my = Integer.parseInt(vs[2].trim());
+                mdx = Integer.parseInt(vs[3].trim());
+                mdy = Integer.parseInt(vs[4].trim());
             } else if (cmdType.equals("release") && vs.length >= 2) {
                 release = vs[1];
             }
