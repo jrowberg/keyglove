@@ -30,19 +30,20 @@ THE SOFTWARE.
 // http://code.google.com/p/arduino/issues/detail?id=156)
 unsigned char ide_workaround = 0;
 
-#include <Wire.h>
-#include "adxl345.h"
-
-#define DETECT_THRESHOLD 20
-#define SCALE_MOUSEX 4
-#define SCALE_MOUSEY 3
+// core features
+#define ENABLE_BLINK
 //#define ENABLE_PS2
 //#define ENABLE_USB
 //#define ENABLE_BLUETOOTH
+#define ENABLE_TOUCH
+#define ENABLE_ACCEL
 
-// trash these? probably
-//#define SMOOTH_MOUSE 10
-//#define SMOOTH_CURVE 4
+// debug settings (useful for kg_visualize Processing sketch,
+// define these and data will be sent over Arduino serial port)
+#define SERIAL_DEBUG_ACCEL
+#define SERIAL_DEBUG_TOUCH
+#define SERIAL_DEBUG_MOUSE
+#define SERIAL_DEBUG_KEYBOARD
 
 #ifdef ENABLE_PS2
     #include "ps2keyboard.h"
@@ -65,64 +66,87 @@ unsigned char ide_workaround = 0;
     void ps2mouseInterrupt() {
         mouse.process_command();
     }
-
-#endif
+#endif /* ENABLE_PS2 */
 
 #ifdef ENABLE_USB
-#endif
+#endif /* ENABLE_USB */
 
 #ifdef ENABLE_BLUETOOTH
-#endif
+#endif /* ENABLE_BLUETOOTH */
 
-#include "sensors.h"
-#include "touchset.h"
+#ifdef ENABLE_TOUCH
+    #include "sensors.h"
+    #include "touchset.h"
+    unsigned long int d; // detection timestamp
+    boolean adding = false;
+    boolean removing = false;
+    long unsigned int detect1, detect2;
+    long unsigned int verify1, verify2;
+    long unsigned int sensors1, sensors2;
+#endif /* ENABLE_TOUCH */
 
-#define MOUSE_MODE_TILT_VELOCITY 1
-#define MOUSE_MODE_TILT_POSITION 2
-#define MOUSE_MODE_MOVEMENT_POSITION 3
+#ifdef ENABLE_ACCEL
+    #include <Wire.h>
+    #include "adxl345.h"
+    #define MOUSE_MODE_TILT_VELOCITY 1
+    #define MOUSE_MODE_TILT_POSITION 2
+    #define MOUSE_MODE_MOVEMENT_POSITION 3
 
-Accelerometer accel;
-int accel_mode = MOUSE_MODE_TILT_POSITION;
-int accel_hist_pos = 0;
-int accel_hist_pos0 = 0;
-#define ACCEL_HIST_SIZE 20
-#define ACCEL_CALIBRATE_X (275.0/256.0)
-#define ACCEL_CALIBRATE_Y (267.0/256.0)
-#define ACCEL_CALIBRATE_Z (241.0/256.0)
+    Accelerometer accel;
 
-// touch sensors
-unsigned long sensors1 = 0, sensors2 = 0;
-unsigned long detect1 = 0, detect2 = 0;
-unsigned long verify1 = 0, verify2 = 0;
+    // accelerometer measurements
+    int xRaw, yRaw, zRaw;             // raw accel values (no calibration, no filtering)
+    int x, y, z;                      // immediate accel values
+    int x0, y0, z0;                   // last-iteration accel values
+    int xBase, yBase, zBase;          // initial accel values
+    int xHist[20], yHist[20], zHist[20];
+    int xMin, yMin, zMin;             // minimum values (for calibration)
+    int xMax, yMax, zMax;             // maximum values (for calibration)
+    int ax, ay, az;                   // immediate accel tilt angles
+    int ax0, ay0, az0;                // last-iteration accel tilt angles
+    int axBase, ayBase, azBase;       // initial accel tilt angles
+    boolean aset = false;             // bool to tell whether initial (*Base) values have been set yet
+    
+    // mouse measurements
+    int mx, my;                       // absolute coordinates
+    int mx0, my0;                     // last-iteration absolute coordinates
+    int mdx, mdy;                     // relative movement
+#endif /* ENABLE_ACCEL */
 
-// accelerometer measurements
-int x = 0, y = 0, z = 0;
-int xHist[ACCEL_HIST_SIZE];
-int yHist[ACCEL_HIST_SIZE];
-int zHist[ACCEL_HIST_SIZE];
-int ax, ay, az;
-int axBase, ayBase, azBase;
-boolean aset = false;
+// basic timing and program flow control
+int counter = 0;                      // loops at 1000
+int ticks = 0;                        // ticks every 1000, never loops
+unsigned long int t;                  // time/benchmark
+long int i;                           // global loop index
+boolean blink_led = false;            // state of
 
-// mouse coordinates
-int mx = 0, my = 0;
-//int mxHist[SMOOTH_MOUSE];
-//int myHist[SMOOTH_MOUSE];
-//int mouseHist = 0;
+// glove-controlled options
+int opt_touch_detect_threshold = 20;            // number of milliseconds required for a touch to register as real
+int opt_enable_calibration = 0;                 // temporarily enable calibration mode (resets accel offset/calibrate)
+//int opt_accel_offset[] = { 0, 0, 0 };           // amount to offset raw accelerometer readings [x,y,z]
+//float opt_accel_calibrate[] = { 1, 1, 1 };      // amount to scale raw accelerometer readings [x,y,z] (post-offset)
 
-// timing and program flow control
-int counter = 0, ticks = 0;
-unsigned long int t; // time var
-unsigned long int d; // detection timestamp
-long int i; // index var
-boolean adding = false;
-boolean removing = false;
-boolean blink_led = false;
+int opt_accel_offset[] = { -12, 5, 2 };
+float opt_accel_calibrate[] = { 0.952, 0.945, 1.04 };
+// mine @ room temp:
+// x={-257,281}, y={-276,267}, z={-258,254}
+// x offset = -12, x calibrate = 0.952
+// y offset = 5, y calibrate = 0.945
+// z offset = 2, z calibrate = 1
+
+int opt_mouse_mode = 2;                         // which mouse mode (0=disable, 1/2/3 as defined)
+int opt_mouse_hold = 0;                         // temporarily hold mouse position for hand re-orientation
+float opt_mouse_scale_mode1[] = { 1, 1 };       // speed scale [x,y] for mode 1 (tilt-velocity)
+float opt_mouse_scale_mode2[] = { 1, 1 };       // speed scale [x,y] for mode 2 (tilt-position)
+float opt_mouse_scale_mode3[] = { 1, 1 };       // speed scale [x,y] for mode 3 (movement-position)
+float opt_kalman_constant = 0.3;
+float opt_smooth_average = 3;
 
 void setup() {
     Serial.begin(57600);
-    Serial.println("Keyglove device activated");
+    Serial.println("info Keyglove device activated");
 
+#ifdef ENABLE_TOUCH
     // initialize all I/O pins to INPUT mode and enable internal pullup resistors
     for (i = 0; i < KSP_TOTAL_SENSORS; i++) {
         pinMode(pins[i], INPUT);
@@ -130,14 +154,23 @@ void setup() {
     }
     pinMode(13, OUTPUT);
     digitalWrite(13, LOW);
-
-#ifdef ENABLE_PS2
-    keyboard.initialize();
-    mouse.initialize();
 #endif
 
+#ifdef ENABLE_PS2
+    // initialize PS/2 interfaces
+    keyboard.initialize();
+    mouse.initialize();
+#endif /* ENABLE_PS2 */
+
+#ifdef ENABLE_ACCEL
     // initialize accelerometer
     accel.powerOn();
+    accel.setRate(50);
+    x = y = z = 0;
+    xMin = yMin = zMin = 0;
+    xMax = yMax = zMax = 0;
+    mx = my = mx0 = my0 = 0;
+#endif /* ENABLE_ACCEL */
     
     // initialize benchmark
     t = millis();
@@ -153,114 +186,137 @@ void loop() {
         Serial.print("PS/2 host interrupt (mouse)\n");
         ps2mouseInterrupt();
     }
-#endif
+#endif /* ENABLE_PS2 */
 
+#ifdef ENABLE_ACCEL
     if (counter % 10 == 0) {
-        accel.readAccel(&x, &y, &z);
-        x = (float)x / ACCEL_CALIBRATE_X;
-        y = (float)y / ACCEL_CALIBRATE_Y;
-        z = (float)z / ACCEL_CALIBRATE_Z;
+        x0 = x;
+        y0 = y;
+        z0 = z;
+        accel.readAccel(&xRaw, &yRaw, &zRaw);
         
-        xHist[accel_hist_pos] = x;
-        yHist[accel_hist_pos] = y;
-        zHist[accel_hist_pos] = z;
+        // offset
+        xRaw += opt_accel_offset[0];
+        yRaw += opt_accel_offset[1];
+        zRaw += opt_accel_offset[2];
+        
+        // calibrate
+        xRaw = (float)xRaw * opt_accel_calibrate[0];
+        yRaw = (float)yRaw * opt_accel_calibrate[1];
+        zRaw = (float)zRaw * opt_accel_calibrate[2];
+        
+        // Kalman filtering
+        x = x0 + (opt_kalman_constant * (xRaw - x0));
+        y = y0 + (opt_kalman_constant * (yRaw - y0));
+        z = z0 + (opt_kalman_constant * (zRaw - z0));
+        
+        if (opt_enable_calibration) {
+            xMin = min(xMin, x);
+            yMin = min(yMin, y);
+            zMin = min(zMin, z);
+            xMax = max(xMax, x);
+            yMax = max(yMax, y);
+            zMax = max(zMax, z);
+#ifdef SERIAL_DEBUG_ACCEL
+            Serial.print("calibrate ");
+            Serial.print(xMin); Serial.print(" ");
+            Serial.print(yMin); Serial.print(" ");
+            Serial.print(zMin); Serial.print(" ");
+            Serial.print(xMax); Serial.print(" ");
+            Serial.print(yMax); Serial.print(" ");
+            Serial.println(zMax);
+#endif
+        }
 
-        // smooth out using very simple averaging
-        Serial.print("precision ");
-        Serial.print(x); Serial.print(" ");
-        for (i = 1; i < ACCEL_HIST_SIZE; i++) x += xHist[(accel_hist_pos + i) % ACCEL_HIST_SIZE];
-        x /= ACCEL_HIST_SIZE;
+        if (abs(x) < 256) {
+            ax = abs(x) < 150
+                     ? degrees(asin((float)x / 256))
+                     : (x < 0)
+                         ? (-90 + degrees(acos((float)x / 256)))
+                         : (90 - degrees(acos((float)x / 256)));
+        } else ax = (x < 0) ? -90 : 90;
+        if (abs(y) < 256) {
+            ax = abs(x) < 150
+                     ? degrees(asin((float)y / 256))
+                     : (y < 0)
+                         ? (-90 + degrees(acos((float)y / 256)))
+                         : (90 - degrees(acos((float)y / 256)));
+        } else ay = (y < 0) ? -90 : 90;
+        if (abs(z) < 256) {
+            az = abs(z) < 150
+                     ? degrees(asin((float)z / 256))
+                     : (z < 0)
+                         ? (-90 + degrees(acos((float)z / 256)))
+                         : (90 - degrees(acos((float)z / 256)));
+        } else az = (z < 0) ? -90 : 90;
         
-        Serial.print(y); Serial.print(" ");
-        for (i = 1; i < ACCEL_HIST_SIZE; i++) y += yHist[(accel_hist_pos + i) % ACCEL_HIST_SIZE];
-        y /= ACCEL_HIST_SIZE;
-        
-        Serial.println(z);
-        for (i = 1; i < ACCEL_HIST_SIZE; i++) z += zHist[(accel_hist_pos + i) % ACCEL_HIST_SIZE];
-        z /= ACCEL_HIST_SIZE;
-
-        ax = (float)x / 256 * 90;
-        ay = (float)y / 256 * 90;
-        az = (float)z / 256 * 90;
-        
+#ifdef SERIAL_DEBUG_ACCEL
         Serial.print("accel ");
+        Serial.print(xRaw); Serial.print(" ");
+        Serial.print(yRaw); Serial.print(" ");
+        Serial.print(zRaw); Serial.print(" ");
         Serial.print(x); Serial.print(" ");
         Serial.print(y); Serial.print(" ");
         Serial.print(z); Serial.print(" ");
         Serial.print(ax); Serial.print(" ");
         Serial.print(ay); Serial.print(" ");
         Serial.println(az);
+#endif /* SERIAL_DEBUG_ACCEL */
 
-        accel_hist_pos0 = accel_hist_pos;
-        accel_hist_pos = (accel_hist_pos + 1) % ACCEL_HIST_SIZE;
-        switch (accel_mode) {
+        mx0 = mx;
+        my0 = my;
+        switch (opt_mouse_mode) {
             case MOUSE_MODE_TILT_VELOCITY:
                 if (aset) {
-                    mx -= ax - axBase;
-                    my -= ay - ayBase;
-                    Serial.print("mouse ");
-                    Serial.print(mx); Serial.print(" ");
-                    //Serial.print("\tmy=");
-                    Serial.println(my);
+                    mx -= (float)(ax - axBase) / opt_mouse_scale_mode1[0];
+                    my -= (float)(ay - ayBase) / opt_mouse_scale_mode1[1];
+                } else if (ticks == 0 && counter == 10) {
+                    axBase = ax;
+                    ayBase = ay;
+                    azBase = az;
+                    aset = true;
+                }
+                break;
+            case MOUSE_MODE_TILT_POSITION:
+                if (aset) {
+                    mx -= (opt_mouse_scale_mode2[0]) * (float)(ax - axBase);
+                    my -= (opt_mouse_scale_mode2[1]) * (float)(ay - ayBase);
                 }
                 axBase = ax;
                 ayBase = ay;
                 azBase = az;
                 aset = true;
                 break;
-            case MOUSE_MODE_TILT_POSITION:
-                if (aset) {
-                    mx -= (SCALE_MOUSEX) * (float)(ax - axBase);
-                    my -= (SCALE_MOUSEY) * (float)(ay - ayBase);
-                    //mxHist[mouseHist] = mx;
-                    //myHist[mouseHist] = my;
-                    
-                    /*int xavg = 0;
-                    int yavg = 0;
-                    int used = 0;
-                    int mmin = mx + my, mmax = mx + my;
-                    int check = (float)SMOOTH_MOUSE / SMOOTH_CURVE;
-                    int curveMax = SMOOTH_MOUSE;*/
-                    
-                    // typical sqrt(mmax - mmin) range is [SCALE, 10*SCALE], with SCALE being the
-                    // value when you're holding relatively still.
-                    
-                    // we want to analyze more smoothing data when slower movement is happening,
-                    // since fast movements are generally far less precise. So, for a SMOOTH_MOUSE
-                    // setting of 20, we want to average 20 data points when sqrt(mmax - mmin) is
-                    // SCALE, and only SMOOTH_MOUSE/SMOOTH_CURVE data points when it is 10*SCALE.
-                    // (note that var 'check' = SMOOTH_MOUSE/SMOOTH_CURVE)
-                    
-                    /*for (int i = mouseHist; i >= 0 && used < curveMax; xavg += mxHist[i], yavg += myHist[i], i--, used++) {
-                        mmin = min(mmin, mxHist[i] + myHist[i]);
-                        mmax = max(mmax, mxHist[i] + myHist[i]);
-                        if (used == check && mmax != mmin) curveMax = max(check, SMOOTH_MOUSE - SMOOTH_MOUSE*0.1*sqrt(mmax - mmin)/(SCALE_MOUSEX + SCALE_MOUSEY));
-                    };
-                    for (int i = SMOOTH_MOUSE - 1; i > mouseHist && used < curveMax; xavg += mxHist[i], yavg += myHist[i], i--, used++) {
-                        mmin = min(mmin, mxHist[i] + myHist[i]);
-                        mmax = max(mmax, mxHist[i] + myHist[i]);
-                        if (used == check && mmax != mmin) curveMax = max(check, SMOOTH_MOUSE - SMOOTH_MOUSE*0.1*sqrt(mmax - mmin)/(SCALE_MOUSEX + SCALE_MOUSEY));
-                    }
-                    xavg = (float)xavg / used;
-                    yavg = (float)yavg / used;
-                    mouseHist = (mouseHist + 1) % SMOOTH_MOUSE;*/
-                    
-                    Serial.print("mouse ");
-                    Serial.print(mx); Serial.print(" ");
-                    Serial.println(my);
-                }/* else {
-                    for (int i = 0; i < mouseHist; mxHist[i] = ax, myHist[i] = ay, i++);
-                }*/
-                axBase = ax;
-                ayBase = ay;
-                azBase = az;
-                aset = true;
-                break;
             case MOUSE_MODE_MOVEMENT_POSITION:
+                if (aset) {
+                    mx -= (float)(x - xBase) / opt_mouse_scale_mode3[0];
+                    my -= (float)((z - 256) - zBase) / opt_mouse_scale_mode3[1];
+                } else if (ticks == 0 && counter == 10) {
+                    xBase = x;
+                    yBase = y;
+                    zBase = z - 256;
+                    aset = true;
+                }
                 break;
         }
-    }
+        //if (BOUND_MOUSEX > 0 && abs(mx) > BOUND_MOUSEX) mx = mx < 0 ? -BOUND_MOUSEX : BOUND_MOUSEX;
+        //if (BOUND_MOUSEY > 0 && abs(my) > BOUND_MOUSEY) my = my < 0 ? -BOUND_MOUSEY : BOUND_MOUSEY;
 
+        // get relative movement amounts
+        mdx = mx - mx0;
+        mdy = my - my0;
+
+#ifdef SERIAL_DEBUG_MOUSE
+        Serial.print("mouse ");
+        Serial.print(mx); Serial.print(" ");
+        Serial.print(my); Serial.print(" ");
+        Serial.print(mdx); Serial.print(" ");
+        Serial.println(mdy);
+#endif /* SERIAL_DEBUG_MOUSE */
+    }
+#endif /* ENABLE_ACCEL */
+
+#ifdef ENABLE_TOUCH
     detect1 = 0;
     detect2 = 0;
     removing = false;
@@ -275,28 +331,27 @@ void loop() {
         if (i < 32) {
             // write value to sensors1
             if (digitalRead(p2) == LOW) bitSet(detect1, i);
-            //Serial.print(bitRead(detect1, i));
         } else {
             // write value to sensors2
             if (digitalRead(p2) == LOW) bitSet(detect2, i - 32);
-            //Serial.print(bitRead(detect2, i - 32));
         }
         pinMode(p1, INPUT);     // reset to INPUT mode
         digitalWrite(p1, HIGH); // enable pullup
     }
-    //Serial.print("\n");
     
     // check to see if we need to reset detection threshold
     if (verify1 != detect1 || verify2 != detect2) {
         // current sensors different from last detection, so reset threshold
+        d = millis();
+#ifdef SERIAL_DEBUG_TOUCH
         Serial.print("touch ");
         for (i = 0; i < KSI_TOTAL_BITS; i++) {
             if (i < 32) Serial.print(bitRead(detect1, i));
             else Serial.print(bitRead(detect2, i - 32));
         }
         Serial.print("\n");
-        d = millis();
-    } else if ((verify1 != sensors1 || verify2 != sensors2) && millis() - d >= DETECT_THRESHOLD) {
+#endif /* SERIAL_DEBUG_TOUCH */
+    } else if ((verify1 != sensors1 || verify2 != sensors2) && millis() - d >= opt_touch_detect_threshold) {
         // detection is over threshold and current readings are different from previous readings
         // check to see if they've just initiated or removed any touches
         if (verify1 > sensors1 || verify2 > sensors2) {
@@ -304,138 +359,192 @@ void loop() {
         } else if (adding && (verify1 < sensors1 || verify2 < sensors2)) {
             adding = false;
             removing = true;
+            String sdr = "";
 
             // actual keypress this time around so test for each possible combination
-            /*Serial.print("AAAAABCMMNNOOYDDDDDDDDEFPPQQRRYGGGGGGHISTUYJJJJJKLVWXYYZZZZ\n");
-            Serial.print("Y1238YYYZYZYZ4MY123468YYYZYZYZ5Y12378YYYYY6Y1238YYYYY714567\n");
-            for (i = 0; i < KSI_TOTAL_BITS; i++) {
-                if (i < 32) Serial.print(bitRead(sensors1, i));
-                else Serial.print(bitRead(sensors2, i - 32));
-            }
-            Serial.print("\n");
-            Serial.print("Base combination: ");*/
-            if        (KG_AY) {
-                Serial.println("release AY");
-                trigger(TOUCH_AY);
-            } else if (KG_A1) {
-                Serial.println("release A1");
-            } else if (KG_A2) {
-                Serial.println("release A2");
-            } else if (KG_A3) {
-                Serial.println("release A3");
-            } else if (KG_A8) {
-                Serial.println("release A8");
-            } else if (KG_BY) {
-                Serial.println("release BY");
-            } else if (KG_CY) {
-                Serial.println("release CY");
-            } else if (KG_MY) {
-                Serial.println("release MY");
-            } else if (KG_MZ) {
-                Serial.println("release MZ");
-            } else if (KG_NY) {
-                Serial.println("release NY");
-            } else if (KG_NZ) {
-                Serial.println("release NZ");
-            } else if (KG_OY) {
-                Serial.println("release OY");
-            } else if (KG_OZ) {
-                Serial.println("release OZ");
+            if        (KG_Y1) {
+                sdr = "release Y1";
+                trigger(KGI_AY);
             } else if (KG_Y4) {
-                Serial.println("release Y4");
-            } else if (KG_DM) {
-                Serial.println("release DM");
-            } else if (KG_DY) {
-                Serial.println("release DY");
-            } else if (KG_D1) {
-                Serial.println("release D1");
-            } else if (KG_D2) {
-                Serial.println("release D2");
-            } else if (KG_D3) {
-                Serial.println("release D3");
-            } else if (KG_D4) {
-                Serial.println("release D4");
-            } else if (KG_D6) {
-                Serial.println("release D6");
-            } else if (KG_D8) {
-                Serial.println("release D8");
-            } else if (KG_EY) {
-                Serial.println("release EY");
-            } else if (KG_FY) {
-                Serial.println("release FY");
-            } else if (KG_PY) {
-                Serial.println("release PY");
-            } else if (KG_PZ) {
-                Serial.println("release PZ");
-            } else if (KG_QY) {
-                Serial.println("release QY");
-            } else if (KG_QZ) {
-                Serial.println("release QZ");
-            } else if (KG_RY) {
-                Serial.println("release RY");
-            } else if (KG_RZ) {
-                Serial.println("release RZ");
+                sdr = "release Y4";
+                trigger(KGI_Y4);
             } else if (KG_Y5) {
-                Serial.println("release Y5");
-            } else if (KG_GY) {
-                Serial.println("release GY");
-            } else if (KG_G1) {
-                Serial.println("release G1");
-            } else if (KG_G2) {
-                Serial.println("release G2");
-            } else if (KG_G3) {
-                Serial.println("release G3");
-            } else if (KG_G7) {
-                Serial.println("release G7");
-            } else if (KG_G8) {
-                Serial.println("release G8");
-            } else if (KG_HY) {
-                Serial.println("release HY");
-            } else if (KG_IY) {
-                Serial.println("release IY");
-            } else if (KG_SY) {
-                Serial.println("release SY");
-            } else if (KG_TY) {
-                Serial.println("release TY");
-            } else if (KG_UY) {
-                Serial.println("release UY");
+                sdr = "release Y5";
+                trigger(KGI_Y5);
             } else if (KG_Y6) {
-                Serial.println("release Y6");
-            } else if (KG_JY) {
-                Serial.println("release JY");
-            } else if (KG_J1) {
-                Serial.println("release J1");
-            } else if (KG_J2) {
-                Serial.println("release J2");
-            } else if (KG_J3) {
-                Serial.println("release J3");
-            } else if (KG_J8) {
-                Serial.println("release J8");
-            } else if (KG_KY) {
-                Serial.println("release KY");
-            } else if (KG_LY) {
-                Serial.println("release LY");
-            } else if (KG_VY) {
-                Serial.println("release VY");
-            } else if (KG_WY) {
-                Serial.println("release WY");
-            } else if (KG_XY) {
-                Serial.println("release XY");
+                sdr = "release Y6";
+                trigger(KGI_Y6);
             } else if (KG_Y7) {
-                Serial.println("release Y7");
-            } else if (KG_Y1) {
-                Serial.println("release Y1");
+                sdr = "release Y7";
+                trigger(KGI_Y7);
             } else if (KG_Z4) {
-                Serial.println("release Z4");
-            } else if (KG_Z5) {
-                Serial.println("release Z5");
+                sdr = "release Z4";
+                trigger(KGI_AY);
+            } else if (KG_Z4) {
+                sdr = "release Z5";
+                trigger(KGI_Z5);
             } else if (KG_Z6) {
-                Serial.println("release Z6");
+                sdr = "release Z6";
+                trigger(KGI_Z6);
             } else if (KG_Z7) {
-                Serial.println("release Z7");
+                sdr = "release Z7";
+                trigger(KGI_Z7);
+            } else if (KG_AY) {
+                sdr = "release AY";
+                trigger(KGI_AY);
+            } else if (KG_A1) {
+                sdr = "release A1";
+                trigger(KGI_A1);
+            } else if (KG_A2) {
+                sdr = "release A2";
+                trigger(KGI_A2);
+            } else if (KG_A3) {
+                sdr = "release A3";
+                trigger(KGI_A3);
+            } else if (KG_A8) {
+                sdr = "release A8";
+                trigger(KGI_A8);
+            } else if (KG_BY) {
+                sdr = "release BY";
+                trigger(KGI_BY);
+            } else if (KG_CY) {
+                sdr = "release CY";
+                trigger(KGI_CY);
+            } else if (KG_MY) {
+                sdr = "release MY";
+                trigger(KGI_MY);
+            } else if (KG_MZ) {
+                sdr = "release MZ";
+                trigger(KGI_MZ);
+            } else if (KG_NY) {
+                sdr = "release NY";
+                trigger(KGI_NY);
+            } else if (KG_NZ) {
+                sdr = "release NZ";
+                trigger(KGI_NZ);
+            } else if (KG_OY) {
+                sdr = "release OY";
+                trigger(KGI_OY);
+            } else if (KG_OZ) {
+                sdr = "release OZ";
+                trigger(KGI_OZ);
+            } else if (KG_DM) {
+                sdr = "release DM";
+                trigger(KGI_DM);
+            } else if (KG_DY) {
+                sdr = "release DY";
+                trigger(KGI_DY);
+            } else if (KG_D1) {
+                sdr = "release D1";
+                trigger(KGI_D1);
+            } else if (KG_D2) {
+                sdr = "release D2";
+                trigger(KGI_D2);
+            } else if (KG_D3) {
+                sdr = "release D3";
+                trigger(KGI_D3);
+            } else if (KG_D4) {
+                sdr = "release D4";
+                trigger(KGI_D4);
+            } else if (KG_D6) {
+                sdr = "release D6";
+                trigger(KGI_D6);
+            } else if (KG_D8) {
+                sdr = "release D8";
+                trigger(KGI_D8);
+            } else if (KG_EY) {
+                sdr = "release EY";
+                trigger(KGI_EY);
+            } else if (KG_FY) {
+                sdr = "release FY";
+                trigger(KGI_FY);
+            } else if (KG_PY) {
+                sdr = "release PY";
+                trigger(KGI_PY);
+            } else if (KG_PZ) {
+                sdr = "release PZ";
+                trigger(KGI_PZ);
+            } else if (KG_QY) {
+                sdr = "release QY";
+                trigger(KGI_QY);
+            } else if (KG_QZ) {
+                sdr = "release QZ";
+                trigger(KGI_QZ);
+            } else if (KG_RY) {
+                sdr = "release RY";
+                trigger(KGI_RY);
+            } else if (KG_RZ) {
+                sdr = "release RZ";
+                trigger(KGI_RZ);
+            } else if (KG_GY) {
+                sdr = "release GY";
+                trigger(KGI_GY);
+            } else if (KG_G1) {
+                sdr = "release G1";
+                trigger(KGI_G1);
+            } else if (KG_G2) {
+                sdr = "release G2";
+                trigger(KGI_G2);
+            } else if (KG_G3) {
+                sdr = "release G3";
+                trigger(KGI_G3);
+            } else if (KG_G7) {
+                sdr = "release G7";
+                trigger(KGI_G7);
+            } else if (KG_G8) {
+                sdr = "release G8";
+                trigger(KGI_G8);
+            } else if (KG_HY) {
+                sdr = "release HY";
+                trigger(KGI_HY);
+            } else if (KG_IY) {
+                sdr = "release IY";
+                trigger(KGI_IY);
+            } else if (KG_SY) {
+                sdr = "release SY";
+                trigger(KGI_SY);
+            } else if (KG_TY) {
+                sdr = "release TY";
+                trigger(KGI_TY);
+            } else if (KG_UY) {
+                sdr = "release UY";
+                trigger(KGI_UY);
+            } else if (KG_JY) {
+                sdr = "release JY";
+                trigger(KGI_JY);
+            } else if (KG_J1) {
+                sdr = "release J1";
+                trigger(KGI_J1);
+            } else if (KG_J2) {
+                sdr = "release J2";
+                trigger(KGI_J2);
+            } else if (KG_J3) {
+                sdr = "release J3";
+                trigger(KGI_J3);
+            } else if (KG_J8) {
+                sdr = "release J8";
+                trigger(KGI_J8);
+            } else if (KG_KY) {
+                sdr = "release KY";
+                trigger(KGI_KY);
+            } else if (KG_LY) {
+                sdr = "release LY";
+                trigger(KGI_LY);
+            } else if (KG_VY) {
+                sdr = "release VY";
+                trigger(KGI_VY);
+            } else if (KG_WY) {
+                sdr = "release WY";
+                trigger(KGI_WY);
+            } else if (KG_XY) {
+                sdr = "release XY";
+                trigger(KGI_XY);
             } else {
-                Serial.println("release UNDEFINED");
+                sdr = "release UNDEFINED";
             }
+#ifdef SERIAL_DEBUG_TOUCH
+            Serial.println(sdr);
+#endif /* SERIAL_DEBUG_TOUCH */
         }
         
         // set official sensor readings to current readings 
@@ -445,6 +554,7 @@ void loop() {
     
     verify1 = detect1;
     verify2 = detect2;
+#endif /* ENABLE_TOUCH */
 
     counter++;
     if (counter == 1000) {
@@ -458,12 +568,11 @@ void loop() {
 #endif
         counter = 0;
         ticks++;
+#ifdef ENABLE_BLINK
         blink_led = !blink_led;
         if (blink_led) digitalWrite(13, HIGH);
         else digitalWrite(13, LOW);
-        //Serial.print("1000 iterations: ");
-        //Serial.print(millis() - t);
-        //Serial.print("\n");
+#endif /* ENABLE_BLINK */
         t = millis();
     }
 }
@@ -473,7 +582,6 @@ void trigger(unsigned int keycode) {
     //keyboard.keypress(KEY_K);
 #endif
     switch (keycode) {
-        case TOUCH_AY: break;
         default: break;
     }
 }
