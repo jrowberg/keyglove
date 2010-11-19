@@ -362,168 +362,14 @@ void loop() {
             String sdr = "";
 
             // actual keypress this time around so test for each possible combination
-            if        (KG_Y1) {
-                sdr = "release Y1";
-                trigger(KGI_AY);
-            } else if (KG_Y4) {
-                sdr = "release Y4";
-                trigger(KGI_Y4);
-            } else if (KG_Y5) {
-                sdr = "release Y5";
-                trigger(KGI_Y5);
-            } else if (KG_Y6) {
-                sdr = "release Y6";
-                trigger(KGI_Y6);
-            } else if (KG_Y7) {
+
+            // pinky finger
+            if        (KG_Y7) {
                 sdr = "release Y7";
                 trigger(KGI_Y7);
-            } else if (KG_Z4) {
-                sdr = "release Z4";
-                trigger(KGI_AY);
-            } else if (KG_Z4) {
-                sdr = "release Z5";
-                trigger(KGI_Z5);
-            } else if (KG_Z6) {
-                sdr = "release Z6";
-                trigger(KGI_Z6);
-            } else if (KG_Z7) {
-                sdr = "release Z7";
-                trigger(KGI_Z7);
-            } else if (KG_AY) {
-                sdr = "release AY";
-                trigger(KGI_AY);
-            } else if (KG_A1) {
-                sdr = "release A1";
-                trigger(KGI_A1);
-            } else if (KG_A2) {
-                sdr = "release A2";
-                trigger(KGI_A2);
-            } else if (KG_A3) {
-                sdr = "release A3";
-                trigger(KGI_A3);
-            } else if (KG_A8) {
-                sdr = "release A8";
-                trigger(KGI_A8);
-            } else if (KG_BY) {
-                sdr = "release BY";
-                trigger(KGI_BY);
-            } else if (KG_CY) {
-                sdr = "release CY";
-                trigger(KGI_CY);
-            } else if (KG_MY) {
-                sdr = "release MY";
-                trigger(KGI_MY);
-            } else if (KG_MZ) {
-                sdr = "release MZ";
-                trigger(KGI_MZ);
-            } else if (KG_NY) {
-                sdr = "release NY";
-                trigger(KGI_NY);
-            } else if (KG_NZ) {
-                sdr = "release NZ";
-                trigger(KGI_NZ);
-            } else if (KG_OY) {
-                sdr = "release OY";
-                trigger(KGI_OY);
-            } else if (KG_OZ) {
-                sdr = "release OZ";
-                trigger(KGI_OZ);
-            } else if (KG_DM) {
-                sdr = "release DM";
-                trigger(KGI_DM);
-            } else if (KG_DY) {
-                sdr = "release DY";
-                trigger(KGI_DY);
-            } else if (KG_D1) {
-                sdr = "release D1";
-                trigger(KGI_D1);
-            } else if (KG_D2) {
-                sdr = "release D2";
-                trigger(KGI_D2);
-            } else if (KG_D3) {
-                sdr = "release D3";
-                trigger(KGI_D3);
-            } else if (KG_D4) {
-                sdr = "release D4";
-                trigger(KGI_D4);
-            } else if (KG_D6) {
-                sdr = "release D6";
-                trigger(KGI_D6);
-            } else if (KG_D8) {
-                sdr = "release D8";
-                trigger(KGI_D8);
-            } else if (KG_EY) {
-                sdr = "release EY";
-                trigger(KGI_EY);
-            } else if (KG_FY) {
-                sdr = "release FY";
-                trigger(KGI_FY);
-            } else if (KG_PY) {
-                sdr = "release PY";
-                trigger(KGI_PY);
-            } else if (KG_PZ) {
-                sdr = "release PZ";
-                trigger(KGI_PZ);
-            } else if (KG_QY) {
-                sdr = "release QY";
-                trigger(KGI_QY);
-            } else if (KG_QZ) {
-                sdr = "release QZ";
-                trigger(KGI_QZ);
-            } else if (KG_RY) {
-                sdr = "release RY";
-                trigger(KGI_RY);
-            } else if (KG_RZ) {
-                sdr = "release RZ";
-                trigger(KGI_RZ);
-            } else if (KG_GY) {
-                sdr = "release GY";
-                trigger(KGI_GY);
-            } else if (KG_G1) {
-                sdr = "release G1";
-                trigger(KGI_G1);
-            } else if (KG_G2) {
-                sdr = "release G2";
-                trigger(KGI_G2);
-            } else if (KG_G3) {
-                sdr = "release G3";
-                trigger(KGI_G3);
-            } else if (KG_G7) {
-                sdr = "release G7";
-                trigger(KGI_G7);
-            } else if (KG_G8) {
-                sdr = "release G8";
-                trigger(KGI_G8);
-            } else if (KG_HY) {
-                sdr = "release HY";
-                trigger(KGI_HY);
-            } else if (KG_IY) {
-                sdr = "release IY";
-                trigger(KGI_IY);
-            } else if (KG_SY) {
-                sdr = "release SY";
-                trigger(KGI_SY);
-            } else if (KG_TY) {
-                sdr = "release TY";
-                trigger(KGI_TY);
-            } else if (KG_UY) {
-                sdr = "release UY";
-                trigger(KGI_UY);
             } else if (KG_JY) {
                 sdr = "release JY";
                 trigger(KGI_JY);
-            } else if (KG_J1) {
-                sdr = "release J1";
-                trigger(KGI_J1);
-            } else if (KG_J2) {
-                sdr = "release J2";
-                trigger(KGI_J2);
-            } else if (KG_J3) {
-                sdr = "release J3";
-                trigger(KGI_J3);
-            } else if (KG_J8) {
-                sdr = "release J8";
-                trigger(KGI_J8);
             } else if (KG_KY) {
                 sdr = "release KY";
                 trigger(KGI_KY);
@@ -539,6 +385,181 @@ void loop() {
             } else if (KG_XY) {
                 sdr = "release XY";
                 trigger(KGI_XY);
+            } else if (KG_J8) {
+                sdr = "release J8";
+                trigger(KGI_J8);
+
+            // ring finger
+            } else if (KG_Y6) {
+                sdr = "release Y6";
+                trigger(KGI_Y6);
+            } else if (KG_GY) {
+                sdr = "release GY";
+                trigger(KGI_GY);
+            } else if (KG_HY) {
+                sdr = "release HY";
+                trigger(KGI_HY);
+            } else if (KG_IY) {
+                sdr = "release IY";
+                trigger(KGI_IY);
+            } else if (KG_SY) {
+                sdr = "release SY";
+                trigger(KGI_SY);
+            } else if (KG_TY) {
+                sdr = "release TY";
+                trigger(KGI_TY);
+            } else if (KG_UY) {
+                sdr = "release UY";
+                trigger(KGI_UY);
+            } else if (KG_G7) {
+                sdr = "release G7";
+                trigger(KGI_G7);
+            } else if (KG_G8) {
+                sdr = "release G8";
+                trigger(KGI_G8);
+            
+            // middle finger
+            } else if (KG_Y5) {
+                sdr = "release Y5";
+                trigger(KGI_Y5);
+            } else if (KG_DY) {
+                sdr = "release DY";
+                trigger(KGI_DY);
+            } else if (KG_EY) {
+                sdr = "release EY";
+                trigger(KGI_EY);
+            } else if (KG_FY) {
+                sdr = "release FY";
+                trigger(KGI_FY);
+            } else if (KG_PZ) {
+                sdr = "release PZ";
+                trigger(KGI_PZ);
+            } else if (KG_PY) {
+                sdr = "release PY";
+                trigger(KGI_PY);
+            } else if (KG_QZ) {
+                sdr = "release QZ";
+                trigger(KGI_QZ);
+            } else if (KG_QY) {
+                sdr = "release QY";
+                trigger(KGI_QY);
+            } else if (KG_RZ) {
+                sdr = "release RZ";
+                trigger(KGI_RZ);
+            } else if (KG_RY) {
+                sdr = "release RY";
+                trigger(KGI_RY);
+            } else if (KG_D4) {
+                sdr = "release D4";
+                trigger(KGI_D4);
+            } else if (KG_D6) {
+                sdr = "release D6";
+                trigger(KGI_D6);
+            } else if (KG_D8) {
+                sdr = "release D8";
+                trigger(KGI_D8);
+            } else if (KG_DM) {
+                sdr = "release DM";
+                trigger(KGI_DM);
+            
+            // index finger
+            } else if (KG_Y4) {
+                sdr = "release Y4";
+                trigger(KGI_Y4);
+            } else if (KG_AY) {
+                sdr = "release AY";
+                trigger(KGI_AY);
+            } else if (KG_BY) {
+                sdr = "release BY";
+                trigger(KGI_BY);
+            } else if (KG_CY) {
+                sdr = "release CY";
+                trigger(KGI_CY);
+            } else if (KG_MZ) {
+                sdr = "release MZ";
+                trigger(KGI_MZ);
+            } else if (KG_MY) {
+                sdr = "release MY";
+                trigger(KGI_MY);
+            } else if (KG_NZ) {
+                sdr = "release NZ";
+                trigger(KGI_NZ);
+            } else if (KG_NY) {
+                sdr = "release NY";
+                trigger(KGI_NY);
+            } else if (KG_OZ) {
+                sdr = "release OZ";
+                trigger(KGI_OZ);
+            } else if (KG_OY) {
+                sdr = "release OY";
+                trigger(KGI_OY);
+            } else if (KG_A8) {
+                sdr = "release A8";
+                trigger(KGI_A8);
+
+            // lower thumb pad to fingernails
+            } else if (KG_Z4) {
+                sdr = "release Z4";
+                trigger(KGI_AY);
+            } else if (KG_Z4) {
+                sdr = "release Z5";
+                trigger(KGI_Z5);
+            } else if (KG_Z6) {
+                sdr = "release Z6";
+                trigger(KGI_Z6);
+            } else if (KG_Z7) {
+                sdr = "release Z7";
+                trigger(KGI_Z7);
+
+            // index finger to palm
+            } else if (KG_A1) {
+                sdr = "release A1";
+                trigger(KGI_A1);
+            } else if (KG_A2) {
+                sdr = "release A2";
+                trigger(KGI_A2);
+            } else if (KG_A3) {
+                sdr = "release A3";
+                trigger(KGI_A3);
+
+            // middle finger to palm
+            } else if (KG_D1) {
+                sdr = "release D1";
+                trigger(KGI_D1);
+            } else if (KG_D2) {
+                sdr = "release D2";
+                trigger(KGI_D2);
+            } else if (KG_D3) {
+                sdr = "release D3";
+                trigger(KGI_D3);
+
+            // ring finger to palm
+            } else if (KG_G1) {
+                sdr = "release G1";
+                trigger(KGI_G1);
+            } else if (KG_G2) {
+                sdr = "release G2";
+                trigger(KGI_G2);
+            } else if (KG_G3) {
+                sdr = "release G3";
+                trigger(KGI_G3);
+
+            // pinky finger to palm
+            } else if (KG_J1) {
+                sdr = "release J1";
+                trigger(KGI_J1);
+            } else if (KG_J2) {
+                sdr = "release J2";
+                trigger(KGI_J2);
+            } else if (KG_J3) {
+                sdr = "release J3";
+                trigger(KGI_J3);
+
+            // thumb tip to palm
+            } else if (KG_Y1) {
+                sdr = "release Y1";
+                trigger(KGI_AY);
+
             } else {
                 sdr = "release UNDEFINED";
             }
