@@ -29,9 +29,9 @@ import processing.serial.*;
 import processing.opengl.*;
 
 // touch sensors
-int numTouches = 59;
+int numTouches = 60;
 byte touches[] = new byte[numTouches];
-String[] touchNames = {
+/*String[] touchNames = {
     "AY", "A1", "A2", "A3", "A8",
     "BY", "CY", "MY", "MZ", "NY",
     "NZ", "OY", "OZ", "Y4", "DM",
@@ -43,7 +43,21 @@ String[] touchNames = {
     "TY", "UY", "Y6", "JY", "J1",
     "J2", "J3", "J8", "KY", "LY",
     "VY", "WY", "XY", "Y7", "Y1",
-    "Z4", "Z5", "Z6", "Z7" };
+    "Z4", "Z5", "Z6", "Z7" };*/
+String[] touchNames = {
+    "Z7", "Y7", "J8", "JY", "KY",
+    "LY", "VY", "WY", "XY", "Z6",
+    "Y6", "G8", "GY", "HY", "IY",
+    "SY", "TY", "UY", "G7", "Z5",
+    "Y5", "D8", "DY", "EY", "FY",
+    "PZ", "PY", "QZ", "QY", "RZ",
+    "RY", "D4", "D6", "D7", "DM",
+    "Z4", "Y4", "A8", "AY", "BY",
+    "CY", "MZ", "MY", "NZ", "NY",
+    "OZ", "OY", "A3", "A2", "A1",
+    "D3", "D2", "D1", "G3", "G2",
+    "G1", "J3", "J2", "J1", "Y1"
+};
 
 // absolute accelerometer x/y/z
 float x = 0, y = 0, z = 0;
@@ -94,7 +108,7 @@ void setup() {
     lights();
     smooth();
     noStroke();
-    port = new Serial(this, Serial.list()[0], 57600);
+    port = new Serial(this, "COM10", 57600);
     font128 = loadFont("Calibri-128.vlw");
     font32 = loadFont("Calibri-32.vlw");
     font24 = loadFont("Calibri-24.vlw");
@@ -310,19 +324,20 @@ void serialEvent(int serial) {
         buff += char(serial);
     } else {
         String[] vs = buff.split(" ");
+        println(buff);
         buff = "";
         String cmdType = vs[0].trim();
         try {
-            if (cmdType.equals("accel") && vs.length >= 10) {
+            if (cmdType.equals("accel") && vs.length >= 16) {
                 px = Integer.parseInt(vs[1].trim());
                 py = Integer.parseInt(vs[2].trim());
                 pz = Integer.parseInt(vs[3].trim());
                 x = Integer.parseInt(vs[4].trim());
                 y = Integer.parseInt(vs[5].trim());
                 z = Integer.parseInt(vs[6].trim());
-                xa = Integer.parseInt(vs[7].trim());
-                ya = Integer.parseInt(vs[8].trim());
-                za = Integer.parseInt(vs[9].trim());
+                xa = Integer.parseInt(vs[10].trim());
+                ya = Integer.parseInt(vs[11].trim());
+                za = Integer.parseInt(vs[12].trim());
             } else if (cmdType.equals("touch") && vs.length >= 2 && vs[1].length() >= numTouches) {
                 for (int i = 0; i < vs[1].length(); i++) touches[i] = vs[1].charAt(i) == '1' ? (byte)1 : 0;
             } else if (cmdType.equals("mouse") && vs.length >= 5) {
@@ -332,6 +347,12 @@ void serialEvent(int serial) {
                 mdy = Integer.parseInt(vs[4].trim());
             } else if (cmdType.equals("release") && vs.length >= 2) {
                 release = vs[1];
+            } else if (cmdType.equals("keycode") && vs.length >= 2) {
+                if (vs[1].charAt(0) == '+') {
+                    // direct key
+                } else if (vs[1].charAt(0) == '/') {
+                    //
+                }
             }
         } catch (NumberFormatException e) {
         }
