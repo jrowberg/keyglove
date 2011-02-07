@@ -41,6 +41,8 @@ unsigned char ide_workaround = 0;
 =============================================== */
 #define ENABLE_BLINK
 #define ENABLE_TRICOLOR
+#define ENABLE_BEEP
+#define ENABLE_VIBRATE
 //#define ENABLE_PS2
 #define ENABLE_USB
 //#define ENABLE_BLUETOOTH
@@ -52,7 +54,7 @@ unsigned char ide_workaround = 0;
 =============================================== */
 // useful for kg_visualize Processing sketch and other serial debugging
 // define these and data will be sent over controller serial port
-//#define SERIAL_DEBUG
+#define SERIAL_DEBUG
 //#define SERIAL_DEBUG_ACCEL
 //#define SERIAL_DEBUG_TOUCH
 //#define SERIAL_DEBUG_MOUSE
@@ -281,7 +283,20 @@ void setup() {
         xMax = yMax = zMax = 0;
         mx = my = mx0 = my0 = 0;
     #endif /* ENABLE_ACCEL */
+
+    #ifdef ENABLE_VIBRATE
+        pinMode(VIBRATE_PIN, OUTPUT);
+        digitalWrite(VIBRATE_PIN, LOW);
+        delay(100);
+        digitalWrite(VIBRATE_PIN, HIGH);
+    #endif /* ENABLE_VIBRATE */
     
+    #ifdef ENABLE_BEEP    
+        tone(SOUND_PIN, 1760, 25);
+        delay(100);
+        tone(SOUND_PIN, 1760, 25);
+    #endif /* ENABLE_BEEP */
+
     // initialize benchmark
     t = millis();
 }
