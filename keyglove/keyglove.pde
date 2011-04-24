@@ -3,7 +3,7 @@
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2010 Jeff Rowberg
+Copyright (c) 2011 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,7 @@ unsigned char ide_workaround = 0;
 //#define ENABLE_BLUETOOTH
 #define ENABLE_TOUCH
 #define ENABLE_ACCEL
+#define ENABLE_GYRO
 
 /* ===============================================
  * DEBUG COMPILER SETTINGS
@@ -55,13 +56,72 @@ unsigned char ide_workaround = 0;
 // useful for kg_visualize Processing sketch and other serial debugging
 // define these and data will be sent over controller serial port
 #define SERIAL_DEBUG
-//#define SERIAL_DEBUG_ACCEL
-//#define SERIAL_DEBUG_TOUCH
-//#define SERIAL_DEBUG_MOUSE
+#define SERIAL_DEBUG_ACCEL
+//#define SERIAL_DEBUG_GYRO
+#define SERIAL_DEBUG_TOUCH
+#define SERIAL_DEBUG_MOUSE
 //#define SERIAL_DEBUG_KEYBOARD
+#define SERIAL_DEBUG_TOUCHSET
+#define SERIAL_DEBUG_BENCHMARK
 
 // set correct pins based on host device
 #include "pins.h"
+
+/* ===============================================
+ * TOUCHSET CONTROL CONSTANT DEFINITIONS
+=============================================== */
+#define KBEEP_OFF 0
+#define KBEEP_LONGBEEP 1
+#define KBEEP_LONGPULSE 2
+#define KBEEP_SHORTBEEP 3
+#define KBEEP_SHORTPULSE 4
+#define KBEEP_SOLID 5
+
+#define KLED_OFF 0
+#define KLED_LONGBLINK 1
+#define KLED_LONGPULSE 2
+#define KLED_SHORTBLINK 3
+#define KLED_SHORTPULSE 4
+#define KLED_SOLID 5
+
+#define KMOUSE_LEFT 1
+#define KMOUSE_MIDDLE 2
+#define KMOUSE_RIGHT 4
+#define KMOUSE_MOVE 0
+#define KMOUSE_SCROLL 1
+
+#define STR_PRODUCT L"Keyglove"
+#define KEYPAD_ASTERISK 85
+#define KEY_BACKSLASH2 100
+#define KEY_APP        101
+#define KEY_POWER      102
+#define KEYPAD_EQUAL   103
+#define KEY_F13        104
+#define KEY_F14        105
+#define KEY_F15        106
+#define KEY_F16        107
+#define KEY_F17        108
+#define KEY_F18        109
+#define KEY_F19        110
+#define KEY_F20        111
+#define KEY_F21        112
+#define KEY_F22        113
+#define KEY_F23        114
+#define KEY_F24        115
+#define KEY_EXECUTE    116
+#define KEY_HELP       117
+#define KEY_MENU       118
+#define KEY_SELECT     119
+#define KEY_STOP       120
+#define KEY_AGAIN      121
+#define KEY_UNDO       122
+#define KEY_CUT        123
+#define KEY_COPY       124
+#define KEY_PASTE      125
+#define KEY_FIND       126
+#define KEY_MUTE       127
+#define KEY_VOLUP      128
+#define KEY_VOLDOWN    129
 
 /* ===============================================
  * PS/2 DECLARATIONS
@@ -89,13 +149,15 @@ unsigned char ide_workaround = 0;
  * USB DECLARATIONS
 =============================================== */
 #ifdef ENABLE_USB
-    #include "usbkeyproc.h"
 #endif /* ENABLE_USB */
 
 /* ===============================================
  * BLUETOOTH DECLARATIONS
 =============================================== */
 #ifdef ENABLE_BLUETOOTH
+    #include "iwrap.h"
+    HardwareSerial Uart = HardwareSerial();
+    iWRAP bluetooth = iWRAP(&Uart);
 #endif /* ENABLE_BLUETOOTH */
 
 /* ===============================================
@@ -118,9 +180,6 @@ unsigned char ide_workaround = 0;
 #ifdef ENABLE_ACCEL
     #include <Wire.h>
     #include "adxl345.h"
-    #define MOUSE_MODE_TILT_VELOCITY 1
-    #define MOUSE_MODE_TILT_POSITION 2
-    #define MOUSE_MODE_MOVEMENT_POSITION 3
 
     Accelerometer accel;
 
@@ -131,6 +190,7 @@ unsigned char ide_workaround = 0;
     int x0, y0, z0;                   // last-iteration accel values
     int x00, y00, z00;                // 2x-last-iteration accel values (for speed)
     int xv, yv, zv;                   // axial vectors
+    long cx, cy, cz;                  // calibration offsets
     int xBase, yBase, zBase;          // initial accel values
     int xHist[20], yHist[20], zHist[20];  // history for averaging (smoothing)
     int xMin, yMin, zMin;             // minimum values (for calibration)
@@ -141,12 +201,40 @@ unsigned char ide_workaround = 0;
     int axv, ayv, azv;                // angular rotational vectors
     int axBase, ayBase, azBase;       // initial accel tilt angles
     boolean aset = false;             // bool to tell whether initial (*Base) values have been set yet
+    int calAccel = 0;
+    boolean accelCalibrated = false;
     
-    // mouse measurements
-    int mx, my;                       // absolute coordinates
-    int mx0, my0;                     // last-iteration absolute coordinates
-    int mdx, mdy;                     // relative movement
+    #define ENABLE_MOUSE
 #endif /* ENABLE_ACCEL */
+
+/* ===============================================
+ * GYROSCOPE DECLARATIONS
+=============================================== */
+#ifdef ENABLE_GYRO
+    #include <Wire.h>
+    #include "itg3200.h"
+
+    ITG3200 gyro = ITG3200();
+
+    // gyroscope measurements
+    int gyroTick;                    // history position counter
+    int gxRaw, gyRaw, gzRaw;         // raw accel values (no calibration, no filtering)
+    int gx, gy, gz;                  // immediate gyro values
+    int gx0, gy0, gz0;               // last-iteration gyro values
+    int gx00, gy00, gz00;            // 2x-last-iteration gyro values (for speed)
+    long cgx, cgy, cgz;              // calibration offsets
+    int gxBase, gyBase, gzBase;      // initial gyro values
+    int gxHist[20], gyHist[20], gzHist[20];  // history for averaging (smoothing)
+    int gxMin, gyMin, gzMin;         // minimum values (for calibration)
+    int gxMax, gyMax, gzMax;         // maximum values (for calibration)
+    boolean gset = false;            // bool to tell whether initial (*Base) values have been set yet
+    int calGyro = 0;
+    boolean gyroCalibrated = false;
+    
+    #ifndef ENABLE_MOUSE
+        #define ENABLE_MOUSE
+    #endif
+#endif /* ENABLE_GYRO */
 
 /* ===============================================
  * TRICOLOR STATUS LED DECLARATIONS
@@ -170,17 +258,35 @@ boolean blink_led;                    // state of blink LED
 /* ===============================================
  * UNIVERSAL CONTROLLER DECLARATIONS
 =============================================== */
+
+#define MOUSE_MODE_TILT_VELOCITY 1
+#define MOUSE_MODE_TILT_POSITION 2
+#define MOUSE_MODE_MOVEMENT_POSITION 3
+#define MOUSE_MODE_3D 4
+
+#define SCROLL_MODE_TILT_VELOCITY 1
+#define SCROLL_MODE_TILT_POSITION 2
+#define SCROLL_MODE_MOVEMENT_POSITION 3
+
 // basic timing and program flow control
 int counter;                          // loops at 1000
 int ticks;                            // ticks every 1000, never loops
 unsigned long int t;                  // time/benchmark
 long int i;                           // global loop index
+boolean moveMouse;                    // whether any mouse movement should possibly occur
+boolean scrollMouse;                  // whether any mouse scrolling should possibly occur
+
+// mouse measurements
+int mx, my, mz, sy;                   // absolute coordinates
+int mx0, my0, mz0, sy0;               // last-iteration absolute coordinates
+int mdx, mdy, mdz, sdy;               // relative movement
+// (note z is for 3D movement, sy is for scrolling)
 
 /* ===============================================
  * DEVICE-CONTROLLED OPTION DECLARATIONS
 =============================================== */
 int opt_touch_detect_threshold = 20;            // number of milliseconds required for a touch to register as real
-int opt_enable_calibration = 0;                 // temporarily enable calibration mode (resets accel offset/calibrate)
+int opt_enable_calibration = 0;                 // temporarily enable calibration mode (resets accel/gyro offset/calibrate)
 //int opt_accel_offset[] = { 0, 0, 0 };           // amount to offset raw accelerometer readings [x,y,z]
 //float opt_accel_calibrate[] = { 1, 1, 1 };      // amount to scale raw accelerometer readings [x,y,z] (post-offset)
 
@@ -192,14 +298,33 @@ float opt_accel_calibrate[] = { 0.952, 0.945, 1.04 };
 // y offset = 5, y calibrate = 0.945
 // z offset = 2, z calibrate = 1
 
-int opt_accel_sampling_div = 4;                 // how many ticks in between each accel reading
-float opt_kalman_constant = 0.4;
-int opt_smooth_average = 3;
-int opt_mouse_mode = 2;                         // which mouse mode (0=disable, 1/2/3 as defined)
+//int opt_gyro_offset[] = { 0, 0, 0 };            // amount to offset raw gyroscope readings [x,y,z]
+//float opt_gyro_calibrate[] = { 1, 1, 1 };       // amount to scale raw gyroscope readings [x,y,z] (post-offset)
+
+int opt_gyro_offset[] = { -22, -115, -7 };
+float opt_gyro_calibrate[] = { 1, 1, 1 };
+
+int opt_motion_sampling_div = 15;                // how many ticks in between each accel/gyro reading
+float opt_accel_kalman_constant = 0.3;
+float opt_gyro_kalman_constant = 0.3;
+int opt_accel_smooth_average = 4;
+int opt_gyro_smooth_average = 0;
+int opt_mouse_mode = 0;                         // which mouse move mode (0=disable, 1/2/3 as defined)
+int opt_scroll_mode = 0;                        // which mouse scroll mode (0=disable, 1/2/3 as defined), uses mouse Y axis values
 int opt_mouse_hold = 0;                         // temporarily hold mouse position for hand re-orientation
+int opt_mouse_invert_x = 1;                     // invert x axis control
+int opt_mouse_invert_y = 1;                     // invert y axis control
+int opt_mouse_invert_z = 0;                     // invert z axis control
 float opt_mouse_scale_mode1[] = { 1, 1 };       // speed scale [x,y] for mode 1 (tilt-velocity)
 float opt_mouse_scale_mode2[] = { 1, 1 };       // speed scale [x,y] for mode 2 (tilt-position)
 float opt_mouse_scale_mode3[] = { 1, 1 };       // speed scale [x,y] for mode 3 (movement-position)
+float opt_mouse_scale_mode4[] = { 1, 1, 1 };    // speed scale [x,y,z] for mode 4 (3D)
+
+int modifiersDown = 0;
+int keysDown[] = { 0, 0, 0, 0, 0, 0 };
+int mouseDown = 0;
+int modeStack[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+int modeStackPos = 0;
 
 /* ===============================================
  * MAIN SETUP ROUTINE
@@ -268,6 +393,7 @@ void setup() {
      * INITIALIZE BLUETOOTH INTERFACE
     =============================================== */
     #ifdef ENABLE_BLUETOOTH
+        Uart.begin(38400);
     #endif /* ENABLE_BLUETOOTH */
     
     /* ===============================================
@@ -278,12 +404,32 @@ void setup() {
         accel.powerOn();
         accel.setRate(100);
         x = y = z = 0;
+        cx = cy = cz = 0;
         accelTick = 0;
+        accelCalibrated = false;
         xMin = yMin = zMin = 0;
         xMax = yMax = zMax = 0;
-        mx = my = mx0 = my0 = 0;
     #endif /* ENABLE_ACCEL */
 
+    /* ===============================================
+     * INITIALIZE GYROSCOPE INTERFACE
+    =============================================== */
+    #ifdef ENABLE_GYRO
+        // initialize gyroscope
+        gyro.init(ITG3200_ADDR_AD0_LOW); 
+        gx = gy = gz = 0;
+        gyroTick = 0;
+        gyroCalibrated = false;
+        gxMin = gyMin = gzMin = 0;
+        gxMax = gyMax = gzMax = 0;
+    #endif /* ENABLE_GYRO */
+
+    mx = my = mz = mx0 = my0 = mz0 = 0;
+    sy = sy0 = 0;
+
+    /* ===============================================
+     * INITIALIZE VIBRATION FEEDBACK
+    =============================================== */
     #ifdef ENABLE_VIBRATE
         pinMode(VIBRATE_PIN, OUTPUT);
         digitalWrite(VIBRATE_PIN, LOW);
@@ -291,131 +437,228 @@ void setup() {
         digitalWrite(VIBRATE_PIN, HIGH);
     #endif /* ENABLE_VIBRATE */
     
+    /* ===============================================
+     * INITIALIZE AUDIO FEEDBACK
+    =============================================== */
     #ifdef ENABLE_BEEP    
         tone(SOUND_PIN, 1760, 25);
         delay(100);
         tone(SOUND_PIN, 1760, 25);
     #endif /* ENABLE_BEEP */
+    
+    #ifdef ENABLE_TOUCH
+        setmode(0); // default touchset mode is always 0
+    #endif /* ENABLE_TOUCH */
 
     // initialize benchmark
     t = millis();
 }
 
 void loop() {
-    /* ===============================================
-     * READ AND PROCESS ACCELEROMETER DATA
-    =============================================== */
-    #ifdef ENABLE_ACCEL
-        if (counter % opt_accel_sampling_div == 0) {
-            x00 = x0;
-            y00 = y0;
-            z00 = z0;
-            x0 = x;
-            y0 = y;
-            z0 = z;
-            accel.readAccel(&xRaw, &yRaw, &zRaw);
-            
-            // offset
-            xRaw += opt_accel_offset[0];
-            yRaw += opt_accel_offset[1];
-            zRaw += opt_accel_offset[2];
-            
-            // calibrate
-            xRaw = (float)xRaw * opt_accel_calibrate[0];
-            yRaw = (float)yRaw * opt_accel_calibrate[1];
-            zRaw = (float)zRaw * opt_accel_calibrate[2];
-            
-            // Kalman filtering
-            x = x0 + (opt_kalman_constant * (xRaw - x0));
-            y = y0 + (opt_kalman_constant * (yRaw - y0));
-            z = z0 + (opt_kalman_constant * (zRaw - z0));
-            
-            // averaging
-            if (opt_smooth_average > 0) {
-                for (i = 1; i < opt_smooth_average; i++) {
-                    x += xHist[(accelTick + i) % opt_smooth_average];
-                    y += yHist[(accelTick + i) % opt_smooth_average];
-                    z += zHist[(accelTick + i) % opt_smooth_average];
+    moveMouse = false;
+    scrollMouse = false;
+    if (counter % opt_motion_sampling_div == 0) {
+        if (opt_mouse_mode > 0 || opt_scroll_mode > 0) {
+            /* ===============================================
+             * READ AND PROCESS ACCELEROMETER DATA
+            =============================================== */
+            #ifdef ENABLE_ACCEL
+                x00 = x0;
+                y00 = y0;
+                z00 = z0;
+                x0 = x;
+                y0 = y;
+                z0 = z;
+                accel.readAccel(&xRaw, &yRaw, &zRaw);
+                
+                // offset
+                xRaw += opt_accel_offset[0];
+                yRaw += opt_accel_offset[1];
+                zRaw += opt_accel_offset[2];
+                
+                // calibrate
+                xRaw = (float)xRaw * opt_accel_calibrate[0];
+                yRaw = (float)yRaw * opt_accel_calibrate[1];
+                zRaw = (float)zRaw * opt_accel_calibrate[2];
+                
+                // Kalman filtering
+                x = x0 + (opt_accel_kalman_constant * (xRaw - x0));
+                y = y0 + (opt_accel_kalman_constant * (yRaw - y0));
+                z = z0 + (opt_accel_kalman_constant * (zRaw - z0));
+                
+                // averaging
+                if (opt_accel_smooth_average > 0) {
+                    for (i = 1; i < opt_accel_smooth_average; i++) {
+                        x += xHist[(accelTick + i) % opt_accel_smooth_average];
+                        y += yHist[(accelTick + i) % opt_accel_smooth_average];
+                        z += zHist[(accelTick + i) % opt_accel_smooth_average];
+                    }
+                    x /= opt_accel_smooth_average;
+                    y /= opt_accel_smooth_average;
+                    z /= opt_accel_smooth_average;
+                    xHist[accelTick % opt_accel_smooth_average] = x;
+                    yHist[accelTick % opt_accel_smooth_average] = y;
+                    zHist[accelTick % opt_accel_smooth_average] = z;
                 }
-                x /= opt_smooth_average;
-                y /= opt_smooth_average;
-                z /= opt_smooth_average;
-                xHist[accelTick % opt_smooth_average] = x;
-                yHist[accelTick % opt_smooth_average] = y;
-                zHist[accelTick % opt_smooth_average] = z;
-            }
-            
-            // calculate linear velocity
-            xv -= ((x0 - x00) - (x - x0));
-            yv -= ((y0 - y00) - (y - y0));
-            zv -= ((z0 - z00) - (z - z0));
-
-            if (opt_enable_calibration) {
-                xMin = min(xMin, x);
-                yMin = min(yMin, y);
-                zMin = min(zMin, z);
-                xMax = max(xMax, x);
-                yMax = max(yMax, y);
-                zMax = max(zMax, z);
+                
+                // calculate linear velocity
+                xv += (x - cx); //((x - x0) - (x0 - x00));
+                yv += (y - cy); //((y - y0) - (y0 - y00));
+                zv += (z - cz); //((z - z0) - (z0 - z00));
+    
+                if (opt_enable_calibration) {
+                    xMin = min(xMin, x);
+                    yMin = min(yMin, y);
+                    zMin = min(zMin, z);
+                    xMax = max(xMax, x);
+                    yMax = max(yMax, y);
+                    zMax = max(zMax, z);
+                    #ifdef SERIAL_DEBUG_ACCEL
+                        Serial.print("calibrateaccel ");
+                        Serial.print(xMin); Serial.print(" ");
+                        Serial.print(yMin); Serial.print(" ");
+                        Serial.print(zMin); Serial.print(" ");
+                        Serial.print(xMax); Serial.print(" ");
+                        Serial.print(yMax); Serial.print(" ");
+                        Serial.println(zMax);
+                    #endif
+                }
+        
+                // calculate tilt angle and angular velocity
+                ax00 = ax0; // 2x-last-iteration
+                ay00 = ay0;
+                az00 = az0;
+                ax0 = ax; // last-iteration
+                ay0 = ay;
+                az0 = az;
+                
+                float xc = (float)x/256, yc = (float)y/256, zc = (float)z/256;
+                ax = degrees(atan(xc / sqrt(yc*yc + zc*zc)));
+                ay = degrees(atan(yc / sqrt(xc*xc + zc*zc)));
+                az = degrees(atan(sqrt(xc*xc + yc*yc) / zc));
+                axv -= ((ax0 - ax00) - (ax - ax0));
+                ayv -= ((ay0 - ay00) - (ay - ay0));
+                azv -= ((az0 - az00) - (az - az0));
+                
                 #ifdef SERIAL_DEBUG_ACCEL
-                    Serial.print("calibrate ");
-                    Serial.print(xMin); Serial.print(" ");
-                    Serial.print(yMin); Serial.print(" ");
-                    Serial.print(zMin); Serial.print(" ");
-                    Serial.print(xMax); Serial.print(" ");
-                    Serial.print(yMax); Serial.print(" ");
-                    Serial.println(zMax);
-                #endif
-            }
+                    Serial.print("accel ");
+                    /*Serial.print(x); Serial.print(" ");
+                    Serial.print(y); Serial.print(" ");
+                    Serial.print(z); Serial.print(" ");
+                    Serial.print(ax); Serial.print(" ");
+                    Serial.print(ay); Serial.print(" ");
+                    Serial.println(az);*/
+                    Serial.print(xRaw); Serial.print(" ");
+                    Serial.print(yRaw); Serial.print(" ");
+                    Serial.print(zRaw); Serial.print(" ");
+                    Serial.print(x); Serial.print(" ");
+                    Serial.print(y); Serial.print(" ");
+                    Serial.print(z); Serial.print(" ");
+                    Serial.print(xv); Serial.print(" ");
+                    Serial.print(yv); Serial.print(" ");
+                    Serial.print(zv); Serial.print(" ");
+                    Serial.print(ax); Serial.print(" ");
+                    Serial.print(ay); Serial.print(" ");
+                    Serial.print(az); Serial.print(" ");
+                    Serial.print(axv); Serial.print(" ");
+                    Serial.print(ayv); Serial.print(" ");
+                    Serial.println(azv);
+                #endif /* SERIAL_DEBUG_ACCEL */
+        
+                accelTick++;
+            #endif /* ENABLE_ACCEL */
+        
+            /* ===============================================
+             * READ AND PROCESS GYROSCOPE DATA
+            =============================================== */
+            #ifdef ENABLE_GYRO
+                gx00 = gx0;
+                gy00 = gy0;
+                gz00 = gz0;
+                gx0 = gx;
+                gy0 = gy;
+                gz0 = gz;
+                gyro.readGyroRaw(&gxRaw, &gyRaw, &gzRaw);
+                
+                // offset
+                gxRaw += opt_gyro_offset[0];
+                gyRaw += opt_gyro_offset[1];
+                gzRaw += opt_gyro_offset[2];
+                
+                // calibrate
+                gxRaw = (float)gxRaw * opt_gyro_calibrate[0] / 15; //14.375;
+                gyRaw = (float)gyRaw * opt_gyro_calibrate[1] / 15; //14.375;
+                gzRaw = (float)gzRaw * opt_gyro_calibrate[2] / 15; //14.375;
+                
+                // Kalman filtering
+                gx = gx0 + (opt_gyro_kalman_constant * (gxRaw - gx0));
+                gy = gy0 + (opt_gyro_kalman_constant * (gyRaw - gy0));
+                gz = gz0 + (opt_gyro_kalman_constant * (gzRaw - gz0));
+                
+                // averaging
+                if (opt_gyro_smooth_average > 0) {
+                    for (i = 1; i < opt_gyro_smooth_average; i++) {
+                        gx += gxHist[(gyroTick + i) % opt_gyro_smooth_average];
+                        gy += gyHist[(gyroTick + i) % opt_gyro_smooth_average];
+                        gz += gzHist[(gyroTick + i) % opt_gyro_smooth_average];
+                    }
+                    gx /= opt_gyro_smooth_average;
+                    gy /= opt_gyro_smooth_average;
+                    gz /= opt_gyro_smooth_average;
+                    gxHist[gyroTick % opt_gyro_smooth_average] = gx;
+                    gyHist[gyroTick % opt_gyro_smooth_average] = gy;
+                    gzHist[gyroTick % opt_gyro_smooth_average] = gz;
+                }
+                
+                if (opt_enable_calibration) {
+                    gxMin = min(gxMin, gx);
+                    gyMin = min(gyMin, gy);
+                    gzMin = min(gzMin, gz);
+                    gxMax = max(gxMax, gx);
+                    gyMax = max(gyMax, gy);
+                    gzMax = max(gzMax, gz);
+                    #ifdef SERIAL_DEBUG_GYRO
+                        Serial.print("calibrategyro ");
+                        Serial.print(gxMin); Serial.print(" ");
+                        Serial.print(gyMin); Serial.print(" ");
+                        Serial.print(gzMin); Serial.print(" ");
+                        Serial.print(gxMax); Serial.print(" ");
+                        Serial.print(gyMax); Serial.print(" ");
+                        Serial.println(gzMax);
+                    #endif
+                }
+        
+                #ifdef SERIAL_DEBUG_GYRO
+                    Serial.print("gyro ");
+                    Serial.print(gxRaw); Serial.print(" ");
+                    Serial.print(gyRaw); Serial.print(" ");
+                    Serial.print(gzRaw); Serial.print(" ");
+                    Serial.print(gx); Serial.print(" ");
+                    Serial.print(gy); Serial.print(" ");
+                    Serial.println(gz);
+                #endif /* SERIAL_DEBUG_GYRO */
+        
+                gyroTick++;
+            #endif /* ENABLE_GYRO */
+        }
     
-            // calculate tilt angle and angular velocity
-            ax00 = ax0; // 2x-last-iteration
-            ay00 = ay0;
-            az00 = az0;
-            ax0 = ax; // last-iteration
-            ay0 = ay;
-            az0 = az;
-            ax = abs(x) < 256 ? degrees(asin((float)x / 256)) : (x < 0 ? -90 : 90);
-            ay = abs(y) < 256 ? degrees(asin((float)y / 256)) : (y < 0 ? -90 : 90);
-            az = abs(z) < 256 ? degrees(asin((float)z / 256)) : (z < 0 ? -90 : 90);
-            axv -= ((ax0 - ax00) - (ax - ax0));
-            ayv -= ((ay0 - ay00) - (ay - ay0));
-            azv -= ((az0 - az00) - (az - az0));
-            
-            #ifdef SERIAL_DEBUG_ACCEL
-                Serial.print("accel ");
-                Serial.print(xRaw); Serial.print(" ");
-                Serial.print(yRaw); Serial.print(" ");
-                Serial.print(zRaw); Serial.print(" ");
-                Serial.print(x); Serial.print(" ");
-                Serial.print(y); Serial.print(" ");
-                Serial.print(z); Serial.print(" ");
-                Serial.print(xv); Serial.print(" ");
-                Serial.print(yv); Serial.print(" ");
-                Serial.print(zv); Serial.print(" ");
-                Serial.print(ax); Serial.print(" ");
-                Serial.print(ay); Serial.print(" ");
-                Serial.print(az); Serial.print(" ");
-                Serial.print(axv); Serial.print(" ");
-                Serial.print(ayv); Serial.print(" ");
-                Serial.println(azv);
-            #endif /* SERIAL_DEBUG_ACCEL */
-    
-            mx0 = mx;
-            my0 = my;
+        #ifdef ENABLE_MOUSE
             switch (opt_mouse_mode) {
                 case MOUSE_MODE_TILT_VELOCITY:
                     if (aset) {
+                        mx0 = mx;
+                        my0 = my;
                         mx -= (float)(ax - axBase) / opt_mouse_scale_mode1[0];
                         my -= (float)(ay - ayBase) / opt_mouse_scale_mode1[1];
-                    } else if (ticks == 0 && counter == 10) {
+                        moveMouse = true;
+                    } else {
                         axBase = ax;
                         ayBase = ay;
                         azBase = az;
                         aset = true;
                     }
                     break;
-                case MOUSE_MODE_TILT_POSITION:
+                /*case MOUSE_MODE_TILT_POSITION:
                     if (aset) {
                         // progressive scaling
                         mx -= (pow(2, abs(axv)) * opt_mouse_scale_mode2[0]) * (float)(ax - axBase);
@@ -425,12 +668,68 @@ void loop() {
                     ayBase = ay;
                     azBase = az;
                     aset = true;
+                    break;*/
+                case MOUSE_MODE_TILT_POSITION:
+                    mx0 = mx;
+                    my0 = my;
+                    mx += (gy < 0) ? -sqrt(-gy) : sqrt(gy);
+                    my -= (gx < 0) ? -sqrt(-gx) : sqrt(gx);
+                    //mx += gy;
+                    //my -= gx;
+                    moveMouse = true;
                     break;
                 case MOUSE_MODE_MOVEMENT_POSITION:
                     if (aset) {
+                        mx0 = mx;
+                        my0 = my;
                         mx -= (float)(x - xBase) / opt_mouse_scale_mode3[0];
                         my -= (float)((z - 256) - zBase) / opt_mouse_scale_mode3[1];
-                    } else if (ticks == 0 && counter == 10) {
+                        moveMouse = true;
+                    } else {
+                        xBase = x;
+                        yBase = y;
+                        zBase = z - 256;
+                        aset = true;
+                    }
+                    break;
+                case MOUSE_MODE_3D:
+                    mx0 = mx;
+                    my0 = my;
+                    mz0 = mz;
+                    mx -= xv / opt_mouse_scale_mode4[0];
+                    my -= zv / opt_mouse_scale_mode4[1];
+                    mz -= yv / opt_mouse_scale_mode4[2];
+                    moveMouse = true;
+                    break;
+            }
+            switch (opt_scroll_mode) {
+                case SCROLL_MODE_TILT_VELOCITY: // gyro
+                    if (aset) {
+                        mx0 = mx;
+                        my0 = my;
+                        mx -= (float)(ax - axBase) / opt_mouse_scale_mode1[0];
+                        my -= (float)(ay - ayBase) / opt_mouse_scale_mode1[1];
+                        scrollMouse = true;
+                    } else {
+                        axBase = ax;
+                        ayBase = ay;
+                        azBase = az;
+                        aset = true;
+                    }
+                    break;
+                case SCROLL_MODE_TILT_POSITION: // gyro
+                    sy0 = sy;
+                    sy -= (gx < 0) ? -sqrt(-gx / 30) : sqrt(gx / 30);
+                    scrollMouse = true;
+                    break;
+                case SCROLL_MODE_MOVEMENT_POSITION: // accel
+                    if (aset) {
+                        mx0 = mx;
+                        my0 = my;
+                        mx -= (float)(x - xBase) / opt_mouse_scale_mode3[0];
+                        my -= (float)((z - 256) - zBase) / opt_mouse_scale_mode3[1];
+                        scrollMouse = true;
+                    } else {
                         xBase = x;
                         yBase = y;
                         zBase = z - 256;
@@ -438,28 +737,64 @@ void loop() {
                     }
                     break;
             }
-            //if (BOUND_MOUSEX > 0 && abs(mx) > BOUND_MOUSEX) mx = mx < 0 ? -BOUND_MOUSEX : BOUND_MOUSEX;
-            //if (BOUND_MOUSEY > 0 && abs(my) > BOUND_MOUSEY) my = my < 0 ? -BOUND_MOUSEY : BOUND_MOUSEY;
+        #endif /* ENABLE_MOUSE */
     
-            // get relative movement amounts
-            mdx = mx - mx0;
-            mdy = my - my0;
+        //if (BOUND_MOUSEX > 0 && abs(mx) > BOUND_MOUSEX) mx = mx < 0 ? -BOUND_MOUSEX : BOUND_MOUSEX;
+        //if (BOUND_MOUSEY > 0 && abs(my) > BOUND_MOUSEY) my = my < 0 ? -BOUND_MOUSEY : BOUND_MOUSEY;
     
+        // get relative movement amounts
+        mdx = mx - mx0;
+        mdy = my - my0;
+        mdz = mz - mz0;
+    
+        if (opt_mouse_invert_x == 1) mdx = -mdx;
+        if (opt_mouse_invert_y == 1) mdy = -mdy;
+        if (opt_mouse_invert_z == 1) mdz = -mdz;
+        if (moveMouse && opt_mouse_mode > 0 && (mdx != 0 || mdy != 0 || mdz != 0)) {
             #ifdef ENABLE_USB
-                Mouse.move(mdx, mdy);
+                if (mdz > 0) Mouse.move(mdx, mdy, mdz);
+                else Mouse.move(mdx, mdy);
             #endif /* ENABLE_USB */
-            
+            #ifdef ENABLE_BLUETOOTH
+                if (mdz > 0) bluetooth.move(mdx, mdy, mdz);
+                else bluetooth.move(mdx, mdy);
+            #endif /* ENABLE_BLUETOOTH */
             #ifdef SERIAL_DEBUG_MOUSE
                 Serial.print("mouse ");
                 Serial.print(mx); Serial.print(" ");
                 Serial.print(my); Serial.print(" ");
                 Serial.print(mdx); Serial.print(" ");
-                Serial.println(mdy);
+                Serial.print(mdy); Serial.print(" ");
+                Serial.print(mdz); Serial.print(" ");
+                Serial.println(mdz);
             #endif /* SERIAL_DEBUG_MOUSE */
-            accelTick++;
         }
-    #endif /* ENABLE_ACCEL */
+        if (scrollMouse && opt_scroll_mode > 0 && sdy != 0) {
+            #ifdef ENABLE_USB
+                Mouse.scroll(sdy);
+            #endif /* ENABLE_USB */
+            #ifdef ENABLE_BLUETOOTH
+                bluetooth.scroll(sdy);
+            #endif /* ENABLE_BLUETOOTH */
+            #ifdef SERIAL_DEBUG_MOUSE
+                Serial.print("scroll ");
+                Serial.print(sy); Serial.print(" ");
+                Serial.println(sdy);
+            #endif /* SERIAL_DEBUG_MOUSE */
+        }
+    }
     
+    #ifdef ENABLE_BLUETOOTH
+        while (Uart.available() > 0) {
+            bluetooth.parse(Uart.read());
+        }
+        while (Serial.available() > 0) {
+            byte bs = Serial.read();
+            Serial.print(bs, BYTE);
+            Uart.print(bs, BYTE);
+        }
+    #endif /* ENABLE_BLUETOOTH */
+
     /* ===============================================
      * READ AND PROCESS TOUCH DATA
     =============================================== */
@@ -490,6 +825,9 @@ void loop() {
         if (verify1 != detect1 || verify2 != detect2) {
             // current sensors different from last detection, so reset threshold
             touchTime = millis();
+        } else if ((verify1 != sensors1 || verify2 != sensors2) && millis() - touchTime >= opt_touch_detect_threshold) {
+            // detection is over threshold and current readings are different from previous readings
+
             #ifdef SERIAL_DEBUG_TOUCH
                 Serial.print("touch ");
                 for (i = 0; i < KG_BASE_COMBINATIONS; i++) {
@@ -498,17 +836,19 @@ void loop() {
                 }
                 Serial.print("\n");
             #endif /* SERIAL_DEBUG_TOUCH */
-        } else if ((verify1 != sensors1 || verify2 != sensors2) && millis() - touchTime >= opt_touch_detect_threshold) {
-            // detection is over threshold and current readings are different from previous readings
+
             // check to see if they've just initiated or removed any touches
             if (verify1 > sensors1 || verify2 > sensors2) {
                 adding = true;
+
+                // touch initiation, check for actions
+                check_sensors_touch(verify1, verify2);
             } else if (adding && (verify1 < sensors1 || verify2 < sensors2)) {
                 adding = false;
                 removing = true;
     
-                // actual keypress this time around so test for each possible combination
-                test_sensors(sensors1, sensors2);
+                // touch release, check for actions
+                check_sensors_release(sensors1, sensors2);
             }
             
             // set official sensor readings to current readings 
@@ -547,6 +887,427 @@ void loop() {
             if (blink_led) digitalWrite(BLINK_LED_PIN, HIGH);
             else digitalWrite(BLINK_LED_PIN, LOW);
         #endif /* ENABLE_BLINK */
+        #ifdef SERIAL_DEBUG_BENCHMARK
+            Serial.print("benchmark 1000 ");
+            Serial.print(millis() - t);
+            Serial.print(" ");
+            Serial.println(ticks);
+        #endif /* SERIAL_DEBUG_BENCHMARK */
         t = millis();
     }
 }
+
+// touchset control functions
+#ifdef ENABLE_TOUCH
+    
+    boolean modeCheck(int mode) {
+        return modeStack[modeStackPos - 1] == mode;
+    }
+    
+    void setmode(int mode) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset setmode ");
+            Serial.println(mode);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        for (; modeStackPos > 0; modeStackPos--) deactivate_mode(modeStack[modeStackPos - 1]);
+        modeStackPos = 1;
+        modeStack[0] = mode;
+        activate_mode(mode);
+    }
+    
+    void togglemode(int mode) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset togglemode ");
+            Serial.println(mode);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        // find the mode and disable it if it's in the stack
+        int i = 0;
+        for (i = 0; i < modeStackPos && modeStack[i] != mode; i++);
+        if (i < 10) {
+            // enabled, so turn it off
+            deactivate_mode(mode);
+            for (; i < modeStackPos; i++) modeStack[i - 1] = modeStack[i];
+            modeStackPos--;
+        } else {
+            // not enabled, so turn it on
+            pushmode(mode);
+        }
+    }
+    
+    void pushmode(int mode) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset pushmode ");
+            Serial.println(mode);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        if (modeStackPos < 10) {
+            modeStack[modeStackPos] = mode;
+            modeStackPos++;
+            activate_mode(mode);
+        }
+    }
+    
+    void popmode() {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.println("touchset popmode");
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        if (modeStackPos > 0) deactivate_mode(modeStack[--modeStackPos]);
+        if (modeStackPos == 0) modeStack[modeStackPos++] = 0;
+        activate_mode(modeStack[modeStackPos - 1]);
+    }
+    
+    void mouseon(int mode) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset mouseon ");
+            Serial.println(mode);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        if (mode == KMOUSE_MOVE) {
+            opt_mouse_mode = 4;
+        } else if (mode == KMOUSE_SCROLL) {
+            opt_scroll_mode = 2;
+        }
+    }
+    
+    void mouseoff(int mode) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset mouseoff ");
+            Serial.println(mode);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        if (mode == KMOUSE_MOVE) {
+            opt_mouse_mode = 0;
+        } else if (mode == KMOUSE_SCROLL) {
+            opt_scroll_mode = 0;
+        }
+    }
+    
+    void mousedown(int button) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset mousedown ");
+            Serial.println(button);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        mouseDown = mouseDown | button;
+        Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+    }
+    
+    void mouseup(int button) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset mouseup ");
+            Serial.println(button);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        if (mouseDown & button > 0) {
+            mouseDown -= button;
+            Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+        }
+    }
+    
+    void mouseclick(int button) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset mouseclick ");
+            Serial.println(button);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        mousedown(button);
+        delay(5);
+        mouseup(button);
+    }
+    
+    void keydown(int code) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset keydown ");
+            Serial.println(code);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        int usePos = 0;
+        for (usePos = 0; usePos < 6 && keysDown[usePos] != 0; usePos++);
+        if (usePos == 6) return; // out of HID keyboard buffer space, REALLY weird for the Keyglove!
+        keysDown[usePos] = code;
+        switch (usePos) {
+            case 0:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key1(code);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key1(code);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 1:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key2(code);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key2(code);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 2:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key3(code);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key3(code);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 3:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key4(code);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key4(code);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 4:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key5(code);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key5(code);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 5:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key6(code);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key6(code);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+        }
+        #ifdef ENABLE_USB
+            Keyboard.send_now();
+        #endif /* ENABLE_USB */
+        #ifdef ENABLE_BLUETOOTH
+            bluetooth.send_now();
+        #endif /* ENABLE_BLUETOOTH */
+    }
+    
+    void keyup(int code) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset keyup ");
+            Serial.println(code);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        int usePos = 0;
+        for (usePos = 0; usePos < 6 && keysDown[usePos] != code; usePos++);
+        if (usePos == 6) return; // key not currently down...oops.
+        keysDown[usePos] = 0;
+        switch (usePos) {
+            case 0:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key1(0);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key1(0);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 1:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key2(0);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key2(0);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 2:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key3(0);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key3(0);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 3:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key4(0);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key4(0);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 4:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key5(0);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key5(0);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+            case 5:
+                #ifdef ENABLE_USB
+                    Keyboard.set_key6(0);
+                #endif /* ENABLE_USB */
+                #ifdef ENABLE_BLUETOOTH
+                    bluetooth.set_key6(0);
+                #endif /* ENABLE_BLUETOOTH */
+                break;
+        }
+        #ifdef ENABLE_USB
+            Keyboard.send_now();
+        #endif /* ENABLE_USB */
+        #ifdef ENABLE_BLUETOOTH
+            bluetooth.send_now();
+        #endif /* ENABLE_BLUETOOTH */
+    }
+    
+    void keypress(int code) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset keypress ");
+            Serial.println(code);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        keydown(code);
+        delay(5);
+        keyup(code);
+    }
+    
+    void modifierdown(int code) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset modifierdown ");
+            Serial.println(code);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        modifiersDown = modifiersDown | code;
+        Keyboard.set_modifier(modifiersDown);
+        Keyboard.send_now();
+    }
+    
+    void modifierup(int code) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset modifierup ");
+            Serial.println(code);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        if (modifiersDown & code > 0) {
+            modifiersDown -= code;
+            Keyboard.set_modifier(modifiersDown);
+            Keyboard.send_now();
+        }
+    }
+    
+    void modifierpress(int code) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset modifierpress ");
+            Serial.println(code);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        modifierdown(code);
+        delay(5);
+        modifierup(code);
+    }
+    
+    void redled(int mode, int duration) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset redled ");
+            Serial.print(mode);
+            Serial.print(" ");
+            Serial.println(duration);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        switch (mode) {
+            case KLED_OFF: tricolorBlinkRed = 0; tricolor(0, -1, -1); break;
+            case KLED_LONGBLINK: tricolorBlinkRed = 1; tricolor(1, -1, -1); break;
+            case KLED_LONGPULSE: tricolorBlinkRed = 2; tricolor(1, -1, -1); break;
+            case KLED_SHORTBLINK: tricolorBlinkRed = 3; tricolor(1, -1, -1); break;
+            case KLED_SHORTPULSE: tricolorBlinkRed = 4; tricolor(1, -1, -1); break;
+            case KLED_SOLID: tricolorBlinkRed = 0; tricolor(1, -1, -1); break;
+        }
+    }
+    
+    void greenled(int mode, int duration) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset greenled ");
+            Serial.print(mode);
+            Serial.print(" ");
+            Serial.println(duration);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        switch (mode) {
+            case KLED_OFF: tricolorBlinkGreen = 0; tricolor(-1, 0, -1); break;
+            case KLED_LONGBLINK: tricolorBlinkGreen = 1; tricolor(-1, 1, -1); break;
+            case KLED_LONGPULSE: tricolorBlinkGreen = 2; tricolor(-1, 1, -1); break;
+            case KLED_SHORTBLINK: tricolorBlinkGreen = 3; tricolor(-1, 1, -1); break;
+            case KLED_SHORTPULSE: tricolorBlinkGreen = 4; tricolor(-1, 1, -1); break;
+            case KLED_SOLID: tricolorBlinkGreen = 0; tricolor(-1, 1, -1); break;
+        }
+    }
+    
+    void blueled(int mode, int duration) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset blueled ");
+            Serial.print(mode);
+            Serial.print(" ");
+            Serial.println(duration);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        switch (mode) {
+            case KLED_OFF: tricolorBlinkBlue = 0; tricolor(-1, -1, 0); break;
+            case KLED_LONGBLINK: tricolorBlinkBlue = 1; tricolor(-1, -1, 1); break;
+            case KLED_LONGPULSE: tricolorBlinkBlue = 2; tricolor(-1, -1, 1); break;
+            case KLED_SHORTBLINK: tricolorBlinkBlue = 3; tricolor(-1, -1, 1); break;
+            case KLED_SHORTPULSE: tricolorBlinkBlue = 4; tricolor(-1, -1, 1); break;
+            case KLED_SOLID: tricolorBlinkBlue = 0; tricolor(-1, -1, 1); break;
+        }
+    }
+    
+    void beep(int pitch, int mode, int duration) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset beep ");
+            Serial.print(pitch);
+            Serial.print(" ");
+            Serial.print(mode);
+            Serial.print(" ");
+            Serial.println(duration);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+    }
+    
+    void vibrate(int mode, int duration) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset vibrate ");
+            Serial.print(mode);
+            Serial.print(" ");
+            Serial.println(duration);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+    }
+    
+#endif /* ENABLE_TOUCH */
+
+#ifdef ENABLE_ACCEL
+
+class Quat {
+    public:
+        double heading;
+        double attitude;
+        double bank;
+
+        double w;
+        double x;
+        double y;
+        double z;
+        
+        double sqw;
+        double sqx;
+        double sqy;
+        double sqz;
+        
+        Quat(double nw, double nx, double ny, double nz) {
+            w = nw;
+            x = nx;
+            y = ny;
+            z = nz;
+            fix();
+        }
+        
+        // thanks to http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
+        void fix() {
+            double sqw = w * w;
+            double sqx = x * x;
+            double sqy = y * y;
+            double sqz = z * z;
+            double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+            double test = x*y + z*w;
+            if (test > 0.499*unit) { // singularity at north pole
+                heading = 2 * atan2(x, w);
+                attitude = PI/2;
+                bank = 0;
+                return;
+            }
+            if (test < -0.499*unit) { // singularity at south pole
+                heading = -2 * atan2(x, w);
+                attitude = -PI/2;
+                bank = 0;
+                return;
+            }
+            heading = atan2(2*y*w - 2*x*z, sqx - sqy - sqz + sqw);
+            attitude = asin(2*test/unit);
+            bank = atan2(2*x*w - 2*y*z , -sqx + sqy - sqz + sqw);
+        }
+};
+
+#endif /* ENABLE_ACCEL */
