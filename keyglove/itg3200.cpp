@@ -25,7 +25,7 @@
 * INT       -> not connected  (but can be used)                             *
 * VIO & VDD -> pin 3.3V                                                     *
 *****************************************************************************/
-#include "ITG3200.h"
+#include "itg3200.h"
 #include <Wire.h>
 
 ITG3200::ITG3200() {
