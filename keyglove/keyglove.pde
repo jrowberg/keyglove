@@ -44,11 +44,14 @@ unsigned char ide_workaround = 0;
 #define ENABLE_BEEP
 #define ENABLE_VIBRATE
 //#define ENABLE_PS2
-#define ENABLE_USB
 //#define ENABLE_BLUETOOTH
 #define ENABLE_TOUCH
 #define ENABLE_ACCEL
 #define ENABLE_GYRO
+#ifdef USE_TEENSY
+    //#define ENABLE_USB
+#endif /* USE_TEENSY */
+
 
 /* ===============================================
  * DEBUG COMPILER SETTINGS
@@ -859,7 +862,6 @@ void loop() {
                     }
                     break;
             }
-        #endif /* ENABLE_MOUSE */
     
         //if (BOUND_MOUSEX > 0 && abs(mx) > BOUND_MOUSEX) mx = mx < 0 ? -BOUND_MOUSEX : BOUND_MOUSEX;
         //if (BOUND_MOUSEY > 0 && abs(my) > BOUND_MOUSEY) my = my < 0 ? -BOUND_MOUSEY : BOUND_MOUSEY;
@@ -904,6 +906,7 @@ void loop() {
                 Serial.println(sdy);
             #endif /* SERIAL_DEBUG_MOUSE */
         }
+        #endif /* ENABLE_MOUSE */
     }
     
     #ifdef ENABLE_BLUETOOTH
@@ -1107,7 +1110,9 @@ void loop() {
             Serial.println(button);
         #endif /* SERIAL_DEBUG_TOUCHSET */
         mouseDown = mouseDown | button;
-        Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+        #ifdef ENABLE_USB
+            Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+        #endif /* ENABLE_USB */
     }
     
     void mouseup(int button) {
@@ -1117,7 +1122,9 @@ void loop() {
         #endif /* SERIAL_DEBUG_TOUCHSET */
         if (mouseDown & button > 0) {
             mouseDown -= button;
-            Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+            #ifdef ENABLE_USB
+                Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+            #endif /* ENABLE_USB */
         }
     }
     
@@ -1281,8 +1288,10 @@ void loop() {
             Serial.println(code);
         #endif /* SERIAL_DEBUG_TOUCHSET */
         modifiersDown = modifiersDown | code;
-        Keyboard.set_modifier(modifiersDown);
-        Keyboard.send_now();
+        #ifdef ENABLE_USB
+            Keyboard.set_modifier(modifiersDown);
+            Keyboard.send_now();
+        #endif /* ENABLE_USB */
     }
     
     void modifierup(int code) {
@@ -1292,8 +1301,10 @@ void loop() {
         #endif /* SERIAL_DEBUG_TOUCHSET */
         if (modifiersDown & code > 0) {
             modifiersDown -= code;
-            Keyboard.set_modifier(modifiersDown);
-            Keyboard.send_now();
+            #ifdef ENABLE_USB
+                Keyboard.set_modifier(modifiersDown);
+                Keyboard.send_now();
+            #endif /* ENABLE_USB */
         }
     }
     
