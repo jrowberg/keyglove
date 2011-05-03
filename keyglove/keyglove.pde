@@ -44,7 +44,7 @@ unsigned char ide_workaround = 0;
 #define ENABLE_BEEP
 #define ENABLE_VIBRATE
 //#define ENABLE_PS2
-//#define ENABLE_BLUETOOTH
+#define ENABLE_BLUETOOTH
 #define ENABLE_TOUCH
 #define ENABLE_ACCEL
 #define ENABLE_GYRO
@@ -264,7 +264,12 @@ unsigned char ide_workaround = 0;
 =============================================== */
 #ifdef ENABLE_BLUETOOTH
     #include "iwrap.h"
+#ifdef USE_TEENSY    
     HardwareSerial Uart = HardwareSerial();    
+#endif /* USE_TEENSY */
+#ifdef USE_ARDUINO 
+    HardwareSerial Uart = Serial3;    
+#endif /* USE_ARDUINO */
     iWRAP bluetooth = iWRAP(&Uart);
 #endif /* ENABLE_BLUETOOTH */
 
