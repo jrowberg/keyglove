@@ -39,7 +39,7 @@ unsigned char ide_workaround = 0;
 /* ===============================================
  * CORE FEATURE SETTINGS
 =============================================== */
-#define ENABLE_BLINK
+//#define ENABLE_BLINK
 #define ENABLE_TRICOLOR
 #define ENABLE_BEEP
 #define ENABLE_VIBRATE
@@ -48,6 +48,7 @@ unsigned char ide_workaround = 0;
 #define ENABLE_TOUCH
 #define ENABLE_ACCEL
 #define ENABLE_GYRO
+#define ENABLE_RX400
 #ifdef USE_TEENSY
     //#define ENABLE_USB
 #endif /* USE_TEENSY */
@@ -63,9 +64,9 @@ unsigned char ide_workaround = 0;
 //#define SERIAL_DEBUG_GYRO
 #define SERIAL_DEBUG_TOUCH
 #define SERIAL_DEBUG_MOUSE
-//#define SERIAL_DEBUG_KEYBOARD
+#define SERIAL_DEBUG_KEYBOARD
 #define SERIAL_DEBUG_TOUCHSET
-#define SERIAL_DEBUG_BENCHMARK
+//#define SERIAL_DEBUG_BENCHMARK
 
 // set correct pins based on host device
 #include "pins.h"
@@ -263,7 +264,7 @@ unsigned char ide_workaround = 0;
 =============================================== */
 #ifdef ENABLE_BLUETOOTH
     #include "iwrap.h"
-    HardwareSerial Uart = HardwareSerial();
+    HardwareSerial Uart = HardwareSerial();    
     iWRAP bluetooth = iWRAP(&Uart);
 #endif /* ENABLE_BLUETOOTH */
 
@@ -342,6 +343,16 @@ unsigned char ide_workaround = 0;
         #define ENABLE_MOUSE
     #endif
 #endif /* ENABLE_GYRO */
+
+/* ===============================================
+ * LOGITECH HACK DECLARATIONS - Emulate an RX400 presenter
+=============================================== */
+#ifdef ENABLE_RX400
+    #include "logitech.h"
+    
+    logitech RX400 = logitech();
+    #define ENABLE_MOUSE
+#endif /* ENABLE_RX400 */
 
 /* ===============================================
  * TRICOLOR STATUS LED DECLARATIONS
@@ -502,7 +513,14 @@ void setup() {
     #ifdef ENABLE_BLUETOOTH
         Uart.begin(38400);
     #endif /* ENABLE_BLUETOOTH */
-    
+
+    /* ===============================================
+     * INITIALIZE LOGITECH RX400 INTERFACE
+    =============================================== */
+    #ifdef ENABLE_RX400
+        RX400.init();
+    #endif /* ENABLE_RX400 */
+        
     /* ===============================================
      * INITIALIZE ACCELEROMETER INTERFACE
     =============================================== */
@@ -883,6 +901,10 @@ void loop() {
                 if (mdz > 0) bluetooth.move(mdx, mdy, mdz);
                 else bluetooth.move(mdx, mdy);
             #endif /* ENABLE_BLUETOOTH */
+            #ifdef ENABLE_RX400
+                if (mdz > 0) RX400.move(mdx, mdy, mdz);
+                else RX400.move(mdx, mdy);
+            #endif /* ENABLE_RX400 */
             #ifdef SERIAL_DEBUG_MOUSE
                 Serial.print("mouse ");
                 Serial.print(mx); Serial.print(" ");
@@ -900,6 +922,9 @@ void loop() {
             #ifdef ENABLE_BLUETOOTH
                 bluetooth.scroll(sdy);
             #endif /* ENABLE_BLUETOOTH */
+            #ifdef ENABLE_RX400
+                RX400.scroll(sdy);
+            #endif /* ENABLE_RX400 */
             #ifdef SERIAL_DEBUG_MOUSE
                 Serial.print("scroll ");
                 Serial.print(sy); Serial.print(" ");
@@ -1113,6 +1138,9 @@ void loop() {
         #ifdef ENABLE_USB
             Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
         #endif /* ENABLE_USB */
+        #ifdef ENABLE_RX400
+            RX400.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+        #endif /* ENABLE_RX400 */
     }
     
     void mouseup(int button) {
@@ -1125,6 +1153,9 @@ void loop() {
             #ifdef ENABLE_USB
                 Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
             #endif /* ENABLE_USB */
+            #ifdef ENABLE_RX400
+                RX400.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+            #endif /* ENABLE_RX400 */
         }
     }
     
@@ -1155,6 +1186,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key1(code);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key1(code);
+                #endif /* ENABLE_RX400 */
                 break;
             case 1:
                 #ifdef ENABLE_USB
@@ -1163,6 +1197,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key2(code);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key2(code);
+                #endif /* ENABLE_RX400 */
                 break;
             case 2:
                 #ifdef ENABLE_USB
@@ -1171,6 +1208,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key3(code);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key3(code);
+                #endif /* ENABLE_RX400 */
                 break;
             case 3:
                 #ifdef ENABLE_USB
@@ -1179,6 +1219,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key4(code);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key4(code);
+                #endif /* ENABLE_RX400 */
                 break;
             case 4:
                 #ifdef ENABLE_USB
@@ -1187,6 +1230,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key5(code);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key5(code);
+                #endif /* ENABLE_RX400 */
                 break;
             case 5:
                 #ifdef ENABLE_USB
@@ -1195,6 +1241,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key6(code);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key6(code);
+                #endif /* ENABLE_RX400 */
                 break;
         }
         #ifdef ENABLE_USB
@@ -1203,6 +1252,9 @@ void loop() {
         #ifdef ENABLE_BLUETOOTH
             bluetooth.send_now();
         #endif /* ENABLE_BLUETOOTH */
+        #ifdef ENABLE_RX400
+            RX400.send_now();
+        #endif /* ENABLE_RX400 */
     }
     
     void keyup(int code) {
@@ -1222,6 +1274,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key1(0);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key1(0);
+                #endif /* ENABLE_RX400 */
                 break;
             case 1:
                 #ifdef ENABLE_USB
@@ -1230,6 +1285,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key2(0);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key2(0);
+                #endif /* ENABLE_RX400 */
                 break;
             case 2:
                 #ifdef ENABLE_USB
@@ -1238,6 +1296,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key3(0);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key3(0);
+                #endif /* ENABLE_RX400 */
                 break;
             case 3:
                 #ifdef ENABLE_USB
@@ -1246,6 +1307,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key4(0);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key4(0);
+                #endif /* ENABLE_RX400 */
                 break;
             case 4:
                 #ifdef ENABLE_USB
@@ -1254,6 +1318,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key5(0);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key5(0);
+                #endif /* ENABLE_RX400 */
                 break;
             case 5:
                 #ifdef ENABLE_USB
@@ -1262,6 +1329,9 @@ void loop() {
                 #ifdef ENABLE_BLUETOOTH
                     bluetooth.set_key6(0);
                 #endif /* ENABLE_BLUETOOTH */
+                #ifdef ENABLE_RX400
+                    RX400.set_key6(0);
+                #endif /* ENABLE_RX400 */
                 break;
         }
         #ifdef ENABLE_USB
@@ -1270,6 +1340,9 @@ void loop() {
         #ifdef ENABLE_BLUETOOTH
             bluetooth.send_now();
         #endif /* ENABLE_BLUETOOTH */
+        #ifdef ENABLE_RX400
+            RX400.send_now();
+        #endif /* ENABLE_RX400 */
     }
     
     void keypress(int code) {
@@ -1292,6 +1365,10 @@ void loop() {
             Keyboard.set_modifier(modifiersDown);
             Keyboard.send_now();
         #endif /* ENABLE_USB */
+        #ifdef ENABLE_RX400       
+            RX400.set_modifier(modifiersDown);
+            RX400.send_now();
+        #endif /* ENABLE_RX400 */
     }
     
     void modifierup(int code) {
@@ -1305,6 +1382,10 @@ void loop() {
                 Keyboard.set_modifier(modifiersDown);
                 Keyboard.send_now();
             #endif /* ENABLE_USB */
+            #ifdef ENABLE_RX400
+                RX400.set_modifier(modifiersDown);
+                RX400.send_now();
+            #endif /* ENABLE_RX400 */
         }
     }
     

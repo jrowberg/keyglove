@@ -61,6 +61,13 @@ THE SOFTWARE.
     #define KSP_7 52
     #define KSP_8 53
 
+    #ifdef ENABLE_RX400    
+        #define KSP_5 2
+        #define KSP_6 3
+        #define KSP_7 4
+        #define KSP_8 5
+    #endif /* ENABLE_RX400 */
+
     #define BLINK_LED_PIN 13 // Arduino LED pin is 13
     #define VIBRATE_PIN 10
     #define SOUND_PIN 9
