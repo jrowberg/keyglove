@@ -62,6 +62,8 @@ THE SOFTWARE.
     #define KSP_8 53
 
     #define BLINK_LED_PIN 13 // Arduino LED pin is 13
+    #define VIBRATE_PIN 10
+    #define SOUND_PIN 9
 
     #define TRICOLOR_RED_PIN 11
     #define TRICOLOR_GREEN_PIN 12
