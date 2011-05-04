@@ -1464,6 +1464,26 @@ void loop() {
             Serial.print(" ");
             Serial.println(duration);
         #endif /* SERIAL_DEBUG_TOUCHSET */
+        #ifdef ENABLE_BEEP
+            if (mode == KBEEP_OFF) {
+                noTone(SOUND_PIN);
+                return;
+            } 
+            
+            int duration_ms = 1000;
+            if (mode == KBEEP_SHORTPULSE) {
+                duration_ms = 100;
+            } else if (mode == KBEEP_SHORTBEEP) {
+                duration_ms = 25;
+            }
+            
+            for (int i = 0; i < duration; i++) {
+                if (i > 0) {
+                    delay(80);
+                }
+                tone(SOUND_PIN, pitch, duration_ms);
+            }
+        #endif /* ENABLE_BEEP */
     }
     
     void vibrate(int mode, int duration) {
