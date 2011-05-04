@@ -108,7 +108,7 @@ void setup() {
     lights();
     smooth();
     noStroke();
-    port = new Serial(this, "COM10", 57600);
+    port = new Serial(this, "COM17", 115200);
     font128 = loadFont("Calibri-128.vlw");
     font32 = loadFont("Calibri-32.vlw");
     font24 = loadFont("Calibri-24.vlw");
@@ -132,7 +132,7 @@ void draw() {
     fill(255, 185); 
     textFont(font16b);
     textAlign(CENTER);
-    text("2010 - Jeff Rowberg", 200, vh - 36);
+    text("2011 - Jeff Rowberg", 200, vh - 36);
     text("www.keyglove.net", 200, vh - 20);
     
     // touch sensor combinations
@@ -253,18 +253,24 @@ void draw() {
     translate(offset3DX + 100, offset3DY + 80, 0);
     fill(255, 0, 0, 200);
     box(200, 5, 5);
+    pushMatrix(); translate(100, 0, 0); sphere(7); popMatrix();
     fill(0, 255, 0, 200);
     box(5, 5, 200);
+    pushMatrix(); translate(0, 0, 100); sphere(7); popMatrix();
     fill(0, 0, 255, 200);
     box(5, 200, 5);
+    pushMatrix(); translate(0, -100, 0); sphere(7); popMatrix();
     pushMatrix();
     rotateX(radians(-ya)); rotateZ(radians(-xa));
     fill(255, 100, 100, 200);
     box(200, 15, 15);
+    pushMatrix(); translate(100, 0, 0); sphere(25); popMatrix();
     fill(100, 255, 100, 200);
     box(15, 15, 200);
+    pushMatrix(); translate(0, 0, 100); sphere(25); popMatrix();
     fill(100, 100, 255, 200);
     box(15, 200, 15);
+    pushMatrix(); translate(0, -100, 0); sphere(25); popMatrix();
     popMatrix();
     popMatrix();
     textFont(font16b);
@@ -324,7 +330,7 @@ void serialEvent(int serial) {
         buff += char(serial);
     } else {
         String[] vs = buff.split(" ");
-        println(buff);
+        //println(buff);
         buff = "";
         String cmdType = vs[0].trim();
         try {
