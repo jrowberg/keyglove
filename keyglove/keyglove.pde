@@ -325,7 +325,7 @@ unsigned char ide_workaround = 0;
 =============================================== */
 #ifdef ENABLE_GYRO
     #include <Wire.h>
-    #include "itg3200.h"
+    #include "ITG3200.h"
 
     ITG3200 gyro = ITG3200();
 
