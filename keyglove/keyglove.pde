@@ -1116,9 +1116,9 @@ void loop() {
             Serial.println(mode);
         #endif /* SERIAL_DEBUG_TOUCHSET */
         if (mode == KMOUSE_MOVE) {
-            opt_mouse_mode = 4;
+            opt_mouse_mode = MOUSE_MODE_3D;
         } else if (mode == KMOUSE_SCROLL) {
-            opt_scroll_mode = 2;
+            opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
         }
     }
     
