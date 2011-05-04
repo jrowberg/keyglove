@@ -292,7 +292,7 @@ unsigned char ide_workaround = 0;
 =============================================== */
 #ifdef ENABLE_ACCEL
     #include <Wire.h>
-    #include "adxl345.h"
+    #include "Adxl345.h"
 
     Accelerometer accel;
 

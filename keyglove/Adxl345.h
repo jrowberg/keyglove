@@ -1,5 +1,4 @@
 #include "WProgram.h"
-#include <Wire.h>
 
 #ifndef Accelerometer_h
 #define Accelerometer_h

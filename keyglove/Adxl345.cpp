@@ -1,10 +1,12 @@
 #include "WProgram.h"
-#include "adxl345.h"
+#include "Adxl345.h"
+#include <Wire.h>
 
 #define DEVICE (0x53)    // ADXL345 device address
 #define TO_READ (6)      // num of bytes we are going to read each time (two bytes for each axis)
 
 Accelerometer::Accelerometer() {
+
 }
 
 void Accelerometer::powerOn() {
