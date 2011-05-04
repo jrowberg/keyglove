@@ -280,7 +280,7 @@ void logitech::move(uint8_t x, uint8_t y) {
 void logitech::move(uint8_t x, uint8_t y, uint8_t z) {
     uint8_t p1 = mouse_toggle ? 0x47 : 0x43;
     sendPacket(4, p1, x, y, (z & 0x1f) | mouse_buttons);
-    mouse_toggle = (mouse_toggle + 1) & 0x01;
+    mouse_toggle = mouse_toggle ? 0 : 1;
 }
 
 void logitech::scroll(uint8_t s) {

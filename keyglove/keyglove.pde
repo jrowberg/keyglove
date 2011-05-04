@@ -1153,7 +1153,7 @@ void loop() {
             Serial.print("touchset mouseup ");
             Serial.println(button);
         #endif /* SERIAL_DEBUG_TOUCHSET */
-        if (mouseDown & button > 0) {
+        if ((mouseDown & button) > 0) {
             mouseDown -= button;
             #ifdef ENABLE_USB
                 Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);

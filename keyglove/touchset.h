@@ -709,12 +709,12 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
     }
     else if ((sensors1 & KS1_J3) == 0 && (sensors2 & KS2_J3) == 16777216) {
         if (modeCheck(KMODE_DEFAULT)) {
-            mouseup(KMOUSE_LEFT);
+            mouseup(KMOUSE_RIGHT);
         }
     }
     else if ((sensors1 & KS1_J2) == 0 && (sensors2 & KS2_J2) == 33554432) {
         if (modeCheck(KMODE_DEFAULT)) {
-            mouseup(KMOUSE_LEFT);
+            mouseup(KMOUSE_MIDDLE);
         }
     }
     else if ((sensors1 & KS1_J1) == 0 && (sensors2 & KS2_J1) == 67108864) {
