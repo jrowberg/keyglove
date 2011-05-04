@@ -305,11 +305,11 @@ int opt_gyro_offset[] = { -22, -115, -7 };
 float opt_gyro_calibrate[] = { 1, 1, 1 };
 
 int opt_motion_sampling_div = 15;                // how many ticks in between each accel/gyro reading
-float opt_accel_kalman_constant = 0.3;
+float opt_accel_kalman_constant = 0.6;
 float opt_gyro_kalman_constant = 0.3;
 int opt_accel_smooth_average = 4;
 int opt_gyro_smooth_average = 0;
-int opt_mouse_mode = 0;                         // which mouse move mode (0=disable, 1/2/3 as defined)
+int opt_mouse_mode = 1;                         // which mouse move mode (0=disable, 1/2/3 as defined)
 int opt_scroll_mode = 0;                        // which mouse scroll mode (0=disable, 1/2/3 as defined), uses mouse Y axis values
 int opt_mouse_hold = 0;                         // temporarily hold mouse position for hand re-orientation
 int opt_mouse_invert_x = 1;                     // invert x axis control
@@ -536,18 +536,36 @@ void loop() {
                 ax = degrees(atan(xc / sqrt(yc*yc + zc*zc)));
                 ay = degrees(atan(yc / sqrt(xc*xc + zc*zc)));
                 az = degrees(atan(sqrt(xc*xc + yc*yc) / zc));
+                if (z >= 0) {
+                    // right side up
+                    if (x >= 0 && y >= 0) {
+                        // Q1, x+ / y+ / z+
+                    } else if (x < 0 && y >= 0) {
+                        // Q2, x- / y+ / z+
+                    } else if (x < 0 && y < 0) {
+                        // Q3, x- / y- / z+
+                    } else {
+                        // Q4, x+ / y- / z+
+                    }
+                } else {
+                    // upside down
+                    if (x >= 0 && y >= 0) {
+                        // Q5, x+ / y+ / z-
+                    } else if (x < 0 && y >= 0) {
+                        // Q6, x- / y+ / z-
+                    } else if (x < 0 && y < 0) {
+                        // Q7, x- / y- / z-
+                    } else {
+                        // Q8, x+ / y- / z-
+                    }
+                }
+                
                 axv -= ((ax0 - ax00) - (ax - ax0));
                 ayv -= ((ay0 - ay00) - (ay - ay0));
                 azv -= ((az0 - az00) - (az - az0));
                 
                 #ifdef SERIAL_DEBUG_ACCEL
                     Serial.print("accel ");
-                    /*Serial.print(x); Serial.print(" ");
-                    Serial.print(y); Serial.print(" ");
-                    Serial.print(z); Serial.print(" ");
-                    Serial.print(ax); Serial.print(" ");
-                    Serial.print(ay); Serial.print(" ");
-                    Serial.println(az);*/
                     Serial.print(xRaw); Serial.print(" ");
                     Serial.print(yRaw); Serial.print(" ");
                     Serial.print(zRaw); Serial.print(" ");
