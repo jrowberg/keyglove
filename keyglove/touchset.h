@@ -1,6 +1,6 @@
 // Keyglove controller source code - Custom touchset definition
-// 4/5/2011 by Jeff Rowberg 
-// (Generated Wed, 06 Apr 2011 19:17:47 -0600 @ 70.188.20.207)
+// 4/5/2011 by Jeff Rowberg <jeff@rowberg.net>
+// (Generated Thu, 05 May 2011 14:57:09 +1200 @ mikenz-eeepc)
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -117,178 +117,178 @@ void deactivate_mode(int mode) {
 
 // numeric sensor definitions
 
-#define KS1_Y7 2
-#define KS2_Y7 0
+#define KS1_Y7 0x2
+#define KS2_Y7 0x0
 
-#define KS1_J8 4
-#define KS2_J8 0
+#define KS1_J8 0x4
+#define KS2_J8 0x0
 
-#define KS1_GJY 4104
-#define KS2_GJY 0
+#define KS1_GJY 0x1008
+#define KS2_GJY 0x0
 
-#define KS1_AJY 8
-#define KS2_AJY 64
+#define KS1_AJY 0x8
+#define KS2_AJY 0x40
 
-#define KS1_JY 8
-#define KS2_JY 0
+#define KS1_JY 0x8
+#define KS2_JY 0x0
 
-#define KS1_KY 16
-#define KS2_KY 0
+#define KS1_KY 0x10
+#define KS2_KY 0x0
 
-#define KS1_LY 32
-#define KS2_LY 0
+#define KS1_LY 0x20
+#define KS2_LY 0x0
 
-#define KS1_VY 64
-#define KS2_VY 0
+#define KS1_VY 0x40
+#define KS2_VY 0x0
 
-#define KS1_WY 128
-#define KS2_WY 0
+#define KS1_WY 0x80
+#define KS2_WY 0x0
 
-#define KS1_XY 256
-#define KS2_XY 0
+#define KS1_XY 0x100
+#define KS2_XY 0x0
 
-#define KS1_Y6 1024
-#define KS2_Y6 0
+#define KS1_Y6 0x400
+#define KS2_Y6 0x0
 
-#define KS1_DGY 4198400
-#define KS2_DGY 0
+#define KS1_DGY 0x401000
+#define KS2_DGY 0x0
 
-#define KS1_GY 4096
-#define KS2_GY 0
+#define KS1_GY 0x1000
+#define KS2_GY 0x0
 
-#define KS1_HY 8192
-#define KS2_HY 0
+#define KS1_HY 0x2000
+#define KS2_HY 0x0
 
-#define KS1_IY 16384
-#define KS2_IY 0
+#define KS1_IY 0x4000
+#define KS2_IY 0x0
 
-#define KS1_SY 32768
-#define KS2_SY 0
+#define KS1_SY 0x8000
+#define KS2_SY 0x0
 
-#define KS1_TY 65536
-#define KS2_TY 0
+#define KS1_TY 0x10000
+#define KS2_TY 0x0
 
-#define KS1_UY 131072
-#define KS2_UY 0
+#define KS1_UY 0x20000
+#define KS2_UY 0x0
 
-#define KS1_Y5 1048576
-#define KS2_Y5 0
+#define KS1_Y5 0x100000
+#define KS2_Y5 0x0
 
-#define KS1_D8 2097152
-#define KS2_D8 0
+#define KS1_D8 0x200000
+#define KS2_D8 0x0
 
-#define KS1_ADY 4194304
-#define KS2_ADY 64
+#define KS1_ADY 0x400000
+#define KS2_ADY 0x40
 
-#define KS1_DY 4194304
-#define KS2_DY 0
+#define KS1_DY 0x400000
+#define KS2_DY 0x0
 
-#define KS1_EY 8388608
-#define KS2_EY 0
+#define KS1_EY 0x800000
+#define KS2_EY 0x0
 
-#define KS1_FY 16777216
-#define KS2_FY 0
+#define KS1_FY 0x1000000
+#define KS2_FY 0x0
 
-#define KS1_PY 67108864
-#define KS2_PY 0
+#define KS1_PY 0x4000000
+#define KS2_PY 0x0
 
-#define KS1_QY 268435456
-#define KS2_QY 0
+#define KS1_QY 0x10000000
+#define KS2_QY 0x0
 
-#define KS1_RY 1073741824
-#define KS2_RY 0
+#define KS1_RY 0x40000000
+#define KS2_RY 0x0
 
-#define KS1_Z4 0
-#define KS2_Z4 8
+#define KS1_Z4 0x0
+#define KS2_Z4 0x8
 
-#define KS1_Y4 0
-#define KS2_Y4 16
+#define KS1_Y4 0x0
+#define KS2_Y4 0x10
 
-#define KS1_A8 0
-#define KS2_A8 32
+#define KS1_A8 0x0
+#define KS2_A8 0x20
 
-#define KS1_AY_J1 0
-#define KS2_AY_J1 67108928
+#define KS1_AY_J1 0x0
+#define KS2_AY_J1 0x4000040
 
-#define KS1_AY 0
-#define KS2_AY 64
+#define KS1_AY 0x0
+#define KS2_AY 0x40
 
-#define KS1_BY_J1 0
-#define KS2_BY_J1 67108992
+#define KS1_BY_J1 0x0
+#define KS2_BY_J1 0x4000080
 
-#define KS1_BY 0
-#define KS2_BY 128
+#define KS1_BY 0x0
+#define KS2_BY 0x80
 
-#define KS1_CY_J1 0
-#define KS2_CY_J1 67109120
+#define KS1_CY_J1 0x0
+#define KS2_CY_J1 0x4000100
 
-#define KS1_CY 0
-#define KS2_CY 256
+#define KS1_CY 0x0
+#define KS2_CY 0x100
 
-#define KS1_J1_MY 0
-#define KS2_J1_MY 67109888
+#define KS1_J1_MY 0x0
+#define KS2_J1_MY 0x4000400
 
-#define KS1_MY 0
-#define KS2_MY 1024
+#define KS1_MY 0x0
+#define KS2_MY 0x400
 
-#define KS1_J1_NY 0
-#define KS2_J1_NY 67112960
+#define KS1_J1_NY 0x0
+#define KS2_J1_NY 0x4001000
 
-#define KS1_NY 0
-#define KS2_NY 4096
+#define KS1_NY 0x0
+#define KS2_NY 0x1000
 
-#define KS1_J1_OY 0
-#define KS2_J1_OY 67125248
+#define KS1_J1_OY 0x0
+#define KS2_J1_OY 0x4004000
 
-#define KS1_OY 0
-#define KS2_OY 16384
+#define KS1_OY 0x0
+#define KS2_OY 0x4000
 
-#define KS1_ADG2 0
-#define KS2_ADG2 4784128
+#define KS1_ADG2 0x0
+#define KS2_ADG2 0x490000
 
-#define KS1_AD2 0
-#define KS2_AD2 589824
+#define KS1_AD2 0x0
+#define KS2_AD2 0x90000
 
-#define KS1_A2 0
-#define KS2_A2 65536
+#define KS1_A2 0x0
+#define KS2_A2 0x10000
 
-#define KS1_D2 0
-#define KS2_D2 524288
+#define KS1_D2 0x0
+#define KS2_D2 0x80000
 
-#define KS1_G2 0
-#define KS2_G2 4194304
+#define KS1_G2 0x0
+#define KS2_G2 0x400000
 
-#define KS1_J3 0
-#define KS2_J3 16777216
+#define KS1_J3 0x0
+#define KS2_J3 0x1000000
 
-#define KS1_J2 0
-#define KS2_J2 33554432
+#define KS1_J2 0x0
+#define KS2_J2 0x2000000
 
-#define KS1_J1 0
-#define KS2_J1 67108864
+#define KS1_J1 0x0
+#define KS2_J1 0x4000000
 
 void check_sensors_touch(long unsigned int sensors1, long unsigned int sensors2) {
-    if ((sensors1 & KS1_D8) == 2097152 && (sensors2 & KS2_D8) == 0) {
+    if ((sensors1 & KS1_D8) == KS1_D8 && (sensors2 & KS2_D8) == KS2_D8) {
         if (modeCheck(KMODE_DEFAULT)) {
             mouseon(KMOUSE_SCROLL);
         }
     }
-    else if ((sensors1 & KS1_A8) == 0 && (sensors2 & KS2_A8) == 32) {
+    else if ((sensors1 & KS1_A8) == KS1_A8 && (sensors2 & KS2_A8) == KS2_A8) {
         if (modeCheck(KMODE_DEFAULT)) {
             mouseon(KMOUSE_MOVE);
         }
     }
-    else if ((sensors1 & KS1_J3) == 0 && (sensors2 & KS2_J3) == 16777216) {
+    else if ((sensors1 & KS1_J3) == KS1_J3 && (sensors2 & KS2_J3) == KS2_J3) {
         if (modeCheck(KMODE_DEFAULT)) {
             mousedown(KMOUSE_RIGHT);
         }
     }
-    else if ((sensors1 & KS1_J2) == 0 && (sensors2 & KS2_J2) == 33554432) {
+    else if ((sensors1 & KS1_J2) == KS1_J2 && (sensors2 & KS2_J2) == KS2_J2) {
         if (modeCheck(KMODE_DEFAULT)) {
             mousedown(KMOUSE_MIDDLE);
         }
     }
-    else if ((sensors1 & KS1_J1) == 0 && (sensors2 & KS2_J1) == 67108864) {
+    else if ((sensors1 & KS1_J1) == KS1_J1 && (sensors2 & KS2_J1) == KS2_J1) {
         if (modeCheck(KMODE_DEFAULT)) {
             mousedown(KMOUSE_LEFT);
         }
@@ -296,12 +296,12 @@ void check_sensors_touch(long unsigned int sensors1, long unsigned int sensors2)
 }
 
 void check_sensors_release(long unsigned int sensors1, long unsigned int sensors2) {
-    if ((sensors1 & KS1_Y7) == 2 && (sensors2 & KS2_Y7) == 0) {
+    if ((sensors1 & KS1_Y7) == KS1_Y7 && (sensors2 & KS2_Y7) == KS2_Y7) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_ESC);
         }
     }
-    else if ((sensors1 & KS1_J8) == 4 && (sensors2 & KS2_J8) == 0) {
+    else if ((sensors1 & KS1_J8) == KS1_J8 && (sensors2 & KS2_J8) == KS2_J8) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_T);
             keypress(KEY_E);
@@ -310,18 +310,18 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             keypress(KEY_SPACE);
         }
     }
-    else if ((sensors1 & KS1_JY) == 8 && (sensors2 & KS2_JY) == 0) {
-        if ((sensors1 & KS1_GJY) == 4104 && (sensors2 & KS2_GJY) == 0) {
+    else if ((sensors1 & KS1_JY) == KS1_JY && (sensors2 & KS2_JY) == KS2_JY) {
+        if ((sensors1 & KS1_GJY) == KS1_GJY && (sensors2 & KS2_GJY) == KS2_GJY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_ENTER);
             }
         }
-        else if ((sensors1 & KS1_AJY) == 8 && (sensors2 & KS2_AJY) == 64) {
+        else if ((sensors1 & KS1_AJY) == KS1_AJY && (sensors2 & KS2_AJY) == KS2_AJY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_TAB);
             }
         }
-        else if ((sensors1 & KS1_JY) == 8 && (sensors2 & KS2_JY) == 0) {
+        else if ((sensors1 & KS1_JY) == KS1_JY && (sensors2 & KS2_JY) == KS2_JY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_O);
             }
@@ -338,7 +338,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             }
         }
     }
-    else if ((sensors1 & KS1_KY) == 16 && (sensors2 & KS2_KY) == 0) {
+    else if ((sensors1 & KS1_KY) == KS1_KY && (sensors2 & KS2_KY) == KS2_KY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_R);
         }
@@ -352,7 +352,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             keypress(KEY_F11);
         }
     }
-    else if ((sensors1 & KS1_LY) == 32 && (sensors2 & KS2_LY) == 0) {
+    else if ((sensors1 & KS1_LY) == KS1_LY && (sensors2 & KS2_LY) == KS2_LY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_U);
         }
@@ -368,33 +368,33 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             keypress(KEY_F12);
         }
     }
-    else if ((sensors1 & KS1_VY) == 64 && (sensors2 & KS2_VY) == 0) {
+    else if ((sensors1 & KS1_VY) == KS1_VY && (sensors2 & KS2_VY) == KS2_VY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_Y);
         }
     }
-    else if ((sensors1 & KS1_WY) == 128 && (sensors2 & KS2_WY) == 0) {
+    else if ((sensors1 & KS1_WY) == KS1_WY && (sensors2 & KS2_WY) == KS2_WY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_B);
         }
     }
-    else if ((sensors1 & KS1_XY) == 256 && (sensors2 & KS2_XY) == 0) {
+    else if ((sensors1 & KS1_XY) == KS1_XY && (sensors2 & KS2_XY) == KS2_XY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_Q);
         }
     }
-    else if ((sensors1 & KS1_Y6) == 1024 && (sensors2 & KS2_Y6) == 0) {
+    else if ((sensors1 & KS1_Y6) == KS1_Y6 && (sensors2 & KS2_Y6) == KS2_Y6) {
         if (modeCheck(KMODE_DEFAULT)) {
             modifierpress(MODIFIERKEY_GUI);
         }
     }
-    else if ((sensors1 & KS1_GY) == 4096 && (sensors2 & KS2_GY) == 0) {
-        if ((sensors1 & KS1_DGY) == 4198400 && (sensors2 & KS2_DGY) == 0) {
+    else if ((sensors1 & KS1_GY) == KS1_GY && (sensors2 & KS2_GY) == KS2_GY) {
+        if ((sensors1 & KS1_DGY) == KS1_DGY && (sensors2 & KS2_DGY) == KS2_DGY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_BACKSPACE);
             }
         }
-        else if ((sensors1 & KS1_GY) == 4096 && (sensors2 & KS2_GY) == 0) {
+        else if ((sensors1 & KS1_GY) == KS1_GY && (sensors2 & KS2_GY) == KS2_GY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_A);
             }
@@ -409,7 +409,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             }
         }
     }
-    else if ((sensors1 & KS1_HY) == 8192 && (sensors2 & KS2_HY) == 0) {
+    else if ((sensors1 & KS1_HY) == KS1_HY && (sensors2 & KS2_HY) == KS2_HY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_S);
         }
@@ -423,7 +423,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             keypress(KEY_F8);
         }
     }
-    else if ((sensors1 & KS1_IY) == 16384 && (sensors2 & KS2_IY) == 0) {
+    else if ((sensors1 & KS1_IY) == KS1_IY && (sensors2 & KS2_IY) == KS2_IY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_L);
         }
@@ -434,38 +434,38 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             keypress(KEY_F9);
         }
     }
-    else if ((sensors1 & KS1_SY) == 32768 && (sensors2 & KS2_SY) == 0) {
+    else if ((sensors1 & KS1_SY) == KS1_SY && (sensors2 & KS2_SY) == KS2_SY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_F);
         }
     }
-    else if ((sensors1 & KS1_TY) == 65536 && (sensors2 & KS2_TY) == 0) {
+    else if ((sensors1 & KS1_TY) == KS1_TY && (sensors2 & KS2_TY) == KS2_TY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_P);
         }
     }
-    else if ((sensors1 & KS1_UY) == 131072 && (sensors2 & KS2_UY) == 0) {
+    else if ((sensors1 & KS1_UY) == KS1_UY && (sensors2 & KS2_UY) == KS2_UY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_X);
         }
     }
-    else if ((sensors1 & KS1_Y5) == 1048576 && (sensors2 & KS2_Y5) == 0) {
+    else if ((sensors1 & KS1_Y5) == KS1_Y5 && (sensors2 & KS2_Y5) == KS2_Y5) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_APP);
         }
     }
-    else if ((sensors1 & KS1_D8) == 2097152 && (sensors2 & KS2_D8) == 0) {
+    else if ((sensors1 & KS1_D8) == KS1_D8 && (sensors2 & KS2_D8) == KS2_D8) {
         if (modeCheck(KMODE_DEFAULT)) {
             mouseoff(KMOUSE_SCROLL);
         }
     }
-    else if ((sensors1 & KS1_DY) == 4194304 && (sensors2 & KS2_DY) == 0) {
-        if ((sensors1 & KS1_ADY) == 4194304 && (sensors2 & KS2_ADY) == 64) {
+    else if ((sensors1 & KS1_DY) == KS1_DY && (sensors2 & KS2_DY) == KS2_DY) {
+        if ((sensors1 & KS1_ADY) == KS1_ADY && (sensors2 & KS2_ADY) == KS2_ADY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_SPACE);
             }
         }
-        else if ((sensors1 & KS1_DY) == 4194304 && (sensors2 & KS2_DY) == 0) {
+        else if ((sensors1 & KS1_DY) == KS1_DY && (sensors2 & KS2_DY) == KS2_DY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_T);
             }
@@ -480,7 +480,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             }
         }
     }
-    else if ((sensors1 & KS1_EY) == 8388608 && (sensors2 & KS2_EY) == 0) {
+    else if ((sensors1 & KS1_EY) == KS1_EY && (sensors2 & KS2_EY) == KS2_EY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_N);
         }
@@ -494,7 +494,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             keypress(KEY_F5);
         }
     }
-    else if ((sensors1 & KS1_FY) == 16777216 && (sensors2 & KS2_FY) == 0) {
+    else if ((sensors1 & KS1_FY) == KS1_FY && (sensors2 & KS2_FY) == KS2_FY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_D);
         }
@@ -508,38 +508,38 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             keypress(KEY_F6);
         }
     }
-    else if ((sensors1 & KS1_PY) == 67108864 && (sensors2 & KS2_PY) == 0) {
+    else if ((sensors1 & KS1_PY) == KS1_PY && (sensors2 & KS2_PY) == KS2_PY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_M);
         }
     }
-    else if ((sensors1 & KS1_QY) == 268435456 && (sensors2 & KS2_QY) == 0) {
+    else if ((sensors1 & KS1_QY) == KS1_QY && (sensors2 & KS2_QY) == KS2_QY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_G);
         }
     }
-    else if ((sensors1 & KS1_RY) == 1073741824 && (sensors2 & KS2_RY) == 0) {
+    else if ((sensors1 & KS1_RY) == KS1_RY && (sensors2 & KS2_RY) == KS2_RY) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_K);
         }
     }
-    else if ((sensors1 & KS1_Z4) == 0 && (sensors2 & KS2_Z4) == 8) {
+    else if ((sensors1 & KS1_Z4) == KS1_Z4 && (sensors2 & KS2_Z4) == KS2_Z4) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_Z);
         }
     }
-    else if ((sensors1 & KS1_Y4) == 0 && (sensors2 & KS2_Y4) == 16) {
+    else if ((sensors1 & KS1_Y4) == KS1_Y4 && (sensors2 & KS2_Y4) == KS2_Y4) {
         if (modeCheck(KMODE_DEFAULT)) {
             keypress(KEY_J);
         }
     }
-    else if ((sensors1 & KS1_A8) == 0 && (sensors2 & KS2_A8) == 32) {
+    else if ((sensors1 & KS1_A8) == KS1_A8 && (sensors2 & KS2_A8) == KS2_A8) {
         if (modeCheck(KMODE_DEFAULT)) {
             mouseoff(KMOUSE_MOVE);
         }
     }
-    else if ((sensors1 & KS1_AY) == 0 && (sensors2 & KS2_AY) == 64) {
-        if ((sensors1 & KS1_AY_J1) == 0 && (sensors2 & KS2_AY_J1) == 67108928) {
+    else if ((sensors1 & KS1_AY) == KS1_AY && (sensors2 & KS2_AY) == KS2_AY) {
+        if ((sensors1 & KS1_AY_J1) == KS1_AY_J1 && (sensors2 & KS2_AY_J1) == KS2_AY_J1) {
             if (modeCheck(KMODE_DEFAULT)) {
                 setmode(KMODE_NUMBERS);
             }
@@ -553,7 +553,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
                 setmode(KMODE_NUMBERS);
             }
         }
-        else if ((sensors1 & KS1_AY) == 0 && (sensors2 & KS2_AY) == 64) {
+        else if ((sensors1 & KS1_AY) == KS1_AY && (sensors2 & KS2_AY) == KS2_AY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_E);
             }
@@ -568,8 +568,8 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             }
         }
     }
-    else if ((sensors1 & KS1_BY) == 0 && (sensors2 & KS2_BY) == 128) {
-        if ((sensors1 & KS1_BY_J1) == 0 && (sensors2 & KS2_BY_J1) == 67108992) {
+    else if ((sensors1 & KS1_BY) == KS1_BY && (sensors2 & KS2_BY) == KS2_BY) {
+        if ((sensors1 & KS1_BY_J1) == KS1_BY_J1 && (sensors2 & KS2_BY_J1) == KS2_BY_J1) {
             if (modeCheck(KMODE_DEFAULT)) {
                 setmode(KMODE_SYMBOLS);
             }
@@ -583,7 +583,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
                 setmode(KMODE_SYMBOLS);
             }
         }
-        else if ((sensors1 & KS1_BY) == 0 && (sensors2 & KS2_BY) == 128) {
+        else if ((sensors1 & KS1_BY) == KS1_BY && (sensors2 & KS2_BY) == KS2_BY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_I);
             }
@@ -598,8 +598,8 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             }
         }
     }
-    else if ((sensors1 & KS1_CY) == 0 && (sensors2 & KS2_CY) == 256) {
-        if ((sensors1 & KS1_CY_J1) == 0 && (sensors2 & KS2_CY_J1) == 67109120) {
+    else if ((sensors1 & KS1_CY) == KS1_CY && (sensors2 & KS2_CY) == KS2_CY) {
+        if ((sensors1 & KS1_CY_J1) == KS1_CY_J1 && (sensors2 & KS2_CY_J1) == KS2_CY_J1) {
             if (modeCheck(KMODE_DEFAULT)) {
                 setmode(KMODE_FUNCTIONS);
             }
@@ -613,7 +613,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
                 setmode(KMODE_DEFAULT);
             }
         }
-        else if ((sensors1 & KS1_CY) == 0 && (sensors2 & KS2_CY) == 256) {
+        else if ((sensors1 & KS1_CY) == KS1_CY && (sensors2 & KS2_CY) == KS2_CY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_H);
             }
@@ -625,8 +625,8 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             }
         }
     }
-    else if ((sensors1 & KS1_MY) == 0 && (sensors2 & KS2_MY) == 1024) {
-        if ((sensors1 & KS1_J1_MY) == 0 && (sensors2 & KS2_J1_MY) == 67109888) {
+    else if ((sensors1 & KS1_MY) == KS1_MY && (sensors2 & KS2_MY) == KS2_MY) {
+        if ((sensors1 & KS1_J1_MY) == KS1_J1_MY && (sensors2 & KS2_J1_MY) == KS2_J1_MY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 togglemode(KMODE_SHIFT);
             }
@@ -640,14 +640,14 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
                 togglemode(KMODE_SHIFT);
             }
         }
-        else if ((sensors1 & KS1_MY) == 0 && (sensors2 & KS2_MY) == 1024) {
+        else if ((sensors1 & KS1_MY) == KS1_MY && (sensors2 & KS2_MY) == KS2_MY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_C);
             }
         }
     }
-    else if ((sensors1 & KS1_NY) == 0 && (sensors2 & KS2_NY) == 4096) {
-        if ((sensors1 & KS1_J1_NY) == 0 && (sensors2 & KS2_J1_NY) == 67112960) {
+    else if ((sensors1 & KS1_NY) == KS1_NY && (sensors2 & KS2_NY) == KS2_NY) {
+        if ((sensors1 & KS1_J1_NY) == KS1_J1_NY && (sensors2 & KS2_J1_NY) == KS2_J1_NY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 togglemode(KMODE_CTRL);
             }
@@ -661,14 +661,14 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
                 togglemode(KMODE_CTRL);
             }
         }
-        else if ((sensors1 & KS1_NY) == 0 && (sensors2 & KS2_NY) == 4096) {
+        else if ((sensors1 & KS1_NY) == KS1_NY && (sensors2 & KS2_NY) == KS2_NY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_W);
             }
         }
     }
-    else if ((sensors1 & KS1_OY) == 0 && (sensors2 & KS2_OY) == 16384) {
-        if ((sensors1 & KS1_J1_OY) == 0 && (sensors2 & KS2_J1_OY) == 67125248) {
+    else if ((sensors1 & KS1_OY) == KS1_OY && (sensors2 & KS2_OY) == KS2_OY) {
+        if ((sensors1 & KS1_J1_OY) == KS1_J1_OY && (sensors2 & KS2_J1_OY) == KS2_J1_OY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 togglemode(KMODE_ALT);
             }
@@ -682,42 +682,42 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
                 togglemode(KMODE_ALT);
             }
         }
-        else if ((sensors1 & KS1_OY) == 0 && (sensors2 & KS2_OY) == 16384) {
+        else if ((sensors1 & KS1_OY) == KS1_OY && (sensors2 & KS2_OY) == KS2_OY) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_V);
             }
         }
     }
-    else if ((sensors1 & KS1_A2) == 0 && (sensors2 & KS2_A2) == 65536) {
-        if ((sensors1 & KS1_D2) == 0 && (sensors2 & KS2_D2) == 524288) {
-            if ((sensors1 & KS1_ADG2) == 0 && (sensors2 & KS2_ADG2) == 4784128) {
+    else if ((sensors1 & KS1_A2) == KS1_A2 && (sensors2 & KS2_A2) == KS2_A2) {
+        if ((sensors1 & KS1_D2) == KS1_D2 && (sensors2 & KS2_D2) == KS2_D2) {
+            if ((sensors1 & KS1_ADG2) == KS1_ADG2 && (sensors2 & KS2_ADG2) == KS2_ADG2) {
                 if (modeCheck(KMODE_DEFAULT)) {
                     keypress(KEY_SEMICOLON);
                 }
             }
-            else if ((sensors1 & KS1_AD2) == 0 && (sensors2 & KS2_AD2) == 589824) {
+            else if ((sensors1 & KS1_AD2) == KS1_AD2 && (sensors2 & KS2_AD2) == KS2_AD2) {
                 if (modeCheck(KMODE_DEFAULT)) {
                     keypress(KEY_COMMA);
                 }
             }
         }
-        else if ((sensors1 & KS1_A2) == 0 && (sensors2 & KS2_A2) == 65536) {
+        else if ((sensors1 & KS1_A2) == KS1_A2 && (sensors2 & KS2_A2) == KS2_A2) {
             if (modeCheck(KMODE_DEFAULT)) {
                 keypress(KEY_PERIOD);
             }
         }
     }
-    else if ((sensors1 & KS1_J3) == 0 && (sensors2 & KS2_J3) == 16777216) {
+    else if ((sensors1 & KS1_J3) == KS1_J3 && (sensors2 & KS2_J3) == KS2_J3) {
         if (modeCheck(KMODE_DEFAULT)) {
             mouseup(KMOUSE_RIGHT);
         }
     }
-    else if ((sensors1 & KS1_J2) == 0 && (sensors2 & KS2_J2) == 33554432) {
+    else if ((sensors1 & KS1_J2) == KS1_J2 && (sensors2 & KS2_J2) == KS2_J2) {
         if (modeCheck(KMODE_DEFAULT)) {
             mouseup(KMOUSE_MIDDLE);
         }
     }
-    else if ((sensors1 & KS1_J1) == 0 && (sensors2 & KS2_J1) == 67108864) {
+    else if ((sensors1 & KS1_J1) == KS1_J1 && (sensors2 & KS2_J1) == KS2_J1) {
         if (modeCheck(KMODE_DEFAULT)) {
             mouseup(KMOUSE_LEFT);
         }
