@@ -119,6 +119,7 @@ class logitech {
         byte clr;
         byte spi_err;
         byte mouse_toggle;
+        byte keyboard_toggle;
 
         uint8_t miso;
         uint8_t mosi;

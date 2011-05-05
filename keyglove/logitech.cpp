@@ -31,6 +31,7 @@ logitech::logitech() {
     mouse_buttons = 0;
     
     mouse_toggle = 1;
+    keyboard_toggle = 1;
 }
 
 void logitech::init() {
@@ -240,28 +241,17 @@ void logitech::set_key6(uint8_t c) {
 }
 
 void logitech::send_now() {
+    uint8_t p1 = keyboard_toggle ? 0x45 : 0x41;
+
     if (keyboard_keys[0] == 0x00) {
-        sendPacket(2, 0x41, 0x00);
-    } else if (keyboard_modifier_keys == 0x00) {
-        sendPacket(3, 0x45, keyboard_keys[0], keyboard_modifier_keys);
-    } else {
-        sendPacket(2, 0x45, keyboard_keys[0]);
+        sendPacket(2, p1, 0x00);
+    } else if (keyboard_modifier_keys != 0x00) {
+        sendPacket(3, p1, keyboard_keys[0], keyboard_modifier_keys);
+    } else if (keyboard_keys[0] != 0x00) {
+        sendPacket(2, p1, keyboard_keys[0]);
     }        
-    
-    /*
-    uart -> print(0x9f, BYTE);
-    uart -> print(0x0a, BYTE);
-    uart -> print(0xa1, BYTE);
-    uart -> print(0x01, BYTE);
-    uart -> print(keyboard_modifier_keys, BYTE);
-    uart -> print(0x00, BYTE);
-    uart -> print(keyboard_keys[0], BYTE);
-    uart -> print(keyboard_keys[1], BYTE);
-    uart -> print(keyboard_keys[2], BYTE);
-    uart -> print(keyboard_keys[3], BYTE);
-    uart -> print(keyboard_keys[4], BYTE);
-    uart -> print(keyboard_keys[5], BYTE);
-    */
+
+    keyboard_toggle = keyboard_toggle ? 0 : 1;
 }
 
 void logitech::set_buttons(uint8_t left, uint8_t middle, uint8_t right) {
