@@ -432,7 +432,7 @@ float opt_accel_kalman_constant = 0.6;
 float opt_gyro_kalman_constant = 0.3;
 int opt_accel_smooth_average = 4;
 int opt_gyro_smooth_average = 0;
-int opt_mouse_mode = 1;                         // which mouse move mode (0=disable, 1/2/3 as defined)
+int opt_mouse_mode = 0;                         // which mouse move mode (0=disable, 1/2/3 as defined)
 int opt_scroll_mode = 0;                        // which mouse scroll mode (0=disable, 1/2/3 as defined), uses mouse Y axis values
 int opt_mouse_hold = 0;                         // temporarily hold mouse position for hand re-orientation
 int opt_mouse_invert_x = 1;                     // invert x axis control
@@ -1078,7 +1078,7 @@ void loop() {
         // find the mode and disable it if it's in the stack
         int i = 0;
         for (i = 0; i < modeStackPos && modeStack[i] != mode; i++);
-        if (i < 10) {
+        if (i < modeStackPos) {
             // enabled, so turn it off
             deactivate_mode(mode);
             for (; i < modeStackPos; i++) modeStack[i - 1] = modeStack[i];
@@ -1116,7 +1116,7 @@ void loop() {
             Serial.println(mode);
         #endif /* SERIAL_DEBUG_TOUCHSET */
         if (mode == KMOUSE_MOVE) {
-            opt_mouse_mode = MOUSE_MODE_3D;
+            opt_mouse_mode = MOUSE_MODE_TILT_VELOCITY;
         } else if (mode == KMOUSE_SCROLL) {
             opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
         }
@@ -1381,7 +1381,7 @@ void loop() {
             Serial.print("touchset modifierup ");
             Serial.println(code);
         #endif /* SERIAL_DEBUG_TOUCHSET */
-        if (modifiersDown & code > 0) {
+        if ((modifiersDown & code) > 0) {
             modifiersDown -= code;
             #ifdef ENABLE_USB
                 Keyboard.set_modifier(modifiersDown);
