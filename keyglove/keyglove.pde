@@ -997,13 +997,13 @@ void loop() {
                 adding = true;
 
                 // touch initiation, check for actions
-                check_sensors_touch(verify1, verify2);
+                check_sensors_touch(verify1, verify2, 1);
             } else if (adding && (verify1 < sensors1 || verify2 < sensors2)) {
                 adding = false;
                 removing = true;
     
                 // touch release, check for actions
-                check_sensors_release(sensors1, sensors2);
+                check_sensors_release(sensors1, sensors2, 1);
             }
             
             // set official sensor readings to current readings 
@@ -1054,9 +1054,11 @@ void loop() {
 
 // touchset control functions
 #ifdef ENABLE_TOUCH
-    
-    boolean modeCheck(int mode) {
-        return modeStack[modeStackPos - 1] == mode;
+    boolean modeCheck(int mode, int pos) {
+        if (modeStackPos < pos) {
+            return false;
+        }
+        return modeStack[modeStackPos - pos] == mode;
     }
     
     void setmode(int mode) {
@@ -1081,7 +1083,7 @@ void loop() {
         if (i < modeStackPos) {
             // enabled, so turn it off
             deactivate_mode(mode);
-            for (; i < modeStackPos; i++) modeStack[i - 1] = modeStack[i];
+            for (i++; i < modeStackPos; i++) modeStack[i - 1] = modeStack[i];
             modeStackPos--;
         } else {
             // not enabled, so turn it on
@@ -1177,7 +1179,7 @@ void loop() {
     void keydown(int code) {
         #ifdef SERIAL_DEBUG_TOUCHSET
             Serial.print("touchset keydown ");
-            Serial.println(code);
+            Serial.println(code, HEX);
         #endif /* SERIAL_DEBUG_TOUCHSET */
         int usePos = 0;
         for (usePos = 0; usePos < 6 && keysDown[usePos] != 0; usePos++);
