@@ -128,9 +128,9 @@ unsigned char ide_workaround = 0;
 #define KEY_VOLDOWN    129
 
 #ifdef USE_ARDUINO
-    #define MODIFIERKEY_CTRL        0x01
+    #define MODIFIERKEY_CTRL        0x04
     #define MODIFIERKEY_SHIFT       0x02
-    #define MODIFIERKEY_ALT         0x04
+    #define MODIFIERKEY_ALT         0x01
     #define MODIFIERKEY_GUI         0x08
     
     #define KEY_A           4
@@ -413,18 +413,18 @@ int opt_enable_calibration = 0;                 // temporarily enable calibratio
 //int opt_accel_offset[] = { 0, 0, 0 };           // amount to offset raw accelerometer readings [x,y,z]
 //float opt_accel_calibrate[] = { 1, 1, 1 };      // amount to scale raw accelerometer readings [x,y,z] (post-offset)
 
-int opt_accel_offset[] = { -12, 5, 2 };
-float opt_accel_calibrate[] = { 0.952, 0.945, 1.04 };
+int opt_accel_offset[] = { 7, -16, 1 };
+float opt_accel_calibrate[] = { 1, 1, 1 };
 // mine @ room temp:
-// x={-257,281}, y={-276,267}, z={-258,254}
+// x={-246,232}, y={-226,259}, z={-304,210}
 // x offset = -12, x calibrate = 0.952
 // y offset = 5, y calibrate = 0.945
-// z offset = 2, z calibrate = 1
+// z offset = -47, z calibrate = 1
 
 //int opt_gyro_offset[] = { 0, 0, 0 };            // amount to offset raw gyroscope readings [x,y,z]
 //float opt_gyro_calibrate[] = { 1, 1, 1 };       // amount to scale raw gyroscope readings [x,y,z] (post-offset)
 
-int opt_gyro_offset[] = { -22, -115, -7 };
+int opt_gyro_offset[] = { 0, 0, 0 };
 float opt_gyro_calibrate[] = { 1, 1, 1 };
 
 int opt_motion_sampling_div = 15;                // how many ticks in between each accel/gyro reading
@@ -610,6 +610,13 @@ void loop() {
                 xRaw = (float)xRaw * opt_accel_calibrate[0];
                 yRaw = (float)yRaw * opt_accel_calibrate[1];
                 zRaw = (float)zRaw * opt_accel_calibrate[2];
+                
+                // switch axis
+                float temp = xRaw;
+                xRaw = -1 * zRaw;
+                zRaw = -1 * yRaw;
+                yRaw = -1 * temp;
+                
                 
                 // Kalman filtering
                 x = x0 + (opt_accel_kalman_constant * (xRaw - x0));
@@ -1393,6 +1400,18 @@ void loop() {
                 RX400.set_modifier(modifiersDown);
                 RX400.send_now();
             #endif /* ENABLE_RX400 */
+        }
+    }
+    
+    void togglemodifier(int code) {
+        #ifdef SERIAL_DEBUG_TOUCHSET
+            Serial.print("touchset modifiertoggle ");
+            Serial.println(code);
+        #endif /* SERIAL_DEBUG_TOUCHSET */
+        if ((modifiersDown & code) > 0) {
+            modifierup(code);
+        } else {
+            modifierdown(code);
         }
     }
     
