@@ -1,0 +1,17 @@
+==What is Keyglove?==
+The Keyglove is an [http://arduino.cc Arduino]-powered glove that uses touch combinations to generate keyboard and mouse control codes. Once learned, the glove can easily be used without looking, making it perfect for embedded/wearable environments. The glove is thin and light, built to allow other activities (such as writing or driving) without being in the way.
+
+==Keyglove Design==
+Because the glove design allows for multi-sensor combinations, the keyglove provides exponentially more possibilities than many other glove-based input devices (prototypes or commercial products). 34 strategically placed contact sensors and smart controller software make it possible to implement the entire English alphabet using simple one-to-one sensor contacts. When you include multi-sensor contacts, there are many hundreds of ergonomically usable combinations.
+
+==Development Status==
+As of October 2010, the glove is currently in the prototype stage with no fully working unit, but I've done a lot of development and testing on it. At the moment, I'm only waiting on a little more hardware to arrive in the mail before I should be able to complete a working model. The source code is logically sound and works as much as possible without the remaining hardware to test it.
+
+For up-to-date development news, check out the [http://keyglove.net/news News] page ([http://keyglove.net/feed RSS here]) or follow the project on Twitter at [http://twitter.com/keyglove @keyglove].
+
+For technical information, please visit the [http://keyglove.net/hardware Hardware] and [http://keyglove.net/software Software] pages. Once the prototype is working, I will add step-by-step instructions to the [http://keyglove.net/build Build Your Own] page (which is currently devoid of any decent content except a [http://keyglove.net/build rather entertaining photo]).
+
+You may also be interested in a [http://keyglove.net/similar list of similar devices] I've come across on the internet recently, either to satisfy your curiosity, or out of a need for inspiration, or possibly to look for a product that might be more suited to your needs.
+
+And, of course, you can always [http://keyglove.net/contact contact me] with any questions, comments, ideas, etc.
+
