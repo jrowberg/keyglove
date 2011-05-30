@@ -108,7 +108,7 @@ void setup() {
     lights();
     smooth();
     noStroke();
-    port = new Serial(this, "COM17", 115200);
+    port = new Serial(this, Serial.list()[0], 115200);
     font128 = loadFont("Calibri-128.vlw");
     font32 = loadFont("Calibri-32.vlw");
     font24 = loadFont("Calibri-24.vlw");

@@ -33,8 +33,8 @@ unsigned char ide_workaround = 0;
 /* ===============================================
  * CORE CONTROLLER SETTINGS
 =============================================== */
-#define USE_ARDUINO
-//#define USE_TEENSY
+//#define USE_ARDUINO
+#define USE_TEENSY
 
 /* ===============================================
  * CORE FEATURE SETTINGS
@@ -48,9 +48,9 @@ unsigned char ide_workaround = 0;
 #define ENABLE_TOUCH
 #define ENABLE_ACCEL
 #define ENABLE_GYRO
-#define ENABLE_RX400
+//#define ENABLE_RX400
 #ifdef USE_TEENSY
-    //#define ENABLE_USB
+  #define ENABLE_USB
 #endif /* USE_TEENSY */
 
 
@@ -356,7 +356,9 @@ unsigned char ide_workaround = 0;
     #include "logitech.h"
     
     logitech RX400 = logitech();
-    #define ENABLE_MOUSE
+    #ifndef ENABLE_MOUSE
+        #define ENABLE_MOUSE
+    #endif
 #endif /* ENABLE_RX400 */
 
 /* ===============================================
