@@ -1,6 +1,6 @@
 // Keyglove controller source code - Custom touchset definition
 // 4/5/2011 by Jeff Rowberg <jeff@rowberg.net>
-// (Generated Tue, 10 May 2011 15:42:46 +1200 @ mikenz-eeepc)
+// (Generated Sat, 11 Jun 2011 01:54:22 -0600 @ host132.hostmonster.com)
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -30,13 +30,12 @@ THE SOFTWARE.
 // ===============================================================
 
 // numeric mode definitions
-
 #define KMODE_DEFAULT 0
 #define KMODE_NUMBERS 1
 #define KMODE_SYMBOLS 2
 #define KMODE_FUNCTIONS 3
 #define KMODE_GUI 4
-
+ 
 void activate_mode(int mode) {
     switch (mode) {
         case KMODE_DEFAULT:
@@ -75,7 +74,7 @@ void activate_mode(int mode) {
             break;
     }
 }
-
+ 
 void deactivate_mode(int mode) {
     switch (mode) {
         case KMODE_GUI:
@@ -84,138 +83,138 @@ void deactivate_mode(int mode) {
             break;
     }
 }
-
+ 
 // numeric sensor definitions
-
+ 
 #define KS1_Y7 0x2
 #define KS2_Y7 0x0
-
+ 
 #define KS1_GJY 0x2008
 #define KS2_GJY 0x0
-
+ 
 #define KS1_AJY 0x8
 #define KS2_AJY 0x80
-
+ 
 #define KS1_JY 0x8
 #define KS2_JY 0x0
-
+ 
 #define KS1_KY 0x10
 #define KS2_KY 0x0
-
+ 
 #define KS1_LY 0x20
 #define KS2_LY 0x0
-
+ 
 #define KS1_HY 0x40
 #define KS2_HY 0x0
-
+ 
 #define KS1_VY 0x80
 #define KS2_VY 0x0
-
+ 
 #define KS1_WY 0x100
 #define KS2_WY 0x0
-
+ 
 #define KS1_XY 0x200
 #define KS2_XY 0x0
-
+ 
 #define KS1_Y6 0x800
 #define KS2_Y6 0x0
-
+ 
 #define KS1_DGY 0x402000
 #define KS2_DGY 0x0
-
+ 
 #define KS1_GY 0x2000
 #define KS2_GY 0x0
-
+ 
 #define KS1_IY 0x4000
 #define KS2_IY 0x0
-
+ 
 #define KS1_SY 0x8000
 #define KS2_SY 0x0
-
+ 
 #define KS1_TY 0x10000
 #define KS2_TY 0x0
-
+ 
 #define KS1_UY 0x20000
 #define KS2_UY 0x0
-
+ 
 #define KS1_Y5 0x100000
 #define KS2_Y5 0x0
-
+ 
 #define KS1_D8 0x200000
 #define KS2_D8 0x0
-
+ 
 #define KS1_ADY 0x400000
 #define KS2_ADY 0x80
-
+ 
 #define KS1_DY 0x400000
 #define KS2_DY 0x0
-
+ 
 #define KS1_EY 0x800000
 #define KS2_EY 0x0
-
+ 
 #define KS1_FY 0x1000000
 #define KS2_FY 0x0
-
+ 
 #define KS1_PY 0x4000000
 #define KS2_PY 0x0
-
+ 
 #define KS1_QY 0x10000000
 #define KS2_QY 0x0
-
+ 
 #define KS1_RY 0x40000000
 #define KS2_RY 0x0
-
+ 
 #define KS1_Y4 0x0
 #define KS2_Y4 0x10
-
+ 
 #define KS1_A8 0x0
 #define KS2_A8 0x20
-
+ 
 #define KS1_MY 0x0
 #define KS2_MY 0x40
-
+ 
 #define KS1_AY 0x0
 #define KS2_AY 0x80
-
+ 
 #define KS1_BY 0x0
 #define KS2_BY 0x100
-
+ 
 #define KS1_CY 0x0
 #define KS2_CY 0x200
-
+ 
 #define KS1_NY 0x0
 #define KS2_NY 0x1000
-
+ 
 #define KS1_OY 0x0
 #define KS2_OY 0x4000
-
+ 
 #define KS1_A3 0x0
 #define KS2_A3 0x8000
-
+ 
 #define KS1_A2 0x0
 #define KS2_A2 0x10000
-
+ 
 #define KS1_A1 0x0
 #define KS2_A1 0x20000
-
+ 
 #define KS1_D3 0x0
 #define KS2_D3 0x40000
-
+ 
 #define KS1_D2 0x0
 #define KS2_D2 0x80000
-
+ 
 #define KS1_D1 0x0
 #define KS2_D1 0x100000
-
+ 
 #define KS1_J3 0x0
 #define KS2_J3 0x1000000
-
+ 
 #define KS1_J2 0x0
 #define KS2_J2 0x2000000
-
+ 
 #define KS1_J1 0x0
 #define KS2_J1 0x4000000
-
+ 
 void check_sensors_touch(long unsigned int sensors1, long unsigned int sensors2, int pos) {
     if ((sensors1 & KS1_D8) == KS1_D8 && (sensors2 & KS2_D8) == KS2_D8 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
         mouseon(KMOUSE_SCROLL);
@@ -233,14 +232,14 @@ void check_sensors_touch(long unsigned int sensors1, long unsigned int sensors2,
         mousedown(KMOUSE_LEFT);
         return;
     }
-
+ 
     /* Fall throughs */
     if (modeCheck(KMODE_GUI, pos) && modeCheck(KMODE_DEFAULT, pos + 1)) {
         check_sensors_touch(sensors1, sensors2, pos + 1);
         return;
     }
 }
-
+ 
 void check_sensors_release(long unsigned int sensors1, long unsigned int sensors2, int pos) {
     if ((sensors1 & KS1_Y7) == KS1_Y7 && (sensors2 & KS2_Y7) == KS2_Y7 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
         keypress(KEY_ESC);
@@ -909,13 +908,13 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             return;
          }
     } else if ((sensors1 & KS1_D3) == KS1_D3 && (sensors2 & KS2_D3) == KS2_D3 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        togglemodifier(MODIFIERKEY_ALT);
+        // UNKNOWN: array (   'action' => 'togglemodifier',   'code' => 'MODIFIERKEY_ALT', )
         return;
     } else if ((sensors1 & KS1_D2) == KS1_D2 && (sensors2 & KS2_D2) == KS2_D2 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        togglemodifier(MODIFIERKEY_CTRL);
+        // UNKNOWN: array (   'action' => 'togglemodifier',   'code' => 'MODIFIERKEY_CTRL', )
         return;
     } else if ((sensors1 & KS1_D1) == KS1_D1 && (sensors2 & KS2_D1) == KS2_D1 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        togglemodifier(MODIFIERKEY_SHIFT);
+        // UNKNOWN: array (   'action' => 'togglemodifier',   'code' => 'MODIFIERKEY_SHIFT', )
         return;
     } else if ((sensors1 & KS1_J3) == KS1_J3 && (sensors2 & KS2_J3) == KS2_J3 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
         mouseup(KMOUSE_RIGHT);
@@ -927,11 +926,11 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         mouseup(KMOUSE_LEFT);
         return;
     }
-
+ 
     /* Fall throughs */
     if (modeCheck(KMODE_GUI, pos) && modeCheck(KMODE_DEFAULT, pos + 1)) {
         check_sensors_release(sensors1, sensors2, pos + 1);
         return;
     }
 }
-
+ 

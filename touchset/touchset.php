@@ -124,7 +124,7 @@ $sensors = array(
 );
 
 // base 1-to-1 touches with VERY IMPORTANT precedence order
-$touches = array(
+/*$touches = array(
     "Z7",
     "Y7",
     "J8",
@@ -190,7 +190,75 @@ $touches = array(
     "J1",
     
     "Y1",
+);*/
+$touches = array(
+    "Z7",
+    "Y7",
+    "J8",
+    "JY",
+    "KY",
+    "LY",
+    "HY",
+    "VY",
+    "WY",
+    "XY",
+    
+    "Z6",
+    "Y6",
+    "G8",
+    "GY",
+    "IY",
+    "SY",
+    "TY",
+    "UY",
+    "G7",
+    
+    "Z5",
+    "Y5",
+    "D8",
+    "DY",
+    "EY",
+    "FY",
+    "PZ",
+    "PY",
+    "QZ",
+    "QY",
+    "RZ",
+    "RY",
+    "D4",
+    "D6",
+    "D7",
+    "DM",
+    
+    "Z4",
+    "Y4",
+    "A8",
+    "MY",
+    "AY",
+    "BY",
+    "CY",
+    "MZ",
+    "NZ",
+    "NY",
+    "OZ",
+    "OY",
+    
+    "A3",
+    "A2",
+    "A1",
+    "D3",
+    "D2",
+    "D1",
+    "G3",
+    "G2",
+    "G1",
+    "J3",
+    "J2",
+    "J1",
+    
+    "Y1",
 );
+
 
 // list of physically impossible touch combinations (e.g. AY+A2)
 $impossible = array(
