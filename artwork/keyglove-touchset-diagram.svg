@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="765"
+   height="765"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 "
+   sodipodi:docname="keyglove-touchset-diagram.svg"
+   inkscape:export-filename="K:\idev\keyglove.net\artwork\keyglove-touchset-steno-fast.png"
+   inkscape:export-xdpi="105.88"
+   inkscape:export-ydpi="105.88">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4352"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#6e6e6e;stop-opacity:1;"
+         offset="0"
+         id="stop4354" />
+    </linearGradient>
+    <filter
+       id="filter4428"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur4430"
+         in="SourceAlpha"
+         stdDeviation="5.4"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix4432"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.405 0 " />
+      <feOffset
+         id="feOffset4434"
+         in="bluralpha"
+         dx="4"
+         dy="4"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge4436">
+        <feMergeNode
+           id="feMergeNode4438"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode4440"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="272.70544"
+     inkscape:cy="401.52633"
+     inkscape:document-units="in"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1680"
+     inkscape:window-height="988"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     height="765px" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-287.36218)">
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3012"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic"><flowRegion
+         id="flowRegion3014"><rect
+           id="rect3016"
+           width="55.714287"
+           height="45.714287"
+           x="-7.1428571"
+           y="853.79077" /></flowRegion><flowPara
+         id="flowPara3018" /></flowRoot>    <text
+       xml:space="preserve"
+       style="font-size:22.81192398px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic"
+       x="-176.02206"
+       y="467.08337"
+       id="text4008"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.82812485,-0.5605437,0.5605437,0.82812485,0,0)"
+       inkscape:transform-center-x="-4.0735666"
+       inkscape:transform-center-y="16.294254"><tspan
+         sodipodi:role="line"
+         id="tspan4010"
+         x="-176.02206"
+         y="467.08337"
+         style="font-size:15.20795059px">(Thumb)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:22.81192398px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic"
+       x="225.11316"
+       y="438.30173"
+       id="text4008-6"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.98728529,-0.15895837,0.15895837,0.98728529,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan4010-8"
+         x="225.11316"
+         y="438.30173"
+         style="font-size:15.20795059px">(Thumb)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:22.81192398px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic"
+       x="515.74988"
+       y="286.78909"
+       id="text4008-5"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.97831869,0.20710516,-0.20710516,0.97831869,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan4010-4"
+         x="515.74988"
+         y="286.78909"
+         style="font-size:15.20795059px">(Thumb)</tspan></text>
+    <g
+       id="g4112"
+       transform="matrix(1.4114636,0,0,1.4114636,-254.22844,-359.04411)">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4092"
+         d="m 498.3706,968.74338 c 13.38308,-11.38231 27.15726,-22.99748 37.46542,-37.56946 12.04491,-16.47495 27.15186,-30.26827 43.63963,-42.23106 7.72339,-10.01574 14.94802,-20.5316 23.50121,-29.89511 16.08922,-11.37827 34.46049,-20.48135 44.71041,-38.28403 7.5486,-9.07457 13.28883,-19.39601 23.34107,-26.08168 5.97982,-7.01254 18.76974,-12.7546 16.75909,-23.50135 -6.0815,-11.48459 -20.24611,-17.64854 -32.55663,-11.4893 -26.32291,4.50143 -44.79372,25.88143 -62.60139,43.83396 -11.09988,13.7919 -31.40954,26.49218 -48.71597,16.68639 -14.1736,-12.18009 -22.41729,-31.81865 -17.30896,-50.60305 0.9051,-14.90611 -0.54639,-30.47304 3.28634,-44.81757 9.67266,-22.11571 20.54914,-43.98137 27.14803,-67.36658 1.24012,-23.28315 15.91785,-43.18912 19.11052,-66.32863 5.69496,-13.97934 5.99525,-36.90724 -11.5993,-42.08554 -15.49287,-4.59657 -23.69161,14.64144 -30.50899,26.32422 -11.74181,21.91398 -14.95036,47.48462 -28.36769,68.57176 -8.39637,19.86081 -14.89521,40.46128 -22.74555,60.46186 -3.26067,7.46581 -19.22992,8.70505 -15.58398,-2.77547 2.46896,-32.32013 5.52689,-48.677 10.26466,-84.6666 2.63689,-23.01853 6.57154,-45.91651 4.79686,-69.30315 0.53506,-12.84007 -2.52506,-28.9353 -16.88511,-32.97976 -9.34326,-4.04378 -20.25085,1.33174 -21.04664,10.95434 -8.25775,29.55126 -6.39986,61.1243 -15.10236,90.71146 -7.68197,30.42113 -5.61025,45.80129 -6.79474,68.82497 -2.79646,10.19943 1.28113,27.89686 -11.91265,31.46707 -4.7834,-2.74788 -6.07544,-10.5011 -8.63481,-15.39657 -2.56857,-28.1303 -17.31118,-53.28621 -18.97671,-81.57219 -4.00713,-23.07835 -4.18792,-48.04224 -16.16595,-68.67118 -9.18317,-13.11481 -35.44646,-9.23778 -35.53537,8.69504 -1.12177,22.42923 4.60803,44.88209 8.55724,66.86175 1.03729,25.08419 1.72013,50.8801 10.37362,74.73726 -0.59496,12.83692 -1.04526,25.78619 3.91888,37.94707 2.32561,9.19253 -7.9511,22.2664 -16.53347,13.31741 -25.14785,-25.87606 -44.07302,-57.02629 -68.38233,-83.74102 -9.70634,-10.97434 -21.2254,-26.72719 -37.38232,-22.91327 -11.7396,6.86777 -3.78294,22.39592 1.02901,31.52464 18.21258,33.23387 44.73384,60.70851 66.58865,91.26535 6.79624,8.04703 16.42773,14.87868 16.4089,26.19497 3.92177,12.64866 10.93824,23.94791 12.607,37.37806 4.59163,32.50686 11.46501,64.90044 21.68083,96.09301 1.4656,2.51133 5.66904,11.03969 1.41428,5.30269 -11.57125,-26.03683 -15.03649,-54.92273 -21.49506,-82.62556 -1.74548,-18.63432 -6.09736,-36.62202 -14.40753,-53.28747 -2.77473,-7.17948 -3.01952,-14.93009 -9.95682,-19.82934 -16.2027,-19.13482 -31.0697,-39.71703 -46.98572,-59.03486 -13.28386,-18.76088 -28.6846,-37.2291 -34.58463,-59.72221 -2.68315,-11.30191 9.68011,-18.99057 19.41136,-15.032 20.31969,10.90811 32.60656,31.70547 47.60143,48.72397 16.05357,20.17461 31.03734,42.37215 48.91499,60.30228 12.51477,5.65241 16.00588,-14.17156 10.43698,-22.17734 -4.37701,-13.47689 1.64901,-28.40772 -5.36721,-41.25713 -5.68981,-22.39312 -5.13603,-45.73436 -7.3342,-68.57746 -4.85835,-19.8191 -7.72057,-40.36095 -8.14124,-60.6662 0.87308,-10.45248 9.53793,-19.31518 20.44257,-17.85424 17.79713,-2.09509 23.61724,17.48441 26.56169,31.19666 7.25912,30.89433 6.54167,63.69563 18.86018,93.32216 4.91635,12.94251 5.04678,27.43012 9.99523,40.14989 1.62266,4.71717 5.34551,12.24931 10.32466,5.52539 5.93539,-13.24445 5.66928,-28.81755 6.34743,-43.12756 2.82928,-21.16635 6.84337,-52.58322 11.58589,-78.73381 3.54879,-24.22278 3.14229,-49.528 12.24449,-72.52063 8.13998,-11.4351 29.47798,-4.67919 34.11967,7.78059 6.08627,19.93471 2.99894,41.81486 2.10467,62.42764 -5.83013,28.52817 -7.96082,54.79654 -14.65483,85.50887 -0.75926,11.16653 -2.62882,24.54538 2.21342,35.19449 15.40319,1.92165 16.28389,-17.9661 20.52084,-28.2439 6.94758,-19.88401 15.15697,-39.23202 24.57727,-58.01127 9.06913,-25.17003 15.61222,-53.42971 35.43721,-72.5976 14.30945,-9.53645 31.23612,5.16839 30.19549,20.61528 -1.6576,17.26454 -6.61198,34.38828 -12.6848,50.6513 -6.47533,13.71988 -9.45287,28.43286 -12.04333,43.22012 -7.74695,22.42958 -18.65359,43.66167 -26.95636,65.79292 0.27156,21.01573 -4.28198,42.60872 -1.19415,63.34447 5.22353,15.16391 17.67936,34.94234 36.65864,27.41965 20.77872,-4.45259 30.56499,-25.33924 46.45033,-37.20758 15.86484,-16.3182 37.52461,-28.54206 60.80212,-27.52974 7.61061,3.01661 16.41077,9.25222 17.49077,17.98697 -5.01201,14.01604 -20.6518,20.67954 -29.54489,31.71059 -12.40784,16.55548 -24.1685,34.5192 -43.01582,44.40192 -13.12149,6.22438 -21.13105,18.41202 -29.83181,29.29564 -5.88191,11.49093 -18.41585,17.18548 -27.16253,26.2024 -20.08686,17.0431 -32.16338,41.69995 -53.88406,57.11224 -2.34017,1.58263 -4.64822,4.84821 -7.31307,5.26975 z"
+         style="fill:#000000"
+         sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4090"
+         d="m 634.17834,821.54706 c -7.14633,-7.54384 -18.48086,-16.10324 -23.2809,-23.31885 7.73094,7.93803 17.14329,15.03636 23.64621,23.46694 l -0.36534,-0.14802 3e-5,-7e-5 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4088"
+         d="m 331.32434,741.0647 c 0.21286,-0.56489 0.34847,0.40683 0,0 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4086"
+         d="m 285.44415,739.44575 c 5.29981,-6.02798 11.62941,-16.80747 17.11854,-19.254 -6.9076,5.46618 -10.26858,14.17348 -17.11854,19.254 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4084"
+         d="m 249.40765,697.60307 c 5.04459,-5.42103 13.62778,-14.03922 18.80822,-15.96674 -6.39068,5.08607 -12.32273,11.09627 -18.80822,15.96674 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4082"
+         d="m 475.14443,686.68616 c -0.009,-0.93365 0.61994,1.07194 0,0 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4080"
+         d="m 356.90971,680.7873 c 9.02992,-2.28577 18.51411,-6.05663 27.62506,-9.4086 0.0196,1.24998 -13.22631,5.4188 -18.20886,8.0255 -3.35329,0.21725 -6.21416,0.95096 -9.4162,1.3831 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4078"
+         d="m 475.15328,678.52476 c 0.0499,-0.48362 0.16215,0.29885 0,0 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4076"
+         d="m 536.12666,678.27109 c -8.76549,-2.83367 -18.99859,-5.06883 -27.89784,-7.77565 8.77639,0.95757 21.67721,4.0947 28.70531,8.03585 l -0.80748,-0.26021 10e-6,10e-6 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4074"
+         d="m 223.68478,661.52135 c 0.0878,-0.40048 0.34666,0.33048 0,0 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4072"
+         d="m 460.53041,650.40317 c -8.21382,-2.76362 -18.35578,-0.65817 -25.96426,-2.09382 9.29717,-0.72971 18.61838,-0.72174 27.6741,1.287 l -0.61334,0.62053 -1.0965,0.18621 0,8e-5 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4070"
+         d="m 334.80205,633.08084 c 0.27812,-0.59109 0.27816,0.59107 0,0 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4068"
+         d="m 345.86216,616.63725 c 6.58225,-2.22558 17.23428,-4.32921 25.44031,-5.99305 -7.54185,2.92118 -17.10541,4.86051 -25.44031,5.99305 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4066"
+         d="m 553.84161,613.05597 c -7.04969,-2.09035 -15.17934,-3.0168 -21.23774,-5.71699 7.99969,1.05931 16.22005,3.53883 23.83581,5.28085 -0.80188,0.51536 -1.72629,0.29832 -2.59807,0.43614 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4064"
+         d="m 350.70416,583.14068 c 0.61778,-0.18212 0.11211,0.1964 0,0 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4062"
+         d="m 484.5211,578.74267 c -0.26409,-0.55726 0.41048,0.16076 0,0 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4060"
+         d="m 464.62537,578.48463 c -6.88999,-2.32539 -16.00747,1.60819 -21.48763,-1.92347 9.48123,0.93575 19.32947,-0.10251 28.64118,1.50116 -2.28958,0.89966 -4.76378,-0.0882 -7.15355,0.42231 z"
+         style="fill:#000000" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path4056"
+         d="m 529.91834,576.74619 c -0.75275,-1.43218 0.98099,0.082 0,0 z"
+         style="fill:#000000" />
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 76.345811,560.84081 109.01364,445.94018"
+       id="path4132"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 123.65784,439.18131 231.79963,421.15769"
+       id="path4134"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 244.19086,420.03121 63.0827,-66.46213"
+       id="path4136"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 321.91776,353.56908 70.96803,24.78249"
+       id="path4138"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 404.15058,379.47803 81.10633,-21.40305"
+       id="path4140"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 495.3952,363.70737 42.80612,61.95622"
+       id="path4142"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="84.23114"
+       y="595.7616"
+       id="text4144"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4146"
+         x="84.23114"
+         y="595.7616">S</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="122.53136"
+       y="649.83246"
+       id="text4148"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4150"
+         x="122.53136"
+         y="649.83246">C</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="170.96986"
+       y="711.78876"
+       id="text4152"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4154"
+         x="170.96986"
+         y="711.78876">P</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00b800;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="119.15193"
+       y="565.34674"
+       id="text4156"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4158"
+         x="119.15193"
+         y="565.34674">Q</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00b800;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="159.70509"
+       y="617.16467"
+       id="text4160"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4162"
+         x="159.70509"
+         y="617.16467">Y</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00b800;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="199.13179"
+       y="665.60321"
+       id="text4164"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4166"
+         x="199.13179"
+         y="665.60321">X</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20.07279396px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="82.934845"
+       y="432.52597"
+       id="text4168"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4170"
+         x="82.934845"
+         y="432.52597">Enter</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20.07279396px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="250.97719"
+       y="343.21408"
+       id="text4172"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4174"
+         x="250.97719"
+         y="343.21408">Backspace</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:20.07279396px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="456.76505"
+       y="349.74646"
+       id="text4176"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4178"
+         x="456.76505"
+         y="349.74646">Space</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="237.43196"
+       y="462.83734"
+       id="text4180"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4182"
+         x="237.43196"
+         y="462.83734">T</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="252.07619"
+       y="555.20844"
+       id="text4184"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4186"
+         x="252.07619"
+         y="555.20844">L</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="264.46744"
+       y="636.31476"
+       id="text4188"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4190"
+         x="264.46744"
+         y="636.31476">G</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="370.35626"
+       y="601.39398"
+       id="text4192"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4194"
+         x="370.35626"
+         y="601.39398">B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="374.86218"
+       y="515.78174"
+       id="text4196"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4198"
+         x="374.86218"
+         y="515.78174">M</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="490.88931"
+       y="556.3349"
+       id="text4200"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4202"
+         x="490.88931"
+         y="556.3349">N</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="387.25342"
+       y="418.90475"
+       id="text4204"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4206"
+         x="387.25342"
+         y="418.90475">H</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="523.55713"
+       y="467.3432"
+       id="text4208"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4210"
+         x="523.55713"
+         y="467.3432">R</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="466.10678"
+       y="631.8089"
+       id="text4212"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4214"
+         x="466.10678"
+         y="631.8089">F</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="519.05121"
+       y="652.08545"
+       id="text4216"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4218"
+         x="519.05121"
+         y="652.08545">I</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="544.96021"
+       y="573.23206"
+       id="text4220"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4222"
+         x="544.96021"
+         y="573.23206">E</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="569.74274"
+       y="485.36682"
+       id="text4224"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4226"
+         x="569.74274"
+         y="485.36682">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="437.94485"
+       y="429.04303"
+       id="text4228"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4230"
+         x="437.94485"
+         y="429.04303">O</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="430.05951"
+       y="520.28766"
+       id="text4232"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4234"
+         x="430.05951"
+         y="520.28766">U</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00b800;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="414.28888"
+       y="611.53229"
+       id="text4236"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4238"
+         x="414.28888"
+         y="611.53229">D</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00b800;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="317.41183"
+       y="621.67053"
+       id="text4240"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4242"
+         x="317.41183"
+         y="621.67053">Z</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00b800;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="298.26178"
+       y="536.05829"
+       id="text4244"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4246"
+         x="298.26178"
+         y="536.05829">K</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#00b800;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="284.74402"
+       y="451.57257"
+       id="text4248"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4250"
+         x="284.74402"
+         y="451.57257">W</tspan></text>
+    <path
+       style="fill:none;stroke:#6e6e6e;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 224.36496,755.79518 c 18.31337,-22.21595 47.15171,-30.00088 72.68344,-40.62959 46.9161,-17.40327 97.42679,-21.99746 147.14053,-21.03793 9.3153,0.0671 18.62929,0.28328 27.93864,0.62086"
+       id="path4252"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#6e6e6e;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 227.05672,768.19997 c 18.6101,-13.09585 40.92034,-19.09868 61.29298,-28.74698 54.82666,-20.64938 113.00223,-32.53463 171.5333,-34.94276 2.38414,0.0442 4.76732,0.15547 7.14418,0.34787"
+       id="path4254"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#6e6e6e;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 239.10672,866.46073 c 14.49152,-24.87817 41.69722,-37.21127 65.18102,-51.81776 43.49601,-24.74052 92.60494,-37.41918 141.82287,-44.48828 9.20423,-1.4358 18.4312,-2.7243 27.67316,-3.89223"
+       id="path4252-4"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#6e6e6e;stroke-width:1.1151551px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 244.12309,878.23996 c 16.25494,-15.92525 37.30532,-25.44694 55.85562,-38.25398 50.77963,-29.21967 106.27751,-50.3299 163.65436,-62.14435 2.36009,-0.34075 4.73,-0.61528 7.10679,-0.80864"
+       id="path4254-8"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#6e6e6e;stroke-width:0.83786833px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 327.56044,940.01494 c 7.7972,-20.17801 26.51674,-32.5585 42.20505,-46.18368 29.33208,-23.51999 64.26071,-38.75773 99.93628,-49.84665 6.65816,-2.15817 13.3507,-4.20977 20.06866,-6.17368"
+       id="path4252-4-1"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#6e6e6e;stroke-width:0.83786833px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 332.94565,949.81304 c 10.1686,-13.74522 24.65532,-23.309 36.89712,-35.01334 34.20396,-27.70798 72.87136,-49.95978 114.03661,-65.53813 1.71049,-0.53304 3.43614,-1.01813 5.17654,-1.44382"
+       id="path4254-8-9"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:26.76372337px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;line-height:153.99999619%;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="30.584553"
+       y="843.76398"
+       id="text4324"
+       sodipodi:linespacing="154%"
+       transform="matrix(0.92760619,-0.37355958,0.37355958,0.92760619,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan4326"
+         x="30.584549"
+         y="843.76398">Right hand</tspan><tspan
+         sodipodi:role="line"
+         x="30.584553"
+         y="884.9801"
+         id="tspan4328" /><tspan
+         sodipodi:role="line"
+         x="30.584549"
+         y="926.19623"
+         id="tspan4330">Palm side up</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#483e37;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="57.578693"
+       y="539.20465"
+       id="text4446"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4448"
+         x="57.578693"
+         y="539.20465">.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#483e37;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="231.32494"
+       y="391.72241"
+       id="text4450"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4452"
+         x="231.32494"
+         y="391.72241">,</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#483e37;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="391.93918"
+       y="347.2757"
+       id="text4454"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4456"
+         x="391.93918"
+         y="347.2757">V</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#483e37;fill-opacity:1;stroke:none;font-family:Century Gothic;-inkscape-font-specification:Century Gothic Bold"
+       x="549.52301"
+       y="400.81378"
+       id="text4458"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4460"
+         x="549.52301"
+         y="400.81378">J</tspan></text>
+  </g>
+</svg>

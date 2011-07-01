@@ -1,0 +1,542 @@
+   1               		.file	"Descriptors.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               		.section	.text.CALLBACK_USB_GetDescriptor,"ax",@progbits
+  17               	.global	CALLBACK_USB_GetDescriptor
+  19               	CALLBACK_USB_GetDescriptor:
+  20               	.LFB96:
+  21               	.LSM0:
+  22               	.LVL0:
+  23               	/* prologue: function */
+  24               	/* frame size = 0 */
+  25 0000 DA01      		movw r26,r20
+  26               	.LSM1:
+  27 0002 9330      		cpi r25,lo8(3)
+  28               	.LVL1:
+  29 0004 01F0      		breq .L5
+  30               	.LVL2:
+  31 0006 9430      		cpi r25,lo8(4)
+  32 0008 00F4      		brsh .L8
+  33 000a 9130      		cpi r25,lo8(1)
+  34 000c 01F0      		breq .L3
+  35 000e 9230      		cpi r25,lo8(2)
+  36 0010 01F0      		breq .+2
+  37 0012 00C0      		rjmp .L2
+  38 0014 00C0      		rjmp .L20
+  39               	.L8:
+  40 0016 9132      		cpi r25,lo8(33)
+  41 0018 01F0      		breq .L6
+  42 001a 9232      		cpi r25,lo8(34)
+  43 001c 01F0      		breq .+2
+  44 001e 00C0      		rjmp .L2
+  45 0020 00C0      		rjmp .L21
+  46               	.L3:
+  47 0022 E0E0      		ldi r30,lo8(DeviceDescriptor)
+  48 0024 F0E0      		ldi r31,hi8(DeviceDescriptor)
+  49               	.LVL3:
+  50 0026 22E1      		ldi r18,lo8(18)
+  51 0028 30E0      		ldi r19,hi8(18)
+  52               	.LVL4:
+  53 002a 00C0      		rjmp .L9
+  54               	.LVL5:
+  55               	.L20:
+  56 002c E0E0      		ldi r30,lo8(ConfigurationDescriptor)
+  57 002e F0E0      		ldi r31,hi8(ConfigurationDescriptor)
+  58               	.LVL6:
+  59 0030 2BE5      		ldi r18,lo8(91)
+  60 0032 30E0      		ldi r19,hi8(91)
+  61               	.LVL7:
+  62 0034 00C0      		rjmp .L9
+  63               	.LVL8:
+  64               	.L5:
+  65               	.LSM2:
+  66 0036 8130      		cpi r24,lo8(1)
+  67 0038 01F0      		breq .L11
+  68 003a 8130      		cpi r24,lo8(1)
+  69 003c 00F0      		brlo .L10
+  70 003e 8230      		cpi r24,lo8(2)
+  71 0040 01F4      		brne .L2
+  72 0042 00C0      		rjmp .L22
+  73               	.L10:
+  74               	.LBB2:
+  75               	.LSM3:
+  76 0044 E0E0      		ldi r30,lo8(LanguageString)
+  77 0046 F0E0      		ldi r31,hi8(LanguageString)
+  78               	/* #APP */
+  79               	 ;  493 "Descriptors.c" 1
+  80 0048 8491      		lpm r24, Z
+  81               		
+  82               	 ;  0 "" 2
+  83               	.LVL9:
+  84               	/* #NOAPP */
+  85 004a 00C0      		rjmp .L19
+  86               	.LVL10:
+  87               	.L11:
+  88               	.LBE2:
+  89               	.LBB3:
+  90               	.LSM4:
+  91 004c E0E0      		ldi r30,lo8(ManufacturerString)
+  92 004e F0E0      		ldi r31,hi8(ManufacturerString)
+  93               	/* #APP */
+  94               	 ;  497 "Descriptors.c" 1
+  95 0050 8491      		lpm r24, Z
+  96               		
+  97               	 ;  0 "" 2
+  98               	.LVL11:
+  99               	/* #NOAPP */
+ 100 0052 00C0      		rjmp .L19
+ 101               	.LVL12:
+ 102               	.L22:
+ 103               	.LBE3:
+ 104               	.LBB4:
+ 105               	.LSM5:
+ 106 0054 E0E0      		ldi r30,lo8(ProductString)
+ 107 0056 F0E0      		ldi r31,hi8(ProductString)
+ 108               	/* #APP */
+ 109               	 ;  501 "Descriptors.c" 1
+ 110 0058 8491      		lpm r24, Z
+ 111               		
+ 112               	 ;  0 "" 2
+ 113               	.LVL13:
+ 114               	/* #NOAPP */
+ 115               	.L19:
+ 116               	.LBE4:
+ 117 005a 282F      		mov r18,r24
+ 118               	.LVL14:
+ 119 005c 30E0      		ldi r19,lo8(0)
+ 120               	.LVL15:
+ 121 005e 00C0      		rjmp .L9
+ 122               	.LVL16:
+ 123               	.L6:
+ 124               	.LSM6:
+ 125 0060 6623      		tst r22
+ 126 0062 01F4      		brne .L13
+ 127 0064 E0E0      		ldi r30,lo8(ConfigurationDescriptor+18)
+ 128 0066 F0E0      		ldi r31,hi8(ConfigurationDescriptor+18)
+ 129               	.LVL17:
+ 130 0068 00C0      		rjmp .L18
+ 131               	.LVL18:
+ 132               	.L13:
+ 133               	.LSM7:
+ 134 006a 6130      		cpi r22,lo8(1)
+ 135 006c 01F4      		brne .L14
+ 136 006e E0E0      		ldi r30,lo8(ConfigurationDescriptor+50)
+ 137 0070 F0E0      		ldi r31,hi8(ConfigurationDescriptor+50)
+ 138               	.LVL19:
+ 139 0072 00C0      		rjmp .L18
+ 140               	.LVL20:
+ 141               	.L14:
+ 142               	.LSM8:
+ 143 0074 6230      		cpi r22,lo8(2)
+ 144 0076 01F4      		brne .L2
+ 145 0078 E0E0      		ldi r30,lo8(ConfigurationDescriptor+75)
+ 146 007a F0E0      		ldi r31,hi8(ConfigurationDescriptor+75)
+ 147               	.LVL21:
+ 148               	.L18:
+ 149 007c 29E0      		ldi r18,lo8(9)
+ 150 007e 30E0      		ldi r19,hi8(9)
+ 151               	.LVL22:
+ 152 0080 00C0      		rjmp .L9
+ 153               	.LVL23:
+ 154               	.L21:
+ 155               	.LSM9:
+ 156 0082 6623      		tst r22
+ 157 0084 01F4      		brne .L15
+ 158 0086 E0E0      		ldi r30,lo8(KeyboardReport)
+ 159 0088 F0E0      		ldi r31,hi8(KeyboardReport)
+ 160               	.LVL24:
+ 161 008a 2FE3      		ldi r18,lo8(63)
+ 162 008c 30E0      		ldi r19,hi8(63)
+ 163               	.LVL25:
+ 164 008e 00C0      		rjmp .L9
+ 165               	.LVL26:
+ 166               	.L15:
+ 167               	.LSM10:
+ 168 0090 6130      		cpi r22,lo8(1)
+ 169 0092 01F4      		brne .L16
+ 170 0094 E0E0      		ldi r30,lo8(MouseReport)
+ 171 0096 F0E0      		ldi r31,hi8(MouseReport)
+ 172               	.LVL27:
+ 173 0098 26E3      		ldi r18,lo8(54)
+ 174 009a 30E0      		ldi r19,hi8(54)
+ 175               	.LVL28:
+ 176 009c 00C0      		rjmp .L9
+ 177               	.LVL29:
+ 178               	.L16:
+ 179               	.LSM11:
+ 180 009e 6230      		cpi r22,lo8(2)
+ 181 00a0 01F4      		brne .L2
+ 182 00a2 E0E0      		ldi r30,lo8(JoystickReport)
+ 183 00a4 F0E0      		ldi r31,hi8(JoystickReport)
+ 184               	.LVL30:
+ 185 00a6 24E3      		ldi r18,lo8(52)
+ 186 00a8 30E0      		ldi r19,hi8(52)
+ 187               	.LVL31:
+ 188 00aa 00C0      		rjmp .L9
+ 189               	.LVL32:
+ 190               	.L2:
+ 191 00ac E0E0      		ldi r30,lo8(0)
+ 192 00ae F0E0      		ldi r31,hi8(0)
+ 193               	.LVL33:
+ 194 00b0 20E0      		ldi r18,lo8(0)
+ 195 00b2 30E0      		ldi r19,hi8(0)
+ 196               	.LVL34:
+ 197               	.L9:
+ 198               	.LSM12:
+ 199 00b4 ED93      		st X+,r30
+ 200 00b6 FC93      		st X,r31
+ 201               	.LSM13:
+ 202 00b8 C901      		movw r24,r18
+ 203               	.LVL35:
+ 204               	/* epilogue start */
+ 205 00ba 0895      		ret
+ 206               	.LFE96:
+ 208               	.global	MouseReport
+ 209               		.section	.progmem.data,"a",@progbits
+ 212               	MouseReport:
+ 213 0000 05        		.byte	5
+ 214 0001 01        		.byte	1
+ 215 0002 09        		.byte	9
+ 216 0003 02        		.byte	2
+ 217 0004 A1        		.byte	-95
+ 218 0005 01        		.byte	1
+ 219 0006 09        		.byte	9
+ 220 0007 01        		.byte	1
+ 221 0008 A1        		.byte	-95
+ 222 0009 00        		.byte	0
+ 223 000a 05        		.byte	5
+ 224 000b 09        		.byte	9
+ 225 000c 19        		.byte	25
+ 226 000d 01        		.byte	1
+ 227 000e 29        		.byte	41
+ 228 000f 03        		.byte	3
+ 229 0010 15        		.byte	21
+ 230 0011 00        		.byte	0
+ 231 0012 25        		.byte	37
+ 232 0013 01        		.byte	1
+ 233 0014 95        		.byte	-107
+ 234 0015 03        		.byte	3
+ 235 0016 75        		.byte	117
+ 236 0017 01        		.byte	1
+ 237 0018 81        		.byte	-127
+ 238 0019 02        		.byte	2
+ 239 001a 95        		.byte	-107
+ 240 001b 01        		.byte	1
+ 241 001c 75        		.byte	117
+ 242 001d 05        		.byte	5
+ 243 001e 81        		.byte	-127
+ 244 001f 01        		.byte	1
+ 245 0020 05        		.byte	5
+ 246 0021 01        		.byte	1
+ 247 0022 09        		.byte	9
+ 248 0023 30        		.byte	48
+ 249 0024 09        		.byte	9
+ 250 0025 31        		.byte	49
+ 251 0026 15        		.byte	21
+ 252 0027 FF        		.byte	-1
+ 253 0028 25        		.byte	37
+ 254 0029 01        		.byte	1
+ 255 002a 35        		.byte	53
+ 256 002b FF        		.byte	-1
+ 257 002c 45        		.byte	69
+ 258 002d 01        		.byte	1
+ 259 002e 95        		.byte	-107
+ 260 002f 02        		.byte	2
+ 261 0030 75        		.byte	117
+ 262 0031 08        		.byte	8
+ 263 0032 81        		.byte	-127
+ 264 0033 06        		.byte	6
+ 265 0034 C0        		.byte	-64
+ 266 0035 C0        		.byte	-64
+ 267               	.global	KeyboardReport
+ 270               	KeyboardReport:
+ 271 0036 05        		.byte	5
+ 272 0037 01        		.byte	1
+ 273 0038 09        		.byte	9
+ 274 0039 06        		.byte	6
+ 275 003a A1        		.byte	-95
+ 276 003b 01        		.byte	1
+ 277 003c 05        		.byte	5
+ 278 003d 07        		.byte	7
+ 279 003e 19        		.byte	25
+ 280 003f E0        		.byte	-32
+ 281 0040 29        		.byte	41
+ 282 0041 E7        		.byte	-25
+ 283 0042 15        		.byte	21
+ 284 0043 00        		.byte	0
+ 285 0044 25        		.byte	37
+ 286 0045 01        		.byte	1
+ 287 0046 75        		.byte	117
+ 288 0047 01        		.byte	1
+ 289 0048 95        		.byte	-107
+ 290 0049 08        		.byte	8
+ 291 004a 81        		.byte	-127
+ 292 004b 02        		.byte	2
+ 293 004c 95        		.byte	-107
+ 294 004d 01        		.byte	1
+ 295 004e 75        		.byte	117
+ 296 004f 08        		.byte	8
+ 297 0050 81        		.byte	-127
+ 298 0051 01        		.byte	1
+ 299 0052 05        		.byte	5
+ 300 0053 08        		.byte	8
+ 301 0054 19        		.byte	25
+ 302 0055 01        		.byte	1
+ 303 0056 29        		.byte	41
+ 304 0057 05        		.byte	5
+ 305 0058 95        		.byte	-107
+ 306 0059 05        		.byte	5
+ 307 005a 75        		.byte	117
+ 308 005b 01        		.byte	1
+ 309 005c 91        		.byte	-111
+ 310 005d 02        		.byte	2
+ 311 005e 95        		.byte	-107
+ 312 005f 01        		.byte	1
+ 313 0060 75        		.byte	117
+ 314 0061 03        		.byte	3
+ 315 0062 91        		.byte	-111
+ 316 0063 01        		.byte	1
+ 317 0064 15        		.byte	21
+ 318 0065 00        		.byte	0
+ 319 0066 25        		.byte	37
+ 320 0067 65        		.byte	101
+ 321 0068 05        		.byte	5
+ 322 0069 07        		.byte	7
+ 323 006a 19        		.byte	25
+ 324 006b 00        		.byte	0
+ 325 006c 29        		.byte	41
+ 326 006d 65        		.byte	101
+ 327 006e 95        		.byte	-107
+ 328 006f 06        		.byte	6
+ 329 0070 75        		.byte	117
+ 330 0071 08        		.byte	8
+ 331 0072 81        		.byte	-127
+ 332 0073 00        		.byte	0
+ 333 0074 C0        		.byte	-64
+ 334               	.global	JoystickReport
+ 337               	JoystickReport:
+ 338 0075 05        		.byte	5
+ 339 0076 01        		.byte	1
+ 340 0077 09        		.byte	9
+ 341 0078 04        		.byte	4
+ 342 0079 A1        		.byte	-95
+ 343 007a 01        		.byte	1
+ 344 007b 09        		.byte	9
+ 345 007c 01        		.byte	1
+ 346 007d A1        		.byte	-95
+ 347 007e 00        		.byte	0
+ 348 007f 09        		.byte	9
+ 349 0080 30        		.byte	48
+ 350 0081 09        		.byte	9
+ 351 0082 31        		.byte	49
+ 352 0083 15        		.byte	21
+ 353 0084 9C        		.byte	-100
+ 354 0085 25        		.byte	37
+ 355 0086 64        		.byte	100
+ 356 0087 35        		.byte	53
+ 357 0088 FF        		.byte	-1
+ 358 0089 45        		.byte	69
+ 359 008a 01        		.byte	1
+ 360 008b 95        		.byte	-107
+ 361 008c 02        		.byte	2
+ 362 008d 75        		.byte	117
+ 363 008e 08        		.byte	8
+ 364 008f 81        		.byte	-127
+ 365 0090 02        		.byte	2
+ 366 0091 C0        		.byte	-64
+ 367 0092 05        		.byte	5
+ 368 0093 09        		.byte	9
+ 369 0094 19        		.byte	25
+ 370 0095 01        		.byte	1
+ 371 0096 29        		.byte	41
+ 372 0097 02        		.byte	2
+ 373 0098 15        		.byte	21
+ 374 0099 00        		.byte	0
+ 375 009a 25        		.byte	37
+ 376 009b 01        		.byte	1
+ 377 009c 75        		.byte	117
+ 378 009d 01        		.byte	1
+ 379 009e 95        		.byte	-107
+ 380 009f 02        		.byte	2
+ 381 00a0 81        		.byte	-127
+ 382 00a1 02        		.byte	2
+ 383 00a2 75        		.byte	117
+ 384 00a3 06        		.byte	6
+ 385 00a4 95        		.byte	-107
+ 386 00a5 01        		.byte	1
+ 387 00a6 81        		.byte	-127
+ 388 00a7 01        		.byte	1
+ 389 00a8 C0        		.byte	-64
+ 390               	.global	DeviceDescriptor
+ 393               	DeviceDescriptor:
+ 394 00a9 12        		.byte	18
+ 395 00aa 01        		.byte	1
+ 396 00ab 1001      		.word	272
+ 397 00ad 00        		.byte	0
+ 398 00ae 00        		.byte	0
+ 399 00af 00        		.byte	0
+ 400 00b0 08        		.byte	8
+ 401 00b1 EB03      		.word	1003
+ 402 00b3 4E20      		.word	8270
+ 403 00b5 0100      		.word	1
+ 404 00b7 01        		.byte	1
+ 405 00b8 02        		.byte	2
+ 406 00b9 DC        		.byte	-36
+ 407 00ba 01        		.byte	1
+ 408               	.global	ConfigurationDescriptor
+ 411               	ConfigurationDescriptor:
+ 412 00bb 09        		.byte	9
+ 413 00bc 02        		.byte	2
+ 414 00bd 5B00      		.word	91
+ 415 00bf 05        		.byte	5
+ 416 00c0 01        		.byte	1
+ 417 00c1 00        		.byte	0
+ 418 00c2 C0        		.byte	-64
+ 419 00c3 FA        		.byte	-6
+ 420 00c4 09        		.byte	9
+ 421 00c5 04        		.byte	4
+ 422 00c6 02        		.byte	2
+ 423 00c7 00        		.byte	0
+ 424 00c8 02        		.byte	2
+ 425 00c9 03        		.byte	3
+ 426 00ca 01        		.byte	1
+ 427 00cb 01        		.byte	1
+ 428 00cc 00        		.byte	0
+ 429 00cd 09        		.byte	9
+ 430 00ce 21        		.byte	33
+ 431 00cf 1101      		.word	273
+ 432 00d1 00        		.byte	0
+ 433 00d2 01        		.byte	1
+ 434 00d3 22        		.byte	34
+ 435 00d4 3F00      		.word	63
+ 436 00d6 07        		.byte	7
+ 437 00d7 05        		.byte	5
+ 438 00d8 84        		.byte	-124
+ 439 00d9 03        		.byte	3
+ 440 00da 0800      		.word	8
+ 441 00dc 01        		.byte	1
+ 442 00dd 07        		.byte	7
+ 443 00de 05        		.byte	5
+ 444 00df 05        		.byte	5
+ 445 00e0 03        		.byte	3
+ 446 00e1 0800      		.word	8
+ 447 00e3 01        		.byte	1
+ 448 00e4 09        		.byte	9
+ 449 00e5 04        		.byte	4
+ 450 00e6 03        		.byte	3
+ 451 00e7 00        		.byte	0
+ 452 00e8 01        		.byte	1
+ 453 00e9 03        		.byte	3
+ 454 00ea 01        		.byte	1
+ 455 00eb 02        		.byte	2
+ 456 00ec 00        		.byte	0
+ 457 00ed 09        		.byte	9
+ 458 00ee 21        		.byte	33
+ 459 00ef 1101      		.word	273
+ 460 00f1 00        		.byte	0
+ 461 00f2 01        		.byte	1
+ 462 00f3 22        		.byte	34
+ 463 00f4 3600      		.word	54
+ 464 00f6 07        		.byte	7
+ 465 00f7 05        		.byte	5
+ 466 00f8 86        		.byte	-122
+ 467 00f9 03        		.byte	3
+ 468 00fa 0800      		.word	8
+ 469 00fc 01        		.byte	1
+ 470 00fd 09        		.byte	9
+ 471 00fe 04        		.byte	4
+ 472 00ff 04        		.byte	4
+ 473 0100 00        		.byte	0
+ 474 0101 01        		.byte	1
+ 475 0102 03        		.byte	3
+ 476 0103 00        		.byte	0
+ 477 0104 00        		.byte	0
+ 478 0105 00        		.byte	0
+ 479 0106 09        		.byte	9
+ 480 0107 21        		.byte	33
+ 481 0108 1101      		.word	273
+ 482 010a 00        		.byte	0
+ 483 010b 01        		.byte	1
+ 484 010c 22        		.byte	34
+ 485 010d 3400      		.word	52
+ 486 010f 07        		.byte	7
+ 487 0110 05        		.byte	5
+ 488 0111 87        		.byte	-121
+ 489 0112 03        		.byte	3
+ 490 0113 0800      		.word	8
+ 491 0115 01        		.byte	1
+ 492               	.global	LanguageString
+ 495               	LanguageString:
+ 496 0116 04        		.byte	4
+ 497 0117 03        		.byte	3
+ 498 0118 0904      		.word	1033
+ 499               	.global	ManufacturerString
+ 502               	ManufacturerString:
+ 503 011a 18        		.byte	24
+ 504 011b 03        		.byte	3
+ 505 011c 4A00      		.string	"J"
+ 506 011e 6500      		.string	"e"
+ 507 0120 6600      		.string	"f"
+ 508 0122 6600      		.string	"f"
+ 509 0124 2000      		.string	" "
+ 510 0126 5200      		.string	"R"
+ 511 0128 6F00      		.string	"o"
+ 512 012a 7700      		.string	"w"
+ 513 012c 6200      		.string	"b"
+ 514 012e 6500      		.string	"e"
+ 515 0130 7200      		.string	"r"
+ 516 0132 6700      		.string	"g"
+ 517 0134 00        		.string	""
+ 518 0135 00        		.string	""
+ 519               	.global	ProductString
+ 522               	ProductString:
+ 523 0136 3A        		.byte	58
+ 524 0137 03        		.byte	3
+ 525 0138 4B00      		.string	"K"
+ 526 013a 6500      		.string	"e"
+ 527 013c 7900      		.string	"y"
+ 528 013e 6700      		.string	"g"
+ 529 0140 6C00      		.string	"l"
+ 530 0142 6F00      		.string	"o"
+ 531 0144 7600      		.string	"v"
+ 532 0146 6500      		.string	"e"
+ 533 0148 2000      		.string	" "
+ 534 014a 4900      		.string	"I"
+ 535 014c 6E00      		.string	"n"
+ 536 014e 7000      		.string	"p"
+ 537 0150 7500      		.string	"u"
+ 538 0152 7400      		.string	"t"
+ 539 0154 2000      		.string	" "
+ 540 0156 4400      		.string	"D"
+ 541 0158 6500      		.string	"e"
+ 542 015a 7600      		.string	"v"
+ 543 015c 6900      		.string	"i"
+ 544 015e 6300      		.string	"c"
+ 545 0160 6500      		.string	"e"
+ 546 0162 00        		.string	""
+ 547 0163 00        		.string	""
+ 572               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Descriptors.c
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:19     .text.CALLBACK_USB_GetDescriptor:00000000 CALLBACK_USB_GetDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:393    .progmem.data:000000a9 DeviceDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:411    .progmem.data:000000bb ConfigurationDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:495    .progmem.data:00000116 LanguageString
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:502    .progmem.data:0000011a ManufacturerString
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:522    .progmem.data:00000136 ProductString
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:270    .progmem.data:00000036 KeyboardReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:212    .progmem.data:00000000 MouseReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc44C6Et.s:337    .progmem.data:00000075 JoystickReport
+
+NO UNDEFINED SYMBOLS

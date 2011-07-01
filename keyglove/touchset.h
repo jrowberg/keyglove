@@ -1,35 +1,68 @@
+
 // Keyglove controller source code - Custom touchset definition
+
 // 4/5/2011 by Jeff Rowberg <jeff@rowberg.net>
-// (Generated Sat, 11 Jun 2011 01:54:22 -0600 @ host132.hostmonster.com)
+
+// (Generated Fri, 17 Jun 2011 00:25:04 -0600 @ host132.hostmonster.com)
+
+
 
 /* ============================================
+
 Controller code is placed under the MIT license
+
 Copyright (c) 2011 Jeff Rowberg
 
+
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
+
 of this software and associated documentation files (the "Software"), to deal
+
 in the Software without restriction, including without limitation the rights
+
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+
 copies of the Software, and to permit persons to whom the Software is
+
 furnished to do so, subject to the following conditions:
 
+
+
 The above copyright notice and this permission notice shall be included in
+
 all copies or substantial portions of the Software.
 
+
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+
 THE SOFTWARE.
+
 ===============================================
+
 */
 
+
+
 // TOTAL: 43 unique combinations used, 5 modes
+
 // ===============================================================
 
+
+
 // numeric mode definitions
+ 
 #define KMODE_DEFAULT 0
 #define KMODE_NUMBERS 1
 #define KMODE_SYMBOLS 2
@@ -241,12 +274,20 @@ void check_sensors_touch(long unsigned int sensors1, long unsigned int sensors2,
 }
  
 void check_sensors_release(long unsigned int sensors1, long unsigned int sensors2, int pos) {
-    if ((sensors1 & KS1_Y7) == KS1_Y7 && (sensors2 & KS2_Y7) == KS2_Y7 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        keypress(KEY_ESC);
-        modifierup(MODIFIERKEY_SHIFT);
-        modifierup(MODIFIERKEY_CTRL);
-        modifierup(MODIFIERKEY_ALT);
-        return;
+    if ((sensors1 & KS1_Y7) == KS1_Y7 && (sensors2 & KS2_Y7) == KS2_Y7) {
+        if (modeCheck(KMODE_DEFAULT, pos)) {
+            keypress(KEY_PERIOD);
+            modifierup(MODIFIERKEY_SHIFT);
+            modifierup(MODIFIERKEY_CTRL);
+            modifierup(MODIFIERKEY_ALT);
+            return;
+         } else if (modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos)) {
+            keypress(KEY_ESC);
+            modifierup(MODIFIERKEY_SHIFT);
+            modifierup(MODIFIERKEY_CTRL);
+            modifierup(MODIFIERKEY_ALT);
+            return;
+         }
     } else if ((sensors1 & KS1_JY) == KS1_JY && (sensors2 & KS2_JY) == KS2_JY) {
         if ((sensors1 & KS1_GJY) == KS1_GJY && (sensors2 & KS2_GJY) == KS2_GJY) {
             if (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos)) {
@@ -270,7 +311,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             return;
         } else {
              if (modeCheck(KMODE_DEFAULT, pos)) {
-                keypress(KEY_P);
+                keypress(KEY_S);
                 modifierup(MODIFIERKEY_SHIFT);
                 modifierup(MODIFIERKEY_CTRL);
                 modifierup(MODIFIERKEY_ALT);
@@ -298,7 +339,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         }
     } else if ((sensors1 & KS1_KY) == KS1_KY && (sensors2 & KS2_KY) == KS2_KY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_D);
+            keypress(KEY_C);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -325,7 +366,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_LY) == KS1_LY && (sensors2 & KS2_LY) == KS2_LY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_Y);
+            keypress(KEY_P);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -353,7 +394,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_HY) == KS1_HY && (sensors2 & KS2_HY) == KS2_HY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_T);
+            keypress(KEY_L);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -380,7 +421,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_VY) == KS1_VY && (sensors2 & KS2_VY) == KS2_VY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_J);
+            keypress(KEY_Q);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -400,7 +441,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_WY) == KS1_WY && (sensors2 & KS2_WY) == KS2_WY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_V);
+            keypress(KEY_Y);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -440,22 +481,38 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             modifierup(MODIFIERKEY_ALT);
             return;
          }
-    } else if ((sensors1 & KS1_Y6) == KS1_Y6 && (sensors2 & KS2_Y6) == KS2_Y6 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        keypress(KEY_DELETE);
-        modifierup(MODIFIERKEY_SHIFT);
-        modifierup(MODIFIERKEY_CTRL);
-        modifierup(MODIFIERKEY_ALT);
-        return;
-    } else if ((sensors1 & KS1_GY) == KS1_GY && (sensors2 & KS2_GY) == KS2_GY) {
-        if ((sensors1 & KS1_DGY) == KS1_DGY && (sensors2 & KS2_DGY) == KS2_DGY && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-            keypress(KEY_SPACE);
+    } else if ((sensors1 & KS1_Y6) == KS1_Y6 && (sensors2 & KS2_Y6) == KS2_Y6) {
+        if (modeCheck(KMODE_DEFAULT, pos)) {
+            keypress(KEY_COMMA);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
             return;
+         } else if (modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos)) {
+            keypress(KEY_DELETE);
+            modifierup(MODIFIERKEY_SHIFT);
+            modifierup(MODIFIERKEY_CTRL);
+            modifierup(MODIFIERKEY_ALT);
+            return;
+         }
+    } else if ((sensors1 & KS1_GY) == KS1_GY && (sensors2 & KS2_GY) == KS2_GY) {
+        if ((sensors1 & KS1_DGY) == KS1_DGY && (sensors2 & KS2_DGY) == KS2_DGY) {
+            if (modeCheck(KMODE_DEFAULT, pos)) {
+                keypress(KEY_BACKSPACE);
+                modifierup(MODIFIERKEY_SHIFT);
+                modifierup(MODIFIERKEY_CTRL);
+                modifierup(MODIFIERKEY_ALT);
+                return;
+             } else if (modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos)) {
+                keypress(KEY_SPACE);
+                modifierup(MODIFIERKEY_SHIFT);
+                modifierup(MODIFIERKEY_CTRL);
+                modifierup(MODIFIERKEY_ALT);
+                return;
+             }
         } else {
              if (modeCheck(KMODE_DEFAULT, pos)) {
-                keypress(KEY_W);
+                keypress(KEY_T);
                 modifierup(MODIFIERKEY_SHIFT);
                 modifierup(MODIFIERKEY_CTRL);
                 modifierup(MODIFIERKEY_ALT);
@@ -483,7 +540,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         }
     } else if ((sensors1 & KS1_IY) == KS1_IY && (sensors2 & KS2_IY) == KS2_IY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_S);
+            keypress(KEY_G);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -509,7 +566,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_SY) == KS1_SY && (sensors2 & KS2_SY) == KS2_SY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_M);
+            keypress(KEY_W);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -529,7 +586,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_TY) == KS1_TY && (sensors2 & KS2_TY) == KS2_TY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_C);
+            keypress(KEY_K);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -550,7 +607,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_UY) == KS1_UY && (sensors2 & KS2_UY) == KS2_UY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_G);
+            keypress(KEY_Z);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -570,7 +627,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             return;
          }
     } else if ((sensors1 & KS1_Y5) == KS1_Y5 && (sensors2 & KS2_Y5) == KS2_Y5 && modeCheck(KMODE_DEFAULT, pos)) {
-        keypress(KEY_Z);
+        keypress(KEY_V);
         modifierup(MODIFIERKEY_SHIFT);
         modifierup(MODIFIERKEY_CTRL);
         modifierup(MODIFIERKEY_ALT);
@@ -579,15 +636,23 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         mouseoff(KMOUSE_SCROLL);
         return;
     } else if ((sensors1 & KS1_DY) == KS1_DY && (sensors2 & KS2_DY) == KS2_DY) {
-        if ((sensors1 & KS1_ADY) == KS1_ADY && (sensors2 & KS2_ADY) == KS2_ADY && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-            keypress(KEY_BACKSPACE);
-            modifierup(MODIFIERKEY_SHIFT);
-            modifierup(MODIFIERKEY_CTRL);
-            modifierup(MODIFIERKEY_ALT);
-            return;
+        if ((sensors1 & KS1_ADY) == KS1_ADY && (sensors2 & KS2_ADY) == KS2_ADY) {
+            if (modeCheck(KMODE_DEFAULT, pos)) {
+                keypress(KEY_SPACE);
+                modifierup(MODIFIERKEY_SHIFT);
+                modifierup(MODIFIERKEY_CTRL);
+                modifierup(MODIFIERKEY_ALT);
+                return;
+             } else if (modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos)) {
+                keypress(KEY_BACKSPACE);
+                modifierup(MODIFIERKEY_SHIFT);
+                modifierup(MODIFIERKEY_CTRL);
+                modifierup(MODIFIERKEY_ALT);
+                return;
+             }
         } else {
              if (modeCheck(KMODE_DEFAULT, pos)) {
-                keypress(KEY_R);
+                keypress(KEY_H);
                 modifierup(MODIFIERKEY_SHIFT);
                 modifierup(MODIFIERKEY_CTRL);
                 modifierup(MODIFIERKEY_ALT);
@@ -615,7 +680,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         }
     } else if ((sensors1 & KS1_EY) == KS1_EY && (sensors2 & KS2_EY) == KS2_EY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_H);
+            keypress(KEY_M);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -642,7 +707,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_FY) == KS1_FY && (sensors2 & KS2_FY) == KS2_FY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_N);
+            keypress(KEY_B);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -669,7 +734,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_PY) == KS1_PY && (sensors2 & KS2_PY) == KS2_PY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_B);
+            keypress(KEY_O);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -696,7 +761,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_QY) == KS1_QY && (sensors2 & KS2_QY) == KS2_QY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_L);
+            keypress(KEY_U);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -717,7 +782,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_RY) == KS1_RY && (sensors2 & KS2_RY) == KS2_RY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_K);
+            keypress(KEY_D);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -731,7 +796,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
             return;
          }
     } else if ((sensors1 & KS1_Y4) == KS1_Y4 && (sensors2 & KS2_Y4) == KS2_Y4 && modeCheck(KMODE_DEFAULT, pos)) {
-        keypress(KEY_Q);
+        keypress(KEY_J);
         modifierup(MODIFIERKEY_SHIFT);
         modifierup(MODIFIERKEY_CTRL);
         modifierup(MODIFIERKEY_ALT);
@@ -741,7 +806,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         return;
     } else if ((sensors1 & KS1_MY) == KS1_MY && (sensors2 & KS2_MY) == KS2_MY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_F);
+            keypress(KEY_A);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -762,7 +827,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_AY) == KS1_AY && (sensors2 & KS2_AY) == KS2_AY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_A);
+            keypress(KEY_R);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -788,7 +853,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_BY) == KS1_BY && (sensors2 & KS2_BY) == KS2_BY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_E);
+            keypress(KEY_N);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -814,7 +879,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_CY) == KS1_CY && (sensors2 & KS2_CY) == KS2_CY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_I);
+            keypress(KEY_F);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -841,7 +906,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_NY) == KS1_NY && (sensors2 & KS2_NY) == KS2_NY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_O);
+            keypress(KEY_E);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);
@@ -864,7 +929,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
          }
     } else if ((sensors1 & KS1_OY) == KS1_OY && (sensors2 & KS2_OY) == KS2_OY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
-            keypress(KEY_U);
+            keypress(KEY_I);
             modifierup(MODIFIERKEY_SHIFT);
             modifierup(MODIFIERKEY_CTRL);
             modifierup(MODIFIERKEY_ALT);

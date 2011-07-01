@@ -50,7 +50,7 @@ unsigned char ide_workaround = 0;
 #define ENABLE_GYRO
 //#define ENABLE_RX400
 #ifdef USE_TEENSY
-  //#define ENABLE_USB
+  #define ENABLE_USB
 #endif /* USE_TEENSY */
 
 
@@ -1199,7 +1199,7 @@ void loop() {
             Serial.println(mode);
         #endif /* SERIAL_DEBUG_TOUCHSET */
         if (mode == KMOUSE_MOVE) {
-            opt_mouse_mode = MOUSE_MODE_TILT_VELOCITY;
+            opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
         } else if (mode == KMOUSE_SCROLL) {
             opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
         }
