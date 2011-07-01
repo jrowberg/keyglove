@@ -163,9 +163,6 @@ const USB_Descriptor_Device_t PROGMEM DeviceDescriptor =
 	.Class                  = USB_CSCP_NoDeviceClass,
 	.SubClass               = USB_CSCP_NoDeviceSubclass,
 	.Protocol               = USB_CSCP_NoDeviceProtocol,
-	/*.Class                  = USB_CSCP_IADDeviceClass,
-	.SubClass               = USB_CSCP_IADDeviceSubclass,
-	.Protocol               = USB_CSCP_IADDeviceProtocol,*/
 
 	.Endpoint0Size          = FIXED_CONTROL_ENDPOINT_SIZE,
 
@@ -504,17 +501,17 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 
 			break;
 		case HID_DTYPE_HID:
-			if (wIndex == 0)
+			if (wIndex == 2)
 			{
 				Address = &ConfigurationDescriptor.HID1_KeyboardHID;
 				Size    = sizeof(USB_HID_Descriptor_HID_t);
 			}
-			else if (wIndex == 1)
+			else if (wIndex == 3)
 			{
 				Address = &ConfigurationDescriptor.HID2_MouseHID;
 				Size    = sizeof(USB_HID_Descriptor_HID_t);
 			}
-			else if (wIndex == 2)
+			else if (wIndex == 4)
 			{
 				Address = &ConfigurationDescriptor.HID3_JoystickHID;
 				Size    = sizeof(USB_HID_Descriptor_HID_t);
@@ -522,17 +519,17 @@ uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
 
 			break;
 		case HID_DTYPE_Report:
-			if (wIndex == 0)
+			if (wIndex == 2)
 			{
 				Address = &KeyboardReport;
 				Size    = sizeof(KeyboardReport);
 			}
-			else if (wIndex == 1)
+			else if (wIndex == 3)
 			{
 				Address = &MouseReport;
 				Size    = sizeof(MouseReport);
 			}
-			else if (wIndex == 2)
+			else if (wIndex == 4)
 			{
 				Address = &JoystickReport;
 				Size    = sizeof(JoystickReport);

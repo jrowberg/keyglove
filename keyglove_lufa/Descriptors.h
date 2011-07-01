@@ -49,7 +49,9 @@
 		 */
 		typedef struct
 		{
-                        /*// virtual serial
+			USB_Descriptor_Configuration_Header_t Config;
+
+                        // virtual serial
 			USB_Descriptor_Interface_Association_t   CDC_IAD;
 			USB_Descriptor_Interface_t               CDC_CCI_Interface;
 			USB_CDC_Descriptor_FunctionalHeader_t    CDC_Functional_Header;
@@ -58,10 +60,9 @@
 			USB_Descriptor_Endpoint_t                CDC_NotificationEndpoint;
 			USB_Descriptor_Interface_t               CDC_DCI_Interface;
 			USB_Descriptor_Endpoint_t                CDC_DataOutEndpoint;
-			USB_Descriptor_Endpoint_t                CDC_DataInEndpoint;*/
+			USB_Descriptor_Endpoint_t                CDC_DataInEndpoint;
 
                         // keyboard
-			USB_Descriptor_Configuration_Header_t Config;
 			USB_Descriptor_Interface_t            HID1_KeyboardInterface;
 			USB_HID_Descriptor_HID_t              HID1_KeyboardHID;
 	                USB_Descriptor_Endpoint_t             HID1_ReportINEndpoint;
