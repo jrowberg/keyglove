@@ -732,13 +732,13 @@
  765               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 DeviceStandardReq.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccijC88Q.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccijC88Q.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccijC88Q.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccijC88Q.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccijC88Q.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccijC88Q.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccijC88Q.s:19     .text.USB_Device_ProcessControlRequest:00000000 USB_Device_ProcessControlRequest
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccyE8YJV.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccyE8YJV.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccyE8YJV.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccyE8YJV.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccyE8YJV.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccyE8YJV.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccyE8YJV.s:19     .text.USB_Device_ProcessControlRequest:00000000 USB_Device_ProcessControlRequest
                             *COM*:00000001 USB_CurrentlySelfPowered
                             *COM*:00000001 USB_RemoteWakeupEnabled
                             *COM*:00000001 USB_ConfigurationNumber

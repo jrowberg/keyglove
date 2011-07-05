@@ -13,19 +13,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   4 .debug_pubnames 00000854  00000000  00000000  000013e2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00004cba  00000000  00000000  00001c36  2**0
+  5 .debug_info   00004cdb  00000000  00000000  00001c36  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00001264  00000000  00000000  000068f0  2**0
+  6 .debug_abbrev 00001264  00000000  00000000  00006911  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00003d52  00000000  00000000  00007b54  2**0
+  7 .debug_line   00003d52  00000000  00000000  00007b75  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000440  00000000  00000000  0000b8a8  2**2
+  8 .debug_frame  00000440  00000000  00000000  0000b8c8  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000021e3  00000000  00000000  0000bce8  2**0
+  9 .debug_str    0000220e  00000000  00000000  0000bd08  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000243f  00000000  00000000  0000decb  2**0
+ 10 .debug_loc    0000243f  00000000  00000000  0000df16  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000368  00000000  00000000  0001030a  2**0
+ 11 .debug_ranges 00000368  00000000  00000000  00010355  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -143,8 +143,8 @@ uint8_t TEMPLATE_FUNC_NAME (const void* const Buffer,
       ea:	24 02 06 05 24 06 00 01 07 05 81 03 08 00 ff 09     $...$...........
       fa:	04 01 00 02 0a 00 00 00 07 05 03 02 10 00 01 07     ................
      10a:	05 82 02 10 00 01 09 04 02 00 02 03 00 00 00 09     ................
-     11a:	21 11 01 00 01 22 20 00 07 05 81 03 08 00 01 07     !...." .........
-     12a:	05 02 03 08 00 01                                   ......
+     11a:	21 11 01 00 01 22 20 00 07 05 84 03 08 00 01 07     !...." .........
+     12a:	05 05 03 08 00 01                                   ......
 
 00000130 <LanguageString>:
      130:	04 03 09 04                                         ....
@@ -337,7 +337,7 @@ void HID_Task(void)
 			{
 				#if !defined(CONTROL_ONLY_DEVICE)
 					UENUM = EndpointNumber;
-     232:	82 e0       	ldi	r24, 0x02	; 2
+     232:	85 e0       	ldi	r24, 0x05	; 5
      234:	80 93 e9 00 	sts	0x00E9, r24
 			 *  \return Boolean \c true if current endpoint is has received an OUT packet, \c false otherwise.
 			 */
@@ -401,7 +401,7 @@ void HID_Task(void)
 			{
 				#if !defined(CONTROL_ONLY_DEVICE)
 					UENUM = EndpointNumber;
-     268:	81 e0       	ldi	r24, 0x01	; 1
+     268:	84 e0       	ldi	r24, 0x04	; 4
      26a:	80 93 e9 00 	sts	0x00E9, r24
 			 *  \return Boolean \c true if the current endpoint is ready for an IN packet, \c false otherwise.
 			 */
@@ -901,7 +901,7 @@ void EVENT_USB_Device_ConfigurationChanged(void)
      4b0:	10 92 16 01 	sts	0x0116, r1
      4b4:	10 92 17 01 	sts	0x0117, r1
      4b8:	10 92 18 01 	sts	0x0118, r1
-     4bc:	81 e0       	ldi	r24, 0x01	; 1
+     4bc:	84 e0       	ldi	r24, 0x04	; 4
      4be:	61 ec       	ldi	r22, 0xC1	; 193
      4c0:	42 e0       	ldi	r20, 0x02	; 2
      4c2:	9b d0       	rcall	.+310    	; 0x5fa <Endpoint_ConfigureEndpoint_Prv>
@@ -918,7 +918,7 @@ void EVENT_USB_Device_ConfigurationChanged(void)
      4d2:	10 e0       	ldi	r17, 0x00	; 0
      4d4:	02 23       	and	r16, r18
      4d6:	13 23       	and	r17, r19
-     4d8:	82 e0       	ldi	r24, 0x02	; 2
+     4d8:	85 e0       	ldi	r24, 0x05	; 5
      4da:	60 ec       	ldi	r22, 0xC0	; 192
      4dc:	42 e0       	ldi	r20, 0x02	; 2
      4de:	8d d0       	rcall	.+282    	; 0x5fa <Endpoint_ConfigureEndpoint_Prv>

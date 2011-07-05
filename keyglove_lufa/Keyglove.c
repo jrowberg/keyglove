@@ -31,8 +31,7 @@
 
 /** \file
  *
- *  Main source file for the KeyboardMouse demo. This file contains the main tasks of the demo and
- *  is responsible for the initial application hardware configuration.
+ *  Main source file for the Keyglove AVR controller code.
  */
 
 #include "Keyglove.h"
@@ -52,6 +51,10 @@ static CDC_LineEncoding_t LineEncodingData = { .BaudRateBPS = 0,
 
 /** Static buffer to hold the last received report from the host, so that it can be echoed back in the next sent report */
 static uint8_t LastReceived[GENERIC_REPORT_SIZE];
+
+static uint8_t KeyboardReportData[GENERIC_REPORT_SIZE];
+static uint8_t MouseReportData[GENERIC_REPORT_SIZE];
+static uint8_t JoystickReportData[GENERIC_REPORT_SIZE];
 
 long counter = 0;
 

@@ -182,7 +182,7 @@
  200               	.LBB95:
  201               	.LBB96:
  202               	.LSM25:
- 203 0020 82E0      		ldi r24,lo8(2)
+ 203 0020 85E0      		ldi r24,lo8(5)
  204 0022 8093 E900 		sts 233,r24
  205               	.LBE96:
  206               	.LBE95:
@@ -232,7 +232,7 @@
  250               	.LBB104:
  251               	.LBB105:
  252               	.LSM33:
- 253 005a 81E0      		ldi r24,lo8(1)
+ 253 005a 84E0      		ldi r24,lo8(4)
  254 005c 8093 E900 		sts 233,r24
  255               	.LBE105:
  256               	.LBE104:
@@ -320,7 +320,7 @@
  336 0030 5105      		cpc r21,__zero_reg__
  337 0032 01F0      		breq .L25
  338               	.LSM43:
- 339 0034 1092 0000 		sts ActionSent.3970,__zero_reg__
+ 339 0034 1092 0000 		sts ActionSent.3973,__zero_reg__
  340               	.LSM44:
  341 0038 285E      		subi r18,lo8(1000)
  342 003a 3340      		sbci r19,hi8(1000)
@@ -332,7 +332,7 @@
  348 0044 00C0      		rjmp .L26
  349               	.L25:
  350               	.LSM46:
- 351 0046 8091 0000 		lds r24,ActionSent.3970
+ 351 0046 8091 0000 		lds r24,ActionSent.3973
  352 004a 8823      		tst r24
  353 004c 01F4      		brne .L26
  354 004e 8091 0000 		lds r24,LineEncodingData
@@ -348,7 +348,7 @@
  364 0066 5E9A      		sbi 43-32,6
  365               	.LSM48:
  366 0068 81E0      		ldi r24,lo8(1)
- 367 006a 8093 0000 		sts ActionSent.3970,r24
+ 367 006a 8093 0000 		sts ActionSent.3973,r24
  368               	.LBB112:
  369               	.LBB113:
  370               	.LSM49:
@@ -660,7 +660,7 @@
  680 0048 1092 0000 		sts (LineEncodingData)+3,__zero_reg__
  681               	.LBB147:
  682               	.LSM87:
- 683 004c 81E0      		ldi r24,lo8(1)
+ 683 004c 84E0      		ldi r24,lo8(4)
  684 004e 61EC      		ldi r22,lo8(-63)
  685 0050 42E0      		ldi r20,lo8(2)
  686 0052 0E94 0000 		call Endpoint_ConfigureEndpoint_Prv
@@ -679,7 +679,7 @@
  699 0068 1323      		and r17,r19
  700               	.LBB148:
  701               	.LSM89:
- 702 006a 82E0      		ldi r24,lo8(2)
+ 702 006a 85E0      		ldi r24,lo8(5)
  703 006c 60EC      		ldi r22,lo8(-64)
  704 006e 42E0      		ldi r20,lo8(2)
  705 0070 0E94 0000 		call Endpoint_ConfigureEndpoint_Prv
@@ -733,7 +733,7 @@
  755               	.LSM95:
  756 0006 88E1      		ldi r24,lo8(24)
  757               	/* #APP */
- 758               	 ;  82 "Keyglove.c" 1
+ 758               	 ;  85 "Keyglove.c" 1
  759 0008 0FB6      		in __tmp_reg__, __SREG__
  760 000a F894      		cli
  761 000c 8093 6000 		sts 96, r24
@@ -789,7 +789,7 @@
  813               	.LBE153:
  814               	.LSM105:
  815               	/* #APP */
- 816               	 ;  66 "Keyglove.c" 1
+ 816               	 ;  69 "Keyglove.c" 1
  817 000c 7894      		sei
  818               	 ;  0 "" 2
  819               	/* #NOAPP */
@@ -828,32 +828,32 @@
  857 0019 00        		.byte	0
  858 001a 00        		.byte	0
  859 001b 08        		.byte	8
- 860               		.lcomm ActionSent.3970,1
+ 860               		.lcomm ActionSent.3973,1
  861               		.lcomm LastReceived,8
  966               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 Keyglove.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:19     .text.EVENT_USB_Device_Connect:00000000 EVENT_USB_Device_Connect
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:41     .text.EVENT_USB_Device_Disconnect:00000000 EVENT_USB_Device_Disconnect
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:63     .text.Keyboard_ProcessLEDReport:00000000 Keyboard_ProcessLEDReport
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:105    .text.ProcessGenericHIDReport:00000000 ProcessGenericHIDReport
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:860    .bss:00000005 LastReceived
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:142    .text.CreateGenericHIDReport:00000000 CreateGenericHIDReport
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:179    .text.HID_Task:00000000 HID_Task
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:311    .text.CDC_Task:00000000 CDC_Task
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:847    .bss:00000000 counter
-                             .bss:00000004 ActionSent.3970
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:852    .data:00000015 LineEncodingData
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:445    .text.EVENT_USB_Device_ControlRequest:00000000 EVENT_USB_Device_ControlRequest
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:636    .text.EVENT_USB_Device_ConfigurationChanged:00000000 EVENT_USB_Device_ConfigurationChanged
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:746    .text.SetupHardware:00000000 SetupHardware
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccR7fJ5K.s:798    .text.main:00000000 main
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:19     .text.EVENT_USB_Device_Connect:00000000 EVENT_USB_Device_Connect
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:41     .text.EVENT_USB_Device_Disconnect:00000000 EVENT_USB_Device_Disconnect
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:63     .text.Keyboard_ProcessLEDReport:00000000 Keyboard_ProcessLEDReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:105    .text.ProcessGenericHIDReport:00000000 ProcessGenericHIDReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:860    .bss:00000005 LastReceived
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:142    .text.CreateGenericHIDReport:00000000 CreateGenericHIDReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:179    .text.HID_Task:00000000 HID_Task
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:311    .text.CDC_Task:00000000 CDC_Task
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:847    .bss:00000000 counter
+                             .bss:00000004 ActionSent.3973
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:852    .data:00000015 LineEncodingData
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:445    .text.EVENT_USB_Device_ControlRequest:00000000 EVENT_USB_Device_ControlRequest
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:636    .text.EVENT_USB_Device_ConfigurationChanged:00000000 EVENT_USB_Device_ConfigurationChanged
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:746    .text.SetupHardware:00000000 SetupHardware
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccgV82MW.s:798    .text.main:00000000 main
 
 UNDEFINED SYMBOLS
 USB_DeviceState

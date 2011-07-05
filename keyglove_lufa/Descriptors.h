@@ -88,10 +88,10 @@
         #define CDC_TXRX_EPSIZE           16
 
         /** Endpoint number of the Generic HID reporting IN endpoint. */
-        #define GENERIC_IN_EPNUM          1
+        #define GENERIC_IN_EPNUM          4
 
         /** Endpoint number of the Generic HID reporting OUT endpoint. */
-        #define GENERIC_OUT_EPNUM         2
+        #define GENERIC_OUT_EPNUM         5
 
         /** Size in bytes of the Generic HID reporting endpoint. */
         #define GENERIC_EPSIZE            8

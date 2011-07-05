@@ -203,7 +203,7 @@
 0080011c D __data_end
 0080011c D _edata
 0080011c B counter
-00800120 b ActionSent.3970
+00800120 b ActionSent.3973
 00800121 b LastReceived
 00800129 B USB_CurrentlySelfPowered
 0080012a B USB_RemoteWakeupEnabled

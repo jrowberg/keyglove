@@ -282,13 +282,13 @@
  297 0088 2000      		.word	32
  298 008a 07        		.byte	7
  299 008b 05        		.byte	5
- 300 008c 81        		.byte	-127
+ 300 008c 84        		.byte	-124
  301 008d 03        		.byte	3
  302 008e 0800      		.word	8
  303 0090 01        		.byte	1
  304 0091 07        		.byte	7
  305 0092 05        		.byte	5
- 306 0093 02        		.byte	2
+ 306 0093 05        		.byte	5
  307 0094 03        		.byte	3
  308 0095 0800      		.word	8
  309 0097 01        		.byte	1
@@ -345,18 +345,18 @@
  390               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 Descriptors.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:19     .text.CALLBACK_USB_GetDescriptor:00000000 CALLBACK_USB_GetDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:198    .progmem.data:00000020 DeviceDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:216    .progmem.data:00000032 ConfigurationDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:313    .progmem.data:00000098 LanguageString
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:320    .progmem.data:0000009c ManufacturerString
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:340    .progmem.data:000000b8 ProductString
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccPHnbjt.s:162    .progmem.data:00000000 GenericReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:19     .text.CALLBACK_USB_GetDescriptor:00000000 CALLBACK_USB_GetDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:198    .progmem.data:00000020 DeviceDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:216    .progmem.data:00000032 ConfigurationDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:313    .progmem.data:00000098 LanguageString
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:320    .progmem.data:0000009c ManufacturerString
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:340    .progmem.data:000000b8 ProductString
+C:\Users\JEFFRO~1\AppData\Local\Temp/cchNraSk.s:162    .progmem.data:00000000 GenericReport
 
 NO UNDEFINED SYMBOLS
