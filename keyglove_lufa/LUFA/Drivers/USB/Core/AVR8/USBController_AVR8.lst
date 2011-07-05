@@ -245,15 +245,15 @@
  298               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 USBController_AVR8.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:19     .text.USB_Disable:00000000 USB_Disable
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:82     .text.USB_ResetInterface:00000000 USB_ResetInterface
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdLW8ZU.s:233    .text.USB_Init:00000000 USB_Init
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:19     .text.USB_Disable:00000000 USB_Disable
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:82     .text.USB_ResetInterface:00000000 USB_ResetInterface
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccHYASYP.s:233    .text.USB_Init:00000000 USB_Init
 
 UNDEFINED SYMBOLS
 USB_INT_DisableAllInterrupts

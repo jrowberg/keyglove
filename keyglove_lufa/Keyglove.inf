@@ -86,12 +86,10 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 [SourceDisksFiles]
 [SourceDisksNames]
 [DeviceList]
-%DESCRIPTION%=DriverInstall, USB\VID_03EB&PID_204E&MI_00
-;, USB\VID_03EB&PID_204E&MI_02, USB\VID_03EB&PID_204E&MI_03, USB\VID_03EB&PID_204E&MI_04
+%DESCRIPTION%=DriverInstall, USB\VID_03EB&PID_204E
 
 [DeviceList.NTamd64]
-%DESCRIPTION%=DriverInstall, USB\VID_03EB&PID_204E&MI_00
-;, USB\VID_03EB&PID_204E&MI_02, USB\VID_03EB&PID_204E&MI_03, USB\VID_03EB&PID_204E&MI_04
+%DESCRIPTION%=DriverInstall, USB\VID_03EB&PID_204E
 
 
 ;------------------------------------------------------------------------------
@@ -101,8 +99,8 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 ;------------------------------------------------------------------------------
 [Strings]
 MFGFILENAME="CDC_vista"
-DRIVERFILENAME ="usbser"
-MFGNAME="http://www.lufa-lib.org"
+DRIVERFILENAME="usbser"
+MFGNAME="Keyglove (www.keyglove.net)"
 INSTDISK="Keyglove Serial Driver Installer"
-DESCRIPTION="Communications Port"
+DESCRIPTION="Keyglove"
 SERVICE="USB RS-232 Emulation Driver"

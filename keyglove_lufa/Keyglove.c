@@ -37,15 +37,6 @@
 
 #include "Keyglove.h"
 
-/** Global structure to hold the current keyboard interface HID report, for transmission to the host */
-static USB_KeyboardReport_Data_t KeyboardReportData;
-
-/** Global structure to hold the current mouse interface HID report, for transmission to the host */
-static USB_MouseReport_Data_t MouseReportData;
-
-/** Global structure to hold the current joystick interface HID report, for transmission to the host */
-static USB_JoystickReport_Data_t JoystickReportData;
-
 /** Contains the current baud rate and other settings of the virtual serial port. While USB virtual serial does not use
  *  the physical USART and thus does not use these settings, they must still be retained and returned to the host
  *  upon request or the host will assume the device is non-functional.
@@ -59,40 +50,44 @@ static CDC_LineEncoding_t LineEncodingData = { .BaudRateBPS = 0,
                                            .ParityType  = CDC_PARITY_None,
                                            .DataBits    = 8                            };
 
+/** Static buffer to hold the last received report from the host, so that it can be echoed back in the next sent report */
+static uint8_t LastReceived[GENERIC_REPORT_SIZE];
+
+long counter = 0;
+
 /** Main program entry point. This routine configures the hardware required by the application, then
  *  enters a loop to run the application tasks in sequence.
  */
 int main(void)
 {
-	SetupHardware();
+    SetupHardware();
 
-	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
-	sei();
+    LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
+    sei();
 
-	for (;;)
-	{
-		Keyboard_HID_Task();
-		Mouse_HID_Task();
-		Joystick_HID_Task();
-		CDC_Task();
-		USB_USBTask();
-	}
+    for (;;)
+    {
+        CDC_Task();
+        HID_Task();
+        USB_USBTask();
+        counter++;
+    }
 }
 
 /** Configures the board hardware and chip peripherals for the demo's functionality. */
 void SetupHardware(void)
 {
-	/* Disable watchdog if enabled by bootloader/fuses */
-	MCUSR &= ~(1 << WDRF);
-	wdt_disable();
+    /* Disable watchdog if enabled by bootloader/fuses */
+    MCUSR &= ~(1 << WDRF);
+    wdt_disable();
 
-	/* Disable clock division */
-	//clock_prescale_set(clock_div_1);
+    /* Disable clock division */
+    //clock_prescale_set(clock_div_1);
         CPU_PRESCALE(CPU_8MHz); // 3.3v AVR shouldn't run faster than 8MHz
 
-	/* Hardware Initialization */
-	LEDs_Init();
-	USB_Init();
+    /* Hardware Initialization */
+    LEDs_Init();
+    USB_Init();
 }
 
 /** Event handler for the USB_Connect event. This indicates that the device is enumerating via the status LEDs and
@@ -100,8 +95,8 @@ void SetupHardware(void)
  */
 void EVENT_USB_Device_Connect(void)
 {
-	/* Indicate USB enumerating */
-	LEDs_SetAllLEDs(LEDMASK_USB_ENUMERATING);
+    /* Indicate USB enumerating */
+    LEDs_SetAllLEDs(LEDMASK_USB_ENUMERATING);
 }
 
 /** Event handler for the USB_Disconnect event. This indicates that the device is no longer connected to a host via
@@ -109,8 +104,8 @@ void EVENT_USB_Device_Connect(void)
  */
 void EVENT_USB_Device_Disconnect(void)
 {
-	/* Indicate USB not ready */
-	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
+    /* Indicate USB not ready */
+    LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
 }
 
 /** Event handler for the USB_ConfigurationChanged event. This is fired when the host sets the current configuration
@@ -118,35 +113,27 @@ void EVENT_USB_Device_Disconnect(void)
  */
 void EVENT_USB_Device_ConfigurationChanged(void)
 {
-	bool ConfigSuccess = true;
+    bool ConfigSuccess = true;
 
-	//* Setup CDC Data Endpoints */
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(CDC_NOTIFICATION_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_IN,
-	                                            CDC_NOTIFICATION_EPSIZE, ENDPOINT_BANK_SINGLE);
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(CDC_TX_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_IN,
-	                                            CDC_TXRX_EPSIZE, ENDPOINT_BANK_SINGLE);
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(CDC_RX_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_OUT,
-	                                            CDC_TXRX_EPSIZE, ENDPOINT_BANK_SINGLE);
+    //* Setup CDC Data Endpoints */
+    ConfigSuccess &= Endpoint_ConfigureEndpoint(CDC_NOTIFICATION_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_IN,
+                                                CDC_NOTIFICATION_EPSIZE, ENDPOINT_BANK_SINGLE);
+    ConfigSuccess &= Endpoint_ConfigureEndpoint(CDC_TX_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_IN,
+                                                CDC_TXRX_EPSIZE, ENDPOINT_BANK_SINGLE);
+    ConfigSuccess &= Endpoint_ConfigureEndpoint(CDC_RX_EPNUM, EP_TYPE_BULK, ENDPOINT_DIR_OUT,
+                                                CDC_TXRX_EPSIZE, ENDPOINT_BANK_SINGLE);
 
-	/* Setup Keyboard HID Report Endpoints */
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(KEYBOARD_IN_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_IN,
-	                                            HID_EPSIZE, ENDPOINT_BANK_SINGLE);
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(KEYBOARD_OUT_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_OUT,
-	                                            HID_EPSIZE, ENDPOINT_BANK_SINGLE);
+    /* Reset line encoding baud rate so that the host knows to send new values */
+    LineEncodingData.BaudRateBPS = 0;
 
-	/* Setup Mouse HID Report Endpoint */
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(MOUSE_IN_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_IN,
-	                                            HID_EPSIZE, ENDPOINT_BANK_SINGLE);
+    /* Setup HID Report Endpoints */
+    ConfigSuccess &= Endpoint_ConfigureEndpoint(GENERIC_IN_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_IN,
+                                                GENERIC_EPSIZE, ENDPOINT_BANK_SINGLE);
+    ConfigSuccess &= Endpoint_ConfigureEndpoint(GENERIC_OUT_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_OUT,
+                                                GENERIC_EPSIZE, ENDPOINT_BANK_SINGLE);
 
-	/* Setup Joystick HID Report Endpoint */
-	ConfigSuccess &= Endpoint_ConfigureEndpoint(JOYSTICK_EPNUM, EP_TYPE_INTERRUPT, ENDPOINT_DIR_IN,
-	                                            HID_EPSIZE, ENDPOINT_BANK_SINGLE);
-
-	/* Reset line encoding baud rate so that the host knows to send new values */
-	LineEncodingData.BaudRateBPS = 0;
-
-	/* Indicate endpoint configuration success or failure */
-	LEDs_SetAllLEDs(ConfigSuccess ? LEDMASK_USB_READY : LEDMASK_USB_ERROR);
+    /* Indicate endpoint configuration success or failure */
+    LEDs_SetAllLEDs(ConfigSuccess ? LEDMASK_USB_READY : LEDMASK_USB_ERROR);
 }
 
 /** Event handler for the USB_ControlRequest event. This is used to catch and process control requests sent to
@@ -155,106 +142,73 @@ void EVENT_USB_Device_ConfigurationChanged(void)
  */
 void EVENT_USB_Device_ControlRequest(void)
 {
-	uint8_t* ReportData;
-	uint8_t  ReportSize;
+    switch (USB_ControlRequest.bRequest)
+    {
+        case HID_REQ_GetReport:
+            if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
+            {
+                uint8_t GenericData[GENERIC_REPORT_SIZE];
+                CreateGenericHIDReport(GenericData);
 
-	/* Handle HID Class specific requests */
-	switch (USB_ControlRequest.bRequest)
-	{
-		case HID_REQ_GetReport:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
+                Endpoint_ClearSETUP();
 
-				/* Determine if it is the mouse or the keyboard data that is being requested */
-				if (USB_ControlRequest.wIndex == 2)
-				{
-					ReportData = (uint8_t*)&KeyboardReportData;
-					ReportSize = sizeof(KeyboardReportData);
-				}
-				else if (USB_ControlRequest.wIndex == 3)
-				{
-					ReportData = (uint8_t*)&MouseReportData;
-					ReportSize = sizeof(MouseReportData);
-				}
-				else if (USB_ControlRequest.wIndex == 4)
-				{
-					ReportData = (uint8_t*)&JoystickReportData;
-					ReportSize = sizeof(JoystickReportData);
-                                }
-                                else
-                                {
-                                        break; // wtf, hmm
-                                }
+                /* Write the report data to the control endpoint */
+                Endpoint_Write_Control_Stream_LE(&GenericData, sizeof(GenericData));
+                Endpoint_ClearOUT();
+            }
 
-				/* Write the report data to the control endpoint */
-				Endpoint_Write_Control_Stream_LE(ReportData, ReportSize);
-				Endpoint_ClearOUT();
+            break;
+        case HID_REQ_SetReport:
+            if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
+            {
+                uint8_t GenericData[GENERIC_REPORT_SIZE];
 
-				/* Clear the report data afterwards */
-				memset(ReportData, 0, ReportSize);
-			}
+                Endpoint_ClearSETUP();
 
-			break;
-		case HID_REQ_SetReport:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
+                /* Read the report data from the control endpoint */
+                Endpoint_Read_Control_Stream_LE(&GenericData, sizeof(GenericData));
+                Endpoint_ClearIN();
 
-				/* Wait until the LED report has been sent by the host */
-				while (!(Endpoint_IsOUTReceived()))
-				{
-					if (USB_DeviceState == DEVICE_STATE_Unattached)
-					  return;
-				}
+                ProcessGenericHIDReport(GenericData);
+            }
 
-				/* Read in the LED report from the host */
-				uint8_t LEDStatus = Endpoint_Read_8();
+            break;
+        case CDC_REQ_GetLineEncoding:
+            if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
+            {
+                Endpoint_ClearSETUP();
 
-				Endpoint_ClearOUT();
-				Endpoint_ClearStatusStage();
+                /* Write the line coding data to the control endpoint */
+                Endpoint_Write_Control_Stream_LE(&LineEncodingData, sizeof(CDC_LineEncoding_t));
+                Endpoint_ClearOUT();
+            }
 
-				/* Process the incoming LED report */
-				Keyboard_ProcessLEDReport(LEDStatus);
-			}
+            break;
+        case CDC_REQ_SetLineEncoding:
+            if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
+            {
+                Endpoint_ClearSETUP();
 
-			break;
-		case CDC_REQ_GetLineEncoding:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
+                /* Read the line coding data in from the host into the global struct */
+                Endpoint_Read_Control_Stream_LE(&LineEncodingData, sizeof(CDC_LineEncoding_t));
+                Endpoint_ClearIN();
+            }
 
-				/* Write the line coding data to the control endpoint */
-				Endpoint_Write_Control_Stream_LE(&LineEncodingData, sizeof(CDC_LineEncoding_t));
-				Endpoint_ClearOUT();
-			}
+            break;
+        case CDC_REQ_SetControlLineState:
+            if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
+            {
+                Endpoint_ClearSETUP();
+                Endpoint_ClearStatusStage();
 
-			break;
-		case CDC_REQ_SetLineEncoding:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
+                /* NOTE: Here you can read in the line state mask from the host, to get the current state of the output handshake
+                         lines. The mask is read in from the wValue parameter in USB_ControlRequest, and can be masked against the
+                         CONTROL_LINE_OUT_* masks to determine the RTS and DTR line states using the following code:
+                */
+            }
 
-				/* Read the line coding data in from the host into the global struct */
-				Endpoint_Read_Control_Stream_LE(&LineEncodingData, sizeof(CDC_LineEncoding_t));
-				Endpoint_ClearIN();
-			}
-
-			break;
-		case CDC_REQ_SetControlLineState:
-			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
-			{
-				Endpoint_ClearSETUP();
-				Endpoint_ClearStatusStage();
-
-				/* NOTE: Here you can read in the line state mask from the host, to get the current state of the output handshake
-				         lines. The mask is read in from the wValue parameter in USB_ControlRequest, and can be masked against the
-						 CONTROL_LINE_OUT_* masks to determine the RTS and DTR line states using the following code:
-				*/
-			}
-
-			break;
-	}
+            break;
+    }
 }
 
 /** Processes a given Keyboard LED report from the host, and sets the board LEDs to match. Since the Keyboard
@@ -264,183 +218,159 @@ void EVENT_USB_Device_ControlRequest(void)
  */
 void Keyboard_ProcessLEDReport(const uint8_t LEDStatus)
 {
-	uint8_t LEDMask = LEDS_LED2;
+    uint8_t LEDMask = LEDS_LED2;
 
-	if (LEDStatus & HID_KEYBOARD_LED_NUMLOCK)
-	  LEDMask |= LEDS_LED2;
+    if (LEDStatus & HID_KEYBOARD_LED_NUMLOCK)
+      LEDMask |= LEDS_LED2;
 
-	if (LEDStatus & HID_KEYBOARD_LED_CAPSLOCK)
-	  LEDMask |= LEDS_LED3;
+    if (LEDStatus & HID_KEYBOARD_LED_CAPSLOCK)
+      LEDMask |= LEDS_LED3;
 
-	if (LEDStatus & HID_KEYBOARD_LED_SCROLLLOCK)
-	  LEDMask |= LEDS_LED4;
+    if (LEDStatus & HID_KEYBOARD_LED_SCROLLLOCK)
+      LEDMask |= LEDS_LED4;
 
-	/* Set the status LEDs to the current Keyboard LED status */
-	LEDs_SetAllLEDs(LEDMask);
-}
-
-/** Keyboard task. This generates the next keyboard HID report for the host, and transmits it via the
- *  keyboard IN endpoint when the host is ready for more data. Additionally, it processes host LED status
- *  reports sent to the device via the keyboard OUT reporting endpoint.
- */
-void Keyboard_HID_Task(void)
-{
-	//uint8_t JoyStatus_LCL = Joystick_GetStatus();
-
-	/* Device must be connected and configured for the task to run */
-	if (USB_DeviceState != DEVICE_STATE_Configured)
-	  return;
-
-	/* Check if board button is not pressed, if so mouse mode enabled */
-	if (false) //(Buttons_GetStatus() & BUTTONS_BUTTON1))
-	{
-		/* Make sent key uppercase by indicating that the left shift key is pressed */
-		KeyboardReportData.Modifier = HID_KEYBOARD_MODIFER_LEFTSHIFT;
-		KeyboardReportData.KeyCode[0] = HID_KEYBOARD_SC_A;
-	}
-
-	/* Select the Keyboard Report Endpoint */
-	Endpoint_SelectEndpoint(KEYBOARD_IN_EPNUM);
-
-	/* Check if Keyboard Endpoint Ready for Read/Write */
-	if (Endpoint_IsReadWriteAllowed())
-	{
-		/* Write Keyboard Report Data */
-		Endpoint_Write_Stream_LE(&KeyboardReportData, sizeof(KeyboardReportData), NULL);
-
-		/* Finalize the stream transfer to send the last packet */
-		Endpoint_ClearIN();
-
-		/* Clear the report data afterwards */
-		memset(&KeyboardReportData, 0, sizeof(KeyboardReportData));
-	}
-
-	/* Select the Keyboard LED Report Endpoint */
-	Endpoint_SelectEndpoint(KEYBOARD_OUT_EPNUM);
-
-	/* Check if Keyboard LED Endpoint Ready for Read/Write */
-	if (Endpoint_IsReadWriteAllowed())
-	{
-		/* Read in and process the LED report from the host */
-		Keyboard_ProcessLEDReport(Endpoint_Read_8());
-
-		/* Handshake the OUT Endpoint - clear endpoint and ready for next report */
-		Endpoint_ClearOUT();
-	}
-}
-
-/** Mouse task. This generates the next mouse HID report for the host, and transmits it via the
- *  mouse IN endpoint when the host is ready for more data.
- */
-void Mouse_HID_Task(void)
-{
-	//uint8_t JoyStatus_LCL = Joystick_GetStatus();
-
-	/* Device must be connected and configured for the task to run */
-	if (USB_DeviceState != DEVICE_STATE_Configured)
-	  return;
-
-	/* Check if board button is pressed, if so mouse mode enabled */
-	if (false) //Buttons_GetStatus() & BUTTONS_BUTTON1)
-	{
-                MouseReportData.Y =  1;
-                //MouseReportData.Button |= (1 << 0);
-	}
-
-	/* Select the Mouse Report Endpoint */
-	Endpoint_SelectEndpoint(MOUSE_IN_EPNUM);
-
-	/* Check if Mouse Endpoint Ready for Read/Write */
-	if (Endpoint_IsReadWriteAllowed())
-	{
-		/* Write Mouse Report Data */
-		Endpoint_Write_Stream_LE(&MouseReportData, sizeof(MouseReportData), NULL);
-
-		/* Finalize the stream transfer to send the last packet */
-		Endpoint_ClearIN();
-
-		/* Clear the report data afterwards */
-		memset(&MouseReportData, 0, sizeof(MouseReportData));
-	}
-}
-
-/** Joystick task to manage joystick HID report generation and transmission to the host. */
-void Joystick_HID_Task(void)
-{
-	/* Device must be connected and configured for the task to run */
-	if (USB_DeviceState != DEVICE_STATE_Configured)
-	  return;
-
-	/* Select the Joystick Report Endpoint */
-	Endpoint_SelectEndpoint(JOYSTICK_EPNUM);
-
-	/* Check to see if the host is ready for another packet */
-	if (Endpoint_IsINReady())
-	{
-		/* Write Joystick Report Data */
-		Endpoint_Write_Stream_LE(&JoystickReportData, sizeof(JoystickReportData), NULL);
-
-		/* Finalize the stream transfer to send the last packet */
-		Endpoint_ClearIN();
-
-		/* Clear the report data afterwards */
-		memset(&JoystickReportData, 0, sizeof(JoystickReportData));
-	}
+    /* Set the status LEDs to the current Keyboard LED status */
+    LEDs_SetAllLEDs(LEDMask);
 }
 
 /** Function to manage CDC data transmission and reception to and from the host. */
 void CDC_Task(void)
 {
-	char*       ReportString    = NULL;
-	static bool ActionSent      = false;
-	
-	/* Device must be connected and configured for the task to run */
-	if (USB_DeviceState != DEVICE_STATE_Configured)
-	  return;
+    char*       ReportString    = NULL;
+    static bool ActionSent      = false;
+    
+    /* Device must be connected and configured for the task to run */
+    if (USB_DeviceState != DEVICE_STATE_Configured)
+      return;
 
-	PORTD |= (1 << 6);
-	_delay_ms(100);
-
+    if (counter % 10000 == 0)
+    {
         ReportString = "Test serial output\r\n";
-        //ActionSent = false;
+    }
+    else
+    {
+        ActionSent = false;
+        if (counter % 10000 == 1000)
+        {
+            PORTD &= ~(1 << 6);
+        }
+    }
 
-	/* Flag management - Only allow one string to be sent per action */
-	if ((ReportString != NULL) && (ActionSent == false) && LineEncodingData.BaudRateBPS)
-	{
-		ActionSent = true;
+    /* Flag management - Only allow one string to be sent per action */
+    if ((ReportString != NULL) && (ActionSent == false) && LineEncodingData.BaudRateBPS)
+    {
+        PORTD |= (1 << 6);
+        ActionSent = true;
 
-		/* Select the Serial Tx Endpoint */
-		Endpoint_SelectEndpoint(CDC_TX_EPNUM);
+        /* Select the Serial Tx Endpoint */
+        Endpoint_SelectEndpoint(CDC_TX_EPNUM);
 
-		/* Write the String to the Endpoint */
-		Endpoint_Write_Stream_LE(ReportString, strlen(ReportString), NULL);
+        /* Write the String to the Endpoint */
+        Endpoint_Write_Stream_LE(ReportString, strlen(ReportString), NULL);
 
-		/* Remember if the packet to send completely fills the endpoint */
-		bool IsFull = (Endpoint_BytesInEndpoint() == CDC_TXRX_EPSIZE);
+        /* Remember if the packet to send completely fills the endpoint */
+        bool IsFull = (Endpoint_BytesInEndpoint() == CDC_TXRX_EPSIZE);
 
-		/* Finalize the stream transfer to send the last packet */
-		Endpoint_ClearIN();
+        /* Finalize the stream transfer to send the last packet */
+        Endpoint_ClearIN();
 
-		/* If the last packet filled the endpoint, send an empty packet to release the buffer on
-		 * the receiver (otherwise all data will be cached until a non-full packet is received) */
-		if (IsFull)
-		{
-			/* Wait until the endpoint is ready for another packet */
-			Endpoint_WaitUntilReady();
+        /* If the last packet filled the endpoint, send an empty packet to release the buffer on
+         * the receiver (otherwise all data will be cached until a non-full packet is received) */
+        if (IsFull)
+        {
+            /* Wait until the endpoint is ready for another packet */
+            Endpoint_WaitUntilReady();
 
-			/* Send an empty packet to ensure that the host does not buffer data sent to it */
-			Endpoint_ClearIN();
-		}
-	}
+            /* Send an empty packet to ensure that the host does not buffer data sent to it */
+            Endpoint_ClearIN();
+        }
+    }
 
-	/* Select the Serial Rx Endpoint */
-	Endpoint_SelectEndpoint(CDC_RX_EPNUM);
+    /* Select the Serial Rx Endpoint */
+    Endpoint_SelectEndpoint(CDC_RX_EPNUM);
 
-	/* Throw away any received data from the host */
-	if (Endpoint_IsOUTReceived())
-	  Endpoint_ClearOUT();
+    /* Throw away any received data from the host */
+    if (Endpoint_IsOUTReceived())
+      Endpoint_ClearOUT();
 
-	PORTD &= ~(1 << 6);
-	_delay_ms(250);
+}
+
+/** Function to process the lest received report from the host.
+ *
+ *  \param[in] DataArray  Pointer to a buffer where the last report data is stored
+ */
+void ProcessGenericHIDReport(uint8_t* DataArray)
+{
+    /*
+        This is where you need to process the reports being sent from the host to the device.
+        DataArray is an array holding the last report from the host. This function is called
+        each time the host has sent a report to the device.
+    */
+
+    for (uint8_t i = 0; i < GENERIC_REPORT_SIZE; i++)
+      LastReceived[i] = DataArray[i];
+}
+
+/** Function to create the next report to send back to the host at the next reporting interval.
+ *
+ *  \param[out] DataArray  Pointer to a buffer where the next report data should be stored
+ */
+void CreateGenericHIDReport(uint8_t* DataArray)
+{
+    /*
+        This is where you need to create reports to be sent to the host from the device. This
+        function is called each time the host is ready to accept a new report. DataArray is
+        an array to hold the report to the host.
+    */
+
+    for (uint8_t i = 0; i < GENERIC_REPORT_SIZE; i++)
+      DataArray[i] = LastReceived[i];
+}
+
+void HID_Task(void)
+{
+    /* Device must be connected and configured for the task to run */
+    if (USB_DeviceState != DEVICE_STATE_Configured)
+      return;
+
+    Endpoint_SelectEndpoint(GENERIC_OUT_EPNUM);
+
+    /* Check to see if a packet has been sent from the host */
+    if (Endpoint_IsOUTReceived())
+    {
+        /* Check to see if the packet contains data */
+        if (Endpoint_IsReadWriteAllowed())
+        {
+            /* Create a temporary buffer to hold the read in report from the host */
+            uint8_t GenericData[GENERIC_REPORT_SIZE];
+
+            /* Read Generic Report Data */
+            Endpoint_Read_Stream_LE(&GenericData, sizeof(GenericData), NULL);
+
+            /* Process Generic Report Data */
+            ProcessGenericHIDReport(GenericData);
+        }
+
+        /* Finalize the stream transfer to send the last packet */
+        Endpoint_ClearOUT();
+    }
+
+    Endpoint_SelectEndpoint(GENERIC_IN_EPNUM);
+
+    /* Check to see if the host is ready to accept another packet */
+    if (Endpoint_IsINReady())
+    {
+        /* Create a temporary buffer to hold the report to send to the host */
+        uint8_t GenericData[GENERIC_REPORT_SIZE];
+
+        /* Create Generic Report Data */
+        CreateGenericHIDReport(GenericData);
+
+        /* Write Generic Report Data */
+        Endpoint_Write_Stream_LE(&GenericData, sizeof(GenericData), NULL);
+
+        /* Finalize the stream transfer to send the last packet */
+        Endpoint_ClearIN();
+    }
 }
 

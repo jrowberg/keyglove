@@ -37,92 +37,79 @@
 #ifndef _DESCRIPTORS_H_
 #define _DESCRIPTORS_H_
 
-	/* Includes: */
-		#include <LUFA/Drivers/USB/USB.h>
+    /* Includes: */
+        #include <LUFA/Drivers/USB/USB.h>
 
-		#include <avr/pgmspace.h>
+        #include <avr/pgmspace.h>
 
-	/* Type Defines: */
-		/** Type define for the device configuration descriptor structure. This must be defined in the
-		 *  application code, as the configuration descriptor contains several sub-descriptors which
-		 *  vary between devices, and which describe the device's usage to the host.
-		 */
-		typedef struct
-		{
-			USB_Descriptor_Configuration_Header_t Config;
+    /* Type Defines: */
+        /** Type define for the device configuration descriptor structure. This must be defined in the
+         *  application code, as the configuration descriptor contains several sub-descriptors which
+         *  vary between devices, and which describe the device's usage to the host.
+         */
+        typedef struct
+        {
+            USB_Descriptor_Configuration_Header_t Config;
 
-                        // virtual serial
-			USB_Descriptor_Interface_Association_t   CDC_IAD;
-			USB_Descriptor_Interface_t               CDC_CCI_Interface;
-			USB_CDC_Descriptor_FunctionalHeader_t    CDC_Functional_Header;
-			USB_CDC_Descriptor_FunctionalACM_t       CDC_Functional_ACM;
-			USB_CDC_Descriptor_FunctionalUnion_t     CDC_Functional_Union;
-			USB_Descriptor_Endpoint_t                CDC_NotificationEndpoint;
-			USB_Descriptor_Interface_t               CDC_DCI_Interface;
-			USB_Descriptor_Endpoint_t                CDC_DataOutEndpoint;
-			USB_Descriptor_Endpoint_t                CDC_DataInEndpoint;
+            // virtual serial
+            USB_Descriptor_Interface_Association_t   CDC_IAD;
+            USB_Descriptor_Interface_t               CDC_CCI_Interface;
+            USB_CDC_Descriptor_FunctionalHeader_t    CDC_Functional_Header;
+            USB_CDC_Descriptor_FunctionalACM_t       CDC_Functional_ACM;
+            USB_CDC_Descriptor_FunctionalUnion_t     CDC_Functional_Union;
+            USB_Descriptor_Endpoint_t                CDC_NotificationEndpoint;
+            USB_Descriptor_Interface_t               CDC_DCI_Interface;
+            USB_Descriptor_Endpoint_t                CDC_DataOutEndpoint;
+            USB_Descriptor_Endpoint_t                CDC_DataInEndpoint;
 
-                        // keyboard
-			USB_Descriptor_Interface_t            HID1_KeyboardInterface;
-			USB_HID_Descriptor_HID_t              HID1_KeyboardHID;
-	                USB_Descriptor_Endpoint_t             HID1_ReportINEndpoint;
-                        USB_Descriptor_Endpoint_t             HID1_ReportOUTEndpoint;
+            // generic HID
+            USB_Descriptor_Interface_t               HID_Interface;
+            USB_HID_Descriptor_HID_t                 HID_GenericHID;
+            USB_Descriptor_Endpoint_t                HID_ReportINEndpoint;
+            USB_Descriptor_Endpoint_t                HID_ReportOUTEndpoint;
 
-                        // mouse
-			USB_Descriptor_Interface_t            HID2_MouseInterface;
-			USB_HID_Descriptor_HID_t              HID2_MouseHID;
-                        USB_Descriptor_Endpoint_t             HID2_ReportINEndpoint;
+        } USB_Descriptor_Configuration_t;
 
-                        // joystick
-			USB_Descriptor_Interface_t            HID3_JoystickInterface;
-			USB_HID_Descriptor_HID_t              HID3_JoystickHID;
-	                USB_Descriptor_Endpoint_t             HID3_ReportINEndpoint;
+    /* Macros: */
 
-		} USB_Descriptor_Configuration_t;
+        /** Endpoint number of the CDC device-to-host notification IN endpoint. */
+        #define CDC_NOTIFICATION_EPNUM    1
 
-	/* Macros: */
+        /** Endpoint number of the CDC device-to-host data IN endpoint. */
+        #define CDC_TX_EPNUM              2
 
-		/** Endpoint number of the CDC device-to-host notification IN endpoint. */
-		#define CDC_NOTIFICATION_EPNUM    1
+        /** Endpoint number of the CDC host-to-device data OUT endpoint. */
+        #define CDC_RX_EPNUM              3
 
-		/** Endpoint number of the CDC device-to-host data IN endpoint. */
-		#define CDC_TX_EPNUM              2
+        /** Size in bytes of the CDC device-to-host notification IN endpoint. */
+        #define CDC_NOTIFICATION_EPSIZE   8
 
-		/** Endpoint number of the CDC host-to-device data OUT endpoint. */
-		#define CDC_RX_EPNUM              3
+        /** Size in bytes of the CDC data IN and OUT endpoints. */
+        #define CDC_TXRX_EPSIZE           16
 
-		/** Size in bytes of the CDC device-to-host notification IN endpoint. */
-		#define CDC_NOTIFICATION_EPSIZE   8
+        /** Endpoint number of the Generic HID reporting IN endpoint. */
+        #define GENERIC_IN_EPNUM          1
 
-		/** Size in bytes of the CDC data IN and OUT endpoints. */
-		#define CDC_TXRX_EPSIZE           16
+        /** Endpoint number of the Generic HID reporting OUT endpoint. */
+        #define GENERIC_OUT_EPNUM         2
 
-		/** Endpoint number of the Keyboard HID reporting IN endpoint. */
-		#define KEYBOARD_IN_EPNUM         4
+        /** Size in bytes of the Generic HID reporting endpoint. */
+        #define GENERIC_EPSIZE            8
 
-		/** Endpoint number of the Keyboard HID reporting OUT endpoint. */
-		#define KEYBOARD_OUT_EPNUM        5
+        /** Size in bytes of the Generic HID reports (including report ID byte). */
+        #define GENERIC_REPORT_SIZE       8
 
-		/** Endpoint number of the Mouse HID reporting IN endpoint. */
-		#define MOUSE_IN_EPNUM            6
+        /** Descriptor header type value, to indicate a HID class HID descriptor. */
+        #define DTYPE_HID                 0x21
 
-		/** Endpoint number of the Joystick HID reporting IN endpoint. */
-		#define JOYSTICK_EPNUM            7
+        /** Descriptor header type value, to indicate a HID class HID report descriptor. */
+        #define DTYPE_Report              0x22
 
-		/** Size in bytes of each of the HID reporting IN and OUT endpoints. */
-		#define HID_EPSIZE                8
-
-		/** Descriptor header type value, to indicate a HID class HID descriptor. */
-		#define DTYPE_HID                 0x21
-
-		/** Descriptor header type value, to indicate a HID class HID report descriptor. */
-		#define DTYPE_Report              0x22
-
-	/* Function Prototypes: */
-		uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
-		                                    const uint8_t wIndex,
-		                                    const void** const DescriptorAddress)
-		                                    ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(3);
+    /* Function Prototypes: */
+        uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,
+                                            const uint8_t wIndex,
+                                            const void** const DescriptorAddress)
+                                            ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(3);
 
 #endif
 
