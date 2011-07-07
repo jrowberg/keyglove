@@ -22,6 +22,7 @@ USB_CurrentlySelfPowered
 USB_RemoteWakeupEnabled
                     0x1               LUFA/Drivers/USB/Core/DeviceStandardReq.o
 USB_DeviceState     0x1               LUFA/Drivers/USB/Core/USBTask.o
+HID_Report_IDs      0x1               Keyglove.o
 USB_ControlRequest  0x8               LUFA/Drivers/USB/Core/USBTask.o
 USB_ConfigurationNumber
                     0x1               LUFA/Drivers/USB/Core/DeviceStandardReq.o
@@ -33,6 +34,9 @@ Discarded input sections
  .text          0x00000000        0x0 Keyglove.o
  .text.Keyboard_ProcessLEDReport
                 0x00000000        0x0 Keyglove.o
+ .text.ProcessHIDReport
+                0x00000000        0x0 Keyglove.o
+ COMMON         0x00000000        0x0 Keyglove.o
  .text          0x00000000        0x0 Descriptors.o
  .data          0x00000000        0x0 Descriptors.o
  .bss           0x00000000        0x0 Descriptors.o
@@ -285,7 +289,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x1052
+.text           0x00000000     0x137e
  *(.vectors)
  .vectors       0x00000000       0x98 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
                 0x00000000                __vectors
@@ -293,47 +297,50 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.vectors)
  *(.progmem.gcc*)
  *(.progmem*)
- .progmem.data  0x00000098       0xe6 Descriptors.o
-                0x00000098                GenericReport
-                0x00000134                ManufacturerString
-                0x00000130                LanguageString
-                0x000000b8                DeviceDescriptor
-                0x00000150                ProductString
-                0x000000ca                ConfigurationDescriptor
-                0x0000017e                . = ALIGN (0x2)
-                0x0000017e                __trampolines_start = .
+ .progmem.data  0x00000098      0x1d1 Descriptors.o
+                0x000001c5                ManufacturerString
+                0x0000023b                ProductStringHID
+                0x00000098                HIDReport
+                0x000001c1                LanguageString
+                0x0000020f                ProductStringSerial
+                0x00000149                DeviceDescriptor
+                0x000001e1                ProductString
+                0x0000015b                ConfigurationDescriptor
+                0x0000026a                . = ALIGN (0x2)
+ *fill*         0x00000269        0x1 00
+                0x0000026a                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x0000017e        0x0 linker stubs
+ .trampolines   0x0000026a        0x0 linker stubs
  *(.trampolines*)
-                0x0000017e                __trampolines_end = .
+                0x0000026a                __trampolines_end = .
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x0000017e                __ctors_start = .
+                0x0000026a                __ctors_start = .
  *(.ctors)
-                0x0000017e                __ctors_end = .
-                0x0000017e                __dtors_start = .
+                0x0000026a                __ctors_end = .
+                0x0000026a                __dtors_start = .
  *(.dtors)
-                0x0000017e                __dtors_end = .
+                0x0000026a                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x0000017e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-                0x0000017e                __init
+ .init0         0x0000026a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+                0x0000026a                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x0000017e        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+ .init2         0x0000026a        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x0000018a       0x1a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-                0x0000018a                __do_copy_data
- .init4         0x000001a4       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
-                0x000001a4                __do_clear_bss
+ .init4         0x00000276       0x1a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+                0x00000276                __do_copy_data
+ .init4         0x00000290       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                0x00000290                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -344,142 +351,138 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x000001b4        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+ .init9         0x000002a0        0x6 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
  *(.init9)
  *(.text)
- .text          0x000001b8        0x2 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-                0x000001b8                __vector_22
-                0x000001b8                __vector_28
-                0x000001b8                __vector_1
-                0x000001b8                __vector_32
-                0x000001b8                __vector_34
-                0x000001b8                __vector_24
-                0x000001b8                __vector_12
-                0x000001b8                __bad_interrupt
-                0x000001b8                __vector_6
-                0x000001b8                __vector_31
-                0x000001b8                __vector_35
-                0x000001b8                __vector_3
-                0x000001b8                __vector_23
-                0x000001b8                __vector_30
-                0x000001b8                __vector_25
-                0x000001b8                __vector_11
-                0x000001b8                __vector_13
-                0x000001b8                __vector_17
-                0x000001b8                __vector_19
-                0x000001b8                __vector_7
-                0x000001b8                __vector_27
-                0x000001b8                __vector_5
-                0x000001b8                __vector_33
-                0x000001b8                __vector_37
-                0x000001b8                __vector_4
-                0x000001b8                __vector_9
-                0x000001b8                __vector_2
-                0x000001b8                __vector_21
-                0x000001b8                __vector_15
-                0x000001b8                __vector_36
-                0x000001b8                __vector_29
-                0x000001b8                __vector_8
-                0x000001b8                __vector_26
-                0x000001b8                __vector_14
-                0x000001b8                __vector_16
-                0x000001b8                __vector_18
-                0x000001b8                __vector_20
-                0x000001ba                . = ALIGN (0x2)
+ .text          0x000002a6        0x2 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+                0x000002a6                __vector_22
+                0x000002a6                __vector_28
+                0x000002a6                __vector_1
+                0x000002a6                __vector_32
+                0x000002a6                __vector_34
+                0x000002a6                __vector_24
+                0x000002a6                __vector_12
+                0x000002a6                __bad_interrupt
+                0x000002a6                __vector_6
+                0x000002a6                __vector_31
+                0x000002a6                __vector_35
+                0x000002a6                __vector_3
+                0x000002a6                __vector_23
+                0x000002a6                __vector_30
+                0x000002a6                __vector_25
+                0x000002a6                __vector_11
+                0x000002a6                __vector_13
+                0x000002a6                __vector_17
+                0x000002a6                __vector_19
+                0x000002a6                __vector_7
+                0x000002a6                __vector_27
+                0x000002a6                __vector_5
+                0x000002a6                __vector_33
+                0x000002a6                __vector_37
+                0x000002a6                __vector_4
+                0x000002a6                __vector_9
+                0x000002a6                __vector_2
+                0x000002a6                __vector_21
+                0x000002a6                __vector_15
+                0x000002a6                __vector_36
+                0x000002a6                __vector_29
+                0x000002a6                __vector_8
+                0x000002a6                __vector_26
+                0x000002a6                __vector_14
+                0x000002a6                __vector_16
+                0x000002a6                __vector_18
+                0x000002a6                __vector_20
+                0x000002a8                . = ALIGN (0x2)
  *(.text.*)
+ .text.RingBuffer_Insert
+                0x000002a8       0x3e Keyglove.o
  .text.EVENT_USB_Device_Connect
-                0x000001ba        0xa Keyglove.o
-                0x000001ba                EVENT_USB_Device_Connect
+                0x000002e6        0xa Keyglove.o
+                0x000002e6                EVENT_USB_Device_Connect
  .text.EVENT_USB_Device_Disconnect
-                0x000001c4        0xa Keyglove.o
-                0x000001c4                EVENT_USB_Device_Disconnect
- .text.ProcessGenericHIDReport
-                0x000001ce       0x22 Keyglove.o
-                0x000001ce                ProcessGenericHIDReport
- .text.CreateGenericHIDReport
-                0x000001f0       0x22 Keyglove.o
-                0x000001f0                CreateGenericHIDReport
+                0x000002f0        0xa Keyglove.o
+                0x000002f0                EVENT_USB_Device_Disconnect
  .text.HID_Task
-                0x00000212       0x9a Keyglove.o
-                0x00000212                HID_Task
+                0x000002fa       0x72 Keyglove.o
+                0x000002fa                HID_Task
  .text.CDC_Task
-                0x000002ac       0xbe Keyglove.o
-                0x000002ac                CDC_Task
+                0x0000036c      0x112 Keyglove.o
+                0x0000036c                CDC_Task
  .text.EVENT_USB_Device_ControlRequest
-                0x0000036a      0x10c Keyglove.o
-                0x0000036a                EVENT_USB_Device_ControlRequest
+                0x0000047e       0xd8 Keyglove.o
+                0x0000047e                EVENT_USB_Device_ControlRequest
  .text.EVENT_USB_Device_ConfigurationChanged
-                0x00000476       0x98 Keyglove.o
-                0x00000476                EVENT_USB_Device_ConfigurationChanged
+                0x00000556       0xac Keyglove.o
+                0x00000556                EVENT_USB_Device_ConfigurationChanged
  .text.SetupHardware
-                0x0000050e       0x32 Keyglove.o
-                0x0000050e                SetupHardware
- .text.main     0x00000540       0x3a Keyglove.o
-                0x00000540                main
+                0x00000602       0x32 Keyglove.o
+                0x00000602                SetupHardware
+ .text.main     0x00000634      0x24e Keyglove.o
+                0x00000634                main
  .text.CALLBACK_USB_GetDescriptor
-                0x0000057a       0x80 Descriptors.o
-                0x0000057a                CALLBACK_USB_GetDescriptor
+                0x00000882       0xa4 Descriptors.o
+                0x00000882                CALLBACK_USB_GetDescriptor
  .text.Endpoint_ConfigureEndpoint_Prv
-                0x000005fa       0x6a LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                0x000005fa                Endpoint_ConfigureEndpoint_Prv
+                0x00000926       0x6a LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x00000926                Endpoint_ConfigureEndpoint_Prv
  .text.Endpoint_ClearStatusStage
-                0x00000664       0x42 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                0x00000664                Endpoint_ClearStatusStage
+                0x00000990       0x42 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x00000990                Endpoint_ClearStatusStage
  .text.Endpoint_WaitUntilReady
-                0x000006a6       0x64 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                0x000006a6                Endpoint_WaitUntilReady
+                0x000009d2       0x64 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x000009d2                Endpoint_WaitUntilReady
  .text.USB_ResetInterface
-                0x0000070a       0x92 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
-                0x0000070a                USB_ResetInterface
+                0x00000a36       0x92 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+                0x00000a36                USB_ResetInterface
  .text.USB_Init
-                0x0000079c       0x12 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
-                0x0000079c                USB_Init
+                0x00000ac8       0x12 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+                0x00000ac8                USB_Init
  .text.USB_INT_DisableAllInterrupts
-                0x000007ae       0x10 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
-                0x000007ae                USB_INT_DisableAllInterrupts
+                0x00000ada       0x10 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x00000ada                USB_INT_DisableAllInterrupts
  .text.USB_INT_ClearAllInterrupts
-                0x000007be        0xa LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
-                0x000007be                USB_INT_ClearAllInterrupts
+                0x00000aea        0xa LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x00000aea                USB_INT_ClearAllInterrupts
  .text.__vector_10
-                0x000007c8      0x194 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
-                0x000007c8                __vector_10
+                0x00000af4      0x194 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x00000af4                __vector_10
  .text.USB_Device_ProcessControlRequest
-                0x0000095c      0x308 LUFA/Drivers/USB/Core/DeviceStandardReq.o
-                0x0000095c                USB_Device_ProcessControlRequest
+                0x00000c88      0x308 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                0x00000c88                USB_Device_ProcessControlRequest
  .text.USB_Event_Stub
-                0x00000c64        0x2 LUFA/Drivers/USB/Core/Events.o
-                0x00000c64                EVENT_USB_Device_WakeUp
-                0x00000c64                USB_Event_Stub
-                0x00000c64                EVENT_USB_Device_Suspend
-                0x00000c64                EVENT_USB_Device_StartOfFrame
-                0x00000c64                EVENT_USB_Device_Reset
+                0x00000f90        0x2 LUFA/Drivers/USB/Core/Events.o
+                0x00000f90                EVENT_USB_Device_WakeUp
+                0x00000f90                USB_Event_Stub
+                0x00000f90                EVENT_USB_Device_Suspend
+                0x00000f90                EVENT_USB_Device_StartOfFrame
+                0x00000f90                EVENT_USB_Device_Reset
  .text.Endpoint_Write_Control_Stream_LE
-                0x00000c66       0xbc LUFA/Drivers/USB/Core/EndpointStream.o
-                0x00000c66                Endpoint_Write_Control_Stream_LE
+                0x00000f92       0xbc LUFA/Drivers/USB/Core/EndpointStream.o
+                0x00000f92                Endpoint_Write_Control_Stream_LE
  .text.Endpoint_Read_Control_Stream_LE
-                0x00000d22       0x82 LUFA/Drivers/USB/Core/EndpointStream.o
-                0x00000d22                Endpoint_Read_Control_Stream_LE
+                0x0000104e       0x82 LUFA/Drivers/USB/Core/EndpointStream.o
+                0x0000104e                Endpoint_Read_Control_Stream_LE
  .text.Endpoint_Write_Control_PStream_LE
-                0x00000da4       0xc2 LUFA/Drivers/USB/Core/EndpointStream.o
-                0x00000da4                Endpoint_Write_Control_PStream_LE
+                0x000010d0       0xc2 LUFA/Drivers/USB/Core/EndpointStream.o
+                0x000010d0                Endpoint_Write_Control_PStream_LE
  .text.Endpoint_Read_Stream_LE
-                0x00000e66       0xa4 LUFA/Drivers/USB/Core/EndpointStream.o
-                0x00000e66                Endpoint_Read_Stream_LE
+                0x00001192       0xa4 LUFA/Drivers/USB/Core/EndpointStream.o
+                0x00001192                Endpoint_Read_Stream_LE
  .text.Endpoint_Write_Stream_LE
-                0x00000f0a       0xa4 LUFA/Drivers/USB/Core/EndpointStream.o
-                0x00000f0a                Endpoint_Write_Stream_LE
+                0x00001236       0xa4 LUFA/Drivers/USB/Core/EndpointStream.o
+                0x00001236                Endpoint_Write_Stream_LE
  .text.USB_USBTask
-                0x00000fae       0x26 LUFA/Drivers/USB/Core/USBTask.o
-                0x00000fae                USB_USBTask
- .text.libgcc   0x00000fd4       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
-                0x00000fd4                __divmodsi4
- .text.libgcc   0x0000100a       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
-                0x0000100a                __udivmodsi4
-                0x0000104e                . = ALIGN (0x2)
+                0x000012da       0x26 LUFA/Drivers/USB/Core/USBTask.o
+                0x000012da                USB_USBTask
+ .text.libgcc   0x00001300       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
+                0x00001300                __divmodsi4
+ .text.libgcc   0x00001336       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+                0x00001336                __udivmodsi4
+                0x0000137a                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000104e        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x0000104e                exit
-                0x0000104e                _exit
+ .fini9         0x0000137a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x0000137a                exit
+                0x0000137a                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -498,47 +501,49 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000104e        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .fini0         0x0000137a        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x00001052                _etext = .
+                0x0000137e                _etext = .
 
-.data           0x00800100       0x1c load address 0x00001052
+.data           0x00800100        0xc load address 0x0000137e
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
- .data          0x00800100       0x1c Keyglove.o
+ .data          0x00800100        0xc Keyglove.o
+                0x00800100                outputCounter
+                0x00800104                HostSerialLocalEcho
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x0080011c                . = ALIGN (0x2)
-                0x0080011c                _edata = .
-                0x0080011c                PROVIDE (__data_end, .)
+                0x0080010c                . = ALIGN (0x2)
+                0x0080010c                _edata = .
+                0x0080010c                PROVIDE (__data_end, .)
 
-.bss            0x0080011c       0x1a
-                0x0080011c                PROVIDE (__bss_start, .)
+.bss            0x0080010c      0x139
+                0x0080010c                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x0080011c        0xd Keyglove.o
-                0x0080011c                counter
+ .bss           0x0080010c      0x12c Keyglove.o
+                0x0080010c                tickCounter
  *(.bss*)
  *(COMMON)
- COMMON         0x00800129        0x3 LUFA/Drivers/USB/Core/DeviceStandardReq.o
-                0x00800129                USB_CurrentlySelfPowered
-                0x0080012a                USB_RemoteWakeupEnabled
-                0x0080012b                USB_ConfigurationNumber
- COMMON         0x0080012c        0xa LUFA/Drivers/USB/Core/USBTask.o
-                0x0080012c                USB_IsInitialized
-                0x0080012d                USB_DeviceState
-                0x0080012e                USB_ControlRequest
-                0x00800136                PROVIDE (__bss_end, .)
-                0x00001052                __data_load_start = LOADADDR (.data)
-                0x0000106e                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800238        0x3 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                0x00800238                USB_CurrentlySelfPowered
+                0x00800239                USB_RemoteWakeupEnabled
+                0x0080023a                USB_ConfigurationNumber
+ COMMON         0x0080023b        0xa LUFA/Drivers/USB/Core/USBTask.o
+                0x0080023b                USB_IsInitialized
+                0x0080023c                USB_DeviceState
+                0x0080023d                USB_ControlRequest
+                0x00800245                PROVIDE (__bss_end, .)
+                0x0000137e                __data_load_start = LOADADDR (.data)
+                0x0000138a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800136        0x0
-                0x00800136                PROVIDE (__noinit_start, .)
+.noinit         0x00800245        0x0
+                0x00800245                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800136                PROVIDE (__noinit_end, .)
-                0x00800136                _end = .
-                0x00800136                PROVIDE (__heap_start, .)
+                0x00800245                PROVIDE (__noinit_end, .)
+                0x00800245                _end = .
+                0x00800245                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -617,90 +622,90 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
                 0x000002a8       0x38 LUFA/Drivers/USB/Class/Common/HIDParser.o
 
 .debug_pubnames
-                0x00000000      0x854
+                0x00000000      0x8af
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000      0x133 Keyglove.o
+                0x00000000      0x152 Keyglove.o
  .debug_pubnames
-                0x00000133       0xb0 Descriptors.o
+                0x00000152       0xec Descriptors.o
  .debug_pubnames
-                0x000001e3       0x32 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+                0x0000023e       0x32 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
  .debug_pubnames
-                0x00000215       0x8b LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x00000270       0x8b LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
  .debug_pubnames
-                0x000002a0       0x46 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+                0x000002fb       0x46 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
  .debug_pubnames
-                0x000002e6       0x62 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x00000341       0x62 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
  .debug_pubnames
-                0x00000348       0x9b LUFA/Drivers/USB/Core/ConfigDescriptor.o
+                0x000003a3       0x9b LUFA/Drivers/USB/Core/ConfigDescriptor.o
  .debug_pubnames
-                0x000003e3       0x8c LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                0x0000043e       0x8c LUFA/Drivers/USB/Core/DeviceStandardReq.o
  .debug_pubnames
-                0x0000046f       0x25 LUFA/Drivers/USB/Core/Events.o
+                0x000004ca       0x25 LUFA/Drivers/USB/Core/Events.o
  .debug_pubnames
-                0x00000494      0x2df LUFA/Drivers/USB/Core/EndpointStream.o
+                0x000004ef      0x2df LUFA/Drivers/USB/Core/EndpointStream.o
  .debug_pubnames
-                0x00000773       0x63 LUFA/Drivers/USB/Core/USBTask.o
+                0x000007ce       0x63 LUFA/Drivers/USB/Core/USBTask.o
  .debug_pubnames
-                0x000007d6       0x7e LUFA/Drivers/USB/Class/Common/HIDParser.o
+                0x00000831       0x7e LUFA/Drivers/USB/Class/Common/HIDParser.o
 
-.debug_info     0x00000000     0x4cdb
+.debug_info     0x00000000     0x5210
  *(.debug_info)
- .debug_info    0x00000000      0x8a1 Keyglove.o
- .debug_info    0x000008a1      0x824 Descriptors.o
- .debug_info    0x000010c5       0xc4 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_info    0x00001189      0x44d LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_info    0x000015d6        0x0 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
- .debug_info    0x000015d6        0x0 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
- .debug_info    0x000015d6      0x4bf LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_info    0x00001a95      0x56d LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_info    0x00002002      0x34e LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_info    0x00002350      0xa67 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_info    0x00002db7       0x79 LUFA/Drivers/USB/Core/Events.o
- .debug_info    0x00002e30     0x157b LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_info    0x000043ab        0x0 LUFA/Drivers/USB/Core/HostStandardReq.o
- .debug_info    0x000043ab        0x0 LUFA/Drivers/USB/Core/PipeStream.o
- .debug_info    0x000043ab      0x23b LUFA/Drivers/USB/Core/USBTask.o
- .debug_info    0x000045e6      0x6f5 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_info    0x00000000      0xd2f Keyglove.o
+ .debug_info    0x00000d2f      0x8cb Descriptors.o
+ .debug_info    0x000015fa       0xc4 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_info    0x000016be      0x44d LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_info    0x00001b0b        0x0 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
+ .debug_info    0x00001b0b        0x0 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
+ .debug_info    0x00001b0b      0x4bf LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_info    0x00001fca      0x56d LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_info    0x00002537      0x34e LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_info    0x00002885      0xa67 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_info    0x000032ec       0x79 LUFA/Drivers/USB/Core/Events.o
+ .debug_info    0x00003365     0x157b LUFA/Drivers/USB/Core/EndpointStream.o
+ .debug_info    0x000048e0        0x0 LUFA/Drivers/USB/Core/HostStandardReq.o
+ .debug_info    0x000048e0        0x0 LUFA/Drivers/USB/Core/PipeStream.o
+ .debug_info    0x000048e0      0x23b LUFA/Drivers/USB/Core/USBTask.o
+ .debug_info    0x00004b1b      0x6f5 LUFA/Drivers/USB/Class/Common/HIDParser.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000     0x1264
+.debug_abbrev   0x00000000     0x1347
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x2b9 Keyglove.o
- .debug_abbrev  0x000002b9      0x17d Descriptors.o
- .debug_abbrev  0x00000436       0x79 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_abbrev  0x000004af      0x19a LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_abbrev  0x00000649        0x1 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
- .debug_abbrev  0x0000064a        0x1 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
- .debug_abbrev  0x0000064b      0x18a LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_abbrev  0x000007d5      0x176 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_abbrev  0x0000094b      0x15c LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_abbrev  0x00000aa7      0x283 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_abbrev  0x00000d2a       0x4a LUFA/Drivers/USB/Core/Events.o
- .debug_abbrev  0x00000d74      0x1aa LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_abbrev  0x00000f1e        0x1 LUFA/Drivers/USB/Core/HostStandardReq.o
- .debug_abbrev  0x00000f1f        0x1 LUFA/Drivers/USB/Core/PipeStream.o
- .debug_abbrev  0x00000f20      0x15d LUFA/Drivers/USB/Core/USBTask.o
- .debug_abbrev  0x0000107d      0x1e7 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_abbrev  0x00000000      0x38f Keyglove.o
+ .debug_abbrev  0x0000038f      0x18a Descriptors.o
+ .debug_abbrev  0x00000519       0x79 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_abbrev  0x00000592      0x19a LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_abbrev  0x0000072c        0x1 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
+ .debug_abbrev  0x0000072d        0x1 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
+ .debug_abbrev  0x0000072e      0x18a LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_abbrev  0x000008b8      0x176 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_abbrev  0x00000a2e      0x15c LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_abbrev  0x00000b8a      0x283 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_abbrev  0x00000e0d       0x4a LUFA/Drivers/USB/Core/Events.o
+ .debug_abbrev  0x00000e57      0x1aa LUFA/Drivers/USB/Core/EndpointStream.o
+ .debug_abbrev  0x00001001        0x1 LUFA/Drivers/USB/Core/HostStandardReq.o
+ .debug_abbrev  0x00001002        0x1 LUFA/Drivers/USB/Core/PipeStream.o
+ .debug_abbrev  0x00001003      0x15d LUFA/Drivers/USB/Core/USBTask.o
+ .debug_abbrev  0x00001160      0x1e7 LUFA/Drivers/USB/Class/Common/HIDParser.o
 
-.debug_line     0x00000000     0x3d52
+.debug_line     0x00000000     0x41c0
  *(.debug_line)
- .debug_line    0x00000000      0x630 Keyglove.o
- .debug_line    0x00000630      0x1c5 Descriptors.o
- .debug_line    0x000007f5      0x11b LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_line    0x00000910      0x444 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_line    0x00000d54       0x24 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
- .debug_line    0x00000d78       0x24 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
- .debug_line    0x00000d9c      0x346 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_line    0x000010e2      0x4e1 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_line    0x000015c3      0x232 LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_line    0x000017f5      0x628 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_line    0x00001e1d       0x7a LUFA/Drivers/USB/Core/Events.o
- .debug_line    0x00001e97     0x174d LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_line    0x000035e4       0x24 LUFA/Drivers/USB/Core/HostStandardReq.o
- .debug_line    0x00003608       0x24 LUFA/Drivers/USB/Core/PipeStream.o
- .debug_line    0x0000362c      0x199 LUFA/Drivers/USB/Core/USBTask.o
- .debug_line    0x000037c5      0x58d LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_line    0x00000000      0xa8e Keyglove.o
+ .debug_line    0x00000a8e      0x1d5 Descriptors.o
+ .debug_line    0x00000c63      0x11b LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_line    0x00000d7e      0x444 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_line    0x000011c2       0x24 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
+ .debug_line    0x000011e6       0x24 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
+ .debug_line    0x0000120a      0x346 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_line    0x00001550      0x4e1 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_line    0x00001a31      0x232 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_line    0x00001c63      0x628 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_line    0x0000228b       0x7a LUFA/Drivers/USB/Core/Events.o
+ .debug_line    0x00002305     0x174d LUFA/Drivers/USB/Core/EndpointStream.o
+ .debug_line    0x00003a52       0x24 LUFA/Drivers/USB/Core/HostStandardReq.o
+ .debug_line    0x00003a76       0x24 LUFA/Drivers/USB/Core/PipeStream.o
+ .debug_line    0x00003a9a      0x199 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_line    0x00003c33      0x58d LUFA/Drivers/USB/Class/Common/HIDParser.o
 
 .debug_frame    0x00000000      0x440
  *(.debug_frame)
@@ -717,62 +722,62 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  .debug_frame   0x000003d0       0x20 LUFA/Drivers/USB/Core/USBTask.o
  .debug_frame   0x000003f0       0x50 LUFA/Drivers/USB/Class/Common/HIDParser.o
 
-.debug_str      0x00000000     0x220e
+.debug_str      0x00000000     0x233f
  *(.debug_str)
- .debug_str     0x00000000      0x5c5 Keyglove.o
-                                0x61f (size before relaxing)
- .debug_str     0x000005c5      0x698 Descriptors.o
-                                0x7c6 (size before relaxing)
- .debug_str     0x00000c5d       0x71 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_str     0x00000000      0x74b Keyglove.o
+                                0x7c8 (size before relaxing)
+ .debug_str     0x0000074b      0x6af Descriptors.o
+                                0x847 (size before relaxing)
+ .debug_str     0x00000dfa       0x71 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
                                 0x114 (size before relaxing)
- .debug_str     0x00000cce      0x273 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_str     0x00000e6b      0x273 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
                                 0x4a3 (size before relaxing)
- .debug_str     0x00000f41      0x232 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_str     0x000010de      0x232 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
                                 0x418 (size before relaxing)
- .debug_str     0x00001173       0xe3 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_str     0x00001310       0xe3 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
                                 0x393 (size before relaxing)
- .debug_str     0x00001256      0x220 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_str     0x000013f3      0x220 LUFA/Drivers/USB/Core/ConfigDescriptor.o
                                 0x2e1 (size before relaxing)
- .debug_str     0x00001476      0x416 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_str     0x00001613      0x3a6 LUFA/Drivers/USB/Core/DeviceStandardReq.o
                                 0x7fe (size before relaxing)
- .debug_str     0x0000188c       0x2e LUFA/Drivers/USB/Core/Events.o
+ .debug_str     0x000019b9       0x2e LUFA/Drivers/USB/Core/Events.o
                                  0xcb (size before relaxing)
- .debug_str     0x000018ba      0x47b LUFA/Drivers/USB/Core/EndpointStream.o
+ .debug_str     0x000019e7      0x474 LUFA/Drivers/USB/Core/EndpointStream.o
                                 0x738 (size before relaxing)
- .debug_str     0x00001d35       0x64 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_str     0x00001e5b       0x64 LUFA/Drivers/USB/Core/USBTask.o
                                 0x26b (size before relaxing)
- .debug_str     0x00001d99      0x475 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_str     0x00001ebf      0x480 LUFA/Drivers/USB/Class/Common/HIDParser.o
                                 0x5b9 (size before relaxing)
 
-.debug_loc      0x00000000     0x243f
+.debug_loc      0x00000000     0x25f4
  *(.debug_loc)
- .debug_loc     0x00000000       0x81 Keyglove.o
- .debug_loc     0x00000081      0x1a0 Descriptors.o
- .debug_loc     0x00000221       0x7f LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_loc     0x000002a0       0x13 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_loc     0x000002b3      0x2c7 LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_loc     0x0000057a      0x224 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_loc     0x0000079e     0x182a LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_loc     0x00001fc8      0x477 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_loc     0x00000000      0x1c4 Keyglove.o
+ .debug_loc     0x000001c4      0x212 Descriptors.o
+ .debug_loc     0x000003d6       0x7f LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_loc     0x00000455       0x13 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_loc     0x00000468      0x2c7 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_loc     0x0000072f      0x224 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_loc     0x00000953     0x182a LUFA/Drivers/USB/Core/EndpointStream.o
+ .debug_loc     0x0000217d      0x477 LUFA/Drivers/USB/Class/Common/HIDParser.o
 
 .debug_macinfo
  *(.debug_macinfo)
 OUTPUT(Keyglove.elf elf32-avr)
 LOAD linker stubs
 
-.debug_ranges   0x00000000      0x368
- .debug_ranges  0x00000000       0x68 Keyglove.o
- .debug_ranges  0x00000068       0x18 Descriptors.o
- .debug_ranges  0x00000080       0x18 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_ranges  0x00000098       0x30 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_ranges  0x000000c8       0x28 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_ranges  0x000000f0       0x28 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_ranges  0x00000118       0x30 LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_ranges  0x00000148       0x78 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_ranges  0x000001c0       0x18 LUFA/Drivers/USB/Core/Events.o
- .debug_ranges  0x000001d8       0xc0 LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_ranges  0x00000298       0x30 LUFA/Drivers/USB/Core/USBTask.o
- .debug_ranges  0x000002c8       0xa0 LUFA/Drivers/USB/Class/Common/HIDParser.o
+.debug_ranges   0x00000000      0x398
+ .debug_ranges  0x00000000       0x98 Keyglove.o
+ .debug_ranges  0x00000098       0x18 Descriptors.o
+ .debug_ranges  0x000000b0       0x18 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_ranges  0x000000c8       0x30 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_ranges  0x000000f8       0x28 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_ranges  0x00000120       0x28 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_ranges  0x00000148       0x30 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_ranges  0x00000178       0x78 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_ranges  0x000001f0       0x18 LUFA/Drivers/USB/Core/Events.o
+ .debug_ranges  0x00000208       0xc0 LUFA/Drivers/USB/Core/EndpointStream.o
+ .debug_ranges  0x000002c8       0x30 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_ranges  0x000002f8       0xa0 LUFA/Drivers/USB/Class/Common/HIDParser.o
 
 Cross Reference Table
 
@@ -782,7 +787,6 @@ CALLBACK_USB_GetDescriptor                        Descriptors.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
 CDC_Task                                          Keyglove.o
 ConfigurationDescriptor                           Descriptors.o
-CreateGenericHIDReport                            Keyglove.o
 DeviceDescriptor                                  Descriptors.o
 EVENT_USB_Device_ConfigurationChanged             Keyglove.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
@@ -839,13 +843,18 @@ Endpoint_Write_PStream_LE                         LUFA/Drivers/USB/Core/Endpoint
 Endpoint_Write_Stream_BE                          LUFA/Drivers/USB/Core/EndpointStream.o
 Endpoint_Write_Stream_LE                          LUFA/Drivers/USB/Core/EndpointStream.o
                                                   Keyglove.o
-GenericReport                                     Descriptors.o
+HIDReport                                         Descriptors.o
+HID_Report_IDs                                    Descriptors.o
+                                                  Keyglove.o
 HID_Task                                          Keyglove.o
+HostSerialLocalEcho                               Keyglove.o
 Keyboard_ProcessLEDReport                         Keyglove.o
 LanguageString                                    Descriptors.o
 ManufacturerString                                Descriptors.o
-ProcessGenericHIDReport                           Keyglove.o
+ProcessHIDReport                                  Keyglove.o
 ProductString                                     Descriptors.o
+ProductStringHID                                  Descriptors.o
+ProductStringSerial                               Descriptors.o
 SetupHardware                                     Keyglove.o
 USB_ConfigurationNumber                           LUFA/Drivers/USB/Core/DeviceStandardReq.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
@@ -902,6 +911,7 @@ __divmodsi4                                       c:/winavr-20100110/bin/../lib/
 __do_clear_bss                                    c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
                                                   LUFA/Drivers/USB/Core/USBTask.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                                                  Descriptors.o
                                                   Keyglove.o
 __do_copy_data                                    c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
                                                   Keyglove.o
@@ -956,8 +966,9 @@ __vector_9                                        c:/winavr-20100110/bin/../lib/
 __vector_default                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vectors                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 _exit                                             c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-counter                                           Keyglove.o
 exit                                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
                                                   c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 main                                              Keyglove.o
                                                   c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+outputCounter                                     Keyglove.o
+tickCounter                                       Keyglove.o

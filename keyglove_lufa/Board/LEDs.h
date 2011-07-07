@@ -76,8 +76,8 @@
 			#define LEDS_LED4        (1 << 6)
 
 			/** LED mask for all the LEDs on the board. */
-                        #define LEDS_ALL_LEDS    (LEDS_LED1 | LEDS_LED2 | LEDS_LED3)
-                        #define LEDS_ALL_LEDS_F  (LEDS_LED1 | LEDS_LED2 | LEDS_LED3)
+            #define LEDS_ALL_LEDS    (LEDS_LED1 | LEDS_LED2 | LEDS_LED3)
+            #define LEDS_ALL_LEDS_F  (LEDS_LED1 | LEDS_LED2 | LEDS_LED3)
 			#define LEDS_ALL_LEDS_D  (LEDS_LED4)
 
 			/** LED mask for none of the board LEDs. */

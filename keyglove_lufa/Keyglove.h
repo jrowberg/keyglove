@@ -46,6 +46,8 @@
         #include <LUFA/Drivers/USB/USB.h>
         #include <LUFA/Drivers/Board/LEDs.h>
         #include <LUFA/Drivers/Board/Buttons.h>
+        #include <LUFA/Drivers/Peripheral/Serial.h>
+        #include <LUFA/Drivers/Misc/RingBuffer.h>
 
     /* Macros: */
         /** LED mask for the library LED driver, to indicate that the USB interface is not ready. */
@@ -85,8 +87,9 @@
         void EVENT_USB_Device_ControlRequest(void);
         void EVENT_USB_Device_StartOfFrame(void);
 
-        void ProcessGenericHIDReport(uint8_t* DataArray);
-        void CreateGenericHIDReport(uint8_t* DataArray);
+        void EVENT_CDC_Device_LineEncodingChanged(USB_ClassInfo_CDC_Device_t* const CDCInterfaceInfo);
+
+        void ProcessHIDReport(uint8_t* DataArray);
 
 #endif
 

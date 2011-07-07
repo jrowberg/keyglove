@@ -94,16 +94,23 @@
         #define GENERIC_OUT_EPNUM         5
 
         /** Size in bytes of the Generic HID reporting endpoint. */
-        #define GENERIC_EPSIZE            8
+        #define GENERIC_EPSIZE            9
 
         /** Size in bytes of the Generic HID reports (including report ID byte). */
-        #define GENERIC_REPORT_SIZE       8
+        #define GENERIC_REPORT_SIZE       9
 
         /** Descriptor header type value, to indicate a HID class HID descriptor. */
         #define DTYPE_HID                 0x21
 
         /** Descriptor header type value, to indicate a HID class HID report descriptor. */
         #define DTYPE_Report              0x22
+
+		enum
+		{
+			HID_REPORTID_MouseReport    = 0x01,
+			HID_REPORTID_KeyboardReport = 0x02,
+			HID_REPORTID_JoystickReport = 0x03,
+		} HID_Report_IDs;
 
     /* Function Prototypes: */
         uint16_t CALLBACK_USB_GetDescriptor(const uint16_t wValue,

@@ -74,7 +74,13 @@ Keyglove.o: Keyglove.c Keyglove.h Descriptors.h LUFA/Drivers/USB/USB.h \
   LUFA/Drivers/USB/Class/Device/../Common/CDC.h \
   LUFA/Drivers/USB/Class/StillImage.h LUFA/Version.h \
   LUFA/Drivers/Board/LEDs.h LUFA/Drivers/Board/../../Common/Common.h \
-  Board/LEDs.h LUFA/Drivers/Board/Buttons.h Board/Buttons.h
+  Board/LEDs.h LUFA/Drivers/Board/Buttons.h Board/Buttons.h \
+  LUFA/Drivers/Peripheral/Serial.h \
+  LUFA/Drivers/Peripheral/../../Common/Common.h \
+  LUFA/Drivers/Peripheral/AVR8/Serial_AVR8.h \
+  LUFA/Drivers/Peripheral/AVR8/../../../Common/Common.h \
+  LUFA/Drivers/Peripheral/AVR8/../../Misc/TerminalCodes.h \
+  LUFA/Drivers/Misc/RingBuffer.h LUFA/Drivers/Misc/../../Common/Common.h
 
 Keyglove.h:
 
@@ -261,3 +267,17 @@ Board/LEDs.h:
 LUFA/Drivers/Board/Buttons.h:
 
 Board/Buttons.h:
+
+LUFA/Drivers/Peripheral/Serial.h:
+
+LUFA/Drivers/Peripheral/../../Common/Common.h:
+
+LUFA/Drivers/Peripheral/AVR8/Serial_AVR8.h:
+
+LUFA/Drivers/Peripheral/AVR8/../../../Common/Common.h:
+
+LUFA/Drivers/Peripheral/AVR8/../../Misc/TerminalCodes.h:
+
+LUFA/Drivers/Misc/RingBuffer.h:
+
+LUFA/Drivers/Misc/../../Common/Common.h:

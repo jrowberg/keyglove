@@ -49,20 +49,34 @@ static CDC_LineEncoding_t LineEncodingData = { .BaudRateBPS = 0,
                                            .ParityType  = CDC_PARITY_None,
                                            .DataBits    = 8                            };
 
-/** Static buffer to hold the last received report from the host, so that it can be echoed back in the next sent report */
-static uint8_t LastReceived[GENERIC_REPORT_SIZE];
+/** Circular buffer to hold data from the host before it is processed on the AVR. */
+static RingBuffer_t HostRXSerial_Buffer;
 
-static uint8_t KeyboardReportData[GENERIC_REPORT_SIZE];
-static uint8_t MouseReportData[GENERIC_REPORT_SIZE];
-static uint8_t JoystickReportData[GENERIC_REPORT_SIZE];
+/** Underlying data buffer for \ref HostRXSerial_Buffer, where the stored bytes are located. */
+static uint8_t      HostRXSerial_Buffer_Data[128];
 
-long counter = 0;
+/** Circular buffer to hold data from the AVR's hardware serial port. */
+static RingBuffer_t HostTXSerial_Buffer;
+
+/** Underlying data buffer for \ref HostTXSerial_Buffer, where the stored bytes are located. */
+static uint8_t      HostTXSerial_Buffer_Data[128];
+
+/** Static buffer to hold the HID reports to and from the host. */
+static uint8_t HIDReportInData[GENERIC_REPORT_SIZE];
+static uint8_t HIDReportOutData[GENERIC_REPORT_SIZE]; // extra byte for the ReportID value
+
+long tickCounter = 0;
+long outputCounter = 1;
+bool HostSerialLocalEcho = true;
 
 /** Main program entry point. This routine configures the hardware required by the application, then
  *  enters a loop to run the application tasks in sequence.
  */
 int main(void)
 {
+    RingBuffer_InitBuffer(&HostRXSerial_Buffer, HostRXSerial_Buffer_Data, sizeof(HostRXSerial_Buffer_Data));
+    RingBuffer_InitBuffer(&HostTXSerial_Buffer, HostTXSerial_Buffer_Data, sizeof(HostTXSerial_Buffer_Data));
+
     SetupHardware();
 
     LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
@@ -70,10 +84,94 @@ int main(void)
 
     for (;;)
     {
+        if (tickCounter % 10000 == 1000)
+        {
+            // virtual serial demo
+            // (sends 'Tick [n]' where [n] is between 0 and 9 sequentially, looping back after 9)
+            RingBuffer_Insert(&HostTXSerial_Buffer, 'T');
+            RingBuffer_Insert(&HostTXSerial_Buffer, 'i');
+            RingBuffer_Insert(&HostTXSerial_Buffer, 'c');
+            RingBuffer_Insert(&HostTXSerial_Buffer, 'k');
+            RingBuffer_Insert(&HostTXSerial_Buffer, ' ');
+            RingBuffer_Insert(&HostTXSerial_Buffer, 48 + (((tickCounter - 1000) / 10000) % 10));
+            RingBuffer_Insert(&HostTXSerial_Buffer, 10); // \r
+            RingBuffer_Insert(&HostTXSerial_Buffer, 13); // \n
+        }
+        else if (tickCounter % 10000 == 3000)
+        {
+            // mouse demo
+            // (moves mouse cursor down and right by 5px, and scrolls down 5px also)
+            HIDReportOutData[0] = HID_REPORTID_MouseReport;
+            HIDReportOutData[1] = 0; // buttons
+            HIDReportOutData[2] = 10; // x movement
+            HIDReportOutData[3] = 10; // y movement
+            HIDReportOutData[4] = -1; // z movement (optional, scrolling)
+            HIDReportOutData[5] = 0; // ]
+            HIDReportOutData[6] = 0; // ] - unused
+            HIDReportOutData[7] = 0; // ]
+            HIDReportOutData[8] = 0; // ]
+        }
+        else if (tickCounter % 10000 == 5000)
+        {
+            // keyboard demo start
+            // (presses 'a', 'b', 'c', etc. keys sequentially, looping back at z)
+            HIDReportOutData[0] = HID_REPORTID_KeyboardReport;
+            HIDReportOutData[1] = 0; // modifiers
+            HIDReportOutData[2] = 0; // RESERVED
+            HIDReportOutData[3] = 4 + (((tickCounter - 1000) / 10000) % 26); // key code [0]
+            HIDReportOutData[4] = 0; // key code [1]
+            HIDReportOutData[5] = 0; // key code [2]
+            HIDReportOutData[6] = 0; // key code [3]
+            HIDReportOutData[7] = 0; // key code [4]
+            HIDReportOutData[8] = 0; // key code [5]
+        }
+        else if (tickCounter % 10000 == 6000)
+        {
+            // keyboard demo end
+            // (releases previous keypresses, endless repeats otherwise)
+            HIDReportOutData[0] = HID_REPORTID_KeyboardReport;
+            HIDReportOutData[1] = 0; // modifiers
+            HIDReportOutData[2] = 0; // RESERVED
+            HIDReportOutData[3] = 0; // key code [0]
+            HIDReportOutData[4] = 0; // key code [1]
+            HIDReportOutData[5] = 0; // key code [2]
+            HIDReportOutData[6] = 0; // key code [3]
+            HIDReportOutData[7] = 0; // key code [4]
+            HIDReportOutData[8] = 0; // key code [5]
+        }
+        else if (tickCounter % 10000 == 7000)
+        {
+            // joystick demo start
+            // (moves left axis down/right, right axis up/left, and presses a button)
+            HIDReportOutData[0] = HID_REPORTID_JoystickReport;
+            HIDReportOutData[1] = 1; // buttons 1
+            HIDReportOutData[2] = 0; // buttons 2
+            HIDReportOutData[3] = 5; // left x axis
+            HIDReportOutData[4] = 5; // left y axis
+            HIDReportOutData[5] = -5; // right x axis
+            HIDReportOutData[6] = -5; // right y exis
+            HIDReportOutData[7] = 0; // ] - unused
+            HIDReportOutData[8] = 0; // ]
+        }
+        else if (tickCounter % 10000 == 8000)
+        {
+            // joystick demo end
+            // (releases previous joystick actions)
+            HIDReportOutData[0] = HID_REPORTID_JoystickReport;
+            HIDReportOutData[1] = 0; // buttons 1
+            HIDReportOutData[2] = 0; // buttons 2
+            HIDReportOutData[3] = 0; // left x axis
+            HIDReportOutData[4] = 0; // left y axis
+            HIDReportOutData[5] = 0; // right x axis
+            HIDReportOutData[6] = 0; // right y exis
+            HIDReportOutData[7] = 0; // ] - unused
+            HIDReportOutData[8] = 0; // ]
+        }
+
         CDC_Task();
         HID_Task();
         USB_USBTask();
-        counter++;
+        tickCounter++;
     }
 }
 
@@ -86,7 +184,7 @@ void SetupHardware(void)
 
     /* Disable clock division */
     //clock_prescale_set(clock_div_1);
-        CPU_PRESCALE(CPU_8MHz); // 3.3v AVR shouldn't run faster than 8MHz
+        CPU_PRESCALE(CPU_4MHz); // 3.3v AVR shouldn't run faster than 8MHz
 
     /* Hardware Initialization */
     LEDs_Init();
@@ -150,13 +248,17 @@ void EVENT_USB_Device_ControlRequest(void)
         case HID_REQ_GetReport:
             if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_INTERFACE))
             {
-                uint8_t GenericData[GENERIC_REPORT_SIZE];
-                CreateGenericHIDReport(GenericData);
+                //CreateHIDReport(HIDReportOutData);
 
                 Endpoint_ClearSETUP();
 
                 /* Write the report data to the control endpoint */
-                Endpoint_Write_Control_Stream_LE(&GenericData, sizeof(GenericData));
+                Endpoint_Write_Control_Stream_LE(&HIDReportOutData, sizeof(HIDReportOutData));
+
+                /* Clean out report data after sending */
+                memset(&HIDReportOutData, 0, GENERIC_REPORT_SIZE + 1);
+
+                /* Finalize the stream transfer to send the last packet */
                 Endpoint_ClearOUT();
             }
 
@@ -164,15 +266,13 @@ void EVENT_USB_Device_ControlRequest(void)
         case HID_REQ_SetReport:
             if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE))
             {
-                uint8_t GenericData[GENERIC_REPORT_SIZE];
-
                 Endpoint_ClearSETUP();
 
                 /* Read the report data from the control endpoint */
-                Endpoint_Read_Control_Stream_LE(&GenericData, sizeof(GenericData));
+                Endpoint_Read_Control_Stream_LE(&HIDReportInData, sizeof(HIDReportInData));
                 Endpoint_ClearIN();
 
-                ProcessGenericHIDReport(GenericData);
+                ProcessHIDReport(HIDReportInData);
             }
 
             break;
@@ -239,37 +339,25 @@ void Keyboard_ProcessLEDReport(const uint8_t LEDStatus)
 /** Function to manage CDC data transmission and reception to and from the host. */
 void CDC_Task(void)
 {
-    char*       ReportString    = NULL;
-    static bool ActionSent      = false;
-    
     /* Device must be connected and configured for the task to run */
     if (USB_DeviceState != DEVICE_STATE_Configured)
-      return;
+        return;
 
-    if (counter % 10000 == 0)
-    {
-        ReportString = "Test serial output\r\n";
-    }
-    else
-    {
-        ActionSent = false;
-        if (counter % 10000 == 1000)
-        {
-            PORTD &= ~(1 << 6);
-        }
-    }
+    uint16_t BufferCount;
 
-    /* Flag management - Only allow one string to be sent per action */
-    if ((ReportString != NULL) && (ActionSent == false) && LineEncodingData.BaudRateBPS)
+    /* Send data packet if anything is waiting */
+    BufferCount = RingBuffer_GetCount(&HostTXSerial_Buffer);
+    if (BufferCount && LineEncodingData.BaudRateBPS)
     {
         PORTD |= (1 << 6);
-        ActionSent = true;
-
-        /* Select the Serial Tx Endpoint */
+        /* Select the Serial TX Endpoint */
         Endpoint_SelectEndpoint(CDC_TX_EPNUM);
 
-        /* Write the String to the Endpoint */
-        Endpoint_Write_Stream_LE(ReportString, strlen(ReportString), NULL);
+        /* Write the byte(s) to the Endpoint */
+        for (int i = 0; i < CDC_TXRX_EPSIZE && BufferCount; i++, BufferCount--)
+        {
+            UEDATX = RingBuffer_Remove(&HostTXSerial_Buffer); // write one byte
+        }
 
         /* Remember if the packet to send completely fills the endpoint */
         bool IsFull = (Endpoint_BytesInEndpoint() == CDC_TXRX_EPSIZE);
@@ -287,14 +375,31 @@ void CDC_Task(void)
             /* Send an empty packet to ensure that the host does not buffer data sent to it */
             Endpoint_ClearIN();
         }
+        PORTD &= ~(1 << 6);
     }
 
-    /* Select the Serial Rx Endpoint */
+    /* Select the Serial RX Endpoint */
     Endpoint_SelectEndpoint(CDC_RX_EPNUM);
 
-    /* Throw away any received data from the host */
+    /* Store any received data from the host */
     if (Endpoint_IsOUTReceived())
-      Endpoint_ClearOUT();
+    {
+        BufferCount = Endpoint_BytesInEndpoint();
+        for (int i = 0; i < BufferCount; i++)
+        {
+            uint8_t b = UEDATX;
+            RingBuffer_Insert(&HostRXSerial_Buffer, b); // read byte from endpoint
+
+            // insert this byte into the TX buffer if local echo is enabled
+            if (HostSerialLocalEcho)
+            {
+                RingBuffer_Insert(&HostTXSerial_Buffer, b);
+            }
+        }
+
+        /* Finalize the stream transfer to receive the last packet */
+        Endpoint_ClearOUT();
+    }
 
 }
 
@@ -302,7 +407,7 @@ void CDC_Task(void)
  *
  *  \param[in] DataArray  Pointer to a buffer where the last report data is stored
  */
-void ProcessGenericHIDReport(uint8_t* DataArray)
+void ProcessHIDReport(uint8_t* DataArray)
 {
     /*
         This is where you need to process the reports being sent from the host to the device.
@@ -310,24 +415,6 @@ void ProcessGenericHIDReport(uint8_t* DataArray)
         each time the host has sent a report to the device.
     */
 
-    for (uint8_t i = 0; i < GENERIC_REPORT_SIZE; i++)
-      LastReceived[i] = DataArray[i];
-}
-
-/** Function to create the next report to send back to the host at the next reporting interval.
- *
- *  \param[out] DataArray  Pointer to a buffer where the next report data should be stored
- */
-void CreateGenericHIDReport(uint8_t* DataArray)
-{
-    /*
-        This is where you need to create reports to be sent to the host from the device. This
-        function is called each time the host is ready to accept a new report. DataArray is
-        an array to hold the report to the host.
-    */
-
-    for (uint8_t i = 0; i < GENERIC_REPORT_SIZE; i++)
-      DataArray[i] = LastReceived[i];
 }
 
 void HID_Task(void)
@@ -344,14 +431,11 @@ void HID_Task(void)
         /* Check to see if the packet contains data */
         if (Endpoint_IsReadWriteAllowed())
         {
-            /* Create a temporary buffer to hold the read in report from the host */
-            uint8_t GenericData[GENERIC_REPORT_SIZE];
-
             /* Read Generic Report Data */
-            Endpoint_Read_Stream_LE(&GenericData, sizeof(GenericData), NULL);
+            Endpoint_Read_Stream_LE(&HIDReportInData, sizeof(HIDReportInData), NULL);
 
             /* Process Generic Report Data */
-            ProcessGenericHIDReport(GenericData);
+            ProcessHIDReport(HIDReportOutData);
         }
 
         /* Finalize the stream transfer to send the last packet */
@@ -363,14 +447,11 @@ void HID_Task(void)
     /* Check to see if the host is ready to accept another packet */
     if (Endpoint_IsINReady())
     {
-        /* Create a temporary buffer to hold the report to send to the host */
-        uint8_t GenericData[GENERIC_REPORT_SIZE];
-
-        /* Create Generic Report Data */
-        CreateGenericHIDReport(GenericData);
-
         /* Write Generic Report Data */
-        Endpoint_Write_Stream_LE(&GenericData, sizeof(GenericData), NULL);
+        Endpoint_Write_Stream_LE(&HIDReportOutData, sizeof(HIDReportOutData), NULL);
+        
+        /* Clean out report data after sending */
+        memset(&HIDReportOutData, 0, GENERIC_REPORT_SIZE + 1);
 
         /* Finalize the stream transfer to send the last packet */
         Endpoint_ClearIN();
