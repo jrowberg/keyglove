@@ -1,0 +1,114 @@
+   1               		.file	"pins_arduino.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	port_to_mode_PGM
+  17               		.section	.progmem.data,"a",@progbits
+  20               	port_to_mode_PGM:
+  21 0000 0000      		.word	0
+  22 0002 0000      		.word	0
+  23 0004 2400      		.word	36
+  24 0006 2700      		.word	39
+  25 0008 2A00      		.word	42
+  26               	.global	port_to_output_PGM
+  29               	port_to_output_PGM:
+  30 000a 0000      		.word	0
+  31 000c 0000      		.word	0
+  32 000e 2500      		.word	37
+  33 0010 2800      		.word	40
+  34 0012 2B00      		.word	43
+  35               	.global	port_to_input_PGM
+  38               	port_to_input_PGM:
+  39 0014 0000      		.word	0
+  40 0016 0000      		.word	0
+  41 0018 2300      		.word	35
+  42 001a 2600      		.word	38
+  43 001c 2900      		.word	41
+  44               	.global	digital_pin_to_port_PGM
+  47               	digital_pin_to_port_PGM:
+  48 001e 04        		.byte	4
+  49 001f 04        		.byte	4
+  50 0020 04        		.byte	4
+  51 0021 04        		.byte	4
+  52 0022 04        		.byte	4
+  53 0023 04        		.byte	4
+  54 0024 04        		.byte	4
+  55 0025 04        		.byte	4
+  56 0026 02        		.byte	2
+  57 0027 02        		.byte	2
+  58 0028 02        		.byte	2
+  59 0029 02        		.byte	2
+  60 002a 02        		.byte	2
+  61 002b 02        		.byte	2
+  62 002c 03        		.byte	3
+  63 002d 03        		.byte	3
+  64 002e 03        		.byte	3
+  65 002f 03        		.byte	3
+  66 0030 03        		.byte	3
+  67 0031 03        		.byte	3
+  68               	.global	digital_pin_to_bit_mask_PGM
+  71               	digital_pin_to_bit_mask_PGM:
+  72 0032 01        		.byte	1
+  73 0033 02        		.byte	2
+  74 0034 04        		.byte	4
+  75 0035 08        		.byte	8
+  76 0036 10        		.byte	16
+  77 0037 20        		.byte	32
+  78 0038 40        		.byte	64
+  79 0039 80        		.byte	-128
+  80 003a 01        		.byte	1
+  81 003b 02        		.byte	2
+  82 003c 04        		.byte	4
+  83 003d 08        		.byte	8
+  84 003e 10        		.byte	16
+  85 003f 20        		.byte	32
+  86 0040 01        		.byte	1
+  87 0041 02        		.byte	2
+  88 0042 04        		.byte	4
+  89 0043 08        		.byte	8
+  90 0044 10        		.byte	16
+  91 0045 20        		.byte	32
+  92               	.global	digital_pin_to_timer_PGM
+  95               	digital_pin_to_timer_PGM:
+  96 0046 00        		.byte	0
+  97 0047 00        		.byte	0
+  98 0048 00        		.byte	0
+  99 0049 07        		.byte	7
+ 100 004a 00        		.byte	0
+ 101 004b 02        		.byte	2
+ 102 004c 01        		.byte	1
+ 103 004d 00        		.byte	0
+ 104 004e 00        		.byte	0
+ 105 004f 03        		.byte	3
+ 106 0050 04        		.byte	4
+ 107 0051 06        		.byte	6
+ 108 0052 00        		.byte	0
+ 109 0053 00        		.byte	0
+ 110 0054 00        		.byte	0
+ 111 0055 00        		.byte	0
+ 112 0056 00        		.byte	0
+ 113 0057 00        		.byte	0
+ 114 0058 00        		.byte	0
+ 115 0059 00        		.byte	0
+ 116               		.text
+ 117               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 pins_arduino.c
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:20     .progmem.data:00000000 port_to_mode_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:29     .progmem.data:0000000a port_to_output_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:38     .progmem.data:00000014 port_to_input_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:47     .progmem.data:0000001e digital_pin_to_port_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:71     .progmem.data:00000032 digital_pin_to_bit_mask_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:95     .progmem.data:00000046 digital_pin_to_timer_PGM
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,286 @@
+   1               		.file	"wiring_pulse.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               		.section	.text.pulseIn,"ax",@progbits
+  17               	.global	pulseIn
+  19               	pulseIn:
+  20               	.LFB7:
+  21               	.LSM0:
+  22               	.LVL0:
+  23 0000 8F92      		push r8
+  24 0002 9F92      		push r9
+  25 0004 AF92      		push r10
+  26 0006 BF92      		push r11
+  27 0008 CF92      		push r12
+  28 000a DF92      		push r13
+  29 000c EF92      		push r14
+  30 000e FF92      		push r15
+  31 0010 0F93      		push r16
+  32 0012 1F93      		push r17
+  33 0014 CF93      		push r28
+  34 0016 DF93      		push r29
+  35               	/* prologue: function */
+  36               	/* frame size = 0 */
+  37               	.LBB2:
+  38               	.LSM1:
+  39 0018 A82F      		mov r26,r24
+  40 001a B0E0      		ldi r27,lo8(0)
+  41 001c CD01      		movw r24,r26
+  42               	.LVL1:
+  43 001e 8050      		subi r24,lo8(-(digital_pin_to_bit_mask_PGM))
+  44 0020 9040      		sbci r25,hi8(-(digital_pin_to_bit_mask_PGM))
+  45 0022 FC01      		movw r30,r24
+  46               	/* #APP */
+  47               	 ;  37 "wiring/wiring_pulse.c" 1
+  48 0024 8490      		lpm r8, Z
+  49               		
+  50               	 ;  0 "" 2
+  51               	.LVL2:
+  52               	/* #NOAPP */
+  53               	.LBE2:
+  54               	.LBB3:
+  55               	.LSM2:
+  56 0026 A050      		subi r26,lo8(-(digital_pin_to_port_PGM))
+  57 0028 B040      		sbci r27,hi8(-(digital_pin_to_port_PGM))
+  58 002a FD01      		movw r30,r26
+  59               	/* #APP */
+  60               	 ;  38 "wiring/wiring_pulse.c" 1
+  61 002c D490      		lpm r13, Z
+  62               		
+  63               	 ;  0 "" 2
+  64               	.LVL3:
+  65               	/* #NOAPP */
+  66               	.LBE3:
+  67               	.LSM3:
+  68 002e 6623      		tst r22
+  69 0030 01F4      		brne .L2
+  70 0032 9924      		clr r9
+  71               	.LVL4:
+  72 0034 00C0      		rjmp .L3
+  73               	.LVL5:
+  74               	.L2:
+  75 0036 982C      		mov r9,r8
+  76               	.LVL6:
+  77               	.L3:
+  78               	.LSM4:
+  79 0038 CA01      		movw r24,r20
+  80 003a B901      		movw r22,r18
+  81               	.LVL7:
+  82 003c 20EA      		ldi r18,lo8(4000)
+  83 003e 3FE0      		ldi r19,hi8(4000)
+  84 0040 40E0      		ldi r20,hlo8(4000)
+  85 0042 50E0      		ldi r21,hhi8(4000)
+  86               	.LVL8:
+  87 0044 0E94 0000 		call __mulsi3
+  88 0048 20E8      		ldi r18,lo8(16000)
+  89 004a 3EE3      		ldi r19,hi8(16000)
+  90 004c 40E0      		ldi r20,hlo8(16000)
+  91 004e 50E0      		ldi r21,hhi8(16000)
+  92 0050 0E94 0000 		call __udivmodsi4
+  93 0054 7901      		movw r14,r18
+  94 0056 8A01      		movw r16,r20
+  95               	.LBB4:
+  96               	.LSM5:
+  97 0058 6D2D      		mov r22,r13
+  98               	.LVL9:
+  99 005a 70E0      		ldi r23,lo8(0)
+ 100               	.LVL10:
+ 101 005c 660F      		lsl r22
+ 102 005e 771F      		rol r23
+ 103               	.LVL11:
+ 104 0060 6050      		subi r22,lo8(-(port_to_input_PGM))
+ 105 0062 7040      		sbci r23,hi8(-(port_to_input_PGM))
+ 106 0064 AA24      		clr r10
+ 107 0066 BB24      		clr r11
+ 108 0068 6501      		movw r12,r10
+ 109               	.LVL12:
+ 110 006a FB01      		movw r30,r22
+ 111               	/* #APP */
+ 112               	 ;  48 "wiring/wiring_pulse.c" 1
+ 113 006c A591      		lpm r26, Z+
+ 114 006e B491      		lpm r27, Z
+ 115               		
+ 116               	 ;  0 "" 2
+ 117               	.LVL13:
+ 118               	/* #NOAPP */
+ 119 0070 00C0      		rjmp .L4
+ 120               	.LVL14:
+ 121               	.L6:
+ 122               	.LBE4:
+ 123               	.LSM6:
+ 124 0072 AE14      		cp r10,r14
+ 125 0074 BF04      		cpc r11,r15
+ 126 0076 C006      		cpc r12,r16
+ 127 0078 D106      		cpc r13,r17
+ 128 007a 01F4      		brne .+2
+ 129 007c 00C0      		rjmp .L5
+ 130 007e 0894      		sec
+ 131 0080 A11C      		adc r10,__zero_reg__
+ 132 0082 B11C      		adc r11,__zero_reg__
+ 133 0084 C11C      		adc r12,__zero_reg__
+ 134 0086 D11C      		adc r13,__zero_reg__
+ 135               	.L4:
+ 136               	.LSM7:
+ 137 0088 8C91      		ld r24,X
+ 138 008a 8821      		and r24,r8
+ 139 008c 8915      		cp r24,r9
+ 140 008e 01F0      		breq .L6
+ 141 0090 00C0      		rjmp .L15
+ 142               	.LVL15:
+ 143               	.L8:
+ 144               	.LSM8:
+ 145 0092 AE14      		cp r10,r14
+ 146 0094 BF04      		cpc r11,r15
+ 147 0096 C006      		cpc r12,r16
+ 148 0098 D106      		cpc r13,r17
+ 149 009a 01F4      		brne .+2
+ 150 009c 00C0      		rjmp .L5
+ 151 009e 0894      		sec
+ 152 00a0 A11C      		adc r10,__zero_reg__
+ 153 00a2 B11C      		adc r11,__zero_reg__
+ 154 00a4 C11C      		adc r12,__zero_reg__
+ 155 00a6 D11C      		adc r13,__zero_reg__
+ 156 00a8 00C0      		rjmp .L14
+ 157               	.LVL16:
+ 158               	.L15:
+ 159               	.LBB5:
+ 160               	.LSM9:
+ 161 00aa FB01      		movw r30,r22
+ 162               	.LVL17:
+ 163               	/* #APP */
+ 164               	 ;  53 "wiring/wiring_pulse.c" 1
+ 165 00ac A591      		lpm r26, Z+
+ 166 00ae B491      		lpm r27, Z
+ 167               		
+ 168               	 ;  0 "" 2
+ 169               	.LVL18:
+ 170               	/* #NOAPP */
+ 171               	.L14:
+ 172               	.LBE5:
+ 173 00b0 8C91      		ld r24,X
+ 174 00b2 8821      		and r24,r8
+ 175 00b4 8915      		cp r24,r9
+ 176 00b6 01F4      		brne .L8
+ 177 00b8 20E0      		ldi r18,lo8(0)
+ 178 00ba 30E0      		ldi r19,hi8(0)
+ 179 00bc 40E0      		ldi r20,hlo8(0)
+ 180 00be 50E0      		ldi r21,hhi8(0)
+ 181               	.LVL19:
+ 182               	.LBB6:
+ 183               	.LSM10:
+ 184 00c0 FB01      		movw r30,r22
+ 185               	.LVL20:
+ 186               	/* #APP */
+ 187               	 ;  58 "wiring/wiring_pulse.c" 1
+ 188 00c2 C591      		lpm r28, Z+
+ 189 00c4 D491      		lpm r29, Z
+ 190               		
+ 191               	 ;  0 "" 2
+ 192               	.LVL21:
+ 193               	/* #NOAPP */
+ 194 00c6 00C0      		rjmp .L9
+ 195               	.L10:
+ 196               	.LBE6:
+ 197               	.LSM11:
+ 198 00c8 DA01      		movw r26,r20
+ 199 00ca C901      		movw r24,r18
+ 200 00cc 8A0D      		add r24,r10
+ 201 00ce 9B1D      		adc r25,r11
+ 202 00d0 AC1D      		adc r26,r12
+ 203 00d2 BD1D      		adc r27,r13
+ 204 00d4 8E15      		cp r24,r14
+ 205 00d6 9F05      		cpc r25,r15
+ 206 00d8 A007      		cpc r26,r16
+ 207 00da B107      		cpc r27,r17
+ 208 00dc 01F0      		breq .L5
+ 209               	.LSM12:
+ 210 00de 2F5F      		subi r18,lo8(-(1))
+ 211 00e0 3F4F      		sbci r19,hi8(-(1))
+ 212 00e2 4F4F      		sbci r20,hlo8(-(1))
+ 213 00e4 5F4F      		sbci r21,hhi8(-(1))
+ 214               	.L9:
+ 215               	.LSM13:
+ 216 00e6 8881      		ld r24,Y
+ 217 00e8 8821      		and r24,r8
+ 218 00ea 8915      		cp r24,r9
+ 219 00ec 01F0      		breq .L10
+ 220               	.LSM14:
+ 221 00ee CA01      		movw r24,r20
+ 222 00f0 B901      		movw r22,r18
+ 223               	.LVL22:
+ 224 00f2 28E0      		ldi r18,lo8(21000)
+ 225 00f4 32E5      		ldi r19,hi8(21000)
+ 226 00f6 40E0      		ldi r20,hlo8(21000)
+ 227 00f8 50E0      		ldi r21,hhi8(21000)
+ 228               	.LVL23:
+ 229 00fa 0E94 0000 		call __mulsi3
+ 230               	.LVL24:
+ 231 00fe 6058      		subi r22,lo8(-(16000))
+ 232 0100 714C      		sbci r23,hi8(-(16000))
+ 233 0102 8F4F      		sbci r24,hlo8(-(16000))
+ 234 0104 9F4F      		sbci r25,hhi8(-(16000))
+ 235 0106 20EA      		ldi r18,lo8(4000)
+ 236 0108 3FE0      		ldi r19,hi8(4000)
+ 237 010a 40E0      		ldi r20,hlo8(4000)
+ 238 010c 50E0      		ldi r21,hhi8(4000)
+ 239 010e 0E94 0000 		call __udivmodsi4
+ 240 0112 C901      		movw r24,r18
+ 241 0114 DA01      		movw r26,r20
+ 242 0116 9C01      		movw r18,r24
+ 243 0118 AD01      		movw r20,r26
+ 244 011a 00C0      		rjmp .L11
+ 245               	.LVL25:
+ 246               	.L5:
+ 247 011c 20E0      		ldi r18,lo8(0)
+ 248 011e 30E0      		ldi r19,hi8(0)
+ 249 0120 40E0      		ldi r20,hlo8(0)
+ 250 0122 50E0      		ldi r21,hhi8(0)
+ 251               	.LVL26:
+ 252               	.L11:
+ 253               	.LSM15:
+ 254 0124 B901      		movw r22,r18
+ 255               	.LVL27:
+ 256 0126 CA01      		movw r24,r20
+ 257               	/* epilogue start */
+ 258 0128 DF91      		pop r29
+ 259 012a CF91      		pop r28
+ 260               	.LVL28:
+ 261 012c 1F91      		pop r17
+ 262 012e 0F91      		pop r16
+ 263 0130 FF90      		pop r15
+ 264 0132 EF90      		pop r14
+ 265               	.LVL29:
+ 266 0134 DF90      		pop r13
+ 267               	.LVL30:
+ 268 0136 CF90      		pop r12
+ 269 0138 BF90      		pop r11
+ 270 013a AF90      		pop r10
+ 271               	.LVL31:
+ 272 013c 9F90      		pop r9
+ 273               	.LVL32:
+ 274 013e 8F90      		pop r8
+ 275               	.LVL33:
+ 276 0140 0895      		ret
+ 277               	.LFE7:
+ 303               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 wiring_pulse.c
+C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:19     .text.pulseIn:00000000 pulseIn
+
+UNDEFINED SYMBOLS
+digital_pin_to_bit_mask_PGM
+digital_pin_to_port_PGM
+__mulsi3
+__udivmodsi4
+port_to_input_PGM
