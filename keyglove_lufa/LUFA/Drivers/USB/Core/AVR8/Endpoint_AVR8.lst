@@ -322,16 +322,16 @@
  385               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 Endpoint_AVR8.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:19     .text.Endpoint_ConfigureEndpoint_Prv:00000000 Endpoint_ConfigureEndpoint_Prv
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:118    .text.Endpoint_ClearEndpoints:00000000 Endpoint_ClearEndpoints
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:162    .text.Endpoint_ClearStatusStage:00000000 Endpoint_ClearStatusStage
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccAFxhJ1.s:226    .text.Endpoint_WaitUntilReady:00000000 Endpoint_WaitUntilReady
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:19     .text.Endpoint_ConfigureEndpoint_Prv:00000000 Endpoint_ConfigureEndpoint_Prv
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:118    .text.Endpoint_ClearEndpoints:00000000 Endpoint_ClearEndpoints
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:162    .text.Endpoint_ClearStatusStage:00000000 Endpoint_ClearStatusStage
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccsahpT1.s:226    .text.Endpoint_WaitUntilReady:00000000 Endpoint_WaitUntilReady
 
 UNDEFINED SYMBOLS
 USB_ControlRequest

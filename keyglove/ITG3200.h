@@ -28,7 +28,13 @@
 #ifndef ITG3200_h
 #define ITG3200_h
 
-#include "WProgram.h"
+#ifdef USE_LUFA
+    #include "ArduinoWrapper.h"
+#endif
+
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
 
 #define ITG3200_ADDR_AD0_HIGH  0x69   //AD0=1 0x69 I2C address when AD0 is connected to HIGH (VCC) - default for sparkfun breakout
 #define ITG3200_ADDR_AD0_LOW   0x68   //AD0=0 0x68 I2C address when AD0 is connected to LOW (GND)

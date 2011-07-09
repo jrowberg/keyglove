@@ -28,9 +28,19 @@ THE SOFTWARE.
 #ifndef ps2keyboard_h
 #define ps2keyboard_h
 
-#include "WProgram.h"
+#ifdef USE_LUFA
+    #include "ArduinoWrapper.h"
+#endif
+
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
+
 #include "ps2dev.h"
-#undef round
+
+#ifdef round
+    #undef round
+#endif
 
 // NUMERIC SCANCODE ARRAY INDEXES
 #define PKEY_A 0
@@ -365,7 +375,7 @@ class PS2keyboard {
         void cmd_echo();
         
         // send key scancodes (make or break)
-        int cmd_keypress(int keycode, boolean make);
+        void cmd_keypress(int keycode, boolean make);
 };
 
 #endif /* ps2keyboard_h */

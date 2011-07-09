@@ -42,11 +42,17 @@
 
         #include "Descriptors.h"
 
+        // yay c++! bleh
+        // http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&p=308100
+        #undef FDEV_SETUP_STREAM
+        #define FDEV_SETUP_STREAM(p, g, f) { 0, 0, f, 0, 0, p, g, 0 }
+
         #include <LUFA/Version.h>
         #include <LUFA/Drivers/USB/USB.h>
         #include <LUFA/Drivers/Board/LEDs.h>
         #include <LUFA/Drivers/Board/Buttons.h>
         #include <LUFA/Drivers/Peripheral/Serial.h>
+        #include <LUFA/Drivers/Peripheral/TWI.h>
         #include <LUFA/Drivers/Misc/RingBuffer.h>
 
     /* Macros: */
@@ -77,10 +83,6 @@
     /* Type Defines: */
 
     /* Function Prototypes: */
-        void SetupHardware(void);
-        void CDC_Task(void);
-        void HID_Task(void);
-
         void EVENT_USB_Device_Connect(void);
         void EVENT_USB_Device_Disconnect(void);
         void EVENT_USB_Device_ConfigurationChanged(void);
@@ -89,7 +91,14 @@
 
         void EVENT_CDC_Device_LineEncodingChanged(USB_ClassInfo_CDC_Device_t* const CDCInterfaceInfo);
 
+        void SetupHardware(void);
+        void CDC_Task(void);
+        void HID_Task(void);
         void ProcessHIDReport(uint8_t* DataArray);
+
+        /** Buffer to hold the HID reports to and from the host. */
+        extern uint8_t HIDReportInData[GENERIC_REPORT_IN_SIZE];
+        extern uint8_t HIDReportOutData[GENERIC_REPORT_OUT_SIZE];
 
 #endif
 

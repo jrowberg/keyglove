@@ -64,13 +64,6 @@
 		#endif
 
 	/* Macros: */
-		#if !defined(AUDIO_TOTAL_SAMPLE_RATES) || defined(__DOXYGEN__)
-			/** Total number of discrete audio sample rates supported by the device. This value can be overridden by defining this
-			 *  token in the project makefile to the desired value, and passing it to the compiler via the -D switch.
-			 */
-			#define AUDIO_TOTAL_SAMPLE_RATES    1
-		#endif
-		
 		/** \name Audio Channel Masks */
 		//@{
 		/** Supported channel mask for an Audio class terminal descriptor. See the Audio class specification for more details. */
@@ -204,7 +197,7 @@
 		 *
 		 *  \param[in] freq  Required audio sampling frequency in HZ
 		 */
-		#define AUDIO_SAMPLE_FREQ(freq)           {.Byte1 = (freq & 0x0000FF), .Byte2 = ((freq >> 8) & 0xFF), .Byte3 = ((freq >> 16) & 0xFF)}
+		#define AUDIO_SAMPLE_FREQ(freq)           {.Byte1 = ((uint32_t)freq & 0xFF), .Byte2 = (((uint32_t)freq >> 8) & 0xFF), .Byte3 = (((uint32_t)freq >> 16) & 0xFF)}
 
 		/** Mask for the attributes parameter of an Audio class-specific Endpoint descriptor, indicating that the endpoint
 		 *  accepts only filled endpoint packets of audio samples.
@@ -216,6 +209,16 @@
 		 */
 		#define AUDIO_EP_ACCEPTS_SMALL_PACKETS    (0 << 7)
 
+		/** Mask for the attributes parameter of an Audio class-specific Endpoint descriptor, indicating that the endpoint
+		 *  allows for sampling frequency adjustments to be made via control requests directed at the endpoint.
+		 */
+		#define AUDIO_EP_SAMPLE_FREQ_CONTROL      (1 << 0)
+
+		/** Mask for the attributes parameter of an Audio class-specific Endpoint descriptor, indicating that the endpoint
+		 *  allows for pitch adjustments to be made via control requests directed at the endpoint.
+		 */
+		#define AUDIO_EP_PITCH_CONTROL            (1 << 1)
+		
 	/* Enums: */
 		/** Enum for possible Class, Subclass and Protocol values of device and interface descriptors relating to the Audio
 		 *  device class.
@@ -267,6 +270,31 @@
 		enum Audio_CSEndpoint_SubTypes_t
 		{
 			AUDIO_DSUBTYPE_CSEndpoint_General         = 0x01, /**< Audio class specific endpoint general descriptor. */
+		};
+
+		/** Enum for the Audio class specific control requests that can be issued by the USB bus host. */
+		enum Audio_ClassRequests_t
+		{
+			AUDIO_REQ_SetCurrent    = 0x01, /**< Audio class-specific request to set the current value of a parameter within the device. */
+			AUDIO_REQ_SetMinimum    = 0x02, /**< Audio class-specific request to set the minimum value of a parameter within the device. */
+			AUDIO_REQ_SetMaximum    = 0x03, /**< Audio class-specific request to set the maximum value of a parameter within the device. */
+			AUDIO_REQ_SetResolution = 0x04, /**< Audio class-specific request to set the resolution value of a parameter within the device. */
+			AUDIO_REQ_SetMemory     = 0x05, /**< Audio class-specific request to set the memory value of a parameter within the device. */
+			AUDIO_REQ_GetCurrent    = 0x81, /**< Audio class-specific request to get the current value of a parameter within the device. */
+			AUDIO_REQ_GetMinimum    = 0x82, /**< Audio class-specific request to get the minimum value of a parameter within the device. */
+			AUDIO_REQ_GetMaximum    = 0x83, /**< Audio class-specific request to get the maximum value of a parameter within the device. */
+			AUDIO_REQ_GetResolution = 0x84, /**< Audio class-specific request to get the resolution value of a parameter within the device. */
+			AUDIO_REQ_GetMemory     = 0x85, /**< Audio class-specific request to get the memory value of a parameter within the device. */
+			AUDIO_REQ_GetStatus     = 0xFF, /**< Audio class-specific request to get the device status. */
+		};
+		
+		/** Enum for Audio class specific Endpoint control modifiers which can be set and retrieved by a USB host, if the corresponding
+		 *  endpoint control is indicated to be supported in the Endpoint's Audio-class specific endpoint descriptor.
+		 */
+		enum Audio_EndpointControls_t
+		{
+			AUDIO_EPCONTROL_SamplingFreq = 0x01, /**< Sampling frequency adjustment of the endpoint. */
+			AUDIO_EPCONTROL_Pitch        = 0x02, /**< Pitch adjustment of the endpoint. */
 		};
 
 	/* Type Defines: */
@@ -449,7 +477,7 @@
 			uint8_t                 UnitID; /**< ID value of this feature unit - must be a unique value within the device. */
 			uint8_t                 SourceID; /**< Source ID value of the audio source input into this feature unit. */
 
-			uint8_t                 ControlSize; /**< Size of each element in the \c ChanelControlls array. */
+			uint8_t                 ControlSize; /**< Size of each element in the \c ChannelControls array. */
 			uint8_t                 ChannelControls[3]; /**< Feature masks for the control channel, and each separate audio channel. */
 
 			uint8_t                 FeatureUnitStrIndex; /**< Index of a string descriptor describing this descriptor within the device. */
@@ -478,7 +506,7 @@
 			uint8_t bUnitID; /**< ID value of this feature unit - must be a unique value within the device. */
 			uint8_t bSourceID; /**< Source ID value of the audio source input into this feature unit. */
 
-			uint8_t bControlSize; /**< Size of each element in the \c ChanelControlls array. */
+			uint8_t bControlSize; /**< Size of each element in the \c ChannelControls array. */
 			uint8_t bmaControls[3]; /**< Feature masks for the control channel, and each separate audio channel. */
 
 			uint8_t iFeature; /**< Index of a string descriptor describing this descriptor within the device. */
@@ -529,23 +557,14 @@
 			uint16_t wFormatTag; /**< Format of the audio stream, see Audio Device Formats specification. */
 		} ATTR_PACKED USB_Audio_StdDescriptor_Interface_AS_t;
 
-		/** \brief 24-Bit Audio Frequency Structure.
-		 *
-		 *  Type define for a 24bit audio sample frequency structure. GCC does not contain a built in 24bit datatype,
-		 *  this this structure is used to build up the value instead. Fill this structure with the \ref AUDIO_SAMPLE_FREQ() macro.
-		 */
-		typedef struct
-		{
-			uint8_t Byte1; /**< Lowest 8 bits of the 24-bit value. */
-			uint8_t Byte2; /**< Middle 8 bits of the 24-bit value. */
-			uint8_t Byte3; /**< Upper 8 bits of the 24-bit value. */
-		} ATTR_PACKED USB_Audio_SampleFreq_t;
-
 		/** \brief Audio class-specific Format Descriptor (LUFA naming conventions).
 		 *
 		 *  Type define for an Audio class-specific audio format descriptor. This is used to give the host full details
 		 *  about the number of channels, the sample resolution, acceptable sample frequencies and encoding method used
 		 *  in the device's audio streams. See the USB Audio specification for more details.
+		 *
+		 *  \note This descriptor <b>must</b> be followed by one or more \ref USB_Audio_SampleFreq_t elements containing
+		 *        the continuous or discrete sample frequencies.
 		 *
 		 *  \see \ref USB_Audio_StdDescriptor_Format_t for the version of this type with standard element names.
 		 */
@@ -562,15 +581,33 @@
 			uint8_t                 SubFrameSize; /**< Size in bytes of each channel's sample data in the stream. */
 			uint8_t                 BitResolution; /**< Bits of resolution of each channel's samples in the stream. */
 
-			uint8_t                 SampleFrequencyType; /**< Total number of sample frequencies supported by the device. */
-			USB_Audio_SampleFreq_t  SampleFrequencies[AUDIO_TOTAL_SAMPLE_RATES]; /**< Sample frequencies supported by the device (must be 24-bit). */
+			uint8_t                 TotalDiscreteSampleRates; /**< Total number of discrete sample frequencies supported by the device. When
+			                                                   *   zero, this must be followed by the lower and upper continuous sampling
+			                                                   *   frequencies supported by the device; otherwise, this must be followed
+			                                                   *   by the given number of discrete sampling frequencies supported.
+			                                                   */
 		} ATTR_PACKED USB_Audio_Descriptor_Format_t;
+
+		/** \brief 24-Bit Audio Frequency Structure.
+		 *
+		 *  Type define for a 24bit audio sample frequency structure. As GCC does not contain a built in 24-bit datatype,
+		 *  this this structure is used to build up the value instead. Fill this structure with the \ref AUDIO_SAMPLE_FREQ() macro.
+		 */
+		typedef struct
+		{
+			uint8_t Byte1; /**< Lowest 8 bits of the 24-bit value. */
+			uint8_t Byte2; /**< Middle 8 bits of the 24-bit value. */
+			uint8_t Byte3; /**< Upper 8 bits of the 24-bit value. */
+		} ATTR_PACKED USB_Audio_SampleFreq_t;
 
 		/** \brief Audio class-specific Format Descriptor (USB-IF naming conventions).
 		 *
 		 *  Type define for an Audio class-specific audio format descriptor. This is used to give the host full details
 		 *  about the number of channels, the sample resolution, acceptable sample frequencies and encoding method used
 		 *  in the device's audio streams. See the USB Audio specification for more details.
+		 *
+		 *  \note This descriptor <b>must</b> be followed by one or more 24-bit integer elements containing the continuous
+		 *        or discrete sample frequencies.
 		 *
 		 *  \see \ref USB_Audio_Descriptor_Format_t for the version of this type with non-standard LUFA specific
 		 *       element names.
@@ -592,8 +629,11 @@
 			uint8_t bSubFrameSize; /**< Size in bytes of each channel's sample data in the stream. */
 			uint8_t bBitResolution; /**< Bits of resolution of each channel's samples in the stream. */
 
-			uint8_t bSampleFrequencyType; /**< Total number of sample frequencies supported by the device. */
-			uint8_t SampleFrequencies[AUDIO_TOTAL_SAMPLE_RATES * 3]; /**< Sample frequencies supported by the device (must be 24-bit). */
+			uint8_t bSampleFrequencyType; /**< Total number of sample frequencies supported by the device. When
+			                               *   zero, this must be followed by the lower and upper continuous sampling
+			                               *   frequencies supported by the device; otherwise, this must be followed
+			                               *   by the given number of discrete sampling frequencies supported.
+			                               */
 		} ATTR_PACKED USB_Audio_StdDescriptor_Format_t;
 
 		/** \brief Audio class-specific Streaming Endpoint Descriptor (LUFA naming conventions).

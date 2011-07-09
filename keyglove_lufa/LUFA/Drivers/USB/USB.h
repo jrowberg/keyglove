@@ -44,14 +44,14 @@
  *    - LUFA/Drivers/USB/Core/ConfigDescriptor.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/DeviceStandardReq.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/Events.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
- *    - LUFA/Drivers/USB/Core/EndpointStream.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/HostStandardReq.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
- *    - LUFA/Drivers/USB/Core/PipeStream.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/USBTask.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/<i>ARCH</i>/Device_<i>ARCH</i>.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/<i>ARCH</i>/Endpoint_<i>ARCH</i>.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
+ *    - LUFA/Drivers/USB/Core/<i>ARCH</i>/EndpointStream_<i>ARCH</i>.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/<i>ARCH</i>/Host_<i>ARCH</i>.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/<i>ARCH</i>/Pipe_<i>ARCH</i>.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
+ *    - LUFA/Drivers/USB/Core/<i>ARCH</i>/PipeStream_<i>ARCH</i>.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/<i>ARCH</i>/USBController_<i>ARCH</i>.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Core/<i>ARCH</i>/USBInterrupt_<i>ARCH</i>.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
  *    - LUFA/Drivers/USB/Class/Common/HIDParser.c <i>(Makefile source module name: LUFA_SRC_USB)</i>
@@ -94,7 +94,7 @@
  *  <tr>
  *   <td>Audio</td>
  *   <td bgcolor="#00EE00">Yes</td>
- *   <td bgcolor="#EE0000">No</td>
+ *   <td bgcolor="#00EE00">Yes</td>
  *  </tr>
  *  <tr>
  *   <td>CDC</td>
@@ -176,7 +176,7 @@
  *
  *  To initialize the Class driver instance, the driver's <tt><i>{Class Name}</i>_Device_ConfigureEndpoints()</tt> function
  *  should be called in response to the \ref EVENT_USB_Device_ConfigurationChanged() event. This function will return a
- *  boolean value if the driver successfully initialized the instance. Like all the class driver functions, this function
+ *  boolean true value if the driver successfully initialized the instance. Like all the class driver functions, this function
  *  takes in the address of the specific instance you wish to initialize - in this manner, multiple separate instances of
  *  the same class type can be initialized like this:
  *

@@ -1,7 +1,13 @@
-#include "WProgram.h"
-
 #ifndef Accelerometer_h
 #define Accelerometer_h
+
+#ifdef USE_LUFA
+    #include "ArduinoWrapper.h"
+#endif
+
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
 
 /* ------- Register names ------- */
 #define ADXL345_DEVID 0x00

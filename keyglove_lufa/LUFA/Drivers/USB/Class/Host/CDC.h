@@ -151,10 +151,6 @@
 			 *  This should be called once after the stack has enumerated the attached device, while the host state machine is in
 			 *  the Addressed state.
 			 *
-			 *  \note The pipe index numbers as given in the interface's configuration structure must not overlap with any other
-			 *        interface, or pipe bank corruption will occur. Gaps in the allocated pipe numbers or non-sequential indexes
-			 *        within a single interface is allowed, but no two interfaces of any type have have interleaved pipe indexes.
-			 *
 			 *  \param[in,out] CDCInterfaceInfo        Pointer to a structure containing an CDC Class host configuration and state.
 			 *  \param[in]     ConfigDescriptorSize    Length of the attached device's Configuration Descriptor.
 			 *  \param[in]     DeviceConfigDescriptor  Pointer to a buffer containing the attached device's Configuration Descriptor.
@@ -185,7 +181,7 @@
 			 */
 			uint8_t CDC_Host_SendControlLineStateChange(USB_ClassInfo_CDC_Host_t* const CDCInterfaceInfo) ATTR_NON_NULL_PTR_ARG(1);
 
-			/** Sends a Send Break request to the device. This is generally used to separate data data or to indicate a special condition
+			/** Sends a Send Break request to the device. This is generally used to separate data or to indicate a special condition
 			 *  to the receiving device.
 			 *
 			 *  \param[in,out] CDCInterfaceInfo  Pointer to a structure containing a CDC Class host configuration and state.

@@ -1,6 +1,9 @@
-#include "WProgram.h"
+#ifndef USE_LUFA
+    #include "WProgram.h"
+    #include <Wire.h>
+#endif
+
 #include "Adxl345.h"
-#include <Wire.h>
 
 #define DEVICE (0x53)    // ADXL345 device address
 #define TO_READ (6)      // num of bytes we are going to read each time (two bytes for each axis)
@@ -59,7 +62,7 @@ void Accelerometer::readFrom(int device, byte address, int num, byte _buff[]) {
 void Accelerometer::getRangeSetting(byte* rangeSetting) {
   byte _b;
   readFrom(DEVICE, ADXL345_DATA_FORMAT, 1, &_b);
-  *rangeSetting = _b & B00000011;
+  *rangeSetting = _b & 0B00000011;
 }
 
 // Sets the range setting, possible values are: 2, 4, 8, 16
@@ -69,22 +72,22 @@ void Accelerometer::setRangeSetting(int val) {
 
   switch (val) {
   case 2:  
-    _s = B00000000; 
+    _s = 0B00000000;
     break;
   case 4:  
-    _s = B00000001; 
+    _s = 0B00000001;
     break;
   case 8:  
-    _s = B00000010; 
+    _s = 0B00000010;
     break;
   case 16: 
-    _s = B00000011; 
+    _s = 0B00000011;
     break;
   default: 
-    _s = B00000000;
+    _s = 0B00000000;
   }
   readFrom(DEVICE, ADXL345_DATA_FORMAT, 1, &_b);
-  _s |= (_b & B11101100);
+  _s |= (_b & 0B11101100);
   writeTo(DEVICE, ADXL345_DATA_FORMAT, _s);
 }
 // gets the state of the SELF_TEST bit
@@ -441,7 +444,7 @@ void Accelerometer::setLowPower(bool state) {
 float Accelerometer::getRate(){
   byte _b;
   readFrom(DEVICE, ADXL345_BW_RATE, 1, &_b);
-  _b &= B00001111;
+  _b &= 0B00001111;
   return (pow(2,((int) _b)-6)) * 6.25;
 }
 
@@ -455,7 +458,7 @@ void Accelerometer::setRate(float rate){
   }
   if (r <= 9) { 
     readFrom(DEVICE, ADXL345_BW_RATE, 1, &_b);
-    _s = (byte) (r + 6) | (_b & B11110000);
+    _s = (byte) (r + 6) | (_b & 0B11110000);
     writeTo(DEVICE, ADXL345_BW_RATE, _s);
   }
 }

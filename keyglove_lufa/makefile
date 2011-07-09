@@ -125,6 +125,7 @@ LUFA_OPTS += -D FIXED_CONTROL_ENDPOINT_SIZE=8
 LUFA_OPTS += -D FIXED_NUM_CONFIGURATIONS=1
 LUFA_OPTS += -D USE_FLASH_DESCRIPTORS
 LUFA_OPTS += -D USE_STATIC_OPTIONS="(USB_DEVICE_OPT_FULLSPEED | USB_OPT_REG_ENABLED | USB_OPT_AUTO_PLL)"
+LUFA_OPTS += -D USE_LUFA
 
 
 # Create the LUFA source path variables by including the LUFA root makefile
@@ -132,14 +133,25 @@ include $(LUFA_PATH)/LUFA/makefile
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c                                                 \
-	  Descriptors.c                                               \
+SRC = wiring/wiring.c \
+      wiring/wiring_analog.c \
+      wiring/wiring_digital.c \
+      wiring/wiring_pulse.c \
+      wiring/wiring_shift.c \
+      wiring/pins_arduino.c \
+      Descriptors.c \
 	  $(LUFA_SRC_USB)
 
-
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC =
-
+CPPSRC = $(TARGET).cpp \
+         ArduinoWrapper.cpp \
+         ../keyglove/Adxl345.cpp \
+         ../keyglove/ITG3200.cpp \
+         ../keyglove/iwrap.cpp \
+         ../keyglove/logitech.cpp \
+         ../keyglove/ps2dev.cpp \
+         ../keyglove/ps2keyboard.cpp \
+         ../keyglove/ps2mouse.cpp
 
 # List Assembler source files here.
 #     Make them always end in a capital .S.  Files ending in a lowercase .s
@@ -168,7 +180,7 @@ DEBUG = dwarf-2
 #     Each directory must be seperated by a space.
 #     Use forward slashes for directory separators.
 #     For a directory that has spaces, enclose it in quotes.
-EXTRAINCDIRS = $(LUFA_PATH)/
+EXTRAINCDIRS = $(LUFA_PATH)/ ../keyglove
 
 
 # Compiler flag to set the C Standard level.

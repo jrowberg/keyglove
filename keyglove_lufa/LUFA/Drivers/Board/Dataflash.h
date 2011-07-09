@@ -66,7 +66,7 @@
  *  application.
  *
  *  \code
- *      // Initialise the SPI and board Dataflash drivers before first use
+ *      // Initialize the SPI and board Dataflash drivers before first use
  *      SPI_Init(SPI_SPEED_FCPU_DIV_2 | SPI_ORDER_MSB_FIRST | SPI_SCK_LEAD_FALLING |
  *               SPI_SAMPLE_TRAILING | SPI_MODE_MASTER);
  *      Dataflash_Init();
@@ -146,7 +146,7 @@
 			#define DATAFLASH_CHIP_MASK(index)      __GET_DATAFLASH_MASK(index)
 
 		/* Inline Functions: */
-			/** Initialises the dataflash driver so that commands and data may be sent to an attached dataflash IC.
+			/** Initializes the dataflash driver so that commands and data may be sent to an attached dataflash IC.
 			 *
 			 *  \note The microcontroller's SPI driver must be initialized before any of the dataflash commands are used.
 			 */
@@ -176,7 +176,7 @@
 			 *  are deselected.
 			 *
 			 *  \param[in] PageAddress  Address of the page to manipulate, ranging from
-			 *                          ((DATAFLASH_PAGES * DATAFLASH_TOTALCHIPS) - 1).
+			 *                          0 to ((DATAFLASH_PAGES * DATAFLASH_TOTALCHIPS) - 1).
 			 */
 			static inline void Dataflash_SelectChipFromPage(const uint16_t PageAddress);
 
@@ -191,7 +191,7 @@
 			static inline void Dataflash_WaitWhileBusy(void);
 
 			/** Sends a set of page and buffer address bytes to the currently selected dataflash IC, for use with
-			 *  dataflash commands which require a complete 24-byte address.
+			 *  dataflash commands which require a complete 24-bit address.
 			 *
 			 *  \param[in] PageAddress  Page address within the selected dataflash IC
 			 *  \param[in] BufferByte   Address within the dataflash's buffer
@@ -235,17 +235,15 @@
 			#if (BOARD == BOARD_NONE)
 				#error The Board Dataflash driver cannot be used if the makefile BOARD option is not set.
 			#elif (BOARD == BOARD_USBKEY)
-				#include "USBKEY/Dataflash.h"
+				#include "AVR8/USBKEY/Dataflash.h"
 			#elif (BOARD == BOARD_STK525)
-				#include "STK525/Dataflash.h"
+				#include "AVR8/STK525/Dataflash.h"
 			#elif (BOARD == BOARD_STK526)
-				#include "STK526/Dataflash.h"
-			#elif (BOARD == BOARD_XPLAIN)
-				#include "XPLAIN/Dataflash.h"
-			#elif (BOARD == BOARD_XPLAIN_REV1)
-				#include "XPLAIN/Dataflash.h"
+				#include "AVR8/STK526/Dataflash.h"
+			#elif ((BOARD == BOARD_XPLAIN) || (BOARD == BOARD_XPLAIN_REV1))
+				#include "AVR8/XPLAIN/Dataflash.h"
 			#elif (BOARD == BOARD_EVK527)
-				#include "EVK527/Dataflash.h"
+				#include "AVR8/EVK527/Dataflash.h"
 			#else
 				#include "Board/Dataflash.h"
 			#endif

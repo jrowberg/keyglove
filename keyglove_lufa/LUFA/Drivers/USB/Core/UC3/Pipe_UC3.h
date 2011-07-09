@@ -45,7 +45,7 @@
 
 /** \ingroup Group_PipePrimitiveRW
  *  \defgroup Group_PipePrimitiveRW_UC3 Read/Write of Primitive Data Types (UC3)
- *  \brief Pipe primative data read/write definitions for the Atmel AVR32 UC3 architecture.
+ *  \brief Pipe primitive data read/write definitions for the Atmel AVR32 UC3 architecture.
  *
  *  Functions, macros, variables, enums and types related to data reading and writing of primitive data types
  *  from and to pipes.
@@ -168,7 +168,7 @@
 			 */
 			#define PIPE_CONTROLPIPE_DEFAULT_SIZE   64
 
-			#if defined(USB_SERIES_UC3A3_AVR) || defined(USB_SERIES_UC3A4_AVR) || defined(__DOXYGEN__)
+			#if defined(USB_SERIES_UC3A3_AVR32) || defined(USB_SERIES_UC3A4_AVR32) || defined(__DOXYGEN__)
 				/** Total number of pipes (including the default control pipe at address 0) which may be used in
 				 *  the device.
 				 */
@@ -332,15 +332,16 @@
 				return (&AVR32_USBB.UPSTA0)[USB_SelectedPipe].cfgok;
 			}
 
-			/** Retrieves the endpoint number of the endpoint within the attached device that the currently selected
+			/** Retrieves the endpoint address of the endpoint within the attached device that the currently selected
 			 *  pipe is bound to.
 			 *
-			 *  \return Endpoint number the currently selected pipe is bound to.
+			 *  \return Endpoint address the currently selected pipe is bound to.
 			 */
-			static inline uint8_t Pipe_BoundEndpointNumber(void) ATTR_WARN_UNUSED_RESULT ATTR_ALWAYS_INLINE;
-			static inline uint8_t Pipe_BoundEndpointNumber(void)
+			static inline uint8_t Pipe_GetBoundEndpointAddress(void) ATTR_WARN_UNUSED_RESULT ATTR_ALWAYS_INLINE;
+			static inline uint8_t Pipe_GetBoundEndpointAddress(void)
 			{
-				return (&AVR32_USBB.UPCFG0)[USB_SelectedPipe].pepnum;
+				return ((&AVR32_USBB.UPCFG0)[USB_SelectedPipe].pepnum |
+				        ((Pipe_GetPipeToken() == PIPE_TOKEN_IN) ? PIPE_EPDIR_MASK : 0));
 			}
 
 			/** Sets the period between interrupts for an INTERRUPT type pipe to a specified number of milliseconds.
@@ -614,7 +615,7 @@
 				return *(USB_PipeFIFOPos[USB_SelectedPipe]++);
 			}
 
-			/** Writes one byte from the currently selected pipe's bank, for IN direction pipes.
+			/** Writes one byte to the currently selected pipe's bank, for IN direction pipes.
 			 *
 			 *  \ingroup Group_PipePrimitiveRW_UC3
 			 *

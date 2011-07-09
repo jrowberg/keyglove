@@ -290,6 +290,9 @@ uint8_t USB_ProcessHIDReport(const uint8_t* ReportData,
 bool USB_GetHIDReportItemInfo(const uint8_t* ReportData,
                               HID_ReportItem_t* const ReportItem)
 {
+	if (ReportItem == NULL)
+		return false;
+
 	uint16_t DataBitsRem  = ReportItem->Attributes.BitSize;
 	uint16_t CurrentBit   = ReportItem->BitOffset;
 	uint32_t BitMask      = (1 << 0);
@@ -320,6 +323,9 @@ bool USB_GetHIDReportItemInfo(const uint8_t* ReportData,
 void USB_SetHIDReportItemInfo(uint8_t* ReportData,
                               HID_ReportItem_t* const ReportItem)
 {
+	if (ReportItem == NULL)
+		return;
+
 	uint16_t DataBitsRem  = ReportItem->Attributes.BitSize;
 	uint16_t CurrentBit   = ReportItem->BitOffset;
 	uint32_t BitMask      = (1 << 0);
@@ -351,7 +357,7 @@ uint16_t USB_GetHIDReportSize(HID_ReportInfo_t* const ParserData,
 		uint16_t ReportSizeBits = ParserData->ReportIDSizes[i].ReportSizeBits[ReportType];
 
 		if (ParserData->ReportIDSizes[i].ReportID == ReportID)
-		  return ((ReportSizeBits >> 3) + ((ReportSizeBits & 0x07) ? 1 : 0));
+		  return (ReportSizeBits / 8) + ((ReportSizeBits % 8) ? 1 : 0);
 	}
 
 	return 0;

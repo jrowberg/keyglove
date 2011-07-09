@@ -81,13 +81,13 @@
 				{
 					uint8_t  StreamingInterfaceNumber; /**< Index of the Audio Streaming interface within the device this structure controls. */
 
-					uint8_t  DataINEndpointNumber; /**< Endpoint number of the incoming MIDI data, if available (zero if unused). */
-					uint16_t DataINEndpointSize; /**< Size in bytes of the incoming MIDI data endpoint, if available (zero if unused). */
+					uint8_t  DataINEndpointNumber; /**< Endpoint number of the incoming MIDI IN data, if available (zero if unused). */
+					uint16_t DataINEndpointSize; /**< Size in bytes of the incoming MIDI IN data endpoint, if available (zero if unused). */
 					bool     DataINEndpointDoubleBank; /**< Indicates if the MIDI interface's IN data endpoint should use double banking. */
 
-					uint8_t  DataOUTEndpointNumber; /**< Endpoint number of the outgoing MIDI data, if available (zero if unused). */
-					uint16_t DataOUTEndpointSize; /**< Size in bytes of the outgoing MIDI data endpoint, if available (zero if unused). */
-					bool     DataOUTEndpointDoubleBank; /**< Indicates if the MIDI interface's IN data endpoint should use double banking. */
+					uint8_t  DataOUTEndpointNumber; /**< Endpoint number of the outgoing MIDI OUT data, if available (zero if unused). */
+					uint16_t DataOUTEndpointSize; /**< Size in bytes of the outgoing MIDI OUT data endpoint, if available (zero if unused). */
+					bool     DataOUTEndpointDoubleBank; /**< Indicates if the MIDI interface's OUT data endpoint should use double banking. */
 				} Config; /**< Config data for the USB class interface within the device. All elements in this section
 				           *   <b>must</b> be set or the interface will fail to enumerate and operate correctly.
 				           */
@@ -104,10 +104,6 @@
 			/** Configures the endpoints of a given MIDI interface, ready for use. This should be linked to the library
 			 *  \ref EVENT_USB_Device_ConfigurationChanged() event so that the endpoints are configured when the configuration
 			 *  containing the given MIDI interface is selected.
-			 *
-			 *  \note The endpoint index numbers as given in the interface's configuration structure must not overlap with any other
-			 *        interface, or endpoint bank corruption will occur. Gaps in the allocated endpoint numbers or non-sequential indexes
-			 *        within a single interface is allowed, but no two interfaces of any type have have interleaved endpoint indexes.
 			 *
 			 *  \param[in,out] MIDIInterfaceInfo  Pointer to a structure containing a MIDI Class configuration and state.
 			 *

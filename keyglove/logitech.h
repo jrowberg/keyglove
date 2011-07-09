@@ -10,8 +10,19 @@
 #ifndef logitech_h
 #define logitech_h
 
-#include "WProgram.h"
-#undef round
+#ifdef USE_LUFA
+    #include "ArduinoWrapper.h"
+#endif
+
+#include <stdarg.h>
+
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
+
+#ifdef round
+    #undef round
+#endif
 
 #define READ                  0x00
 #define WRITE                 0x80
@@ -131,4 +142,4 @@ class logitech {
         
 };
 
-#endif /* iwrap_h */
+#endif /* logitech_h */

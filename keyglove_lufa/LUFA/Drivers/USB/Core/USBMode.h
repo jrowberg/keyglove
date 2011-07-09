@@ -55,6 +55,11 @@
 #ifndef __USBMODE_H__
 #define __USBMODE_H__
 
+	/* Enable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			extern "C" {
+		#endif
+
 	/* Preprocessor Checks: */
 		#if !defined(__INCLUDE_FROM_USB_DRIVER)
 			#error Do not include this file directly. Include LUFA/Drivers/USB/USB.h instead.
@@ -139,34 +144,34 @@
 				#define USB_CAN_BE_HOST
 			#elif (defined(__AVR32_UC3A0512__) || defined(__AVR32_UC3A0256__) || \
 			       defined(__AVR32_UC3A0128__) || defined(__AVR32_UC3A064__))
-				#define USB_SERIES_UC3A0_AVR
+				#define USB_SERIES_UC3A0_AVR32
 				#define USB_CAN_BE_DEVICE
 				#define USB_CAN_BE_HOST
 			#elif (defined(__AVR32_UC3A1512__) || defined(__AVR32_UC3A1256__) || \
 			       defined(__AVR32_UC3A1128__) || defined(__AVR32_UC3A164__))
-				#define USB_SERIES_UC3A1_AVR
+				#define USB_SERIES_UC3A1_AVR32
 				#define USB_CAN_BE_DEVICE
 				#define USB_CAN_BE_HOST
 			#elif (defined(__AVR32_UC3A3256__) || defined(__AVR32_UC3A3256S__) || \
 			       defined(__AVR32_UC3A3128__) || defined(__AVR32_UC3A3128S__) || \
 			       defined(__AVR32_UC3A364__)  || defined(__AVR32_UC3A364S__))
-				#define USB_SERIES_UC3A3_AVR
+				#define USB_SERIES_UC3A3_AVR32
 				#define USB_CAN_BE_DEVICE
 				#define USB_CAN_BE_HOST
 			#elif (defined(__AVR32_UC3A4256__) || defined(__AVR32_UC3A4256S__) || \
 			       defined(__AVR32_UC3A4128__) || defined(__AVR32_UC3A4128S__) || \
 			       defined(__AVR32_UC3A464__)  || defined(__AVR32_UC3A464S__))
-				#define USB_SERIES_UC3A4_AVR
+				#define USB_SERIES_UC3A4_AVR32
 				#define USB_CAN_BE_DEVICE
 				#define USB_CAN_BE_HOST
 			#elif (defined(__AVR32_UC3B0512__) || defined(__AVR32_UC3B0256__) || \
 			       defined(__AVR32_UC3B0128__) || defined(__AVR32_UC3B064__))
-				#define USB_SERIES_UC3B0_AVR
+				#define USB_SERIES_UC3B0_AVR32
 				#define USB_CAN_BE_DEVICE
 				#define USB_CAN_BE_HOST
 			#elif (defined(__AVR32_UC3B1512__) || defined(__AVR32_UC3B1256__) || \
 			       defined(__AVR32_UC3B1128__) || defined(__AVR32_UC3B164__))
-				#define USB_SERIES_UC3B1_AVR
+				#define USB_SERIES_UC3B1_AVR32
 				#define USB_CAN_BE_DEVICE
 				#define USB_CAN_BE_HOST
 			#endif
@@ -201,6 +206,11 @@
 				#error The currently selected device or architecture is not supported under the USB component of the library.
 			#endif
 	#endif
+
+	/* Disable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			}
+		#endif
 
 #endif
 

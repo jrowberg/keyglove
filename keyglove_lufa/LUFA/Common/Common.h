@@ -67,10 +67,20 @@
 		#include <string.h>
 		#include <stddef.h>
 		
+		#if defined(USE_LUFA_CONFIG_HEADER)
+			#include "LUFAConfig.h"
+		#endif
+
+		#include "CompilerSpecific.h"
 		#include "Architectures.h"
 		#include "Attributes.h"
 		#include "BoardTypes.h"
 		
+	/* Enable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			extern "C" {
+		#endif
+
 	/* Architecture specific utility includes: */
 		#if defined(__DOXYGEN__)
 			/** Type define for an unsigned integer the same width as the selected architecture's machine register.
@@ -159,7 +169,7 @@
 
 			#if (ARCH == ARCH_AVR8) || defined(__DOXYGEN__)
 				/** Defines a volatile \c NOP statement which cannot be optimized out by the compiler, and thus can always
-				 *  be set as a breakpoint in the resulting code. Useful for debugging purposes, where the optimiser
+				 *  be set as a breakpoint in the resulting code. Useful for debugging purposes, where the optimizer
 				 *  removes/reorders code to the point where break points cannot reliably be set.
 				 *
 				 *  \note This macro is not available for all architectures.
@@ -219,31 +229,6 @@
 					#define pgm_read_ptr(Address)        (void*)pgm_read_word(Address)
 				#endif
 			#endif
-			
-			/** Forces GCC to use pointer indirection (via the device's pointer register pairs) when accessing the given
-			 *  struct pointer. In some cases GCC will emit non-optimal assembly code when accessing a structure through
-			 *  a pointer, resulting in a larger binary. When this macro is used on a (non \c const) structure pointer before
-			 *  use, it will force GCC to use pointer indirection on the elements rather than direct store and load
-			 *  instructions.
-			 *
-			 *  \param[in, out] StructPtr  Pointer to a structure which is to be forced into indirect access mode.
-			 */
-			#define GCC_FORCE_POINTER_ACCESS(StructPtr) __asm__ __volatile__("" : "=b" (StructPtr) : "0" (StructPtr))
-
-			/** Forces GCC to create a memory barrier, ensuring that memory accesses are not reordered past the barrier point.
-			 *  This can be used before ordering-critical operations, to ensure that the compiler does not re-order the resulting
-			 *  assembly output in an unexpected manner on sections of code that are ordering-specific.
-			 */
-			#define GCC_MEMORY_BARRIER()                __asm__ __volatile__("" ::: "memory");
-			
-			/** Evaluates to boolean true if the specified value can be determined at compile time to be a constant value
-			 *  when compiling under GCC.
-			 *
-			 *  \param[in] x  Value to check compile time constantness of.
-			 *
-			 *  \return Boolean true if the given value is known to be a compile time constant.
-			 */
-			#define GCC_IS_COMPILE_CONST(x)             __builtin_constant_p(x)
 
 			#if !defined(ISR) || defined(__DOXYGEN__)
 				/** Macro for the definition of interrupt service routines, so that the compiler can insert the required
@@ -260,7 +245,7 @@
 				 *
 				 *  \param Name  Unique name of the interrupt service routine.
 				 */
-				#define ISR(Name, ...)                  void Name (void) __attribute__((__interrupt__)); void Name (void)
+				#define ISR(Name, ...)                  void Name (void) __attribute__((__interrupt__)) __VA_ARGS__; void Name (void)
 			#endif
 
 		/* Inline Functions: */
@@ -389,6 +374,11 @@
 
 				GCC_MEMORY_BARRIER();
 			}
+
+	/* Disable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			}
+		#endif
 
 #endif
 

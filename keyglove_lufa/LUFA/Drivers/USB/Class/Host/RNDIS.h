@@ -131,10 +131,6 @@
 			 *  This should be called once after the stack has enumerated the attached device, while the host state machine is in
 			 *  the Addressed state.
 			 *
-			 *  \note The pipe index numbers as given in the interface's configuration structure must not overlap with any other
-			 *        interface, or pipe bank corruption will occur. Gaps in the allocated pipe numbers or non-sequential indexes
-			 *        within a single interface is allowed, but no two interfaces of any type have have interleaved pipe indexes.
-			 *
 			 *  \param[in,out] RNDISInterfaceInfo      Pointer to a structure containing an RNDIS Class host configuration and state.
 			 *  \param[in]     ConfigDescriptorSize    Length of the attached device's Configuration Descriptor.
 			 *  \param[in]     DeviceConfigDescriptor  Pointer to a buffer containing the attached device's Configuration Descriptor.
@@ -155,7 +151,7 @@
 			 */
 			uint8_t RNDIS_Host_SendKeepAlive(USB_ClassInfo_RNDIS_Host_t* const RNDISInterfaceInfo) ATTR_NON_NULL_PTR_ARG(1);
 
-			/** Initialises the attached RNDIS device's RNDIS interface. This should be called after the device's pipes have been
+			/** Initializes the attached RNDIS device's RNDIS interface. This should be called after the device's pipes have been
 			 *  configured via the call to \ref RNDIS_Host_ConfigurePipes().
 			 *
 			 *  \param[in,out] RNDISInterfaceInfo  Pointer to a structure containing an RNDIS Class host configuration and state.

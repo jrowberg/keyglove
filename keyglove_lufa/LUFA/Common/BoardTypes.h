@@ -120,7 +120,7 @@
 			/** Selects the Arduino Uno specific board drivers, including the driver for the board LEDs. */
 			#define BOARD_UNO           18
 
-			/** Selects the CUL V3 specific board drivers, including the Button and LEDs drivers. */
+			/** Selects the Busware CUL V3 specific board drivers, including the Button and LEDs drivers. */
 			#define BOARD_CULV3         19
 
 			/** Selects the Blackcat USB JTAG specific board drivers, including the driver for the board LEDs. */
@@ -146,6 +146,15 @@
 
 			/** Selects the Atmel EVK1101 specific board drivers, including the Button, Joystick and LED drivers. */
 			#define BOARD_EVK1101       27
+			
+			/** Selects the Busware TUL specific board drivers, including the Button and LED drivers. */
+			#define BOARD_TUL           28
+
+			/** Selects the Atmel EVK1100 specific board drivers, including the Button, Joystick and LED drivers. */
+			#define BOARD_EVK1100       29
+
+			/** Selects the Atmel EVK1104 specific board drivers, including the Button and LED drivers. */
+			#define BOARD_EVK1104       30
 			
 			#if !defined(__DOXYGEN__)
 				#define BOARD_          BOARD_NONE

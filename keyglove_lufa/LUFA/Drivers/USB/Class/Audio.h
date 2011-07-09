@@ -29,28 +29,29 @@
 */
 
 /** \file
- *  \brief Master include file for the library USB Audio Class driver.
+ *  \brief Master include file for the library USB Audio 1.0 Class driver.
  *
- *  Master include file for the library USB Audio Class driver, for both host and device modes, where available.
+ *  Master include file for the library USB Audio 1.0 Class driver, for both host and device modes, where available.
  *
  *  This file should be included in all user projects making use of this optional class driver, instead of
  *  including any headers in the USB/ClassDriver/Device, USB/ClassDriver/Host or USB/ClassDriver/Common subdirectories.
  */
 
 /** \ingroup Group_USBClassDrivers
- *  \defgroup Group_USBClassAudio Audio Class Driver
+ *  \defgroup Group_USBClassAudio Audio 1.0 Class Driver
  *
  *  \section Sec_Dependencies Module Source Dependencies
  *  The following files must be built with any user project that uses this module:
  *    - LUFA/Drivers/USB/Class/Device/Audio.c <i>(Makefile source module name: LUFA_SRC_USBCLASS)</i>
+ *    - LUFA/Drivers/USB/Class/Host/Audio.c <i>(Makefile source module name: LUFA_SRC_USBCLASS)</i>
  *
  *  \section Sec_ModDescription Module Description
- *  Audio Class Driver module. This module contains an internal implementation of the USB Audio 1.0 Class, for Device
- *  USB mode only. User applications can use this class driver instead of implementing the Audio class manually via
- *  the low-level LUFA APIs.
+ *  Audio 1.0 Class Driver module. This module contains an internal implementation of the USB Audio 1.0 Class, for both
+ *  Device and Host USB modes. User applications can use this class driver instead of implementing the Audio 1.0 class
+ *  manually via the low-level LUFA APIs.
  *
  *  This module is designed to simplify the user code by exposing only the required interface needed to interface with
- *  Hosts or Devices using the USB Audio Class.
+ *  Hosts or Devices using the USB Audio 1.0 Class.
  *
  *  @{
  */
@@ -67,6 +68,10 @@
 
 		#if defined(USB_CAN_BE_DEVICE)
 			#include "Device/Audio.h"
+		#endif
+
+		#if defined(USB_CAN_BE_HOST)
+			#include "Host/Audio.h"
 		#endif
 
 #endif

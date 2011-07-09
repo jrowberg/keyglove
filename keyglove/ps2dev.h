@@ -13,9 +13,18 @@
 #ifndef ps2dev_h
 #define ps2dev_h
 
-#include "WProgram.h"
-#include "wiring.h"
-#undef round
+#ifdef USE_LUFA
+    #include "ArduinoWrapper.h"
+#endif
+
+#ifndef USE_LUFA
+    #include "WProgram.h"
+    #include "wiring.h"
+#endif
+
+#ifdef round
+    #undef round
+#endif
 
 class PS2dev {
     public:

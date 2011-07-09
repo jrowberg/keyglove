@@ -25,8 +25,12 @@ THE SOFTWARE.
 ===============================================
 */
 
-#include "WProgram.h"
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
+
 #include "iwrap.h"
+
 #ifdef round
     #undef round
 #endif

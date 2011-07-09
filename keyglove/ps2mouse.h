@@ -28,9 +28,19 @@ THE SOFTWARE.
 #ifndef ps2mouse_h
 #define ps2mouse_h
 
-#include "WProgram.h"
+#ifdef USE_LUFA
+    #include "ArduinoWrapper.h"
+#endif
+
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
+
 #include "ps2dev.h"
-#undef round
+
+#ifdef round
+    #undef round
+#endif
 
 #define PS2MOUSE_MODE_RESET 1
 #define PS2MOUSE_MODE_STREAM 2
@@ -82,7 +92,7 @@ class PS2mouse {
         void cmd_echo();
         
         // send mouse movement data
-        int cmd_move(int dx, int dy);
+        void cmd_move(int dx, int dy);
 };
 
 #endif /* ps2mouse_h */

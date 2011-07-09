@@ -54,7 +54,7 @@ uint8_t USB_Host_GetDeviceConfigDescriptor(const uint8_t ConfigNumber,
 	if ((ErrorCode = USB_Host_SendControlRequest(ConfigHeader)) != HOST_SENDCONTROL_Successful)
 	  return ErrorCode;
 
-	*ConfigSizePtr = DESCRIPTOR_PCAST(ConfigHeader, USB_Descriptor_Configuration_Header_t)->TotalConfigurationSize;
+	*ConfigSizePtr = le16_to_cpu(DESCRIPTOR_PCAST(ConfigHeader, USB_Descriptor_Configuration_Header_t)->TotalConfigurationSize);
 
 	if (*ConfigSizePtr > BufferSize)
 	  return HOST_GETCONFIG_BuffOverflow;
@@ -118,7 +118,7 @@ void USB_GetNextDescriptorOfTypeAfter(uint16_t* const BytesRem,
 
 uint8_t USB_GetNextDescriptorComp(uint16_t* const BytesRem,
                                   void** const CurrConfigLoc,
-                                  const ConfigComparatorPtr_t const ComparatorRoutine)
+                                  ConfigComparatorPtr_t const ComparatorRoutine)
 {
 	uint8_t ErrorCode;
 

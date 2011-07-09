@@ -581,26 +581,23 @@
  606 01cd 6500      		.string	"e"
  607 01cf 00        		.string	""
  608 01d0 00        		.string	""
- 609               		.comm HID_Report_IDs,1,1
- 634               	.Letext0:
+ 633               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 Descriptors.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:19     .text.CALLBACK_USB_GetDescriptor:00000000 CALLBACK_USB_GetDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:384    .progmem.data:000000b1 DeviceDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:402    .progmem.data:000000c3 ConfigurationDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:499    .progmem.data:00000129 LanguageString
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:506    .progmem.data:0000012d ManufacturerString
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:526    .progmem.data:00000149 ProductString
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:555    .progmem.data:00000177 ProductStringSerial
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:583    .progmem.data:000001a3 ProductStringHID
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc82mVWc.s:203    .progmem.data:00000000 HIDReport
-                            *COM*:00000001 HID_Report_IDs
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:19     .text.CALLBACK_USB_GetDescriptor:00000000 CALLBACK_USB_GetDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:384    .progmem.data:000000b1 DeviceDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:402    .progmem.data:000000c3 ConfigurationDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:499    .progmem.data:00000129 LanguageString
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:506    .progmem.data:0000012d ManufacturerString
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:526    .progmem.data:00000149 ProductString
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:555    .progmem.data:00000177 ProductStringSerial
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:583    .progmem.data:000001a3 ProductStringHID
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccpuHOFK.s:203    .progmem.data:00000000 HIDReport
 
-UNDEFINED SYMBOLS
-__do_clear_bss
+NO UNDEFINED SYMBOLS

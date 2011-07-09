@@ -1,5 +1,6 @@
-Keyglove.o: Keyglove.c Keyglove.h Descriptors.h LUFA/Drivers/USB/USB.h \
+Keyglove.o: Keyglove.cpp Keyglove.h Descriptors.h LUFA/Drivers/USB/USB.h \
   LUFA/Drivers/USB/../../Common/Common.h \
+  LUFA/Drivers/USB/../../Common/CompilerSpecific.h \
   LUFA/Drivers/USB/../../Common/Architectures.h \
   LUFA/Drivers/USB/../../Common/Attributes.h \
   LUFA/Drivers/USB/../../Common/BoardTypes.h \
@@ -38,6 +39,7 @@ Keyglove.o: Keyglove.c Keyglove.h Descriptors.h LUFA/Drivers/USB/USB.h \
   LUFA/Drivers/USB/Core/AVR8/../USBTask.h \
   LUFA/Drivers/USB/Core/AVR8/../USBController.h \
   LUFA/Drivers/USB/Core/AVR8/../EndpointStream.h \
+  LUFA/Drivers/USB/Core/AVR8/../AVR8/EndpointStream_AVR8.h \
   LUFA/Drivers/USB/Core/Events.h LUFA/Drivers/USB/Core/StdRequestType.h \
   LUFA/Drivers/USB/Core/StdDescriptors.h \
   LUFA/Drivers/USB/Core/DeviceStandardReq.h \
@@ -80,7 +82,12 @@ Keyglove.o: Keyglove.c Keyglove.h Descriptors.h LUFA/Drivers/USB/USB.h \
   LUFA/Drivers/Peripheral/AVR8/Serial_AVR8.h \
   LUFA/Drivers/Peripheral/AVR8/../../../Common/Common.h \
   LUFA/Drivers/Peripheral/AVR8/../../Misc/TerminalCodes.h \
-  LUFA/Drivers/Misc/RingBuffer.h LUFA/Drivers/Misc/../../Common/Common.h
+  LUFA/Drivers/Peripheral/TWI.h LUFA/Drivers/Peripheral/AVR8/TWI_AVR8.h \
+  LUFA/Drivers/Misc/RingBuffer.h LUFA/Drivers/Misc/../../Common/Common.h \
+  ../keyglove/keyglove.pde ArduinoWrapper.h wiring/wiring.h \
+  wiring/binary.h ../keyglove/pins.h ../keyglove/Adxl345.h \
+  ../keyglove/ITG3200.h ../keyglove/touchset_helpers.h \
+  ../keyglove/touchset.h
 
 Keyglove.h:
 
@@ -89,6 +96,8 @@ Descriptors.h:
 LUFA/Drivers/USB/USB.h:
 
 LUFA/Drivers/USB/../../Common/Common.h:
+
+LUFA/Drivers/USB/../../Common/CompilerSpecific.h:
 
 LUFA/Drivers/USB/../../Common/Architectures.h:
 
@@ -169,6 +178,8 @@ LUFA/Drivers/USB/Core/AVR8/../USBTask.h:
 LUFA/Drivers/USB/Core/AVR8/../USBController.h:
 
 LUFA/Drivers/USB/Core/AVR8/../EndpointStream.h:
+
+LUFA/Drivers/USB/Core/AVR8/../AVR8/EndpointStream_AVR8.h:
 
 LUFA/Drivers/USB/Core/Events.h:
 
@@ -278,6 +289,28 @@ LUFA/Drivers/Peripheral/AVR8/../../../Common/Common.h:
 
 LUFA/Drivers/Peripheral/AVR8/../../Misc/TerminalCodes.h:
 
+LUFA/Drivers/Peripheral/TWI.h:
+
+LUFA/Drivers/Peripheral/AVR8/TWI_AVR8.h:
+
 LUFA/Drivers/Misc/RingBuffer.h:
 
 LUFA/Drivers/Misc/../../Common/Common.h:
+
+../keyglove/keyglove.pde:
+
+ArduinoWrapper.h:
+
+wiring/wiring.h:
+
+wiring/binary.h:
+
+../keyglove/pins.h:
+
+../keyglove/Adxl345.h:
+
+../keyglove/ITG3200.h:
+
+../keyglove/touchset_helpers.h:
+
+../keyglove/touchset.h:

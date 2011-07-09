@@ -141,10 +141,6 @@
 			 *  \ref EVENT_USB_Device_ConfigurationChanged() event so that the endpoints are configured when the configuration containing
 			 *  the given CDC interface is selected.
 			 *
-			 *  \note The endpoint index numbers as given in the interface's configuration structure must not overlap with any other
-			 *        interface, or endpoint bank corruption will occur. Gaps in the allocated endpoint numbers or non-sequential indexes
-			 *        within a single interface is allowed, but no two interfaces of any type have have interleaved endpoint indexes.
-			 *
 			 *  \param[in,out] CDCInterfaceInfo  Pointer to a structure containing a CDC Class configuration and state.
 			 *
 			 *  \return Boolean \c true if the endpoints were successfully configured, \c false otherwise.
@@ -177,7 +173,7 @@
 			/** CDC class driver event for a control line state change on a CDC interface. This event fires each time the host requests a
 			 *  control line state change (containing the virtual serial control line states, such as DTR) and may be hooked in the
 			 *  user program by declaring a handler function with the same name and parameters listed here. The new control line states
-			 *  are available in the ControlLineStates.HostToDevice value inside the CDC interface structure passed as a parameter, set as
+			 *  are available in the State.ControlLineStates.HostToDevice value inside the CDC interface structure passed as a parameter, set as
 			 *  a mask of CDC_CONTROL_LINE_OUT_* masks.
 			 *
 			 *  \param[in,out] CDCInterfaceInfo  Pointer to a structure containing a CDC Class configuration and state.
@@ -338,6 +334,7 @@
 				#endif
 
 				void CDC_Device_Event_Stub(void) ATTR_CONST;
+				
 				void EVENT_CDC_Device_LineEncodingChanged(USB_ClassInfo_CDC_Device_t* const CDCInterfaceInfo)
 				                                          ATTR_WEAK ATTR_NON_NULL_PTR_ARG(1) ATTR_ALIAS(CDC_Device_Event_Stub);
 				void EVENT_CDC_Device_ControLineStateChanged(USB_ClassInfo_CDC_Device_t* const CDCInterfaceInfo)

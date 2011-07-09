@@ -25,8 +25,12 @@
 * INT       -> not connected  (but can be used)                             *
 * VIO & VDD -> pin 3.3V                                                     *
 *****************************************************************************/
+
 #include "ITG3200.h"
-#include <Wire.h>
+
+#ifndef USE_LUFA
+    #include <Wire.h>
+#endif
 
 ITG3200::ITG3200() {
   setOffsets(0,0,0);
@@ -212,7 +216,7 @@ void ITG3200::zeroCalibrate(unsigned int totSamples, unsigned int sampleDelayMS)
   float tmpOffsets[] = {0,0,0};
   int xyz[3];
 
-  for (int i = 0;i < totSamples;i++){
+  for (unsigned int i = 0;i < totSamples;i++){
     delay(sampleDelayMS);
     readGyroRaw(xyz);
     tmpOffsets[0] += xyz[0];

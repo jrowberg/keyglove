@@ -25,7 +25,10 @@ THE SOFTWARE.
 ===============================================
 */
 
-#include "WProgram.h"
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
+
 #include "ps2dev.h"
 #include "ps2keyboard.h"
 #ifdef round
@@ -127,7 +130,7 @@ void PS2keyboard::cmd_error() { while (keyboard -> write(0xFC) != 0); last_sent_
 void PS2keyboard::cmd_echo() { while (keyboard -> write(0xEE) != 0); last_sent_byte = 0xEE; }
 
 // send key scancodes (make or break)
-int PS2keyboard::cmd_keypress(int keycode, boolean make) {
+void PS2keyboard::cmd_keypress(int keycode, boolean make) {
     unsigned char *bytes;
     if (keycode == PKEY_PRTSC) {
         bytes = scancode_prtsc;

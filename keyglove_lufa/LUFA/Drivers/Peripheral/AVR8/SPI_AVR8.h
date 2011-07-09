@@ -53,7 +53,7 @@
  *  application.
  *
  *  \code
- *      // Initialise the SPI driver before first use
+ *      // Initialize the SPI driver before first use
  *      SPI_Init(SPI_SPEED_FCPU_DIV_2 | SPI_ORDER_MSB_FIRST | SPI_SCK_LEAD_FALLING |
  *               SPI_SAMPLE_TRAILING | SPI_MODE_MASTER);
  *
@@ -145,7 +145,7 @@
 			/** SPI data order mask for \c SPI_Init(). Indicates that data should be shifted out MSB first. */
 			#define SPI_ORDER_MSB_FIRST            (0 << DORD)
 
-			/** SPI data order mask for \c SPI_Init(). Indicates that data should be shifted out MSB first. */
+			/** SPI data order mask for \c SPI_Init(). Indicates that data should be shifted out LSB first. */
 			#define SPI_ORDER_LSB_FIRST            (1 << DORD)
 			//@}
 			
@@ -159,7 +159,7 @@
 			//@}
 			
 		/* Inline Functions: */
-			/** Initialises the SPI subsystem, ready for transfers. Must be called before calling any other
+			/** Initializes the SPI subsystem, ready for transfers. Must be called before calling any other
 			 *  SPI routines.
 			 *
 			 *  \param[in] SPIOptions  SPI Options, a mask consisting of one of each of the \c SPI_SPEED_*,
@@ -167,16 +167,23 @@
 			 */
 			static inline void SPI_Init(const uint8_t SPIOptions)
 			{
-				DDRB  |=  ((1 << 1) | (1 << 2));
-				DDRB  &= ~((1 << 0) | (1 << 3));
-				PORTB |=  ((1 << 0) | (1 << 3));
+				/* Prevent high rise times on PB.0 (/SS) from forcing a change to SPI slave mode */
+				DDRB  |= (1 << 0);
+				PORTB |= (1 << 0);
 
-				SPCR   = ((1 << SPE) | SPIOptions);
+				DDRB  |=  ((1 << 1) | (1 << 2));
+				DDRB  &= ~(1 << 3);
+				PORTB |=  (1 << 3);
 
 				if (SPIOptions & SPI_USE_DOUBLESPEED)
 				  SPSR |= (1 << SPI2X);
 				else
 				  SPSR &= ~(1 << SPI2X);
+
+				/* Switch /SS to input mode after configuration to allow for forced mode changes */
+				DDRB &= ~(1 << 0);
+
+				SPCR   = ((1 << SPE) | SPIOptions);
 			}
 
 			/** Turns off the SPI driver, disabling and returning used hardware to their default configuration. */
@@ -187,6 +194,15 @@
 
 				SPCR   = 0;
 				SPSR   = 0;
+			}
+			
+			/** Retrieves the currently selected SPI mode, once the SPI interface has been configured.
+			 *
+			 *  \return \ref SPI_MODE_MASTER if the interface is currently in SPI Master mode, \ref SPI_MODE_SLAVE otherwise
+			 */
+			static inline uint8_t SPI_GetCurrentMode(void)
+			{
+				return (SPCR & SPI_MODE_MASTER);
 			}
 
 			/** Sends and receives a byte through the SPI interface, blocking until the transfer is complete.

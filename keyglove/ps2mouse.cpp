@@ -25,7 +25,10 @@ THE SOFTWARE.
 ===============================================
 */
 
-#include "WProgram.h"
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
+
 #include "ps2dev.h"
 #include "ps2mouse.h"
 #ifdef round
@@ -99,7 +102,7 @@ void PS2mouse::cmd_error() {
 }
 
 // send mouse movement code
-int PS2mouse::cmd_move(int dx, int dy) {
+void PS2mouse::cmd_move(int dx, int dy) {
     char overflowx = 0;
     char overflowy = 0;
     char data[3];

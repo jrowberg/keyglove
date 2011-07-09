@@ -42,8 +42,24 @@ void Audio_Device_ProcessControlRequest(USB_ClassInfo_Audio_Device_t* const Audi
 	if (!(Endpoint_IsSETUPReceived()))
 	  return;
 
-	if (USB_ControlRequest.wIndex != AudioInterfaceInfo->Config.StreamingInterfaceNumber)
-	  return;
+	if ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_RECIPIENT) == REQREC_INTERFACE)
+	{
+		if (USB_ControlRequest.wIndex != AudioInterfaceInfo->Config.StreamingInterfaceNumber)
+		  return;
+	}
+	else if ((USB_ControlRequest.bmRequestType & CONTROL_REQTYPE_RECIPIENT) == REQREC_ENDPOINT)
+	{
+		bool EndpointFilterMatch = false;
+	
+		EndpointFilterMatch |= (AudioInterfaceInfo->Config.DataINEndpointNumber &&
+		                        ((uint8_t)USB_ControlRequest.wIndex == (ENDPOINT_DESCRIPTOR_DIR_IN  | AudioInterfaceInfo->Config.DataINEndpointNumber)));
+	
+		EndpointFilterMatch |= (AudioInterfaceInfo->Config.DataOUTEndpointNumber &&
+		                        ((uint8_t)USB_ControlRequest.wIndex == (ENDPOINT_DESCRIPTOR_DIR_OUT | AudioInterfaceInfo->Config.DataOUTEndpointNumber)));
+
+		if (!(EndpointFilterMatch))
+		  return;
+	}	
 
 	switch (USB_ControlRequest.bRequest)
 	{
@@ -54,6 +70,64 @@ void Audio_Device_ProcessControlRequest(USB_ClassInfo_Audio_Device_t* const Audi
 				Endpoint_ClearStatusStage();
 
 				AudioInterfaceInfo->State.InterfaceEnabled = ((USB_ControlRequest.wValue & 0xFF) != 0);
+				EVENT_Audio_Device_StreamStartStop(AudioInterfaceInfo);
+			}
+
+			break;
+		case AUDIO_REQ_GetStatus:
+			if ((USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE)) ||
+			    (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_ENDPOINT)))
+			{
+				Endpoint_ClearSETUP();
+				Endpoint_ClearStatusStage();
+			}
+
+			break;
+		case AUDIO_REQ_SetCurrent:
+		case AUDIO_REQ_SetMinimum:
+		case AUDIO_REQ_SetMaximum:
+		case AUDIO_REQ_SetResolution:
+			if (USB_ControlRequest.bmRequestType == (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_ENDPOINT))
+			{
+				uint8_t EndpointProperty = USB_ControlRequest.bRequest;
+				uint8_t EndpointAddress  = (uint8_t)USB_ControlRequest.wIndex;
+				uint8_t EndpointControl  = (USB_ControlRequest.wValue >> 8);
+			
+				if (CALLBACK_Audio_Device_GetSetEndpointProperty(AudioInterfaceInfo, EndpointProperty, EndpointAddress,
+				                                                 EndpointControl, NULL, NULL))
+				{
+					uint16_t ValueLength = USB_ControlRequest.wLength;
+					uint8_t  Value[ValueLength];
+					
+					Endpoint_ClearSETUP();
+					Endpoint_Read_Control_Stream_LE(Value, ValueLength);
+					Endpoint_ClearIN();					
+
+					CALLBACK_Audio_Device_GetSetEndpointProperty(AudioInterfaceInfo, EndpointProperty, EndpointAddress,
+					                                             EndpointControl, &ValueLength, Value);
+				}				
+			}
+
+			break;
+		case AUDIO_REQ_GetCurrent:
+		case AUDIO_REQ_GetMinimum:
+		case AUDIO_REQ_GetMaximum:
+		case AUDIO_REQ_GetResolution:
+			if (USB_ControlRequest.bmRequestType == (REQDIR_DEVICETOHOST | REQTYPE_CLASS | REQREC_ENDPOINT))
+			{
+				uint8_t  EndpointProperty = USB_ControlRequest.bRequest;
+				uint8_t  EndpointAddress  = (uint8_t)USB_ControlRequest.wIndex;
+				uint8_t  EndpointControl  = (USB_ControlRequest.wValue >> 8);
+				uint16_t ValueLength      = USB_ControlRequest.wLength;
+				uint8_t  Value[ValueLength];
+
+				if (CALLBACK_Audio_Device_GetSetEndpointProperty(AudioInterfaceInfo, EndpointProperty, EndpointAddress,
+				                                                 EndpointControl, &ValueLength, Value))
+				{
+					Endpoint_ClearSETUP();
+					Endpoint_Write_Control_Stream_LE(Value, ValueLength);
+					Endpoint_ClearOUT();					
+				}
 			}
 
 			break;
@@ -69,29 +143,40 @@ bool Audio_Device_ConfigureEndpoints(USB_ClassInfo_Audio_Device_t* const AudioIn
 		uint16_t Size;
 		uint8_t  Type;
 		uint8_t  Direction;
+		bool     DoubleBanked;
 
 		if (EndpointNum == AudioInterfaceInfo->Config.DataINEndpointNumber)
 		{
 			Size         = AudioInterfaceInfo->Config.DataINEndpointSize;
 			Direction    = ENDPOINT_DIR_IN;
 			Type         = EP_TYPE_ISOCHRONOUS;
+			DoubleBanked = true;
 		}
 		else if (EndpointNum == AudioInterfaceInfo->Config.DataOUTEndpointNumber)
 		{
 			Size         = AudioInterfaceInfo->Config.DataOUTEndpointSize;
 			Direction    = ENDPOINT_DIR_OUT;
 			Type         = EP_TYPE_ISOCHRONOUS;
+			DoubleBanked = true;
 		}
 		else
 		{
 			continue;
 		}
 
-		if (!(Endpoint_ConfigureEndpoint(EndpointNum, Type, Direction, Size, ENDPOINT_BANK_DOUBLE)))
-		  return false;
+		if (!(Endpoint_ConfigureEndpoint(EndpointNum, Type, Direction, Size,
+		                                 DoubleBanked ? ENDPOINT_BANK_DOUBLE : ENDPOINT_BANK_SINGLE)))
+		{
+			return false;
+		}
 	}
 
 	return true;
+}
+
+void Audio_Device_Event_Stub(void)
+{
+
 }
 
 #endif

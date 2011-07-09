@@ -28,8 +28,17 @@ THE SOFTWARE.
 #ifndef iwrap_h
 #define iwrap_h
 
-#include "WProgram.h"
-#undef round
+#ifdef USE_LUFA
+    #include "ArduinoWrapper.h"
+#endif
+
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
+
+#ifdef round
+    #undef round
+#endif
 
 class iWRAP {
     public:

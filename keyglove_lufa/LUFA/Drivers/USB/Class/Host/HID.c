@@ -112,7 +112,7 @@ uint8_t HID_Host_ConfigurePipes(USB_ClassInfo_HID_Host_t* const HIDInterfaceInfo
 			DoubleBanked    = HIDInterfaceInfo->Config.DataINPipeDoubleBank;
 			InterruptPeriod = DataINEndpoint->PollingIntervalMS;
 
-			HIDInterfaceInfo->State.DataINPipeSize   = DataINEndpoint->EndpointSize;
+			HIDInterfaceInfo->State.DataINPipeSize = DataINEndpoint->EndpointSize;
 		}
 		else if (PipeNum == HIDInterfaceInfo->Config.DataOUTPipeNumber)
 		{
@@ -148,7 +148,7 @@ uint8_t HID_Host_ConfigurePipes(USB_ClassInfo_HID_Host_t* const HIDInterfaceInfo
 	HIDInterfaceInfo->State.HIDReportSize        = HIDDescriptor->HIDReportLength;
 	HIDInterfaceInfo->State.SupportsBootProtocol = (HIDInterface->SubClass != HID_CSCP_NonBootProtocol);
 	HIDInterfaceInfo->State.LargestReportSize    = 8;
-	HIDInterfaceInfo->State.IsActive = true;
+	HIDInterfaceInfo->State.IsActive             = true;
 
 	return HID_ENUMERROR_NoError;
 }
@@ -355,6 +355,23 @@ uint8_t HID_Host_SetBootProtocol(USB_ClassInfo_HID_Host_t* const HIDInterfaceInf
 	HIDInterfaceInfo->State.UsingBootProtocol = true;
 
 	return HOST_SENDCONTROL_Successful;
+}
+
+uint8_t HID_Host_SetIdlePeriod(USB_ClassInfo_HID_Host_t* const HIDInterfaceInfo,
+                               const uint16_t MS)
+{
+	USB_ControlRequest = (USB_Request_Header_t)
+		{
+			.bmRequestType = (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE),
+			.bRequest      = HID_REQ_SetIdle,
+			.wValue        = ((MS << 6) & 0xFF00),
+			.wIndex        = HIDInterfaceInfo->State.InterfaceNumber,
+			.wLength       = 0,
+		};
+
+	Pipe_SelectPipe(PIPE_CONTROLPIPE);
+
+	return USB_Host_SendControlRequest(NULL);
 }
 
 #if !defined(HID_HOST_BOOT_PROTOCOL_ONLY)

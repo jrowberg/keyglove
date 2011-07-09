@@ -51,6 +51,11 @@
 	/* Includes: */
 		#include "../../../../Common/Common.h"
 
+	/* Enable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			extern "C" {
+		#endif
+
 	/* Preprocessor Checks: */
 		#if !defined(__INCLUDE_FROM_USB_DRIVER)
 			#error Do not include this file directly. Include LUFA/Drivers/USB/USB.h instead.
@@ -133,7 +138,7 @@
 				OTGCON &= ~(1 << HNPREQ);
 			}
 
-			/** Indicates if the connected device is not currently sending a HNP request.
+			/** Indicates if the connected device is currently sending a HNP request.
 			 *
 			 *  \return Boolean \c true if a HNP is currently being issued by the connected device, \c false otherwise.
 			 */
@@ -142,6 +147,11 @@
 			{
 				return ((OTGCON & (1 << HNPREQ)) ? true : false);
 			}
+
+	/* Disable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			}
+		#endif
 
 #endif
 

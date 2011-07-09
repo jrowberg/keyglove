@@ -1,17 +1,83 @@
 Archive member included because of file (symbol)
 
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
+                              Keyglove.o (__subsf3)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o) (__addsf3x)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+                              Keyglove.o (atan)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o)
+                              Keyglove.o (__divsf3)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o) (__divsf3x)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+                              Keyglove.o (__fixsfsi)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o) (__fixunssfsi)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+                              ../keyglove/ITG3200.o (__floatunsisf)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_inf.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o) (__fp_inf)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_nan.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o) (__fp_nan)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_powser.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o) (__fp_powser)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o) (__fp_pscA)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o) (__fp_pscB)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_round.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o) (__fp_round)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o) (__fp_split3)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o) (__fp_zero)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(inverse.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o) (inverse)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3.o)
+                              Keyglove.o (__mulsf3)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o) (__mulsf3x)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+                              ../keyglove/Adxl345.o (pow)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+                              Keyglove.o (sqrt)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(square.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o) (square)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o) (exp)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_mpack.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o) (__fp_mpack)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_norm2.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o) (__fp_norm2)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o) (ldexp)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o) (log)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(modf.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o) (modf)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+                              wiring/wiring_pulse.o (__mulsi3)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o)
+                              Keyglove.o (__divmodhi4)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+                              wiring/wiring_pulse.o (__udivmodsi4)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
                               Keyglove.o (__divmodsi4)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o (exit)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
-                              Keyglove.o (__do_clear_bss)
-c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
-                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o) (__udivmodsi4)
+                              wiring/wiring.o (__do_clear_bss)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
+                              Keyglove.o (__do_global_ctors)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o) (__udivmodhi4)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_tablejump.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o) (__tablejump__)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(eerd_byte_at90usb1287.o)
-                              LUFA/Drivers/USB/Core/EndpointStream.o (__eerd_byte_usb1287)
+                              LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o (__eerd_byte_usb1287)
 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(eeupd_byte_at90usb1287.o)
-                              LUFA/Drivers/USB/Core/EndpointStream.o (__eeupd_byte_usb1287)
+                              LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o (__eeupd_byte_usb1287)
 
 Allocating common symbols
 Common symbol       size              file
@@ -22,7 +88,6 @@ USB_CurrentlySelfPowered
 USB_RemoteWakeupEnabled
                     0x1               LUFA/Drivers/USB/Core/DeviceStandardReq.o
 USB_DeviceState     0x1               LUFA/Drivers/USB/Core/USBTask.o
-HID_Report_IDs      0x1               Keyglove.o
 USB_ControlRequest  0x8               LUFA/Drivers/USB/Core/USBTask.o
 USB_ConfigurationNumber
                     0x1               LUFA/Drivers/USB/Core/DeviceStandardReq.o
@@ -31,12 +96,36 @@ Discarded input sections
 
  .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
  .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
- .text          0x00000000        0x0 Keyglove.o
- .text.Keyboard_ProcessLEDReport
-                0x00000000        0x0 Keyglove.o
- .text.ProcessHIDReport
-                0x00000000        0x0 Keyglove.o
- COMMON         0x00000000        0x0 Keyglove.o
+ .text          0x00000000        0x0 wiring/wiring.o
+ .data          0x00000000        0x0 wiring/wiring.o
+ .text.delayMicroseconds
+                0x00000000        0x0 wiring/wiring.o
+ .text          0x00000000        0x0 wiring/wiring_analog.o
+ .data          0x00000000        0x0 wiring/wiring_analog.o
+ .bss           0x00000000        0x0 wiring/wiring_analog.o
+ .text.analogReference
+                0x00000000        0x0 wiring/wiring_analog.o
+ .text.analogRead
+                0x00000000        0x0 wiring/wiring_analog.o
+ .text.analogWrite
+                0x00000000        0x0 wiring/wiring_analog.o
+ .text          0x00000000        0x0 wiring/wiring_digital.o
+ .data          0x00000000        0x0 wiring/wiring_digital.o
+ .bss           0x00000000        0x0 wiring/wiring_digital.o
+ .text          0x00000000        0x0 wiring/wiring_pulse.o
+ .data          0x00000000        0x0 wiring/wiring_pulse.o
+ .bss           0x00000000        0x0 wiring/wiring_pulse.o
+ .text.pulseIn  0x00000000        0x0 wiring/wiring_pulse.o
+ .text          0x00000000        0x0 wiring/wiring_shift.o
+ .data          0x00000000        0x0 wiring/wiring_shift.o
+ .bss           0x00000000        0x0 wiring/wiring_shift.o
+ .text.shiftOut
+                0x00000000        0x0 wiring/wiring_shift.o
+ .text.shiftIn  0x00000000        0x0 wiring/wiring_shift.o
+ .text          0x00000000        0x0 wiring/pins_arduino.o
+ .data          0x00000000        0x0 wiring/pins_arduino.o
+ .bss           0x00000000        0x0 wiring/pins_arduino.o
+ .progmem.data  0x00000000        0x0 wiring/pins_arduino.o
  .text          0x00000000        0x0 Descriptors.o
  .data          0x00000000        0x0 Descriptors.o
  .bss           0x00000000        0x0 Descriptors.o
@@ -64,6 +153,46 @@ Discarded input sections
  .text          0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
  .data          0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
  .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .text          0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .data          0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_Control_Stream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Read_Control_Stream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_Control_PStream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Read_Control_EStream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Read_Control_EStream_LE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_Control_EStream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_Control_EStream_LE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Null_Stream
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Discard_Stream
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Read_EStream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Read_EStream_LE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_EStream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_EStream_LE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_PStream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_PStream_LE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Read_Stream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text.Endpoint_Write_Stream_BE
+                0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .text          0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/PipeStream_AVR8.o
+ .data          0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/PipeStream_AVR8.o
+ .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/AVR8/PipeStream_AVR8.o
  .text          0x00000000        0x0 LUFA/Drivers/USB/Core/ConfigDescriptor.o
  .data          0x00000000        0x0 LUFA/Drivers/USB/Core/ConfigDescriptor.o
  .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/ConfigDescriptor.o
@@ -81,49 +210,9 @@ Discarded input sections
  .text          0x00000000        0x0 LUFA/Drivers/USB/Core/Events.o
  .data          0x00000000        0x0 LUFA/Drivers/USB/Core/Events.o
  .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/Events.o
- .text          0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .data          0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_Control_Stream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Read_Control_Stream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_Control_PStream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Read_Control_EStream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Read_Control_EStream_LE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_Control_EStream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_Control_EStream_LE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Null_Stream
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Discard_Stream
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Read_EStream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Read_EStream_LE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_EStream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_EStream_LE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_PStream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_PStream_LE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Read_Stream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
- .text.Endpoint_Write_Stream_BE
-                0x00000000        0x0 LUFA/Drivers/USB/Core/EndpointStream.o
  .text          0x00000000        0x0 LUFA/Drivers/USB/Core/HostStandardReq.o
  .data          0x00000000        0x0 LUFA/Drivers/USB/Core/HostStandardReq.o
  .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/HostStandardReq.o
- .text          0x00000000        0x0 LUFA/Drivers/USB/Core/PipeStream.o
- .data          0x00000000        0x0 LUFA/Drivers/USB/Core/PipeStream.o
- .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/PipeStream.o
  .text          0x00000000        0x0 LUFA/Drivers/USB/Core/USBTask.o
  .data          0x00000000        0x0 LUFA/Drivers/USB/Core/USBTask.o
  .bss           0x00000000        0x0 LUFA/Drivers/USB/Core/USBTask.o
@@ -138,6 +227,121 @@ Discarded input sections
                 0x00000000        0x0 LUFA/Drivers/USB/Class/Common/HIDParser.o
  .text.USB_ProcessHIDReport
                 0x00000000        0x0 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .data          0x00000000        0x0 ArduinoWrapper.o
+ .bss           0x00000000        0x0 ../keyglove/Adxl345.o
+ .data          0x00000000        0x0 ../keyglove/ITG3200.o
+ .bss           0x00000000        0x0 ../keyglove/ITG3200.o
+ .text          0x00000000        0x0 ../keyglove/iwrap.o
+ .data          0x00000000        0x0 ../keyglove/iwrap.o
+ .bss           0x00000000        0x0 ../keyglove/iwrap.o
+ .text          0x00000000        0x0 ../keyglove/logitech.o
+ .data          0x00000000        0x0 ../keyglove/logitech.o
+ .bss           0x00000000        0x0 ../keyglove/logitech.o
+ .text          0x00000000        0x0 ../keyglove/ps2dev.o
+ .data          0x00000000        0x0 ../keyglove/ps2dev.o
+ .bss           0x00000000        0x0 ../keyglove/ps2dev.o
+ .text          0x00000000        0x0 ../keyglove/ps2keyboard.o
+ .data          0x00000000        0x0 ../keyglove/ps2keyboard.o
+ .bss           0x00000000        0x0 ../keyglove/ps2keyboard.o
+ .progmem.gcc_sw_table
+                0x00000000        0x0 ../keyglove/ps2keyboard.o
+ .text          0x00000000        0x0 ../keyglove/ps2mouse.o
+ .data          0x00000000        0x0 ../keyglove/ps2mouse.o
+ .bss           0x00000000        0x0 ../keyglove/ps2mouse.o
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_inf.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_inf.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_inf.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_nan.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_nan.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_nan.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_powser.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_powser.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_powser.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_round.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_round.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_round.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(inverse.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(inverse.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(inverse.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(square.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(square.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(square.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_mpack.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_mpack.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_mpack.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_norm2.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_norm2.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_norm2.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(modf.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(modf.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(modf.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+ .text.libgcc   0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
  .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
  .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
  .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
@@ -149,9 +353,16 @@ Discarded input sections
  .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
  .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
  .text.libgcc   0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
- .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
- .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
- .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
+ .text.libgcc   0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+ .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_tablejump.o)
+ .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_tablejump.o)
+ .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_tablejump.o)
  .text          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(eerd_byte_at90usb1287.o)
  .data          0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(eerd_byte_at90usb1287.o)
  .bss           0x00000000        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(eerd_byte_at90usb1287.o)
@@ -178,7 +389,12 @@ Linker script and memory map
 
 Address of section .data set to 0x800100
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-LOAD Keyglove.o
+LOAD wiring/wiring.o
+LOAD wiring/wiring_analog.o
+LOAD wiring/wiring_digital.o
+LOAD wiring/wiring_pulse.o
+LOAD wiring/wiring_shift.o
+LOAD wiring/pins_arduino.o
 LOAD Descriptors.o
 LOAD LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
 LOAD LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
@@ -186,14 +402,23 @@ LOAD LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
 LOAD LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
 LOAD LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
 LOAD LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+LOAD LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+LOAD LUFA/Drivers/USB/Core/AVR8/PipeStream_AVR8.o
 LOAD LUFA/Drivers/USB/Core/ConfigDescriptor.o
 LOAD LUFA/Drivers/USB/Core/DeviceStandardReq.o
 LOAD LUFA/Drivers/USB/Core/Events.o
-LOAD LUFA/Drivers/USB/Core/EndpointStream.o
 LOAD LUFA/Drivers/USB/Core/HostStandardReq.o
-LOAD LUFA/Drivers/USB/Core/PipeStream.o
 LOAD LUFA/Drivers/USB/Core/USBTask.o
 LOAD LUFA/Drivers/USB/Class/Common/HIDParser.o
+LOAD Keyglove.o
+LOAD ArduinoWrapper.o
+LOAD ../keyglove/Adxl345.o
+LOAD ../keyglove/ITG3200.o
+LOAD ../keyglove/iwrap.o
+LOAD ../keyglove/logitech.o
+LOAD ../keyglove/ps2dev.o
+LOAD ../keyglove/ps2keyboard.o
+LOAD ../keyglove/ps2mouse.o
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a
@@ -289,200 +514,533 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x137e
+.text           0x00000000     0x7e94
  *(.vectors)
  .vectors       0x00000000       0x98 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
                 0x00000000                __vectors
                 0x00000000                __vector_default
  *(.vectors)
  *(.progmem.gcc*)
+ .progmem.gcc_fplib
+                0x00000098       0x2d c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+ .progmem.gcc_fplib
+                0x000000c5       0x28 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+ .progmem.gcc_fplib
+                0x000000ed       0x5a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
  *(.progmem*)
- .progmem.data  0x00000098      0x1d1 Descriptors.o
-                0x000001c5                ManufacturerString
-                0x0000023b                ProductStringHID
-                0x00000098                HIDReport
-                0x000001c1                LanguageString
-                0x0000020f                ProductStringSerial
-                0x00000149                DeviceDescriptor
-                0x000001e1                ProductString
-                0x0000015b                ConfigurationDescriptor
-                0x0000026a                . = ALIGN (0x2)
- *fill*         0x00000269        0x1 00
-                0x0000026a                __trampolines_start = .
+ .progmem.data  0x00000147      0x1d1 Descriptors.o
+                0x00000274                ManufacturerString
+                0x000002ea                ProductStringHID
+                0x00000147                HIDReport
+                0x00000270                LanguageString
+                0x000002be                ProductStringSerial
+                0x000001f8                DeviceDescriptor
+                0x00000290                ProductString
+                0x0000020a                ConfigurationDescriptor
+                0x00000318                . = ALIGN (0x2)
+                0x00000318                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x0000026a        0x0 linker stubs
+ .trampolines   0x00000318        0x0 linker stubs
  *(.trampolines*)
-                0x0000026a                __trampolines_end = .
+                0x00000318                __trampolines_end = .
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x0000026a                __ctors_start = .
+                0x00000318                __ctors_start = .
  *(.ctors)
-                0x0000026a                __ctors_end = .
-                0x0000026a                __dtors_start = .
+ .ctors         0x00000318        0x2 Keyglove.o
+                0x0000031a                __ctors_end = .
+                0x0000031a                __dtors_start = .
  *(.dtors)
-                0x0000026a                __dtors_end = .
+                0x0000031a                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x0000026a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-                0x0000026a                __init
+ .init0         0x0000031a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+                0x0000031a                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x0000026a        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+ .init2         0x0000031a        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x00000276       0x1a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-                0x00000276                __do_copy_data
- .init4         0x00000290       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
-                0x00000290                __do_clear_bss
+ .init4         0x00000326       0x1a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+                0x00000326                __do_copy_data
+ .init4         0x00000340       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                0x00000340                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
  *(.init6)
+ .init6         0x00000350       0x16 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
+                0x00000350                __do_global_ctors
  *(.init6)
  *(.init7)
  *(.init7)
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x000002a0        0x6 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+ .init9         0x00000366        0x8 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
  *(.init9)
  *(.text)
- .text          0x000002a6        0x2 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-                0x000002a6                __vector_22
-                0x000002a6                __vector_28
-                0x000002a6                __vector_1
-                0x000002a6                __vector_32
-                0x000002a6                __vector_34
-                0x000002a6                __vector_24
-                0x000002a6                __vector_12
-                0x000002a6                __bad_interrupt
-                0x000002a6                __vector_6
-                0x000002a6                __vector_31
-                0x000002a6                __vector_35
-                0x000002a6                __vector_3
-                0x000002a6                __vector_23
-                0x000002a6                __vector_30
-                0x000002a6                __vector_25
-                0x000002a6                __vector_11
-                0x000002a6                __vector_13
-                0x000002a6                __vector_17
-                0x000002a6                __vector_19
-                0x000002a6                __vector_7
-                0x000002a6                __vector_27
-                0x000002a6                __vector_5
-                0x000002a6                __vector_33
-                0x000002a6                __vector_37
-                0x000002a6                __vector_4
-                0x000002a6                __vector_9
-                0x000002a6                __vector_2
-                0x000002a6                __vector_21
-                0x000002a6                __vector_15
-                0x000002a6                __vector_36
-                0x000002a6                __vector_29
-                0x000002a6                __vector_8
-                0x000002a6                __vector_26
-                0x000002a6                __vector_14
-                0x000002a6                __vector_16
-                0x000002a6                __vector_18
-                0x000002a6                __vector_20
-                0x000002a8                . = ALIGN (0x2)
+ .text          0x0000036e        0x2 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+                0x0000036e                __vector_22
+                0x0000036e                __vector_28
+                0x0000036e                __vector_1
+                0x0000036e                __vector_32
+                0x0000036e                __vector_34
+                0x0000036e                __vector_24
+                0x0000036e                __vector_12
+                0x0000036e                __bad_interrupt
+                0x0000036e                __vector_6
+                0x0000036e                __vector_31
+                0x0000036e                __vector_35
+                0x0000036e                __vector_3
+                0x0000036e                __vector_30
+                0x0000036e                __vector_25
+                0x0000036e                __vector_11
+                0x0000036e                __vector_13
+                0x0000036e                __vector_17
+                0x0000036e                __vector_19
+                0x0000036e                __vector_7
+                0x0000036e                __vector_27
+                0x0000036e                __vector_5
+                0x0000036e                __vector_33
+                0x0000036e                __vector_37
+                0x0000036e                __vector_4
+                0x0000036e                __vector_9
+                0x0000036e                __vector_2
+                0x0000036e                __vector_21
+                0x0000036e                __vector_15
+                0x0000036e                __vector_36
+                0x0000036e                __vector_29
+                0x0000036e                __vector_8
+                0x0000036e                __vector_26
+                0x0000036e                __vector_14
+                0x0000036e                __vector_16
+                0x0000036e                __vector_18
+                0x0000036e                __vector_20
+ .text          0x00000370     0x4b28 Keyglove.o
+                0x000012dc                keypress(int)
+                0x0000065e                EVENT_USB_Device_ConfigurationChanged
+                0x00002eb0                loop
+                0x00000748                tricolor(unsigned char, unsigned char, unsigned char)
+                0x000003b6                ProcessHIDReport
+                0x000010c2                modifierpress(int)
+                0x0000131a                mouseup(int)
+                0x000003a2                EVENT_USB_Device_Connect
+                0x00000c54                popmode()
+                0x00000d98                setmode(int)
+                0x00000ad2                modifierup(int)
+                0x00001100                togglemodifier(int)
+                0x00000458                CDC_Task
+                0x00004e5a                mouseclick(int)
+                0x000003ac                EVENT_USB_Device_Disconnect
+                0x00000370                modeCheck(int, int)
+                0x00000978                redled(int, int)
+                0x00000a18                beep(int, int, int)
+                0x0000077c                mouseoff(int)
+                0x00002bc4                mousedown(int)
+                0x00004dcc                main
+                0x00000d08                togglemode(int)
+                0x00000714                SetupHardware
+                0x00000832                blueled(int, int)
+                0x00002c16                check_sensors_touch(unsigned long, unsigned long, int)
+                0x00001378                check_sensors_release(unsigned long, unsigned long, int)
+                0x00000e02                setup
+                0x0000057e                EVENT_USB_Device_ControlRequest
+                0x00000b30                modifierdown(int)
+                0x00000b7e                activate_mode(int)
+                0x000007e8                vibrate(int, int)
+                0x000008d6                greenled(int, int)
+                0x00000b24                deactivate_mode(int)
+                0x000007b0                mouseon(int)
+                0x0000113e                keyup(int)
+                0x000003e2                HID_Task
+                0x0000120c                keydown(int)
+                0x000003b8                Keyboard_ProcessLEDReport(unsigned char)
+                0x00000cbc                pushmode(int)
+ .text          0x00004e98      0x5f2 ArduinoWrapper.o
+                0x00005404                noTone(unsigned char)
+                0x00004f1e                WireI2C::receive()
+                0x00004eca                HardwareSerial::print(unsigned long)
+                0x00004f1c                WireI2C::send(unsigned char)
+                0x00005402                tone(unsigned char, unsigned int, unsigned int)
+                0x00004eec                USBKeyboard::set_modifier(unsigned char)
+                0x00005406                USBKeyboard::send_now()
+                0x00004ef2                USBKeyboard::set_key1(unsigned char)
+                0x00004f28                digitalRead
+                0x00004f24                WireI2C::available()
+                0x00004ee2                HardwareSerial::println(char const*, int)
+                0x00004eae                USBVirtualSerial::println(char const*)
+                0x00004eda                HardwareSerial::println(unsigned char)
+                0x00004eb2                USBVirtualSerial::println(int)
+                0x00004fde                digitalWrite
+                0x00004ec2                HardwareSerial::begin(unsigned long)
+                0x00005486                USBMouse::move(unsigned char, unsigned char)
+                0x000051f0                pinMode
+                0x00004f1a                WireI2C::endTransmission()
+                0x00004ea0                USBVirtualSerial::print(unsigned long)
+                0x00004ec4                HardwareSerial::print(char const*)
+                0x00005466                USBMouse::move(unsigned char, unsigned char, unsigned char)
+                0x00004ed0                HardwareSerial::print(unsigned char, int)
+                0x00004ef8                USBKeyboard::set_key2(unsigned char)
+                0x00004ed4                HardwareSerial::print(unsigned long, int)
+                0x00004ec8                HardwareSerial::print(int)
+                0x00004f04                USBKeyboard::set_key4(unsigned char)
+                0x00005440                USBMouse::set_buttons(unsigned char, unsigned char, unsigned char)
+                0x00004eaa                USBVirtualSerial::print(unsigned long, int)
+                0x00004e9a                USBVirtualSerial::print(char const*)
+                0x00004edc                HardwareSerial::println(int)
+                0x00004ea6                USBVirtualSerial::print(unsigned char, int)
+                0x00004ed8                HardwareSerial::println(char const*)
+                0x00004ecc                HardwareSerial::print(long double)
+                0x00004e98                USBVirtualSerial::begin(unsigned long)
+                0x00004ebc                USBVirtualSerial::println(int, int)
+                0x00004eac                USBVirtualSerial::print(long double, int)
+                0x00004ea4                USBVirtualSerial::print(char const*, int)
+                0x00004ede                HardwareSerial::println(unsigned long)
+                0x00004ee0                HardwareSerial::println(long double)
+                0x00004ee4                HardwareSerial::println(unsigned char, int)
+                0x00004ed2                HardwareSerial::print(int, int)
+                0x00004eb8                USBVirtualSerial::println(char const*, int)
+                0x00004e9c                USBVirtualSerial::print(unsigned char)
+                0x00004f0a                USBKeyboard::set_key5(unsigned char)
+                0x00004eb6                USBVirtualSerial::println(long double)
+                0x00004ee6                HardwareSerial::println(int, int)
+                0x00004ece                HardwareSerial::print(char const*, int)
+                0x00005420                USBMouse::scroll(unsigned char)
+                0x00004ea8                USBVirtualSerial::print(int, int)
+                0x00004ebe                USBVirtualSerial::println(unsigned long, int)
+                0x00004ec0                USBVirtualSerial::println(long double, int)
+                0x00004ee8                HardwareSerial::println(unsigned long, int)
+                0x00004f16                WireI2C::begin()
+                0x00004ed6                HardwareSerial::print(long double, int)
+                0x00004f18                WireI2C::beginTransmission(int)
+                0x00004f10                USBKeyboard::set_key6(unsigned char)
+                0x00004ec6                HardwareSerial::print(unsigned char)
+                0x00004efe                USBKeyboard::set_key3(unsigned char)
+                0x00004eba                USBVirtualSerial::println(unsigned char, int)
+                0x00004eea                HardwareSerial::println(long double, int)
+                0x00004ea2                USBVirtualSerial::print(long double)
+                0x00004e9e                USBVirtualSerial::print(int)
+                0x00004eb0                USBVirtualSerial::println(unsigned char)
+                0x00004eb4                USBVirtualSerial::println(unsigned long)
+                0x00004f22                WireI2C::requestFrom(int, int)
+ .text          0x0000548a      0x9d8 ../keyglove/Adxl345.o
+                0x00005c3a                Accelerometer::getAxisOffset(int*, int*, int*)
+                0x0000577c                Accelerometer::getInterruptMapping(unsigned char)
+                0x0000579c                Accelerometer::isTapSourceOnZ()
+                0x0000580c                Accelerometer::isInactivityXEnabled()
+                0x0000596e                Accelerometer::setJustifyBit(bool)
+                0x0000578c                Accelerometer::isLowPower()
+                0x0000593c                Accelerometer::setInactivityY(bool)
+                0x000057bc                Accelerometer::isActivitySourceOnY()
+                0x00005824                Accelerometer::isActivityXEnabled()
+                0x00005774                Accelerometer::isInterruptEnabled(unsigned char)
+                0x0000581c                Accelerometer::isActivityYEnabled()
+                0x00005946                Accelerometer::setInactivityX(bool)
+                0x00005950                Accelerometer::setActivityZ(bool)
+                0x0000557a                Accelerometer::setTapDuration(int)
+                0x000054f8                Accelerometer::setTimeInactivity(int)
+                0x00005814                Accelerometer::isActivityZEnabled()
+                0x00005db0                Accelerometer::readAccel(int*, int*, int*)
+                0x00005660                Accelerometer::printAllRegister()
+                0x00005516                Accelerometer::setInactivityThreshold(int)
+                0x000057dc                Accelerometer::isTapDetectionOnX()
+                0x000057ec                Accelerometer::isInactivityAc()
+                0x00005784                Accelerometer::getInterruptSource(unsigned char)
+                0x00005534                Accelerometer::setActivityThreshold(int)
+                0x00005aba                Accelerometer::getFreeFallDuration()
+                0x000057e4                Accelerometer::getSuppressBit()
+                0x0000584c                Accelerometer::getSelfTestBit()
+                0x000057fc                Accelerometer::isInactivityZEnabled()
+                0x00005900                Accelerometer::setTapDetectionOnY(bool)
+                0x00005d72                Accelerometer::getRangeSetting(unsigned char*)
+                0x00005a54                Accelerometer::getRate()
+                0x00005928                Accelerometer::setActivityAc(bool)
+                0x0000591e                Accelerometer::setInactivityAc(bool)
+                0x000057a4                Accelerometer::isTapSourceOnY()
+                0x000058e0                Accelerometer::setInterruptMapping(unsigned char, bool)
+                0x000058f6                Accelerometer::setTapDetectionOnZ(bool)
+                0x00005996                Accelerometer::setSelfTestBit(bool)
+                0x000054da                Accelerometer::setFreeFallThreshold(int)
+                0x000058d4                Accelerometer::setInterrupt(unsigned char, bool)
+                0x00005730                Accelerometer::getRegisterBit(unsigned char, int)
+                0x000054bc                Accelerometer::setFreeFallDuration(int)
+                0x00005b7a                Accelerometer::getActivityThreshold()
+                0x00005844                Accelerometer::getSpiBit()
+                0x000057c4                Accelerometer::isActivitySourceOnX()
+                0x00005978                Accelerometer::setFullResBit(bool)
+                0x000055f2                Accelerometer::readFrom(int, unsigned char, int, unsigned char*)
+                0x00005cce                Accelerometer::getTapThreshold()
+                0x00005804                Accelerometer::isInactivityYEnabled()
+                0x00005598                Accelerometer::setAxisOffset(int, int, int)
+                0x000057b4                Accelerometer::isActivitySourceOnZ()
+                0x000057ac                Accelerometer::isTapSourceOnX()
+                0x00005aea                Accelerometer::getFreeFallThreshold()
+                0x00005570                Accelerometer::setDoubleTapLatency(int)
+                0x000058ec                Accelerometer::setLowPower(bool)
+                0x0000548c                Accelerometer::Accelerometer()
+                0x00005932                Accelerometer::setInactivityZ(bool)
+                0x000057d4                Accelerometer::isTapDetectionOnY()
+                0x00005982                Accelerometer::setInterruptLevelBit(bool)
+                0x0000583c                Accelerometer::getInterruptLevelBit()
+                0x00005b4a                Accelerometer::getInactivityThreshold()
+                0x000055d4                Accelerometer::setTapThreshold(int)
+                0x000059ce                Accelerometer::setRate(float)
+                0x000057cc                Accelerometer::isTapDetectionOnZ()
+                0x0000548e                Accelerometer::writeTo(int, unsigned char, unsigned char)
+                0x00005cfe                Accelerometer::setRangeSetting(int)
+                0x00005854                Accelerometer::setRegisterBit(unsigned char, int, bool)
+                0x00005834                Accelerometer::getFullResBit()
+                0x00005bda                Accelerometer::getDoubleTapLatency()
+                0x00005b1a                Accelerometer::getTimeInactivity()
+                0x000057f4                Accelerometer::isActivityAc()
+                0x00005e2c                Accelerometer::powerOn()
+                0x00005914                Accelerometer::setSuppressBit(bool)
+                0x00005c0a                Accelerometer::getTapDuration()
+                0x0000598c                Accelerometer::setSpiBit(bool)
+                0x00005794                Accelerometer::isAsleep()
+                0x00005964                Accelerometer::setActivityX(bool)
+                0x0000590a                Accelerometer::setTapDetectionOnX(bool)
+                0x000059a0                Accelerometer::getInterruptSource()
+                0x0000548a                Accelerometer::Accelerometer()
+                0x0000595a                Accelerometer::setActivityY(bool)
+                0x00005552                Accelerometer::setDoubleTapWindow(int)
+                0x0000582c                Accelerometer::getJustifyBit()
+                0x00005baa                Accelerometer::getDoubleTapWindow()
+ .text          0x00005e62      0xb68 ../keyglove/ITG3200.o
+                0x00006020                ITG3200::setSampleRateDiv(unsigned char)
+                0x000069a4                ITG3200::init(unsigned int)
+                0x000064b6                ITG3200::isRawDataReady()
+                0x0000667a                ITG3200::isINTOpenDrain()
+                0x00005f54                ITG3200::ITG3200()
+                0x000065ec                ITG3200::setLatchMode(bool)
+                0x0000679c                ITG3200::getSampleRateDiv()
+                0x00006356                ITG3200::readGyro(float*, float*, float*)
+                0x00006252                ITG3200::isLowPower()
+                0x00005e68                ITG3200::setScaleFactor(float, float, float, bool)
+                0x00006524                ITG3200::isRawDataReadyOn()
+                0x00005e62                ITG3200::getDevAddr()
+                0x000062e8                ITG3200::readGyroRawCal(int*, int*, int*)
+                0x0000621c                ITG3200::setPowerMode(bool)
+                0x000067c8                ITG3200::zeroCalibrate(unsigned int, unsigned int)
+                0x000066f4                ITG3200::setFilterBW(unsigned char)
+                0x00005f94                ITG3200::ITG3200()
+                0x00006542                ITG3200::setITGReady(bool)
+                0x000061b0                ITG3200::isZgyroStandby()
+                0x00006118                ITG3200::setZgyroStandby(bool)
+                0x00006276                ITG3200::readGyroRaw(int*, int*, int*)
+                0x0000669e                ITG3200::setINTLogiclvl(bool)
+                0x00006596                ITG3200::setLatchClearMode(bool)
+                0x00006620                ITG3200::isLatchUntilCleared()
+                0x0000614a                ITG3200::setYgyroStandby(bool)
+                0x0000617c                ITG3200::setXgyroStandby(bool)
+                0x000064d4                ITG3200::isITGReady()
+                0x00006644                ITG3200::setINTDriveType(bool)
+                0x00006042                ITG3200::readmem(unsigned char, unsigned char, unsigned char*)
+                0x0000642a                ITG3200::readGyro(float*)
+                0x00006438                ITG3200::readGyroRawCal(int*)
+                0x00006454                ITG3200::readTemp(float*)
+                0x000067b8                ITG3200::reset()
+                0x000064f8                ITG3200::setRawDataReady(bool)
+                0x000061f8                ITG3200::isXgyroStandby()
+                0x00006446                ITG3200::readGyroRaw(int*)
+                0x00006720                ITG3200::getFilterBW()
+                0x00006952                ITG3200::init(unsigned int, unsigned char, unsigned char, unsigned char, unsigned char, bool, bool)
+                0x000060fa                ITG3200::getClockSource()
+                0x000061d4                ITG3200::isYgyroStandby()
+                0x000065c8                ITG3200::isAnyRegClrMode()
+                0x0000673e                ITG3200::setFSRange(unsigned char)
+                0x00005fe4                ITG3200::writemem(unsigned char, unsigned char)
+                0x000066d0                ITG3200::isINTActiveOnLow()
+                0x00005fd4                ITG3200::setOffsets(int, int, int)
+                0x00006572                ITG3200::isITGReadyOn()
+                0x000060ce                ITG3200::setClockSource(unsigned char)
+                0x00006770                ITG3200::getFSRange()
+                0x00006026                ITG3200::setDevAddr(unsigned int)
+                0x000069ca                . = ALIGN (0x2)
  *(.text.*)
- .text.RingBuffer_Insert
-                0x000002a8       0x3e Keyglove.o
- .text.EVENT_USB_Device_Connect
-                0x000002e6        0xa Keyglove.o
-                0x000002e6                EVENT_USB_Device_Connect
- .text.EVENT_USB_Device_Disconnect
-                0x000002f0        0xa Keyglove.o
-                0x000002f0                EVENT_USB_Device_Disconnect
- .text.HID_Task
-                0x000002fa       0x72 Keyglove.o
-                0x000002fa                HID_Task
- .text.CDC_Task
-                0x0000036c      0x112 Keyglove.o
-                0x0000036c                CDC_Task
- .text.EVENT_USB_Device_ControlRequest
-                0x0000047e       0xd8 Keyglove.o
-                0x0000047e                EVENT_USB_Device_ControlRequest
- .text.EVENT_USB_Device_ConfigurationChanged
-                0x00000556       0xac Keyglove.o
-                0x00000556                EVENT_USB_Device_ConfigurationChanged
- .text.SetupHardware
-                0x00000602       0x32 Keyglove.o
-                0x00000602                SetupHardware
- .text.main     0x00000634      0x24e Keyglove.o
-                0x00000634                main
+ .text.__vector_23
+                0x000069ca       0xa8 wiring/wiring.o
+                0x000069ca                __vector_23
+ .text.millis   0x00006a72       0x1c wiring/wiring.o
+                0x00006a72                millis
+ .text.micros   0x00006a8e       0x4c wiring/wiring.o
+                0x00006a8e                micros
+ .text.delay    0x00006ada       0x48 wiring/wiring.o
+                0x00006ada                delay
+ .text.init     0x00006b22       0x8c wiring/wiring.o
+                0x00006b22                init
  .text.CALLBACK_USB_GetDescriptor
-                0x00000882       0xa4 Descriptors.o
-                0x00000882                CALLBACK_USB_GetDescriptor
+                0x00006bae       0xa4 Descriptors.o
+                0x00006bae                CALLBACK_USB_GetDescriptor
  .text.Endpoint_ConfigureEndpoint_Prv
-                0x00000926       0x6a LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                0x00000926                Endpoint_ConfigureEndpoint_Prv
+                0x00006c52       0x6a LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x00006c52                Endpoint_ConfigureEndpoint_Prv
  .text.Endpoint_ClearStatusStage
-                0x00000990       0x42 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                0x00000990                Endpoint_ClearStatusStage
+                0x00006cbc       0x42 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x00006cbc                Endpoint_ClearStatusStage
  .text.Endpoint_WaitUntilReady
-                0x000009d2       0x64 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                0x000009d2                Endpoint_WaitUntilReady
+                0x00006cfe       0x64 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x00006cfe                Endpoint_WaitUntilReady
  .text.USB_ResetInterface
-                0x00000a36       0x92 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
-                0x00000a36                USB_ResetInterface
+                0x00006d62       0x92 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+                0x00006d62                USB_ResetInterface
  .text.USB_Init
-                0x00000ac8       0x12 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
-                0x00000ac8                USB_Init
+                0x00006df4       0x12 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+                0x00006df4                USB_Init
  .text.USB_INT_DisableAllInterrupts
-                0x00000ada       0x10 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
-                0x00000ada                USB_INT_DisableAllInterrupts
+                0x00006e06       0x10 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x00006e06                USB_INT_DisableAllInterrupts
  .text.USB_INT_ClearAllInterrupts
-                0x00000aea        0xa LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
-                0x00000aea                USB_INT_ClearAllInterrupts
+                0x00006e16        0xa LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x00006e16                USB_INT_ClearAllInterrupts
  .text.__vector_10
-                0x00000af4      0x194 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
-                0x00000af4                __vector_10
- .text.USB_Device_ProcessControlRequest
-                0x00000c88      0x308 LUFA/Drivers/USB/Core/DeviceStandardReq.o
-                0x00000c88                USB_Device_ProcessControlRequest
- .text.USB_Event_Stub
-                0x00000f90        0x2 LUFA/Drivers/USB/Core/Events.o
-                0x00000f90                EVENT_USB_Device_WakeUp
-                0x00000f90                USB_Event_Stub
-                0x00000f90                EVENT_USB_Device_Suspend
-                0x00000f90                EVENT_USB_Device_StartOfFrame
-                0x00000f90                EVENT_USB_Device_Reset
+                0x00006e20      0x194 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x00006e20                __vector_10
  .text.Endpoint_Write_Control_Stream_LE
-                0x00000f92       0xbc LUFA/Drivers/USB/Core/EndpointStream.o
-                0x00000f92                Endpoint_Write_Control_Stream_LE
+                0x00006fb4       0xbc LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+                0x00006fb4                Endpoint_Write_Control_Stream_LE
  .text.Endpoint_Read_Control_Stream_LE
-                0x0000104e       0x82 LUFA/Drivers/USB/Core/EndpointStream.o
-                0x0000104e                Endpoint_Read_Control_Stream_LE
+                0x00007070       0x82 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+                0x00007070                Endpoint_Read_Control_Stream_LE
  .text.Endpoint_Write_Control_PStream_LE
-                0x000010d0       0xc2 LUFA/Drivers/USB/Core/EndpointStream.o
-                0x000010d0                Endpoint_Write_Control_PStream_LE
+                0x000070f2       0xc2 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+                0x000070f2                Endpoint_Write_Control_PStream_LE
  .text.Endpoint_Read_Stream_LE
-                0x00001192       0xa4 LUFA/Drivers/USB/Core/EndpointStream.o
-                0x00001192                Endpoint_Read_Stream_LE
+                0x000071b4       0xa4 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+                0x000071b4                Endpoint_Read_Stream_LE
  .text.Endpoint_Write_Stream_LE
-                0x00001236       0xa4 LUFA/Drivers/USB/Core/EndpointStream.o
-                0x00001236                Endpoint_Write_Stream_LE
+                0x00007258       0xa4 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+                0x00007258                Endpoint_Write_Stream_LE
+ .text.USB_Device_ProcessControlRequest
+                0x000072fc      0x308 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                0x000072fc                USB_Device_ProcessControlRequest
+ .text.USB_Event_Stub
+                0x00007604        0x2 LUFA/Drivers/USB/Core/Events.o
+                0x00007604                EVENT_USB_Device_WakeUp
+                0x00007604                USB_Event_Stub
+                0x00007604                EVENT_USB_Device_Suspend
+                0x00007604                EVENT_USB_Device_StartOfFrame
+                0x00007604                EVENT_USB_Device_Reset
  .text.USB_USBTask
-                0x000012da       0x26 LUFA/Drivers/USB/Core/USBTask.o
-                0x000012da                USB_USBTask
- .text.libgcc   0x00001300       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
-                0x00001300                __divmodsi4
- .text.libgcc   0x00001336       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
-                0x00001336                __udivmodsi4
-                0x0000137a                . = ALIGN (0x2)
+                0x00007606       0x26 LUFA/Drivers/USB/Core/USBTask.o
+                0x00007606                USB_USBTask
+ .text.avr-libc.fplib
+                0x0000762c        0xa c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
+                0x0000762c                __subsf3
+                0x0000762e                __addsf3
+ .text.avr-libc.fplib
+                0x00007636       0xc0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+                0x00007650                __addsf3x
+ .text.avr-libc.fplib
+                0x000076f6       0x50 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+                0x000076f6                atan
+ .text.avr-libc.fplib
+                0x00007746        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o)
+                0x00007746                __divsf3
+ .text.avr-libc.fplib
+                0x0000774a       0xcc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                0x00007760                __divsf3x
+                0x00007764                __divsf3_pse
+ .text.avr-libc.fplib
+                0x00007816        0xa c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+                0x00007816                __fixsfsi
+ .text.avr-libc.fplib
+                0x00007820       0x58 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+                0x00007820                __fixunssfsi
+ .text.avr-libc.fplib
+                0x00007878       0x7a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+                0x0000787c                __floatsisf
+                0x00007878                __floatunsisf
+ .text.avr-libc.fplib
+                0x000078f2        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_inf.o)
+                0x000078f2                __fp_inf
+ .text.avr-libc.fplib
+                0x000078fe        0x6 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_nan.o)
+                0x000078fe                __fp_nan
+ .text.avr-libc.fplib
+                0x00007904       0x4a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_powser.o)
+                0x00007904                __fp_powser
+ .text.avr-libc.fplib
+                0x0000794e        0xe c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
+                0x0000794e                __fp_pscA
+ .text.avr-libc.fplib
+                0x0000795c        0xe c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
+                0x0000795c                __fp_pscB
+ .text.avr-libc.fplib
+                0x0000796a       0x22 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_round.o)
+                0x0000796a                __fp_round
+ .text.avr-libc.fplib
+                0x0000798c       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+                0x0000798c                __fp_split3
+                0x0000799c                __fp_splitA
+ .text.avr-libc.fplib
+                0x000079d0        0xe c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+                0x000079d0                __fp_zero
+                0x000079d2                __fp_szero
+ .text.avr-libc.fplib
+                0x000079de        0xe c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(inverse.o)
+                0x000079de                inverse
+ .text.avr-libc.fplib
+                0x000079ec        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3.o)
+                0x000079ec                __mulsf3
+ .text.avr-libc.fplib
+                0x000079f0       0xc2 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                0x00007a08                __mulsf3_pse
+                0x00007a04                __mulsf3x
+ .text.avr-libc.fplib
+                0x00007ab2       0x98 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+                0x00007ab2                pow
+ .text.avr-libc.fplib
+                0x00007b4a       0x84 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+                0x00007b52                sqrt
+ .text.avr-libc.fplib
+                0x00007bce        0x6 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(square.o)
+                0x00007bce                square
+ .text.avr-libc.fplib
+                0x00007bd4       0x62 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                0x00007bde                exp
+ .text.avr-libc.fplib
+                0x00007c36       0x1c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_mpack.o)
+                0x00007c3a                __fp_mpack_finite
+                0x00007c36                __fp_mpack
+ .text.avr-libc.fplib
+                0x00007c52        0xe c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_norm2.o)
+                0x00007c52                __fp_norm2
+ .text.avr-libc.fplib
+                0x00007c60       0x6c c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+                0x00007c64                ldexp
+ .text.avr-libc.fplib
+                0x00007ccc       0x8a c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                0x00007cd6                log
+ .text.avr-libc.fplib
+                0x00007d56       0x66 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(modf.o)
+                0x00007d56                modff
+                0x00007d56                modf
+ .text.libgcc   0x00007dbc       0x26 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o)
+                0x00007dbc                __divmodhi4
+                0x00007dbc                _div
+ .text.libgcc   0x00007de2       0x44 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
+                0x00007de2                __udivmodsi4
+ .text.libgcc   0x00007e26       0x36 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
+                0x00007e26                __divmodsi4
+ .text.libgcc   0x00007e5c       0x28 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+                0x00007e5c                __udivmodhi4
+ .text.libgcc   0x00007e84        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_tablejump.o)
+                0x00007e88                __tablejump__
+                0x00007e84                __tablejump2__
+                0x00007e90                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000137a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
-                0x0000137a                exit
-                0x0000137a                _exit
+ .fini9         0x00007e90        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+                0x00007e90                exit
+                0x00007e90                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -501,49 +1059,203 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000137a        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+ .fini0         0x00007e90        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000137e                _etext = .
+                0x00007e94                _etext = .
 
-.data           0x00800100        0xc load address 0x0000137e
+.data           0x00800100      0x36c load address 0x00007e94
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
- .data          0x00800100        0xc Keyglove.o
-                0x00800100                outputCounter
-                0x00800104                HostSerialLocalEcho
+ .data          0x00800100      0x35b Keyglove.o
+                0x00800402                opt_touch_detect_threshold
+                0x0080042e                opt_mouse_invert_x
+                0x0080042d                opt_gyro_rot90
+                0x00800438                opt_mouse_scale_mode2
+                0x00800428                opt_gyro_kalman_constant
+                0x00800422                opt_motion_sampling_div
+                0x00800424                opt_accel_kalman_constant
+                0x008002ce                pins
+                0x0080042f                opt_mouse_invert_y
+                0x00800416                opt_gyro_calibrate
+                0x0080040a                opt_accel_calibrate
+                0x00800312                combinations
+                0x0080042c                opt_accel_smooth_average
+                0x00800430                opt_mouse_scale_mode1
+                0x00800440                opt_mouse_scale_mode3
+                0x00800448                opt_mouse_scale_mode4
+                0x00800404                opt_accel_offset
+ .data          0x0080045b       0x10 ../keyglove/Adxl345.o
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x0080010c                . = ALIGN (0x2)
-                0x0080010c                _edata = .
-                0x0080010c                PROVIDE (__data_end, .)
+                0x0080046c                . = ALIGN (0x2)
+ *fill*         0x0080046b        0x1 00
+                0x0080046c                _edata = .
+                0x0080046c                PROVIDE (__data_end, .)
 
-.bss            0x0080010c      0x139
-                0x0080010c                PROVIDE (__bss_start, .)
+.bss            0x0080046c      0x387
+                0x0080046c                PROVIDE (__bss_start, .)
  *(.bss)
- .bss           0x0080010c      0x12c Keyglove.o
-                0x0080010c                tickCounter
+ .bss           0x0080046c        0x9 wiring/wiring.o
+                0x0080046c                timer0_overflow_count
+                0x00800470                timer0_millis
+ .bss           0x00800475      0x35f Keyglove.o
+                0x008004e7                zv
+                0x00800672                tricolorBlinkGreen
+                0x008004e5                yv
+                0x0080048c                t
+                0x00800487                ide_workaround
+                0x0080057b                yMax
+                0x0080058b                ax00
+                0x008004ae                opt_enable_calibration
+                0x00800610                gyHist
+                0x0080057d                zMax
+                0x00800674                tricolorBlinkBlue
+                0x008004d1                x
+                0x008004ed                cy
+                0x008004a4                sy0
+                0x0080059a                accelCalibrated
+                0x00800494                moveMouse
+                0x008004f7                yBase
+                0x008004c9                accelTick
+                0x008004e9                cx
+                0x008005e2                gxBase
+                0x008006b7                sensors2
+                0x0080069b                modeStackPos
+                0x00800475                HIDReportInData
+                0x008004f5                xBase
+                0x008004d9                y0
+                0x008005ce                gz0
+                0x0080066c                gset
+                0x00800660                gxMin
+                0x008004e1                z00
+                0x0080069d                touchTime
+                0x008004e3                xv
+                0x0080066a                gzMax
+                0x008005be                gxRaw
+                0x008004dd                x00
+                0x008005e8                gxHist
+                0x008004b6                opt_gyro_smooth_average
+                0x008006a2                removing
+                0x008004bb                accel
+                0x00800677                modifiersDown
+                0x008004cd                yRaw
+                0x008005c6                gy
+                0x00800579                xMax
+                0x00800573                xMin
+                0x00800583                az
+                0x00800498                my
+                0x008004cb                xRaw
+                0x00800638                gzHist
+                0x00800523                yHist
+                0x008004b7                opt_accel_rot90
+                0x008006a7                detect2
+                0x00800593                ayBase
+                0x00800575                yMin
+                0x008004d7                x0
+                0x008004ac                sdy
+                0x0080047e                HIDReportOutData
+                0x008005b8                gyroDiff
+                0x00800676                blink_led
+                0x008004d5                z
+                0x008005c2                gzRaw
+                0x0080057f                ax
+                0x008004aa                mdz
+                0x008006bb                mode
+                0x0080059b                gyro
+                0x00800664                gzMin
+                0x00800490                i
+                0x008004f9                zBase
+                0x00800577                zMin
+                0x00800598                calAccel
+                0x008004df                y00
+                0x008005e4                gyBase
+                0x008006a1                adding
+                0x008004b0                opt_gyro_offset
+                0x008005da                cgy
+                0x00800668                gyMax
+                0x00800685                mouseDown
+                0x00800666                gxMax
+                0x008005d2                gy00
+                0x00800488                counter
+                0x0080058f                az00
+                0x00800679                keysDown
+                0x008006ab                verify1
+                0x0080049e                mx0
+                0x00800595                azBase
+                0x008004a8                mdy
+                0x0080066f                gyroCalibrated
+                0x008004ba                opt_scroll_mode
+                0x008005de                cgz
+                0x008004a0                my0
+                0x008004b9                opt_mouse_mode
+                0x008004db                z0
+                0x008005d4                gz00
+                0x008004d3                y
+                0x0080054b                zHist
+                0x008004a6                mdx
+                0x00800670                tricolorBlinkRed
+                0x0080066d                calGyro
+                0x008005c8                gz
+                0x008006a3                detect1
+                0x008005b4                gyroMicros
+                0x0080048a                ticks
+                0x008004f1                cz
+                0x0080049a                mz
+                0x008004fb                xHist
+                0x008004a2                mz0
+                0x00800589                az0
+                0x008005bc                gyroTick
+                0x0080049c                sy
+                0x008005d6                cgx
+                0x008006b3                sensors1
+                0x008005d0                gx00
+                0x0080058d                ay00
+                0x00800591                axBase
+                0x00800687                modeStack
+                0x008005c0                gyRaw
+                0x008005c4                gx
+                0x00800495                scrollMouse
+                0x00800581                ay
+                0x00800585                ax0
+                0x008006af                verify2
+                0x00800496                mx
+                0x008004c5                accelDiff
+                0x00800587                ay0
+                0x008005e6                gzBase
+                0x00800597                aset
+                0x008004b8                opt_mouse_invert_z
+                0x008004cf                zRaw
+                0x008004c1                accelMicros
+                0x00800662                gyMin
+                0x008005ca                gx0
+                0x008005cc                gy0
+ .bss           0x008007d4       0x12 ArduinoWrapper.o
+                0x008007dd                Keyboard
+                0x008007d4                Serial
+                0x008007e5                Wire
+                0x008007d5                Mouse
  *(.bss*)
  *(COMMON)
- COMMON         0x00800238        0x3 LUFA/Drivers/USB/Core/DeviceStandardReq.o
-                0x00800238                USB_CurrentlySelfPowered
-                0x00800239                USB_RemoteWakeupEnabled
-                0x0080023a                USB_ConfigurationNumber
- COMMON         0x0080023b        0xa LUFA/Drivers/USB/Core/USBTask.o
-                0x0080023b                USB_IsInitialized
-                0x0080023c                USB_DeviceState
-                0x0080023d                USB_ControlRequest
-                0x00800245                PROVIDE (__bss_end, .)
-                0x0000137e                __data_load_start = LOADADDR (.data)
-                0x0000138a                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x008007e6        0x3 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                0x008007e6                USB_CurrentlySelfPowered
+                0x008007e7                USB_RemoteWakeupEnabled
+                0x008007e8                USB_ConfigurationNumber
+ COMMON         0x008007e9        0xa LUFA/Drivers/USB/Core/USBTask.o
+                0x008007e9                USB_IsInitialized
+                0x008007ea                USB_DeviceState
+                0x008007eb                USB_ControlRequest
+                0x008007f3                PROVIDE (__bss_end, .)
+                0x00007e94                __data_load_start = LOADADDR (.data)
+                0x00008200                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800245        0x0
-                0x00800245                PROVIDE (__noinit_start, .)
+.noinit         0x008007f3        0x0
+                0x008007f3                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800245                PROVIDE (__noinit_end, .)
-                0x00800245                _end = .
-                0x00800245                PROVIDE (__heap_start, .)
+                0x008007f3                PROVIDE (__noinit_end, .)
+                0x008007f3                _end = .
+                0x008007f3                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -594,194 +1306,427 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x2e0
+.debug_aranges  0x00000000      0x450
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x70 Keyglove.o
+                0x00000000       0x48 wiring/wiring.o
  .debug_aranges
-                0x00000070       0x20 Descriptors.o
+                0x00000048       0x30 wiring/wiring_analog.o
  .debug_aranges
-                0x00000090       0x20 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+                0x00000078       0x20 wiring/wiring_pulse.o
  .debug_aranges
-                0x000000b0       0x38 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x00000098       0x28 wiring/wiring_shift.o
  .debug_aranges
-                0x000000e8       0x30 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+                0x000000c0       0x20 Descriptors.o
  .debug_aranges
-                0x00000118       0x30 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x000000e0       0x20 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
  .debug_aranges
-                0x00000148       0x38 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+                0x00000100       0x38 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
  .debug_aranges
-                0x00000180       0x20 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                0x00000138       0x30 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
  .debug_aranges
-                0x000001a0       0x20 LUFA/Drivers/USB/Core/Events.o
+                0x00000168       0x30 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
  .debug_aranges
-                0x000001c0       0xc8 LUFA/Drivers/USB/Core/EndpointStream.o
+                0x00000198       0xc8 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
  .debug_aranges
-                0x00000288       0x20 LUFA/Drivers/USB/Core/USBTask.o
+                0x00000260       0x38 LUFA/Drivers/USB/Core/ConfigDescriptor.o
  .debug_aranges
-                0x000002a8       0x38 LUFA/Drivers/USB/Class/Common/HIDParser.o
+                0x00000298       0x20 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_aranges
+                0x000002b8       0x20 LUFA/Drivers/USB/Core/Events.o
+ .debug_aranges
+                0x000002d8       0x20 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_aranges
+                0x000002f8       0x38 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_aranges
+                0x00000330       0x20 Keyglove.o
+ .debug_aranges
+                0x00000350       0x20 ArduinoWrapper.o
+ .debug_aranges
+                0x00000370       0x20 ../keyglove/Adxl345.o
+ .debug_aranges
+                0x00000390       0x20 ../keyglove/ITG3200.o
+ .debug_aranges
+                0x000003b0       0x20 ../keyglove/iwrap.o
+ .debug_aranges
+                0x000003d0       0x20 ../keyglove/logitech.o
+ .debug_aranges
+                0x000003f0       0x20 ../keyglove/ps2dev.o
+ .debug_aranges
+                0x00000410       0x20 ../keyglove/ps2keyboard.o
+ .debug_aranges
+                0x00000430       0x20 ../keyglove/ps2mouse.o
 
 .debug_pubnames
-                0x00000000      0x8af
+                0x00000000     0x32c3
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000      0x152 Keyglove.o
+                0x00000000       0x8d wiring/wiring.o
  .debug_pubnames
-                0x00000152       0xec Descriptors.o
+                0x0000008d       0x5a wiring/wiring_analog.o
  .debug_pubnames
-                0x0000023e       0x32 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+                0x000000e7       0x1e wiring/wiring_pulse.o
  .debug_pubnames
-                0x00000270       0x8b LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                0x00000105       0x2b wiring/wiring_shift.o
  .debug_pubnames
-                0x000002fb       0x46 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+                0x00000130       0xad wiring/pins_arduino.o
  .debug_pubnames
-                0x00000341       0x62 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+                0x000001dd       0xd9 Descriptors.o
  .debug_pubnames
-                0x000003a3       0x9b LUFA/Drivers/USB/Core/ConfigDescriptor.o
+                0x000002b6       0x32 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
  .debug_pubnames
-                0x0000043e       0x8c LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                0x000002e8       0x8b LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
  .debug_pubnames
-                0x000004ca       0x25 LUFA/Drivers/USB/Core/Events.o
+                0x00000373       0x46 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
  .debug_pubnames
-                0x000004ef      0x2df LUFA/Drivers/USB/Core/EndpointStream.o
+                0x000003b9       0x62 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
  .debug_pubnames
-                0x000007ce       0x63 LUFA/Drivers/USB/Core/USBTask.o
+                0x0000041b      0x2df LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
  .debug_pubnames
-                0x00000831       0x7e LUFA/Drivers/USB/Class/Common/HIDParser.o
+                0x000006fa       0x9b LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_pubnames
+                0x00000795       0x8c LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_pubnames
+                0x00000821       0x25 LUFA/Drivers/USB/Core/Events.o
+ .debug_pubnames
+                0x00000846       0x63 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_pubnames
+                0x000008a9       0x7e LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_pubnames
+                0x00000927      0x9db Keyglove.o
+ .debug_pubnames
+                0x00001302      0x6e3 ArduinoWrapper.o
+ .debug_pubnames
+                0x000019e5      0xb5a ../keyglove/Adxl345.o
+ .debug_pubnames
+                0x0000253f      0x508 ../keyglove/ITG3200.o
+ .debug_pubnames
+                0x00002a47      0x132 ../keyglove/iwrap.o
+ .debug_pubnames
+                0x00002b79      0x1cf ../keyglove/logitech.o
+ .debug_pubnames
+                0x00002d48       0x7d ../keyglove/ps2dev.o
+ .debug_pubnames
+                0x00002dc5      0x3cb ../keyglove/ps2keyboard.o
+ .debug_pubnames
+                0x00003190      0x133 ../keyglove/ps2mouse.o
 
-.debug_info     0x00000000     0x5210
+.debug_info     0x00000000    0x10948
  *(.debug_info)
- .debug_info    0x00000000      0xd2f Keyglove.o
- .debug_info    0x00000d2f      0x8cb Descriptors.o
- .debug_info    0x000015fa       0xc4 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_info    0x000016be      0x44d LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_info    0x00001b0b        0x0 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
- .debug_info    0x00001b0b        0x0 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
- .debug_info    0x00001b0b      0x4bf LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_info    0x00001fca      0x56d LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_info    0x00002537      0x34e LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_info    0x00002885      0xa67 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_info    0x000032ec       0x79 LUFA/Drivers/USB/Core/Events.o
- .debug_info    0x00003365     0x157b LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_info    0x000048e0        0x0 LUFA/Drivers/USB/Core/HostStandardReq.o
- .debug_info    0x000048e0        0x0 LUFA/Drivers/USB/Core/PipeStream.o
- .debug_info    0x000048e0      0x23b LUFA/Drivers/USB/Core/USBTask.o
- .debug_info    0x00004b1b      0x6f5 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_info    0x00000000      0x1df wiring/wiring.o
+ .debug_info    0x000001df      0x1b0 wiring/wiring_analog.o
+ .debug_info    0x0000038f       0xa7 wiring/wiring_digital.o
+ .debug_info    0x00000436      0x26e wiring/wiring_pulse.o
+ .debug_info    0x000006a4      0x130 wiring/wiring_shift.o
+ .debug_info    0x000007d4      0x165 wiring/pins_arduino.o
+ .debug_info    0x00000939      0x89e Descriptors.o
+ .debug_info    0x000011d7       0xc4 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_info    0x0000129b      0x44d LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_info    0x000016e8        0x0 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
+ .debug_info    0x000016e8        0x0 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
+ .debug_info    0x000016e8      0x496 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_info    0x00001b7e      0x56d LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_info    0x000020eb     0x157b LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .debug_info    0x00003666        0x0 LUFA/Drivers/USB/Core/AVR8/PipeStream_AVR8.o
+ .debug_info    0x00003666      0x34e LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_info    0x000039b4      0xa8c LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_info    0x00004440       0x79 LUFA/Drivers/USB/Core/Events.o
+ .debug_info    0x000044b9        0x0 LUFA/Drivers/USB/Core/HostStandardReq.o
+ .debug_info    0x000044b9      0x23b LUFA/Drivers/USB/Core/USBTask.o
+ .debug_info    0x000046f4      0x6f5 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_info    0x00004de9     0x390b Keyglove.o
+ .debug_info    0x000086f4     0x1a19 ArduinoWrapper.o
+ .debug_info    0x0000a10d     0x1f05 ../keyglove/Adxl345.o
+ .debug_info    0x0000c012     0x12df ../keyglove/ITG3200.o
+ .debug_info    0x0000d2f1      0xb4e ../keyglove/iwrap.o
+ .debug_info    0x0000de3f      0xbef ../keyglove/logitech.o
+ .debug_info    0x0000ea2e      0x5d4 ../keyglove/ps2dev.o
+ .debug_info    0x0000f002     0x10cb ../keyglove/ps2keyboard.o
+ .debug_info    0x000100cd      0x87b ../keyglove/ps2mouse.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000     0x1347
+.debug_abbrev   0x00000000     0x29ba
  *(.debug_abbrev)
- .debug_abbrev  0x00000000      0x38f Keyglove.o
- .debug_abbrev  0x0000038f      0x18a Descriptors.o
- .debug_abbrev  0x00000519       0x79 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_abbrev  0x00000592      0x19a LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_abbrev  0x0000072c        0x1 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
- .debug_abbrev  0x0000072d        0x1 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
- .debug_abbrev  0x0000072e      0x18a LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_abbrev  0x000008b8      0x176 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_abbrev  0x00000a2e      0x15c LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_abbrev  0x00000b8a      0x283 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_abbrev  0x00000e0d       0x4a LUFA/Drivers/USB/Core/Events.o
- .debug_abbrev  0x00000e57      0x1aa LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_abbrev  0x00001001        0x1 LUFA/Drivers/USB/Core/HostStandardReq.o
- .debug_abbrev  0x00001002        0x1 LUFA/Drivers/USB/Core/PipeStream.o
- .debug_abbrev  0x00001003      0x15d LUFA/Drivers/USB/Core/USBTask.o
- .debug_abbrev  0x00001160      0x1e7 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_abbrev  0x00000000       0xe1 wiring/wiring.o
+ .debug_abbrev  0x000000e1      0x119 wiring/wiring_analog.o
+ .debug_abbrev  0x000001fa       0x65 wiring/wiring_digital.o
+ .debug_abbrev  0x0000025f       0xfa wiring/wiring_pulse.o
+ .debug_abbrev  0x00000359       0xa1 wiring/wiring_shift.o
+ .debug_abbrev  0x000003fa       0x88 wiring/pins_arduino.o
+ .debug_abbrev  0x00000482      0x17d Descriptors.o
+ .debug_abbrev  0x000005ff       0x79 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_abbrev  0x00000678      0x19a LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_abbrev  0x00000812        0x1 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
+ .debug_abbrev  0x00000813        0x1 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
+ .debug_abbrev  0x00000814      0x15a LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_abbrev  0x0000096e      0x176 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_abbrev  0x00000ae4      0x1aa LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .debug_abbrev  0x00000c8e        0x1 LUFA/Drivers/USB/Core/AVR8/PipeStream_AVR8.o
+ .debug_abbrev  0x00000c8f      0x15c LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_abbrev  0x00000deb      0x283 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_abbrev  0x0000106e       0x4a LUFA/Drivers/USB/Core/Events.o
+ .debug_abbrev  0x000010b8        0x1 LUFA/Drivers/USB/Core/HostStandardReq.o
+ .debug_abbrev  0x000010b9      0x15d LUFA/Drivers/USB/Core/USBTask.o
+ .debug_abbrev  0x00001216      0x1e7 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_abbrev  0x000013fd      0x507 Keyglove.o
+ .debug_abbrev  0x00001904      0x223 ArduinoWrapper.o
+ .debug_abbrev  0x00001b27      0x229 ../keyglove/Adxl345.o
+ .debug_abbrev  0x00001d50      0x216 ../keyglove/ITG3200.o
+ .debug_abbrev  0x00001f66      0x182 ../keyglove/iwrap.o
+ .debug_abbrev  0x000020e8      0x2a6 ../keyglove/logitech.o
+ .debug_abbrev  0x0000238e      0x1b0 ../keyglove/ps2dev.o
+ .debug_abbrev  0x0000253e      0x2c9 ../keyglove/ps2keyboard.o
+ .debug_abbrev  0x00002807      0x1b3 ../keyglove/ps2mouse.o
 
-.debug_line     0x00000000     0x41c0
+.debug_line     0x00000000     0xa59a
  *(.debug_line)
- .debug_line    0x00000000      0xa8e Keyglove.o
- .debug_line    0x00000a8e      0x1d5 Descriptors.o
- .debug_line    0x00000c63      0x11b LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_line    0x00000d7e      0x444 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_line    0x000011c2       0x24 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
- .debug_line    0x000011e6       0x24 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
- .debug_line    0x0000120a      0x346 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_line    0x00001550      0x4e1 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_line    0x00001a31      0x232 LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_line    0x00001c63      0x628 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_line    0x0000228b       0x7a LUFA/Drivers/USB/Core/Events.o
- .debug_line    0x00002305     0x174d LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_line    0x00003a52       0x24 LUFA/Drivers/USB/Core/HostStandardReq.o
- .debug_line    0x00003a76       0x24 LUFA/Drivers/USB/Core/PipeStream.o
- .debug_line    0x00003a9a      0x199 LUFA/Drivers/USB/Core/USBTask.o
- .debug_line    0x00003c33      0x58d LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_line    0x00000000      0x2ae wiring/wiring.o
+ .debug_line    0x000002ae      0x1f1 wiring/wiring_analog.o
+ .debug_line    0x0000049f       0x90 wiring/wiring_digital.o
+ .debug_line    0x0000052f      0x12c wiring/wiring_pulse.o
+ .debug_line    0x0000065b      0x144 wiring/wiring_shift.o
+ .debug_line    0x0000079f       0xa2 wiring/pins_arduino.o
+ .debug_line    0x00000841      0x1d5 Descriptors.o
+ .debug_line    0x00000a16      0x11b LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_line    0x00000b31      0x444 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_line    0x00000f75       0x24 LUFA/Drivers/USB/Core/AVR8/Host_AVR8.o
+ .debug_line    0x00000f99       0x24 LUFA/Drivers/USB/Core/AVR8/Pipe_AVR8.o
+ .debug_line    0x00000fbd      0x33e LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_line    0x000012fb      0x4e1 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_line    0x000017dc     0x1775 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .debug_line    0x00002f51       0x24 LUFA/Drivers/USB/Core/AVR8/PipeStream_AVR8.o
+ .debug_line    0x00002f75      0x232 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_line    0x000031a7      0x632 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_line    0x000037d9       0x7a LUFA/Drivers/USB/Core/Events.o
+ .debug_line    0x00003853       0x24 LUFA/Drivers/USB/Core/HostStandardReq.o
+ .debug_line    0x00003877      0x199 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_line    0x00003a10      0x58d LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_line    0x00003f9d     0x327c Keyglove.o
+ .debug_line    0x00007219      0x89f ArduinoWrapper.o
+ .debug_line    0x00007ab8      0xa9b ../keyglove/Adxl345.o
+ .debug_line    0x00008553      0x795 ../keyglove/ITG3200.o
+ .debug_line    0x00008ce8      0x3c2 ../keyglove/iwrap.o
+ .debug_line    0x000090aa      0x723 ../keyglove/logitech.o
+ .debug_line    0x000097cd      0x37a ../keyglove/ps2dev.o
+ .debug_line    0x00009b47      0x5a2 ../keyglove/ps2keyboard.o
+ .debug_line    0x0000a0e9      0x4b1 ../keyglove/ps2mouse.o
 
-.debug_frame    0x00000000      0x440
+.debug_frame    0x00000000     0x1900
  *(.debug_frame)
- .debug_frame   0x00000000       0xc0 Keyglove.o
- .debug_frame   0x000000c0       0x20 Descriptors.o
- .debug_frame   0x000000e0       0x20 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_frame   0x00000100       0x50 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_frame   0x00000150       0x40 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_frame   0x00000190       0x40 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_frame   0x000001d0       0x50 LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_frame   0x00000220       0x20 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_frame   0x00000240       0x20 LUFA/Drivers/USB/Core/Events.o
- .debug_frame   0x00000260      0x170 LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_frame   0x000003d0       0x20 LUFA/Drivers/USB/Core/USBTask.o
- .debug_frame   0x000003f0       0x50 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_frame   0x00000000       0x70 wiring/wiring.o
+ .debug_frame   0x00000070       0x40 wiring/wiring_analog.o
+ .debug_frame   0x000000b0       0x20 wiring/wiring_pulse.o
+ .debug_frame   0x000000d0       0x30 wiring/wiring_shift.o
+ .debug_frame   0x00000100       0x20 Descriptors.o
+ .debug_frame   0x00000120       0x20 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_frame   0x00000140       0x50 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_frame   0x00000190       0x40 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_frame   0x000001d0       0x40 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_frame   0x00000210      0x170 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .debug_frame   0x00000380       0x50 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_frame   0x000003d0       0x20 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_frame   0x000003f0       0x20 LUFA/Drivers/USB/Core/Events.o
+ .debug_frame   0x00000410       0x20 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_frame   0x00000430       0x50 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_frame   0x00000480      0x290 Keyglove.o
+ .debug_frame   0x00000710      0x430 ArduinoWrapper.o
+ .debug_frame   0x00000b40      0x530 ../keyglove/Adxl345.o
+ .debug_frame   0x00001070      0x320 ../keyglove/ITG3200.o
+ .debug_frame   0x00001390      0x100 ../keyglove/iwrap.o
+ .debug_frame   0x00001490      0x150 ../keyglove/logitech.o
+ .debug_frame   0x000015e0       0x70 ../keyglove/ps2dev.o
+ .debug_frame   0x00001650      0x1e0 ../keyglove/ps2keyboard.o
+ .debug_frame   0x00001830       0xd0 ../keyglove/ps2mouse.o
 
-.debug_str      0x00000000     0x233f
+.debug_str      0x00000000     0x5b01
  *(.debug_str)
- .debug_str     0x00000000      0x74b Keyglove.o
-                                0x7c8 (size before relaxing)
- .debug_str     0x0000074b      0x6af Descriptors.o
-                                0x847 (size before relaxing)
- .debug_str     0x00000dfa       0x71 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_str     0x00000000       0xf3 wiring/wiring.o
+                                0x139 (size before relaxing)
+ .debug_str     0x000000f3       0x89 wiring/wiring_analog.o
+                                0x141 (size before relaxing)
+ .debug_str     0x0000017c       0x18 wiring/wiring_digital.o
+                                 0xcc (size before relaxing)
+ .debug_str     0x00000194       0x94 wiring/wiring_pulse.o
+                                0x168 (size before relaxing)
+ .debug_str     0x00000228       0x47 wiring/wiring_shift.o
+                                 0xf1 (size before relaxing)
+ .debug_str     0x0000026f       0x3a wiring/pins_arduino.o
+                                0x156 (size before relaxing)
+ .debug_str     0x000002a9      0x6c1 Descriptors.o
+                                0x7e7 (size before relaxing)
+ .debug_str     0x0000096a       0x71 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
                                 0x114 (size before relaxing)
- .debug_str     0x00000e6b      0x273 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_str     0x000009db      0x3ca LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
                                 0x4a3 (size before relaxing)
- .debug_str     0x000010de      0x232 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
-                                0x418 (size before relaxing)
- .debug_str     0x00001310       0xe3 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_str     0x00000da5      0x277 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+                                0x413 (size before relaxing)
+ .debug_str     0x0000101c       0xe3 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
                                 0x393 (size before relaxing)
- .debug_str     0x000013f3      0x220 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_str     0x000010ff      0x4f7 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+                                0x742 (size before relaxing)
+ .debug_str     0x000015f6      0x216 LUFA/Drivers/USB/Core/ConfigDescriptor.o
                                 0x2e1 (size before relaxing)
- .debug_str     0x00001613      0x3a6 LUFA/Drivers/USB/Core/DeviceStandardReq.o
-                                0x7fe (size before relaxing)
- .debug_str     0x000019b9       0x2e LUFA/Drivers/USB/Core/Events.o
+ .debug_str     0x0000180c      0x3f0 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                                0x803 (size before relaxing)
+ .debug_str     0x00001bfc       0x2e LUFA/Drivers/USB/Core/Events.o
                                  0xcb (size before relaxing)
- .debug_str     0x000019e7      0x474 LUFA/Drivers/USB/Core/EndpointStream.o
-                                0x738 (size before relaxing)
- .debug_str     0x00001e5b       0x64 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_str     0x00001c2a       0x64 LUFA/Drivers/USB/Core/USBTask.o
                                 0x26b (size before relaxing)
- .debug_str     0x00001ebf      0x480 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_str     0x00001c8e      0x489 LUFA/Drivers/USB/Class/Common/HIDParser.o
                                 0x5b9 (size before relaxing)
+ .debug_str     0x00002117     0x284b Keyglove.o
+                               0x2c5c (size before relaxing)
+ .debug_str     0x00004962      0x3ec ArduinoWrapper.o
+                                0x9e0 (size before relaxing)
+ .debug_str     0x00004d4e      0x112 ../keyglove/Adxl345.o
+                               0x16f8 (size before relaxing)
+ .debug_str     0x00004e60      0x11c ../keyglove/ITG3200.o
+                                0xab4 (size before relaxing)
+ .debug_str     0x00004f7c      0x183 ../keyglove/iwrap.o
+                                0x800 (size before relaxing)
+ .debug_str     0x000050ff      0x25b ../keyglove/logitech.o
+                                0x6b9 (size before relaxing)
+ .debug_str     0x0000535a       0x8a ../keyglove/ps2dev.o
+                                0x449 (size before relaxing)
+ .debug_str     0x000053e4      0x587 ../keyglove/ps2keyboard.o
+                                0xa43 (size before relaxing)
+ .debug_str     0x0000596b      0x196 ../keyglove/ps2mouse.o
+                                0x643 (size before relaxing)
 
-.debug_loc      0x00000000     0x25f4
+.debug_loc      0x00000000     0x73d5
  *(.debug_loc)
- .debug_loc     0x00000000      0x1c4 Keyglove.o
- .debug_loc     0x000001c4      0x212 Descriptors.o
- .debug_loc     0x000003d6       0x7f LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_loc     0x00000455       0x13 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_loc     0x00000468      0x2c7 LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_loc     0x0000072f      0x224 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_loc     0x00000953     0x182a LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_loc     0x0000217d      0x477 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_loc     0x00000000      0x113 wiring/wiring.o
+ .debug_loc     0x00000113      0x15b wiring/wiring_analog.o
+ .debug_loc     0x0000026e      0x258 wiring/wiring_pulse.o
+ .debug_loc     0x000004c6       0xf5 wiring/wiring_shift.o
+ .debug_loc     0x000005bb      0x212 Descriptors.o
+ .debug_loc     0x000007cd       0x7f LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_loc     0x0000084c     0x182a LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .debug_loc     0x00002076      0x2c7 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_loc     0x0000233d      0x242 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_loc     0x0000257f      0x477 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_loc     0x000029f6     0x111f Keyglove.o
+ .debug_loc     0x00003b15      0x673 ArduinoWrapper.o
+ .debug_loc     0x00004188     0x11a7 ../keyglove/Adxl345.o
+ .debug_loc     0x0000532f      0xdca ../keyglove/ITG3200.o
+ .debug_loc     0x000060f9      0x1fe ../keyglove/iwrap.o
+ .debug_loc     0x000062f7      0x512 ../keyglove/logitech.o
+ .debug_loc     0x00006809      0x210 ../keyglove/ps2dev.o
+ .debug_loc     0x00006a19      0x605 ../keyglove/ps2keyboard.o
+ .debug_loc     0x0000701e      0x3b7 ../keyglove/ps2mouse.o
 
 .debug_macinfo
  *(.debug_macinfo)
 OUTPUT(Keyglove.elf elf32-avr)
 LOAD linker stubs
 
-.debug_ranges   0x00000000      0x398
- .debug_ranges  0x00000000       0x98 Keyglove.o
- .debug_ranges  0x00000098       0x18 Descriptors.o
- .debug_ranges  0x000000b0       0x18 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
- .debug_ranges  0x000000c8       0x30 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
- .debug_ranges  0x000000f8       0x28 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
- .debug_ranges  0x00000120       0x28 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
- .debug_ranges  0x00000148       0x30 LUFA/Drivers/USB/Core/ConfigDescriptor.o
- .debug_ranges  0x00000178       0x78 LUFA/Drivers/USB/Core/DeviceStandardReq.o
- .debug_ranges  0x000001f0       0x18 LUFA/Drivers/USB/Core/Events.o
- .debug_ranges  0x00000208       0xc0 LUFA/Drivers/USB/Core/EndpointStream.o
- .debug_ranges  0x000002c8       0x30 LUFA/Drivers/USB/Core/USBTask.o
- .debug_ranges  0x000002f8       0xa0 LUFA/Drivers/USB/Class/Common/HIDParser.o
+.debug_ranges   0x00000000      0x430
+ .debug_ranges  0x00000000       0x40 wiring/wiring.o
+ .debug_ranges  0x00000040       0x28 wiring/wiring_analog.o
+ .debug_ranges  0x00000068       0x18 wiring/wiring_pulse.o
+ .debug_ranges  0x00000080       0x20 wiring/wiring_shift.o
+ .debug_ranges  0x000000a0       0x18 Descriptors.o
+ .debug_ranges  0x000000b8       0x18 LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
+ .debug_ranges  0x000000d0       0x30 LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+ .debug_ranges  0x00000100       0x28 LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+ .debug_ranges  0x00000128       0x28 LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
+ .debug_ranges  0x00000150       0xc0 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+ .debug_ranges  0x00000210       0x30 LUFA/Drivers/USB/Core/ConfigDescriptor.o
+ .debug_ranges  0x00000240       0x78 LUFA/Drivers/USB/Core/DeviceStandardReq.o
+ .debug_ranges  0x000002b8       0x18 LUFA/Drivers/USB/Core/Events.o
+ .debug_ranges  0x000002d0       0x30 LUFA/Drivers/USB/Core/USBTask.o
+ .debug_ranges  0x00000300       0xa0 LUFA/Drivers/USB/Class/Common/HIDParser.o
+ .debug_ranges  0x000003a0       0x90 Keyglove.o
 
 Cross Reference Table
 
 Symbol                                            File
+Accelerometer::Accelerometer()                    ../keyglove/Adxl345.o
+Accelerometer::Accelerometer()                    ../keyglove/Adxl345.o
+                                                  Keyglove.o
+Accelerometer::getActivityThreshold()             ../keyglove/Adxl345.o
+Accelerometer::getAxisOffset(int*, int*, int*)    ../keyglove/Adxl345.o
+Accelerometer::getDoubleTapLatency()              ../keyglove/Adxl345.o
+Accelerometer::getDoubleTapWindow()               ../keyglove/Adxl345.o
+Accelerometer::getFreeFallDuration()              ../keyglove/Adxl345.o
+Accelerometer::getFreeFallThreshold()             ../keyglove/Adxl345.o
+Accelerometer::getFullResBit()                    ../keyglove/Adxl345.o
+Accelerometer::getInactivityThreshold()           ../keyglove/Adxl345.o
+Accelerometer::getInterruptLevelBit()             ../keyglove/Adxl345.o
+Accelerometer::getInterruptMapping(unsigned char) ../keyglove/Adxl345.o
+Accelerometer::getInterruptSource()               ../keyglove/Adxl345.o
+Accelerometer::getInterruptSource(unsigned char)  ../keyglove/Adxl345.o
+Accelerometer::getJustifyBit()                    ../keyglove/Adxl345.o
+Accelerometer::getRangeSetting(unsigned char*)    ../keyglove/Adxl345.o
+Accelerometer::getRate()                          ../keyglove/Adxl345.o
+Accelerometer::getRegisterBit(unsigned char, int) ../keyglove/Adxl345.o
+Accelerometer::getSelfTestBit()                   ../keyglove/Adxl345.o
+Accelerometer::getSpiBit()                        ../keyglove/Adxl345.o
+Accelerometer::getSuppressBit()                   ../keyglove/Adxl345.o
+Accelerometer::getTapDuration()                   ../keyglove/Adxl345.o
+Accelerometer::getTapThreshold()                  ../keyglove/Adxl345.o
+Accelerometer::getTimeInactivity()                ../keyglove/Adxl345.o
+Accelerometer::isActivityAc()                     ../keyglove/Adxl345.o
+Accelerometer::isActivitySourceOnX()              ../keyglove/Adxl345.o
+Accelerometer::isActivitySourceOnY()              ../keyglove/Adxl345.o
+Accelerometer::isActivitySourceOnZ()              ../keyglove/Adxl345.o
+Accelerometer::isActivityXEnabled()               ../keyglove/Adxl345.o
+Accelerometer::isActivityYEnabled()               ../keyglove/Adxl345.o
+Accelerometer::isActivityZEnabled()               ../keyglove/Adxl345.o
+Accelerometer::isAsleep()                         ../keyglove/Adxl345.o
+Accelerometer::isInactivityAc()                   ../keyglove/Adxl345.o
+Accelerometer::isInactivityXEnabled()             ../keyglove/Adxl345.o
+Accelerometer::isInactivityYEnabled()             ../keyglove/Adxl345.o
+Accelerometer::isInactivityZEnabled()             ../keyglove/Adxl345.o
+Accelerometer::isInterruptEnabled(unsigned char)  ../keyglove/Adxl345.o
+Accelerometer::isLowPower()                       ../keyglove/Adxl345.o
+Accelerometer::isTapDetectionOnX()                ../keyglove/Adxl345.o
+Accelerometer::isTapDetectionOnY()                ../keyglove/Adxl345.o
+Accelerometer::isTapDetectionOnZ()                ../keyglove/Adxl345.o
+Accelerometer::isTapSourceOnX()                   ../keyglove/Adxl345.o
+Accelerometer::isTapSourceOnY()                   ../keyglove/Adxl345.o
+Accelerometer::isTapSourceOnZ()                   ../keyglove/Adxl345.o
+Accelerometer::powerOn()                          ../keyglove/Adxl345.o
+                                                  Keyglove.o
+Accelerometer::printAllRegister()                 ../keyglove/Adxl345.o
+Accelerometer::readAccel(int*, int*, int*)        ../keyglove/Adxl345.o
+                                                  Keyglove.o
+Accelerometer::readFrom(int, unsigned char, int, unsigned char*) ../keyglove/Adxl345.o
+Accelerometer::setActivityAc(bool)                ../keyglove/Adxl345.o
+Accelerometer::setActivityThreshold(int)          ../keyglove/Adxl345.o
+Accelerometer::setActivityX(bool)                 ../keyglove/Adxl345.o
+Accelerometer::setActivityY(bool)                 ../keyglove/Adxl345.o
+Accelerometer::setActivityZ(bool)                 ../keyglove/Adxl345.o
+Accelerometer::setAxisOffset(int, int, int)       ../keyglove/Adxl345.o
+Accelerometer::setDoubleTapLatency(int)           ../keyglove/Adxl345.o
+Accelerometer::setDoubleTapWindow(int)            ../keyglove/Adxl345.o
+Accelerometer::setFreeFallDuration(int)           ../keyglove/Adxl345.o
+Accelerometer::setFreeFallThreshold(int)          ../keyglove/Adxl345.o
+Accelerometer::setFullResBit(bool)                ../keyglove/Adxl345.o
+Accelerometer::setInactivityAc(bool)              ../keyglove/Adxl345.o
+Accelerometer::setInactivityThreshold(int)        ../keyglove/Adxl345.o
+Accelerometer::setInactivityX(bool)               ../keyglove/Adxl345.o
+Accelerometer::setInactivityY(bool)               ../keyglove/Adxl345.o
+Accelerometer::setInactivityZ(bool)               ../keyglove/Adxl345.o
+Accelerometer::setInterrupt(unsigned char, bool)  ../keyglove/Adxl345.o
+Accelerometer::setInterruptLevelBit(bool)         ../keyglove/Adxl345.o
+Accelerometer::setInterruptMapping(unsigned char, bool) ../keyglove/Adxl345.o
+Accelerometer::setJustifyBit(bool)                ../keyglove/Adxl345.o
+Accelerometer::setLowPower(bool)                  ../keyglove/Adxl345.o
+Accelerometer::setRangeSetting(int)               ../keyglove/Adxl345.o
+Accelerometer::setRate(float)                     ../keyglove/Adxl345.o
+                                                  Keyglove.o
+Accelerometer::setRegisterBit(unsigned char, int, bool) ../keyglove/Adxl345.o
+Accelerometer::setSelfTestBit(bool)               ../keyglove/Adxl345.o
+Accelerometer::setSpiBit(bool)                    ../keyglove/Adxl345.o
+Accelerometer::setSuppressBit(bool)               ../keyglove/Adxl345.o
+Accelerometer::setTapDetectionOnX(bool)           ../keyglove/Adxl345.o
+Accelerometer::setTapDetectionOnY(bool)           ../keyglove/Adxl345.o
+Accelerometer::setTapDetectionOnZ(bool)           ../keyglove/Adxl345.o
+Accelerometer::setTapDuration(int)                ../keyglove/Adxl345.o
+Accelerometer::setTapThreshold(int)               ../keyglove/Adxl345.o
+Accelerometer::setTimeInactivity(int)             ../keyglove/Adxl345.o
+Accelerometer::writeTo(int, unsigned char, unsigned char) ../keyglove/Adxl345.o
 CALLBACK_HIDParser_FilterHIDReportItem            LUFA/Drivers/USB/Class/Common/HIDParser.o
 CALLBACK_USB_GetDescriptor                        Descriptors.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
@@ -789,12 +1734,16 @@ CDC_Task                                          Keyglove.o
 ConfigurationDescriptor                           Descriptors.o
 DeviceDescriptor                                  Descriptors.o
 EVENT_USB_Device_ConfigurationChanged             Keyglove.o
+                                                  LUFA/Drivers/USB/Core/Events.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
 EVENT_USB_Device_Connect                          Keyglove.o
+                                                  LUFA/Drivers/USB/Core/Events.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
 EVENT_USB_Device_ControlRequest                   Keyglove.o
+                                                  LUFA/Drivers/USB/Core/Events.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
 EVENT_USB_Device_Disconnect                       Keyglove.o
+                                                  LUFA/Drivers/USB/Core/Events.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
 EVENT_USB_Device_Reset                            LUFA/Drivers/USB/Core/Events.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
@@ -806,73 +1755,275 @@ EVENT_USB_Device_WakeUp                           LUFA/Drivers/USB/Core/Events.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
 Endpoint_ClearEndpoints                           LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
 Endpoint_ClearStatusStage                         LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                                                  LUFA/Drivers/USB/Core/DeviceStandardReq.o
                                                   Keyglove.o
+                                                  LUFA/Drivers/USB/Core/DeviceStandardReq.o
 Endpoint_ConfigureEndpoint_Prv                    LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
+                                                  Keyglove.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
+Endpoint_Discard_Stream                           LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Null_Stream                              LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Read_Control_EStream_BE                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Read_Control_EStream_LE                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Read_Control_Stream_BE                   LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Read_Control_Stream_LE                   LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
                                                   Keyglove.o
-Endpoint_Discard_Stream                           LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Null_Stream                              LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Read_Control_EStream_BE                  LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Read_Control_EStream_LE                  LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Read_Control_Stream_BE                   LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Read_Control_Stream_LE                   LUFA/Drivers/USB/Core/EndpointStream.o
-                                                  Keyglove.o
-Endpoint_Read_EStream_BE                          LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Read_EStream_LE                          LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Read_Stream_BE                           LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Read_Stream_LE                           LUFA/Drivers/USB/Core/EndpointStream.o
+Endpoint_Read_EStream_BE                          LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Read_EStream_LE                          LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Read_Stream_BE                           LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Read_Stream_LE                           LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
                                                   Keyglove.o
 Endpoint_WaitUntilReady                           LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                                                  LUFA/Drivers/USB/Core/EndpointStream.o
                                                   Keyglove.o
-Endpoint_Write_Control_EStream_BE                 LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_Control_EStream_LE                 LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_Control_PStream_BE                 LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_Control_PStream_LE                 LUFA/Drivers/USB/Core/EndpointStream.o
+                                                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_Control_EStream_BE                 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_Control_EStream_LE                 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_Control_PStream_BE                 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_Control_PStream_LE                 LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
-Endpoint_Write_Control_Stream_BE                  LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_Control_Stream_LE                  LUFA/Drivers/USB/Core/EndpointStream.o
-                                                  LUFA/Drivers/USB/Core/DeviceStandardReq.o
+Endpoint_Write_Control_Stream_BE                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_Control_Stream_LE                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
                                                   Keyglove.o
-Endpoint_Write_EStream_BE                         LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_EStream_LE                         LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_PStream_BE                         LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_PStream_LE                         LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_Stream_BE                          LUFA/Drivers/USB/Core/EndpointStream.o
-Endpoint_Write_Stream_LE                          LUFA/Drivers/USB/Core/EndpointStream.o
+                                                  LUFA/Drivers/USB/Core/DeviceStandardReq.o
+Endpoint_Write_EStream_BE                         LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_EStream_LE                         LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_PStream_BE                         LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_PStream_LE                         LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_Stream_BE                          LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Endpoint_Write_Stream_LE                          LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
                                                   Keyglove.o
 HIDReport                                         Descriptors.o
-HID_Report_IDs                                    Descriptors.o
-                                                  Keyglove.o
+HIDReportInData                                   Keyglove.o
+                                                  ArduinoWrapper.o
+HIDReportOutData                                  Keyglove.o
 HID_Task                                          Keyglove.o
-HostSerialLocalEcho                               Keyglove.o
-Keyboard_ProcessLEDReport                         Keyglove.o
+                                                  ArduinoWrapper.o
+HardwareSerial::begin(unsigned long)              ArduinoWrapper.o
+HardwareSerial::print(char const*)                ArduinoWrapper.o
+HardwareSerial::print(char const*, int)           ArduinoWrapper.o
+HardwareSerial::print(int)                        ArduinoWrapper.o
+HardwareSerial::print(int, int)                   ArduinoWrapper.o
+                                                  ../keyglove/iwrap.o
+HardwareSerial::print(long double)                ArduinoWrapper.o
+HardwareSerial::print(long double, int)           ArduinoWrapper.o
+HardwareSerial::print(unsigned char)              ArduinoWrapper.o
+HardwareSerial::print(unsigned char, int)         ArduinoWrapper.o
+                                                  ../keyglove/iwrap.o
+HardwareSerial::print(unsigned long)              ArduinoWrapper.o
+HardwareSerial::print(unsigned long, int)         ArduinoWrapper.o
+HardwareSerial::println(char const*)              ArduinoWrapper.o
+HardwareSerial::println(char const*, int)         ArduinoWrapper.o
+HardwareSerial::println(int)                      ArduinoWrapper.o
+HardwareSerial::println(int, int)                 ArduinoWrapper.o
+HardwareSerial::println(long double)              ArduinoWrapper.o
+HardwareSerial::println(long double, int)         ArduinoWrapper.o
+HardwareSerial::println(unsigned char)            ArduinoWrapper.o
+HardwareSerial::println(unsigned char, int)       ArduinoWrapper.o
+HardwareSerial::println(unsigned long)            ArduinoWrapper.o
+HardwareSerial::println(unsigned long, int)       ArduinoWrapper.o
+ITG3200::ITG3200()                                ../keyglove/ITG3200.o
+                                                  Keyglove.o
+ITG3200::ITG3200()                                ../keyglove/ITG3200.o
+ITG3200::getClockSource()                         ../keyglove/ITG3200.o
+ITG3200::getDevAddr()                             ../keyglove/ITG3200.o
+ITG3200::getFSRange()                             ../keyglove/ITG3200.o
+ITG3200::getFilterBW()                            ../keyglove/ITG3200.o
+ITG3200::getSampleRateDiv()                       ../keyglove/ITG3200.o
+ITG3200::init(unsigned int)                       ../keyglove/ITG3200.o
+                                                  Keyglove.o
+ITG3200::init(unsigned int, unsigned char, unsigned char, unsigned char, unsigned char, bool, bool) ../keyglove/ITG3200.o
+ITG3200::isAnyRegClrMode()                        ../keyglove/ITG3200.o
+ITG3200::isINTActiveOnLow()                       ../keyglove/ITG3200.o
+ITG3200::isINTOpenDrain()                         ../keyglove/ITG3200.o
+ITG3200::isITGReady()                             ../keyglove/ITG3200.o
+ITG3200::isITGReadyOn()                           ../keyglove/ITG3200.o
+ITG3200::isLatchUntilCleared()                    ../keyglove/ITG3200.o
+ITG3200::isLowPower()                             ../keyglove/ITG3200.o
+ITG3200::isRawDataReady()                         ../keyglove/ITG3200.o
+ITG3200::isRawDataReadyOn()                       ../keyglove/ITG3200.o
+ITG3200::isXgyroStandby()                         ../keyglove/ITG3200.o
+ITG3200::isYgyroStandby()                         ../keyglove/ITG3200.o
+ITG3200::isZgyroStandby()                         ../keyglove/ITG3200.o
+ITG3200::readGyro(float*)                         ../keyglove/ITG3200.o
+ITG3200::readGyro(float*, float*, float*)         ../keyglove/ITG3200.o
+ITG3200::readGyroRaw(int*)                        ../keyglove/ITG3200.o
+ITG3200::readGyroRaw(int*, int*, int*)            ../keyglove/ITG3200.o
+                                                  Keyglove.o
+ITG3200::readGyroRawCal(int*)                     ../keyglove/ITG3200.o
+ITG3200::readGyroRawCal(int*, int*, int*)         ../keyglove/ITG3200.o
+ITG3200::readTemp(float*)                         ../keyglove/ITG3200.o
+ITG3200::readmem(unsigned char, unsigned char, unsigned char*) ../keyglove/ITG3200.o
+ITG3200::reset()                                  ../keyglove/ITG3200.o
+ITG3200::setClockSource(unsigned char)            ../keyglove/ITG3200.o
+ITG3200::setDevAddr(unsigned int)                 ../keyglove/ITG3200.o
+ITG3200::setFSRange(unsigned char)                ../keyglove/ITG3200.o
+ITG3200::setFilterBW(unsigned char)               ../keyglove/ITG3200.o
+ITG3200::setINTDriveType(bool)                    ../keyglove/ITG3200.o
+ITG3200::setINTLogiclvl(bool)                     ../keyglove/ITG3200.o
+ITG3200::setITGReady(bool)                        ../keyglove/ITG3200.o
+ITG3200::setLatchClearMode(bool)                  ../keyglove/ITG3200.o
+ITG3200::setLatchMode(bool)                       ../keyglove/ITG3200.o
+ITG3200::setOffsets(int, int, int)                ../keyglove/ITG3200.o
+ITG3200::setPowerMode(bool)                       ../keyglove/ITG3200.o
+ITG3200::setRawDataReady(bool)                    ../keyglove/ITG3200.o
+ITG3200::setSampleRateDiv(unsigned char)          ../keyglove/ITG3200.o
+ITG3200::setScaleFactor(float, float, float, bool) ../keyglove/ITG3200.o
+ITG3200::setXgyroStandby(bool)                    ../keyglove/ITG3200.o
+ITG3200::setYgyroStandby(bool)                    ../keyglove/ITG3200.o
+ITG3200::setZgyroStandby(bool)                    ../keyglove/ITG3200.o
+ITG3200::writemem(unsigned char, unsigned char)   ../keyglove/ITG3200.o
+ITG3200::zeroCalibrate(unsigned int, unsigned int) ../keyglove/ITG3200.o
+Keyboard                                          ArduinoWrapper.o
+                                                  Keyglove.o
+Keyboard_ProcessLEDReport(unsigned char)          Keyglove.o
 LanguageString                                    Descriptors.o
 ManufacturerString                                Descriptors.o
+Mouse                                             ArduinoWrapper.o
+                                                  Keyglove.o
+PS2dev::PS2dev(int, int)                          ../keyglove/ps2dev.o
+PS2dev::PS2dev(int, int)                          ../keyglove/ps2dev.o
+PS2dev::gohi(int)                                 ../keyglove/ps2dev.o
+PS2dev::golo(int)                                 ../keyglove/ps2dev.o
+PS2dev::read(unsigned char*)                      ../keyglove/ps2dev.o
+                                                  ../keyglove/ps2mouse.o
+                                                  ../keyglove/ps2keyboard.o
+PS2dev::write(unsigned char)                      ../keyglove/ps2dev.o
+                                                  ../keyglove/ps2mouse.o
+                                                  ../keyglove/ps2keyboard.o
+PS2keyboard::PS2keyboard(PS2dev*)                 ../keyglove/ps2keyboard.o
+PS2keyboard::PS2keyboard(PS2dev*)                 ../keyglove/ps2keyboard.o
+PS2keyboard::cmd_ack()                            ../keyglove/ps2keyboard.o
+PS2keyboard::cmd_echo()                           ../keyglove/ps2keyboard.o
+PS2keyboard::cmd_error()                          ../keyglove/ps2keyboard.o
+PS2keyboard::cmd_keypress(int, unsigned char)     ../keyglove/ps2keyboard.o
+PS2keyboard::cmd_resend()                         ../keyglove/ps2keyboard.o
+PS2keyboard::cmd_success()                        ../keyglove/ps2keyboard.o
+PS2keyboard::get_allkeys_mode()                   ../keyglove/ps2keyboard.o
+PS2keyboard::get_led_capslock()                   ../keyglove/ps2keyboard.o
+PS2keyboard::get_led_numlock()                    ../keyglove/ps2keyboard.o
+PS2keyboard::get_led_scrolllock()                 ../keyglove/ps2keyboard.o
+PS2keyboard::get_scancode_set()                   ../keyglove/ps2keyboard.o
+PS2keyboard::get_typematic_delay()                ../keyglove/ps2keyboard.o
+PS2keyboard::get_typematic_rate()                 ../keyglove/ps2keyboard.o
+PS2keyboard::initialize()                         ../keyglove/ps2keyboard.o
+PS2keyboard::keydown(int)                         ../keyglove/ps2keyboard.o
+PS2keyboard::keypress(int)                        ../keyglove/ps2keyboard.o
+PS2keyboard::keyup(int)                           ../keyglove/ps2keyboard.o
+PS2keyboard::process_command()                    ../keyglove/ps2keyboard.o
+PS2keyboard::run_bat()                            ../keyglove/ps2keyboard.o
+PS2keyboard::set_allkeys_mode(int)                ../keyglove/ps2keyboard.o
+PS2keyboard::set_defaults()                       ../keyglove/ps2keyboard.o
+PS2keyboard::set_led_capslock(unsigned char)      ../keyglove/ps2keyboard.o
+PS2keyboard::set_led_numlock(unsigned char)       ../keyglove/ps2keyboard.o
+PS2keyboard::set_led_scrolllock(unsigned char)    ../keyglove/ps2keyboard.o
+PS2keyboard::set_scancode_set(int)                ../keyglove/ps2keyboard.o
+PS2keyboard::set_typematic_delay(int)             ../keyglove/ps2keyboard.o
+PS2keyboard::set_typematic_rate(float)            ../keyglove/ps2keyboard.o
+PS2mouse::PS2mouse(PS2dev*)                       ../keyglove/ps2mouse.o
+PS2mouse::PS2mouse(PS2dev*)                       ../keyglove/ps2mouse.o
+PS2mouse::cmd_ack()                               ../keyglove/ps2mouse.o
+PS2mouse::cmd_error()                             ../keyglove/ps2mouse.o
+PS2mouse::cmd_move(int, int)                      ../keyglove/ps2mouse.o
+PS2mouse::cmd_resend()                            ../keyglove/ps2mouse.o
+PS2mouse::cmd_success()                           ../keyglove/ps2mouse.o
+PS2mouse::initialize()                            ../keyglove/ps2mouse.o
+PS2mouse::move(int, int)                          ../keyglove/ps2mouse.o
+PS2mouse::process_command()                       ../keyglove/ps2mouse.o
+PS2mouse::run_bat()                               ../keyglove/ps2mouse.o
+PS2mouse::set_defaults()                          ../keyglove/ps2mouse.o
 ProcessHIDReport                                  Keyglove.o
 ProductString                                     Descriptors.o
 ProductStringHID                                  Descriptors.o
 ProductStringSerial                               Descriptors.o
+Serial                                            ArduinoWrapper.o
+                                                  ../keyglove/ps2mouse.o
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ps2dev.o
+                                                  ../keyglove/logitech.o
+                                                  ../keyglove/iwrap.o
+                                                  ../keyglove/Adxl345.o
+                                                  Keyglove.o
 SetupHardware                                     Keyglove.o
+USBKeyboard::send_now()                           ArduinoWrapper.o
+                                                  Keyglove.o
+USBKeyboard::set_key1(unsigned char)              ArduinoWrapper.o
+                                                  Keyglove.o
+USBKeyboard::set_key2(unsigned char)              ArduinoWrapper.o
+                                                  Keyglove.o
+USBKeyboard::set_key3(unsigned char)              ArduinoWrapper.o
+                                                  Keyglove.o
+USBKeyboard::set_key4(unsigned char)              ArduinoWrapper.o
+                                                  Keyglove.o
+USBKeyboard::set_key5(unsigned char)              ArduinoWrapper.o
+                                                  Keyglove.o
+USBKeyboard::set_key6(unsigned char)              ArduinoWrapper.o
+                                                  Keyglove.o
+USBKeyboard::set_modifier(unsigned char)          ArduinoWrapper.o
+                                                  Keyglove.o
+USBMouse::move(unsigned char, unsigned char)      ArduinoWrapper.o
+                                                  Keyglove.o
+USBMouse::move(unsigned char, unsigned char, unsigned char) ArduinoWrapper.o
+                                                  Keyglove.o
+USBMouse::scroll(unsigned char)                   ArduinoWrapper.o
+                                                  Keyglove.o
+USBMouse::set_buttons(unsigned char, unsigned char, unsigned char) ArduinoWrapper.o
+                                                  Keyglove.o
+USBVirtualSerial::begin(unsigned long)            ArduinoWrapper.o
+                                                  Keyglove.o
+USBVirtualSerial::print(char const*)              ArduinoWrapper.o
+                                                  ../keyglove/ps2mouse.o
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ps2dev.o
+                                                  ../keyglove/Adxl345.o
+                                                  Keyglove.o
+USBVirtualSerial::print(char const*, int)         ArduinoWrapper.o
+USBVirtualSerial::print(int)                      ArduinoWrapper.o
+                                                  Keyglove.o
+USBVirtualSerial::print(int, int)                 ArduinoWrapper.o
+                                                  ../keyglove/iwrap.o
+                                                  ../keyglove/Adxl345.o
+USBVirtualSerial::print(long double)              ArduinoWrapper.o
+USBVirtualSerial::print(long double, int)         ArduinoWrapper.o
+USBVirtualSerial::print(unsigned char)            ArduinoWrapper.o
+USBVirtualSerial::print(unsigned char, int)       ArduinoWrapper.o
+                                                  ../keyglove/Adxl345.o
+USBVirtualSerial::print(unsigned long)            ArduinoWrapper.o
+                                                  Keyglove.o
+USBVirtualSerial::print(unsigned long, int)       ArduinoWrapper.o
+USBVirtualSerial::println(char const*)            ArduinoWrapper.o
+                                                  ../keyglove/ps2mouse.o
+                                                  ../keyglove/logitech.o
+                                                  Keyglove.o
+USBVirtualSerial::println(char const*, int)       ArduinoWrapper.o
+USBVirtualSerial::println(int)                    ArduinoWrapper.o
+                                                  Keyglove.o
+USBVirtualSerial::println(int, int)               ArduinoWrapper.o
+USBVirtualSerial::println(long double)            ArduinoWrapper.o
+USBVirtualSerial::println(long double, int)       ArduinoWrapper.o
+USBVirtualSerial::println(unsigned char)          ArduinoWrapper.o
+USBVirtualSerial::println(unsigned char, int)     ArduinoWrapper.o
+                                                  ../keyglove/ps2mouse.o
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ps2dev.o
+USBVirtualSerial::println(unsigned long)          ArduinoWrapper.o
+USBVirtualSerial::println(unsigned long, int)     ArduinoWrapper.o
 USB_ConfigurationNumber                           LUFA/Drivers/USB/Core/DeviceStandardReq.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
-USB_ControlRequest                                LUFA/Drivers/USB/Core/USBTask.o
-                                                  LUFA/Drivers/USB/Core/EndpointStream.o
+USB_ControlRequest                                Keyglove.o
+                                                  LUFA/Drivers/USB/Core/USBTask.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                                                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
                                                   LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                                                  Keyglove.o
 USB_CurrentlySelfPowered                          LUFA/Drivers/USB/Core/DeviceStandardReq.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
-USB_DeviceState                                   LUFA/Drivers/USB/Core/USBTask.o
-                                                  LUFA/Drivers/USB/Core/EndpointStream.o
+USB_DeviceState                                   Keyglove.o
+                                                  LUFA/Drivers/USB/Core/USBTask.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
+                                                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
                                                   LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
                                                   LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.o
-                                                  Keyglove.o
 USB_Device_ProcessControlRequest                  LUFA/Drivers/USB/Core/DeviceStandardReq.o
                                                   LUFA/Drivers/USB/Core/USBTask.o
 USB_Device_SendRemoteWakeup                       LUFA/Drivers/USB/Core/AVR8/Device_AVR8.o
@@ -898,33 +2049,187 @@ USB_RemoteWakeupEnabled                           LUFA/Drivers/USB/Core/DeviceSt
 USB_ResetInterface                                LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.o
 USB_SetHIDReportItemInfo                          LUFA/Drivers/USB/Class/Common/HIDParser.o
 USB_USBTask                                       LUFA/Drivers/USB/Core/USBTask.o
-                                                  LUFA/Drivers/USB/Core/EndpointStream.o
                                                   Keyglove.o
+                                                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
+Wire                                              ArduinoWrapper.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+WireI2C::available()                              ArduinoWrapper.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+WireI2C::begin()                                  ArduinoWrapper.o
+                                                  ../keyglove/Adxl345.o
+WireI2C::beginTransmission(int)                   ArduinoWrapper.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+WireI2C::endTransmission()                        ArduinoWrapper.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+WireI2C::receive()                                ArduinoWrapper.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+WireI2C::requestFrom(int, int)                    ArduinoWrapper.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+WireI2C::send(unsigned char)                      ArduinoWrapper.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+__addsf3                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  ../keyglove/ITG3200.o
+                                                  Keyglove.o
+__addsf3x                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_powser.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
 __bad_interrupt                                   c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __bss_end                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
 __bss_start                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+__ctors_end                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
+__ctors_start                                     c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
 __data_end                                        c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __data_load_start                                 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __data_start                                      c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+__divmodhi4                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o)
+                                                  Keyglove.o
 __divmodsi4                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
                                                   Keyglove.o
+__divsf3                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(inverse.o)
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+                                                  Keyglove.o
+__divsf3_pse                                      c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+__divsf3x                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o)
 __do_clear_bss                                    c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_clear_bss.o)
+                                                  ArduinoWrapper.o
+                                                  Keyglove.o
                                                   LUFA/Drivers/USB/Core/USBTask.o
                                                   LUFA/Drivers/USB/Core/DeviceStandardReq.o
-                                                  Descriptors.o
-                                                  Keyglove.o
+                                                  wiring/wiring.o
 __do_copy_data                                    c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+                                                  ../keyglove/ps2mouse.o
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ps2dev.o
+                                                  ../keyglove/logitech.o
+                                                  ../keyglove/Adxl345.o
+                                                  Keyglove.o
+                                                  wiring/wiring_analog.o
+__do_global_ctors                                 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
                                                   Keyglove.o
 __eerd_byte_usb1287                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(eerd_byte_at90usb1287.o)
-                                                  LUFA/Drivers/USB/Core/EndpointStream.o
+                                                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
 __eeupd_byte_usb1287                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(eeupd_byte_at90usb1287.o)
-                                                  LUFA/Drivers/USB/Core/EndpointStream.o
+                                                  LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.o
 __eeupd_r18_usb1287                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libc.a(eeupd_byte_at90usb1287.o)
+__fixsfsi                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+                                                  Keyglove.o
+__fixunssfsi                                      c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+__floatsisf                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+                                                  Keyglove.o
+__floatunsisf                                     c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ITG3200.o
+__fp_inf                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_inf.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+__fp_mpack                                        c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_mpack.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+__fp_mpack_finite                                 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_mpack.o)
+__fp_nan                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_nan.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+__fp_norm2                                        c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_norm2.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+__fp_powser                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_powser.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+__fp_pscA                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+__fp_pscB                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+__fp_round                                        c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_round.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
+__fp_split3                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+__fp_splitA                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+__fp_szero                                        c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixsfsi.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+__fp_zero                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3x.o)
 __heap_end                                        c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __init                                            c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+__mulsf3                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(square.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/ITG3200.o
+                                                  ../keyglove/Adxl345.o
+                                                  Keyglove.o
+__mulsf3_pse                                      c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+__mulsf3x                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3x.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(mulsf3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(fp_powser.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+__mulsi3                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_mulsi3.o)
+                                                  wiring/wiring_pulse.o
 __stack                                           c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+__subsf3                                          c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(addsf3.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(modf.o)
+                                                  Keyglove.o
+__tablejump2__                                    c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_tablejump.o)
+__tablejump__                                     c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_tablejump.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_ctors.o)
+__udivmodhi4                                      c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodhi4.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o)
 __udivmodsi4                                      c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_udivmodsi4.o)
                                                   c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodsi4.o)
+                                                  wiring/wiring_pulse.o
 __vector_1                                        c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vector_10                                       LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.o
                                                   c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
@@ -941,7 +2246,8 @@ __vector_2                                        c:/winavr-20100110/bin/../lib/
 __vector_20                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vector_21                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vector_22                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-__vector_23                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+__vector_23                                       wiring/wiring.o
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vector_24                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vector_25                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vector_26                                       c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
@@ -965,10 +2271,292 @@ __vector_8                                        c:/winavr-20100110/bin/../lib/
 __vector_9                                        c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vector_default                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
 __vectors                                         c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+_div                                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_divmodhi4.o)
 _exit                                             c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
+accel                                             Keyglove.o
+accelCalibrated                                   Keyglove.o
+accelDiff                                         Keyglove.o
+accelMicros                                       Keyglove.o
+accelTick                                         Keyglove.o
+activate_mode(int)                                Keyglove.o
+adding                                            Keyglove.o
+analogRead                                        wiring/wiring_analog.o
+analogReference                                   wiring/wiring_analog.o
+analogWrite                                       wiring/wiring_analog.o
+analog_reference                                  wiring/wiring_analog.o
+aset                                              Keyglove.o
+atan                                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+                                                  Keyglove.o
+ax                                                Keyglove.o
+ax0                                               Keyglove.o
+ax00                                              Keyglove.o
+axBase                                            Keyglove.o
+ay                                                Keyglove.o
+ay0                                               Keyglove.o
+ay00                                              Keyglove.o
+ayBase                                            Keyglove.o
+az                                                Keyglove.o
+az0                                               Keyglove.o
+az00                                              Keyglove.o
+azBase                                            Keyglove.o
+beep(int, int, int)                               Keyglove.o
+blink_led                                         Keyglove.o
+blueled(int, int)                                 Keyglove.o
+calAccel                                          Keyglove.o
+calGyro                                           Keyglove.o
+cgx                                               Keyglove.o
+cgy                                               Keyglove.o
+cgz                                               Keyglove.o
+check_sensors_release(unsigned long, unsigned long, int) Keyglove.o
+check_sensors_touch(unsigned long, unsigned long, int) Keyglove.o
+combinations                                      Keyglove.o
+counter                                           Keyglove.o
+cx                                                Keyglove.o
+cy                                                Keyglove.o
+cz                                                Keyglove.o
+deactivate_mode(int)                              Keyglove.o
+delay                                             wiring/wiring.o
+                                                  ../keyglove/ps2mouse.o
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/logitech.o
+                                                  ../keyglove/ITG3200.o
+                                                  Keyglove.o
+delayMicroseconds                                 wiring/wiring.o
+                                                  ../keyglove/ps2dev.o
+detect1                                           Keyglove.o
+detect2                                           Keyglove.o
+digitalRead                                       ArduinoWrapper.o
+                                                  ../keyglove/ps2dev.o
+                                                  Keyglove.o
+                                                  wiring/wiring_shift.o
+digitalWrite                                      ArduinoWrapper.o
+                                                  ../keyglove/ps2dev.o
+                                                  Keyglove.o
+                                                  wiring/wiring_shift.o
+                                                  wiring/wiring_analog.o
+digital_pin_to_bit_mask_PGM                       wiring/pins_arduino.o
+                                                  wiring/wiring_pulse.o
+digital_pin_to_port_PGM                           wiring/pins_arduino.o
+                                                  wiring/wiring_pulse.o
+digital_pin_to_timer_PGM                          wiring/pins_arduino.o
+                                                  wiring/wiring_analog.o
 exit                                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr51\libgcc.a(_exit.o)
                                                   c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
+exp                                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+greenled(int, int)                                Keyglove.o
+gset                                              Keyglove.o
+gx                                                Keyglove.o
+gx0                                               Keyglove.o
+gx00                                              Keyglove.o
+gxBase                                            Keyglove.o
+gxHist                                            Keyglove.o
+gxMax                                             Keyglove.o
+gxMin                                             Keyglove.o
+gxRaw                                             Keyglove.o
+gy                                                Keyglove.o
+gy0                                               Keyglove.o
+gy00                                              Keyglove.o
+gyBase                                            Keyglove.o
+gyHist                                            Keyglove.o
+gyMax                                             Keyglove.o
+gyMin                                             Keyglove.o
+gyRaw                                             Keyglove.o
+gyro                                              Keyglove.o
+gyroCalibrated                                    Keyglove.o
+gyroDiff                                          Keyglove.o
+gyroMicros                                        Keyglove.o
+gyroTick                                          Keyglove.o
+gz                                                Keyglove.o
+gz0                                               Keyglove.o
+gz00                                              Keyglove.o
+gzBase                                            Keyglove.o
+gzHist                                            Keyglove.o
+gzMax                                             Keyglove.o
+gzMin                                             Keyglove.o
+gzRaw                                             Keyglove.o
+i                                                 Keyglove.o
+iWRAP::iWRAP(HardwareSerial*)                     ../keyglove/iwrap.o
+iWRAP::iWRAP(HardwareSerial*)                     ../keyglove/iwrap.o
+iWRAP::move(unsigned char, unsigned char)         ../keyglove/iwrap.o
+iWRAP::move(unsigned char, unsigned char, unsigned char) ../keyglove/iwrap.o
+iWRAP::parse(int)                                 ../keyglove/iwrap.o
+iWRAP::scroll(unsigned char)                      ../keyglove/iwrap.o
+iWRAP::send_now()                                 ../keyglove/iwrap.o
+iWRAP::set_buttons(unsigned char, unsigned char, unsigned char) ../keyglove/iwrap.o
+iWRAP::set_key1(unsigned char)                    ../keyglove/iwrap.o
+iWRAP::set_key2(unsigned char)                    ../keyglove/iwrap.o
+iWRAP::set_key3(unsigned char)                    ../keyglove/iwrap.o
+iWRAP::set_key4(unsigned char)                    ../keyglove/iwrap.o
+iWRAP::set_key5(unsigned char)                    ../keyglove/iwrap.o
+iWRAP::set_key6(unsigned char)                    ../keyglove/iwrap.o
+iWRAP::set_modifier(unsigned char)                ../keyglove/iwrap.o
+ide_workaround                                    Keyglove.o
+init                                              wiring/wiring.o
+                                                  Keyglove.o
+inverse                                           c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(inverse.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+keydown(int)                                      Keyglove.o
+keypress(int)                                     Keyglove.o
+keysDown                                          Keyglove.o
+keyup(int)                                        Keyglove.o
+ldexp                                             c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(ldexp.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+log                                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(log.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+logitech::SPI(char)                               ../keyglove/logitech.o
+logitech::init()                                  ../keyglove/logitech.o
+logitech::logitech()                              ../keyglove/logitech.o
+logitech::logitech()                              ../keyglove/logitech.o
+logitech::move(unsigned char, unsigned char)      ../keyglove/logitech.o
+logitech::move(unsigned char, unsigned char, unsigned char) ../keyglove/logitech.o
+logitech::read(char)                              ../keyglove/logitech.o
+logitech::scroll(unsigned char)                   ../keyglove/logitech.o
+logitech::sendPacket(int, ...)                    ../keyglove/logitech.o
+logitech::send_now()                              ../keyglove/logitech.o
+logitech::setSopCode(int)                         ../keyglove/logitech.o
+logitech::set_buttons(unsigned char, unsigned char, unsigned char) ../keyglove/logitech.o
+logitech::set_key1(unsigned char)                 ../keyglove/logitech.o
+logitech::set_key2(unsigned char)                 ../keyglove/logitech.o
+logitech::set_key3(unsigned char)                 ../keyglove/logitech.o
+logitech::set_key4(unsigned char)                 ../keyglove/logitech.o
+logitech::set_key5(unsigned char)                 ../keyglove/logitech.o
+logitech::set_key6(unsigned char)                 ../keyglove/logitech.o
+logitech::set_modifier(unsigned char)             ../keyglove/logitech.o
+logitech::write(char, char)                       ../keyglove/logitech.o
+loop                                              Keyglove.o
 main                                              Keyglove.o
                                                   c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51/crtusb1287.o
-outputCounter                                     Keyglove.o
-tickCounter                                       Keyglove.o
+mdx                                               Keyglove.o
+mdy                                               Keyglove.o
+mdz                                               Keyglove.o
+micros                                            wiring/wiring.o
+                                                  Keyglove.o
+millis                                            wiring/wiring.o
+                                                  Keyglove.o
+mode                                              Keyglove.o
+modeCheck(int, int)                               Keyglove.o
+modeStack                                         Keyglove.o
+modeStackPos                                      Keyglove.o
+modf                                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(modf.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(exp.o)
+modff                                             c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(modf.o)
+modifierdown(int)                                 Keyglove.o
+modifierpress(int)                                Keyglove.o
+modifiersDown                                     Keyglove.o
+modifierup(int)                                   Keyglove.o
+mouseDown                                         Keyglove.o
+mouseclick(int)                                   Keyglove.o
+mousedown(int)                                    Keyglove.o
+mouseoff(int)                                     Keyglove.o
+mouseon(int)                                      Keyglove.o
+mouseup(int)                                      Keyglove.o
+moveMouse                                         Keyglove.o
+mx                                                Keyglove.o
+mx0                                               Keyglove.o
+my                                                Keyglove.o
+my0                                               Keyglove.o
+mz                                                Keyglove.o
+mz0                                               Keyglove.o
+noTone(unsigned char)                             ArduinoWrapper.o
+                                                  Keyglove.o
+opt_accel_calibrate                               Keyglove.o
+opt_accel_kalman_constant                         Keyglove.o
+opt_accel_offset                                  Keyglove.o
+opt_accel_rot90                                   Keyglove.o
+opt_accel_smooth_average                          Keyglove.o
+opt_enable_calibration                            Keyglove.o
+opt_gyro_calibrate                                Keyglove.o
+opt_gyro_kalman_constant                          Keyglove.o
+opt_gyro_offset                                   Keyglove.o
+opt_gyro_rot90                                    Keyglove.o
+opt_gyro_smooth_average                           Keyglove.o
+opt_motion_sampling_div                           Keyglove.o
+opt_mouse_invert_x                                Keyglove.o
+opt_mouse_invert_y                                Keyglove.o
+opt_mouse_invert_z                                Keyglove.o
+opt_mouse_mode                                    Keyglove.o
+opt_mouse_scale_mode1                             Keyglove.o
+opt_mouse_scale_mode2                             Keyglove.o
+opt_mouse_scale_mode3                             Keyglove.o
+opt_mouse_scale_mode4                             Keyglove.o
+opt_scroll_mode                                   Keyglove.o
+opt_touch_detect_threshold                        Keyglove.o
+pinMode                                           ArduinoWrapper.o
+                                                  ../keyglove/ps2dev.o
+                                                  Keyglove.o
+                                                  wiring/wiring_analog.o
+pins                                              Keyglove.o
+popmode()                                         Keyglove.o
+port_to_input_PGM                                 wiring/pins_arduino.o
+                                                  wiring/wiring_pulse.o
+port_to_mode_PGM                                  wiring/pins_arduino.o
+port_to_output_PGM                                wiring/pins_arduino.o
+pow                                               c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(pow.o)
+                                                  ../keyglove/ps2keyboard.o
+                                                  ../keyglove/Adxl345.o
+pulseIn                                           wiring/wiring_pulse.o
+pushmode(int)                                     Keyglove.o
+redled(int, int)                                  Keyglove.o
+removing                                          Keyglove.o
+scancode_pause                                    ../keyglove/ps2keyboard.o
+scancode_prtsc                                    ../keyglove/ps2keyboard.o
+scancodes                                         ../keyglove/ps2keyboard.o
+scrollMouse                                       Keyglove.o
+sdy                                               Keyglove.o
+sensors1                                          Keyglove.o
+sensors2                                          Keyglove.o
+setmode(int)                                      Keyglove.o
+setup                                             Keyglove.o
+shiftIn                                           wiring/wiring_shift.o
+shiftOut                                          wiring/wiring_shift.o
+sqrt                                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(sqrt.o)
+                                                  Keyglove.o
+square                                            c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(square.o)
+                                                  c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr51\libm.a(atan.o)
+sy                                                Keyglove.o
+sy0                                               Keyglove.o
+t                                                 Keyglove.o
+ticks                                             Keyglove.o
+timer0_millis                                     wiring/wiring.o
+timer0_overflow_count                             wiring/wiring.o
+togglemode(int)                                   Keyglove.o
+togglemodifier(int)                               Keyglove.o
+tone(unsigned char, unsigned int, unsigned int)   ArduinoWrapper.o
+                                                  Keyglove.o
+touchTime                                         Keyglove.o
+tricolor(unsigned char, unsigned char, unsigned char) Keyglove.o
+tricolorBlinkBlue                                 Keyglove.o
+tricolorBlinkGreen                                Keyglove.o
+tricolorBlinkRed                                  Keyglove.o
+verify1                                           Keyglove.o
+verify2                                           Keyglove.o
+vibrate(int, int)                                 Keyglove.o
+x                                                 Keyglove.o
+x0                                                Keyglove.o
+x00                                               Keyglove.o
+xBase                                             Keyglove.o
+xHist                                             Keyglove.o
+xMax                                              Keyglove.o
+xMin                                              Keyglove.o
+xRaw                                              Keyglove.o
+xv                                                Keyglove.o
+y                                                 Keyglove.o
+y0                                                Keyglove.o
+y00                                               Keyglove.o
+yBase                                             Keyglove.o
+yHist                                             Keyglove.o
+yMax                                              Keyglove.o
+yMin                                              Keyglove.o
+yRaw                                              Keyglove.o
+yv                                                Keyglove.o
+z                                                 Keyglove.o
+z0                                                Keyglove.o
+z00                                               Keyglove.o
+zBase                                             Keyglove.o
+zHist                                             Keyglove.o
+zMax                                              Keyglove.o
+zMin                                              Keyglove.o
+zRaw                                              Keyglove.o
+zv                                                Keyglove.o

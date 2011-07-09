@@ -14,8 +14,12 @@
 //   Cypress stuff based on code by dunk (http://sites.google.com/site/mrdunk/Home/rc-system-firmware)
 // License: GPLv3
 
-#include "WProgram.h"
+#ifndef USE_LUFA
+    #include "WProgram.h"
+#endif
+
 #include "logitech.h"
+
 #ifdef round
     #undef round
 #endif

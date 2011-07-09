@@ -45,7 +45,7 @@
 
 /** \ingroup Group_EndpointPrimitiveRW
  *  \defgroup Group_EndpointPrimitiveRW_UC3 Read/Write of Primitive Data Types (UC3)
- *  \brief Endpoint primative read/write definitions for the Atmel AVR32 UC3 architecture.
+ *  \brief Endpoint primitive read/write definitions for the Atmel AVR32 UC3 architecture.
  *
  *  Functions, macros, variables, enums and types related to data reading and writing of primitive data types
  *  from and to endpoints.
@@ -98,7 +98,7 @@
 			#define _ENDPOINT_GET_BANKS2(EPDetails)           _ENDPOINT_GET_BANKS3(EPDetails)
 			#define _ENDPOINT_GET_BANKS3(MaxSize, Banks)      (Banks)
 
-			#if defined(USB_SERIES_UC3A0_AVR) || defined(USB_SERIES_UC3A1_AVR)
+			#if defined(USB_SERIES_UC3A0_AVR32) || defined(USB_SERIES_UC3A1_AVR32)
 				#define ENDPOINT_DETAILS_MAXEP                 7
 
 				#define ENDPOINT_DETAILS_EP0                   64,  1
@@ -108,7 +108,7 @@
 				#define ENDPOINT_DETAILS_EP4                   64,  2
 				#define ENDPOINT_DETAILS_EP5                   256, 2
 				#define ENDPOINT_DETAILS_EP6                   256, 2
-			#elif defined(USB_SERIES_UC3A3_AVR) || defined(USB_SERIES_UC3A4_AVR)
+			#elif defined(USB_SERIES_UC3A3_AVR32) || defined(USB_SERIES_UC3A4_AVR32)
 				#define ENDPOINT_DETAILS_MAXEP                 8
 
 				#define ENDPOINT_DETAILS_EP0                   64,  1
@@ -118,7 +118,7 @@
 				#define ENDPOINT_DETAILS_EP4                   512, 2
 				#define ENDPOINT_DETAILS_EP5                   512, 2
 				#define ENDPOINT_DETAILS_EP6                   512, 2			
-			#elif defined(USB_SERIES_UC3B0_AVR) || defined(USB_SERIES_UC3B1_AVR) 
+			#elif defined(USB_SERIES_UC3B0_AVR32) || defined(USB_SERIES_UC3B1_AVR32) 
 				#define ENDPOINT_DETAILS_MAXEP                 7
 
 				#define ENDPOINT_DETAILS_EP0                   64,  1
@@ -198,7 +198,7 @@
 				#define ENDPOINT_CONTROLEP_DEFAULT_SIZE     8
 			#endif
 
-			/** Retrives the maximum bank size in bytes of a given endpoint.
+			/** Retrieves the maximum bank size in bytes of a given endpoint.
 			 *
 			 *  \note This macro will only work correctly on endpoint indexes that are compile-time constants
 			 *        defined by the preprocessor.
@@ -633,7 +633,7 @@
 				return *(USB_EndpointFIFOPos[USB_SelectedEndpoint]++);
 			}
 
-			/** Writes one byte from the currently selected endpoint's bank, for IN direction endpoints.
+			/** Writes one byte to the currently selected endpoint's bank, for IN direction endpoints.
 			 *
 			 *  \ingroup Group_EndpointPrimitiveRW_UC3
 			 *

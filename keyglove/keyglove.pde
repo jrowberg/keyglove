@@ -36,13 +36,17 @@ unsigned char ide_workaround = 0;
 //#define USE_ARDUINO
 #define USE_TEENSY
 
+#ifdef USE_LUFA // defined in the LUFA code release, which includes this source file
+    #include "ArduinoWrapper.h"
+#endif
+
 /* ===============================================
  * CORE FEATURE SETTINGS
 =============================================== */
 #define ENABLE_BLINK
 #define ENABLE_TRICOLOR
 #define ENABLE_BEEP
-//#define ENABLE_VIBRATE
+#define ENABLE_VIBRATE
 //#define ENABLE_PS2
 //#define ENABLE_BLUETOOTH
 #define ENABLE_TOUCH
@@ -94,7 +98,17 @@ unsigned char ide_workaround = 0;
 #define KMOUSE_MOVE 0
 #define KMOUSE_SCROLL 1
 
+#define MOUSE_MODE_TILT_VELOCITY 1
+#define MOUSE_MODE_TILT_POSITION 2
+#define MOUSE_MODE_MOVEMENT_POSITION 3
+#define MOUSE_MODE_3D 4
+
+#define SCROLL_MODE_TILT_VELOCITY 1
+#define SCROLL_MODE_TILT_POSITION 2
+#define SCROLL_MODE_MOVEMENT_POSITION 3
+
 #define STR_PRODUCT L"Keyglove"
+
 #define KEYPAD_ASTERISK 85
 #define KEY_BACKSLASH2 100
 #define KEY_APP        101
@@ -232,6 +246,67 @@ unsigned char ide_workaround = 0;
 #endif /* !MODIFYERKEY_ALT */
 
 /* ===============================================
+ * UNIVERSAL CONTROLLER DECLARATIONS
+=============================================== */
+
+// basic timing and program flow control
+int counter;                          // loops at 1000
+int ticks;                            // ticks every 1000, never loops
+unsigned long int t;                  // time/benchmark
+long int i;                           // global loop index
+boolean moveMouse;                    // whether any mouse movement should possibly occur
+boolean scrollMouse;                  // whether any mouse scrolling should possibly occur
+
+// mouse measurements
+int mx, my, mz, sy;                   // absolute coordinates
+int mx0, my0, mz0, sy0;               // last-iteration absolute coordinates
+int mdx, mdy, mdz, sdy;               // relative movement
+// (note z is for 3D movement, sy is for scrolling)
+
+/* ===============================================
+ * DEVICE-CONTROLLED OPTION DECLARATIONS
+=============================================== */
+unsigned int opt_touch_detect_threshold = 20;   // number of milliseconds required for a touch to register as real
+unsigned int opt_enable_calibration = 0;        // temporarily enable calibration mode (resets accel/gyro offset/calibrate)
+//int opt_accel_offset[] = { 0, 0, 0 };           // amount to offset raw accelerometer readings [x,y,z]
+//float opt_accel_calibrate[] = { 1, 1, 1 };      // amount to scale raw accelerometer readings [x,y,z] (post-offset)
+
+int opt_accel_offset[] = { 7, -16, 1 };
+float opt_accel_calibrate[] = { 1, 1, 1 };
+// mine @ room temp:
+// x={-246,232}, y={-226,259}, z={-304,210}
+// x offset = -12, x calibrate = 0.952
+// y offset = 5, y calibrate = 0.945
+// z offset = -47, z calibrate = 1
+
+//int opt_gyro_offset[] = { 0, 0, 0 };            // amount to offset raw gyroscope readings [x,y,z]
+//float opt_gyro_calibrate[] = { 1, 1, 1 };       // amount to scale raw gyroscope readings [x,y,z] (post-offset)
+
+int opt_gyro_offset[] = { 0, 0, 0 };
+float opt_gyro_calibrate[] = { 1, 1, 1 };
+
+int opt_motion_sampling_div = 12;                 // how many ticks in between each accel/gyro reading
+float opt_accel_kalman_constant = 0.6;
+float opt_gyro_kalman_constant = 0.3;
+byte opt_accel_smooth_average = 4;
+byte opt_gyro_smooth_average = 0;
+
+byte opt_accel_rot90 = 0;
+byte opt_gyro_rot90 = 4;
+
+byte opt_mouse_invert_x = 1;                      // invert mouse x movements
+byte opt_mouse_invert_y = 1;                      // invert mouse y movements
+byte opt_mouse_invert_z = 0;                      // invert mouse z movements
+
+byte opt_mouse_mode = 0;                          // which mouse move mode (0=disable, 1/2/3/4 as defined)
+byte opt_scroll_mode = 0;                         // which mouse scroll mode (0=disable, 1/2/3 as defined), uses mouse Y axis values
+
+float opt_mouse_scale_mode1[] = { 1, 1 };         // speed scale [x,y] for mode 1 (tilt-velocity)
+float opt_mouse_scale_mode2[] = { 1, 1 };         // speed scale [x,y] for mode 2 (tilt-position)
+float opt_mouse_scale_mode3[] = { 1, 1 };         // speed scale [x,y] for mode 3 (movement-position)
+float opt_mouse_scale_mode4[] = { 1, 1, 1 };      // speed scale [x,y,z] for mode 4 (3D)
+
+/* ===============================================
  * PS/2 DECLARATIONS
 =============================================== */
 #ifdef ENABLE_PS2
@@ -240,7 +315,7 @@ unsigned char ide_workaround = 0;
     
     PS2dev ps2k(KB_PIN_CLOCK, KB_PIN_DATA);
     PS2keyboard keyboard(&ps2k);
-    
+
     PS2dev ps2m(MOUSE_PIN_CLOCK, MOUSE_PIN_DATA);
     PS2mouse mouse(&ps2m);
 
@@ -274,24 +349,12 @@ unsigned char ide_workaround = 0;
 #endif /* ENABLE_BLUETOOTH */
 
 /* ===============================================
- * TOUCH SENSOR DECLARATIONS
-=============================================== */
-#ifdef ENABLE_TOUCH
-    #include "touchset.h"
-    unsigned long int touchTime; // detection timestamp
-    boolean adding = false;
-    boolean removing = false;
-    long unsigned int detect1, detect2;
-    long unsigned int verify1, verify2;
-    long unsigned int sensors1, sensors2;
-    byte mode;
-#endif /* ENABLE_TOUCH */
-
-/* ===============================================
  * ACCELEROMETER DECLARATIONS
 =============================================== */
 #ifdef ENABLE_ACCEL
-    #include <Wire.h>
+    #ifndef USE_LUFA
+        #include <Wire.h>
+    #endif
     #include "Adxl345.h"
 
     Accelerometer accel;
@@ -325,7 +388,9 @@ unsigned char ide_workaround = 0;
  * GYROSCOPE DECLARATIONS
 =============================================== */
 #ifdef ENABLE_GYRO
-    #include <Wire.h>
+    #ifndef USE_LUFA
+        #include <Wire.h>
+    #endif
     #include "ITG3200.h"
 
     ITG3200 gyro = ITG3200();
@@ -384,81 +449,27 @@ unsigned char ide_workaround = 0;
 boolean blink_led;                    // state of blink LED
 
 /* ===============================================
- * UNIVERSAL CONTROLLER DECLARATIONS
+ * TOUCH SENSOR DECLARATIONS
 =============================================== */
+#ifdef ENABLE_TOUCH
+    // touchset key/mouse status and mode stack
+    int modifiersDown = 0;
+    int keysDown[] = { 0, 0, 0, 0, 0, 0 };
+    int mouseDown = 0;
+    int modeStack[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int modeStackPos = 0;
 
-#define MOUSE_MODE_TILT_VELOCITY 1
-#define MOUSE_MODE_TILT_POSITION 2
-#define MOUSE_MODE_MOVEMENT_POSITION 3
-#define MOUSE_MODE_3D 4
+    #include "touchset_helpers.h"
+    #include "touchset.h"
 
-#define SCROLL_MODE_TILT_VELOCITY 1
-#define SCROLL_MODE_TILT_POSITION 2
-#define SCROLL_MODE_MOVEMENT_POSITION 3
-
-// basic timing and program flow control
-int counter;                          // loops at 1000
-int ticks;                            // ticks every 1000, never loops
-unsigned long int t;                  // time/benchmark
-long int i;                           // global loop index
-boolean moveMouse;                    // whether any mouse movement should possibly occur
-boolean scrollMouse;                  // whether any mouse scrolling should possibly occur
-
-// mouse measurements
-int mx, my, mz, sy;                   // absolute coordinates
-int mx0, my0, mz0, sy0;               // last-iteration absolute coordinates
-int mdx, mdy, mdz, sdy;               // relative movement
-// (note z is for 3D movement, sy is for scrolling)
-
-/* ===============================================
- * DEVICE-CONTROLLED OPTION DECLARATIONS
-=============================================== */
-int opt_touch_detect_threshold = 20;            // number of milliseconds required for a touch to register as real
-int opt_enable_calibration = 0;                 // temporarily enable calibration mode (resets accel/gyro offset/calibrate)
-//int opt_accel_offset[] = { 0, 0, 0 };           // amount to offset raw accelerometer readings [x,y,z]
-//float opt_accel_calibrate[] = { 1, 1, 1 };      // amount to scale raw accelerometer readings [x,y,z] (post-offset)
-
-int opt_accel_offset[] = { 7, -16, 1 };
-float opt_accel_calibrate[] = { 1, 1, 1 };
-// mine @ room temp:
-// x={-246,232}, y={-226,259}, z={-304,210}
-// x offset = -12, x calibrate = 0.952
-// y offset = 5, y calibrate = 0.945
-// z offset = -47, z calibrate = 1
-
-//int opt_gyro_offset[] = { 0, 0, 0 };            // amount to offset raw gyroscope readings [x,y,z]
-//float opt_gyro_calibrate[] = { 1, 1, 1 };       // amount to scale raw gyroscope readings [x,y,z] (post-offset)
-
-int opt_gyro_offset[] = { 0, 0, 0 };
-float opt_gyro_calibrate[] = { 1, 1, 1 };
-
-int opt_motion_sampling_div = 12;                 // how many ticks in between each accel/gyro reading
-float opt_accel_kalman_constant = 0.6;
-float opt_gyro_kalman_constant = 0.3;
-byte opt_accel_smooth_average = 4;
-byte opt_gyro_smooth_average = 0;
-
-byte opt_accel_rot90 = 0;
-byte opt_gyro_rot90 = 4;
-
-byte opt_mouse_invert_x = 1;                      // invert mouse x movements
-byte opt_mouse_invert_y = 1;                      // invert mouse y movements
-byte opt_mouse_invert_z = 0;                      // invert mouse z movements
-
-byte opt_mouse_mode = 0;                          // which mouse move mode (0=disable, 1/2/3/4 as defined)
-byte opt_scroll_mode = 0;                         // which mouse scroll mode (0=disable, 1/2/3 as defined), uses mouse Y axis values
-
-float opt_mouse_scale_mode1[] = { 1, 1 };         // speed scale [x,y] for mode 1 (tilt-velocity)
-float opt_mouse_scale_mode2[] = { 1, 1 };         // speed scale [x,y] for mode 2 (tilt-position)
-float opt_mouse_scale_mode3[] = { 1, 1 };         // speed scale [x,y] for mode 3 (movement-position)
-float opt_mouse_scale_mode4[] = { 1, 1, 1 };      // speed scale [x,y,z] for mode 4 (3D)
-
-// touchset key/mouse status and mode stack
-int modifiersDown = 0;
-int keysDown[] = { 0, 0, 0, 0, 0, 0 };
-int mouseDown = 0;
-int modeStack[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-int modeStackPos = 0;
+    unsigned long int touchTime; // detection timestamp
+    boolean adding = false;
+    boolean removing = false;
+    long unsigned int detect1, detect2;
+    long unsigned int verify1, verify2;
+    long unsigned int sensors1, sensors2;
+    byte mode;
+#endif /* ENABLE_TOUCH */
 
 /* ===============================================
  * MAIN SETUP ROUTINE
@@ -584,7 +595,7 @@ void setup() {
     /* ===============================================
      * INITIALIZE AUDIO FEEDBACK
     =============================================== */
-    #ifdef ENABLE_BEEP    
+    #ifdef ENABLE_BEEP
         tone(SOUND_PIN, 1760, 25);
         delay(100);
         tone(SOUND_PIN, 1760, 25);
@@ -668,7 +679,7 @@ void loop() {
                 x = x0 + (opt_accel_kalman_constant * (xRaw - x0));
                 y = y0 + (opt_accel_kalman_constant * (yRaw - y0));
                 z = z0 + (opt_accel_kalman_constant * (zRaw - z0));
-                
+
                 // averaging
                 if (opt_accel_smooth_average > 0) {
                     for (i = 1; i < opt_accel_smooth_average; i++) {
@@ -728,8 +739,8 @@ void loop() {
                 //ax = degrees(atan2(yc, zc));
                 //ay = degrees(atan2(xc, zc));
                 //az = degrees(atan(sqrt(xc*xc + yc*yc) / zc));
-                
-                int axa = abs(ax), aya = abs(ay), aza = abs(az);
+
+                int axa = abs(ax), aya = abs(ay); //, aza = abs(az);
                 if (axa > 90 || aya > 90) az += 180;
                 
                 // you can't really get z rotation with just an accelerometer.
@@ -974,7 +985,7 @@ void loop() {
         mdx = mx - mx0;
         mdy = my - my0;
         mdz = mz - mz0;
-    
+
         if (opt_mouse_invert_x == 1) mdx = -mdx;
         if (opt_mouse_invert_y == 1) mdy = -mdy;
         if (opt_mouse_invert_z == 1) mdz = -mdz;
@@ -1133,474 +1144,10 @@ void loop() {
     }
 }
 
-// touchset control functions
-#ifdef ENABLE_TOUCH
-    boolean modeCheck(int mode, int pos) {
-        if (modeStackPos < pos) {
-            return false;
-        }
-        return modeStack[modeStackPos - pos] == mode;
-    }
-    
-    void setmode(int mode) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset setmode ");
-            Serial.println(mode);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        for (; modeStackPos > 0; modeStackPos--) deactivate_mode(modeStack[modeStackPos - 1]);
-        modeStackPos = 1;
-        modeStack[0] = mode;
-        activate_mode(mode);
-    }
-    
-    void togglemode(int mode) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset togglemode ");
-            Serial.println(mode);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        // find the mode and disable it if it's in the stack
-        int i = 0;
-        for (i = 0; i < modeStackPos && modeStack[i] != mode; i++);
-        if (i < modeStackPos) {
-            // enabled, so turn it off
-            deactivate_mode(mode);
-            for (i++; i < modeStackPos; i++) modeStack[i - 1] = modeStack[i];
-            modeStackPos--;
-        } else {
-            // not enabled, so turn it on
-            pushmode(mode);
-        }
-    }
-    
-    void pushmode(int mode) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset pushmode ");
-            Serial.println(mode);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        if (modeStackPos < 10) {
-            modeStack[modeStackPos] = mode;
-            modeStackPos++;
-            activate_mode(mode);
-        }
-    }
-    
-    void popmode() {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.println("touchset popmode");
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        if (modeStackPos > 0) deactivate_mode(modeStack[--modeStackPos]);
-        if (modeStackPos == 0) modeStack[modeStackPos++] = 0;
-        activate_mode(modeStack[modeStackPos - 1]);
-    }
-    
-    void mouseon(int mode) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset mouseon ");
-            Serial.println(mode);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        if (mode == KMOUSE_MOVE) {
-            opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
-        } else if (mode == KMOUSE_SCROLL) {
-            opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
-        }
-    }
-    
-    void mouseoff(int mode) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset mouseoff ");
-            Serial.println(mode);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        if (mode == KMOUSE_MOVE) {
-            opt_mouse_mode = 0;
-        } else if (mode == KMOUSE_SCROLL) {
-            opt_scroll_mode = 0;
-        }
-    }
-    
-    void mousedown(int button) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset mousedown ");
-            Serial.println(button);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        mouseDown = mouseDown | button;
-        #ifdef ENABLE_USB
-            Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
-        #endif /* ENABLE_USB */
-        #ifdef ENABLE_RX400
-            RX400.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
-        #endif /* ENABLE_RX400 */
-    }
-    
-    void mouseup(int button) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset mouseup ");
-            Serial.println(button);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        if ((mouseDown & button) > 0) {
-            mouseDown -= button;
-            #ifdef ENABLE_USB
-                Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
-            #endif /* ENABLE_USB */
-            #ifdef ENABLE_RX400
-                RX400.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
-            #endif /* ENABLE_RX400 */
-        }
-    }
-    
-    void mouseclick(int button) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset mouseclick ");
-            Serial.println(button);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        mousedown(button);
-        delay(5);
-        mouseup(button);
-    }
-    
-    void keydown(int code) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset keydown ");
-            Serial.println(code);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        int usePos = 0;
-        for (usePos = 0; usePos < 6 && keysDown[usePos] != 0; usePos++);
-        if (usePos == 6) return; // out of HID keyboard buffer space, REALLY weird for the Keyglove!
-        keysDown[usePos] = code;
-        switch (usePos) {
-            case 0:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key1(code);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key1(code);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key1(code);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 1:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key2(code);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key2(code);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key2(code);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 2:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key3(code);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key3(code);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key3(code);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 3:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key4(code);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key4(code);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key4(code);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 4:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key5(code);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key5(code);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key5(code);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 5:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key6(code);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key6(code);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key6(code);
-                #endif /* ENABLE_RX400 */
-                break;
-        }
-        #ifdef ENABLE_USB
-            Keyboard.send_now();
-        #endif /* ENABLE_USB */
-        #ifdef ENABLE_BLUETOOTH
-            bluetooth.send_now();
-        #endif /* ENABLE_BLUETOOTH */
-        #ifdef ENABLE_RX400
-            RX400.send_now();
-        #endif /* ENABLE_RX400 */
-    }
-    
-    void keyup(int code) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset keyup ");
-            Serial.println(code);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        int usePos = 0;
-        for (usePos = 0; usePos < 6 && keysDown[usePos] != code; usePos++);
-        if (usePos == 6) return; // key not currently down...oops.
-        keysDown[usePos] = 0;
-        switch (usePos) {
-            case 0:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key1(0);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key1(0);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key1(0);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 1:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key2(0);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key2(0);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key2(0);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 2:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key3(0);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key3(0);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key3(0);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 3:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key4(0);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key4(0);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key4(0);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 4:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key5(0);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key5(0);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key5(0);
-                #endif /* ENABLE_RX400 */
-                break;
-            case 5:
-                #ifdef ENABLE_USB
-                    Keyboard.set_key6(0);
-                #endif /* ENABLE_USB */
-                #ifdef ENABLE_BLUETOOTH
-                    bluetooth.set_key6(0);
-                #endif /* ENABLE_BLUETOOTH */
-                #ifdef ENABLE_RX400
-                    RX400.set_key6(0);
-                #endif /* ENABLE_RX400 */
-                break;
-        }
-        #ifdef ENABLE_USB
-            Keyboard.send_now();
-        #endif /* ENABLE_USB */
-        #ifdef ENABLE_BLUETOOTH
-            bluetooth.send_now();
-        #endif /* ENABLE_BLUETOOTH */
-        #ifdef ENABLE_RX400
-            RX400.send_now();
-        #endif /* ENABLE_RX400 */
-    }
-    
-    void keypress(int code) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset keypress ");
-            Serial.println(code);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        keydown(code);
-        delay(5);
-        keyup(code);
-    }
-    
-    void modifierdown(int code) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset modifierdown ");
-            Serial.println(code);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        modifiersDown = modifiersDown | code;
-        #ifdef ENABLE_USB
-            Keyboard.set_modifier(modifiersDown);
-            Keyboard.send_now();
-        #endif /* ENABLE_USB */
-        #ifdef ENABLE_RX400       
-            RX400.set_modifier(modifiersDown);
-            RX400.send_now();
-        #endif /* ENABLE_RX400 */
-    }
-    
-    void modifierup(int code) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset modifierup ");
-            Serial.println(code);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        if ((modifiersDown & code) > 0) {
-            modifiersDown -= code;
-            #ifdef ENABLE_USB
-                Keyboard.set_modifier(modifiersDown);
-                Keyboard.send_now();
-            #endif /* ENABLE_USB */
-            #ifdef ENABLE_RX400
-                RX400.set_modifier(modifiersDown);
-                RX400.send_now();
-            #endif /* ENABLE_RX400 */
-        }
-    }
-    
-    void togglemodifier(int code) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset modifiertoggle ");
-            Serial.println(code);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        if ((modifiersDown & code) > 0) {
-            modifierup(code);
-        } else {
-            modifierdown(code);
-        }
-    }
-    
-    void modifierpress(int code) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset modifierpress ");
-            Serial.println(code);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        modifierdown(code);
-        delay(5);
-        modifierup(code);
-    }
-    
-    void redled(int mode, int duration) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset redled ");
-            Serial.print(mode);
-            Serial.print(" ");
-            Serial.println(duration);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        #ifdef ENABLE_TRICOLOR
-            switch (mode) {
-                case KLED_OFF: tricolorBlinkRed = 0; tricolor(0, -1, -1); break;
-                case KLED_LONGBLINK: tricolorBlinkRed = 1; tricolor(1, -1, -1); break;
-                case KLED_LONGPULSE: tricolorBlinkRed = 2; tricolor(1, -1, -1); break;
-                case KLED_SHORTBLINK: tricolorBlinkRed = 3; tricolor(1, -1, -1); break;
-                case KLED_SHORTPULSE: tricolorBlinkRed = 4; tricolor(1, -1, -1); break;
-                case KLED_SOLID: tricolorBlinkRed = 0; tricolor(1, -1, -1); break;
-            }
-        #endif /* ENABLE_TRICOLOR */
-    }
-    
-    void greenled(int mode, int duration) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset greenled ");
-            Serial.print(mode);
-            Serial.print(" ");
-            Serial.println(duration);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        #ifdef ENABLE_TRICOLOR
-            switch (mode) {
-                case KLED_OFF: tricolorBlinkGreen = 0; tricolor(-1, 0, -1); break;
-                case KLED_LONGBLINK: tricolorBlinkGreen = 1; tricolor(-1, 1, -1); break;
-                case KLED_LONGPULSE: tricolorBlinkGreen = 2; tricolor(-1, 1, -1); break;
-                case KLED_SHORTBLINK: tricolorBlinkGreen = 3; tricolor(-1, 1, -1); break;
-                case KLED_SHORTPULSE: tricolorBlinkGreen = 4; tricolor(-1, 1, -1); break;
-                case KLED_SOLID: tricolorBlinkGreen = 0; tricolor(-1, 1, -1); break;
-            }
-        #endif /* ENABLE_TRICOLOR */
-    }
-    
-    void blueled(int mode, int duration) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset blueled ");
-            Serial.print(mode);
-            Serial.print(" ");
-            Serial.println(duration);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        #ifdef ENABLE_TRICOLOR
-            switch (mode) {
-                case KLED_OFF: tricolorBlinkBlue = 0; tricolor(-1, -1, 0); break;
-                case KLED_LONGBLINK: tricolorBlinkBlue = 1; tricolor(-1, -1, 1); break;
-                case KLED_LONGPULSE: tricolorBlinkBlue = 2; tricolor(-1, -1, 1); break;
-                case KLED_SHORTBLINK: tricolorBlinkBlue = 3; tricolor(-1, -1, 1); break;
-                case KLED_SHORTPULSE: tricolorBlinkBlue = 4; tricolor(-1, -1, 1); break;
-                case KLED_SOLID: tricolorBlinkBlue = 0; tricolor(-1, -1, 1); break;
-            }
-        #endif /* ENABLE_TRICOLOR */
-    }
-    
-    void beep(int pitch, int mode, int duration) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset beep ");
-            Serial.print(pitch);
-            Serial.print(" ");
-            Serial.print(mode);
-            Serial.print(" ");
-            Serial.println(duration);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-        #ifdef ENABLE_BEEP
-            if (mode == KBEEP_OFF) {
-                noTone(SOUND_PIN);
-                return;
-            } 
-            
-            int duration_ms = 1000;
-            if (mode == KBEEP_SHORTPULSE) {
-                duration_ms = 100;
-            } else if (mode == KBEEP_SHORTBEEP) {
-                duration_ms = 25;
-            }
-            
-            for (int i = 0; i < duration; i++) {
-                if (i > 0) {
-                    delay(80);
-                }
-                tone(SOUND_PIN, pitch, duration_ms);
-            }
-        #endif /* ENABLE_BEEP */
-    }
-    
-    void vibrate(int mode, int duration) {
-        #ifdef SERIAL_DEBUG_TOUCHSET
-            Serial.print("touchset vibrate ");
-            Serial.print(mode);
-            Serial.print(" ");
-            Serial.println(duration);
-        #endif /* SERIAL_DEBUG_TOUCHSET */
-    }
-    
-#endif /* ENABLE_TOUCH */
 
 #ifdef ENABLE_ACCEL
 
-class Quat {
+/*class Quat {
     public:
         double heading;
         double attitude;
@@ -1648,6 +1195,6 @@ class Quat {
             attitude = asin(2*test/unit);
             bank = atan2(2*x*w - 2*y*z , -sqx + sqy - sqz + sqw);
         }
-};
+};*/
 
 #endif /* ENABLE_ACCEL */

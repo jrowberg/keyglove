@@ -53,6 +53,11 @@
 		#include "../../../Common/Common.h"
 		#include "USBMode.h"		
 
+	/* Enable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			extern "C" {
+		#endif
+
 	/* Preprocessor Checks: */
 		#if !defined(__INCLUDE_FROM_USB_DRIVER)
 			#error Do not include this file directly. Include LUFA/Drivers/USB/USB.h instead.
@@ -74,8 +79,8 @@
 			 */
 			#define CONTROL_REQTYPE_TYPE       0x60
 
-			/** Mask for the request type parameter, to indicate the recipient of the request (Standard, Class
-			 *  or Vendor Specific). The result of this mask should then be compared to the request recipient
+			/** Mask for the request type parameter, to indicate the recipient of the request (Device, Interface
+			 *  Endpoint or Other). The result of this mask should then be compared to the request recipient
 			 *  masks.
 			 *
 			 *  \see REQREC_* macros for masks indicating the request recipient.
@@ -173,17 +178,17 @@
 			 */
 			enum USB_Control_Request_t
 			{
-				REQ_GetStatus           = 0, /**< Implemented in the library for device, endpoint and interface
-				                              *   recipients. Passed to the user application for other recipients
-				                              *   via the \ref EVENT_USB_Device_ControlRequest() event when received in
+				REQ_GetStatus           = 0, /**< Implemented in the library for device and endpoint recipients. Passed
+				                              *   to the user application for other recipients via the
+				                              *   \ref EVENT_USB_Device_ControlRequest() event when received in
 				                              *   device mode. */
-				REQ_ClearFeature        = 1, /**< Implemented in the library for device, endpoint and interface
-				                              *   recipients. Passed to the user application for other recipients
-				                              *   via the \ref EVENT_USB_Device_ControlRequest() event when received in
+				REQ_ClearFeature        = 1, /**< Implemented in the library for device and endpoint recipients. Passed
+				                              *   to the user application for other recipients via the
+				                              *   \ref EVENT_USB_Device_ControlRequest() event when received in
 				                              *   device mode. */
-				REQ_SetFeature          = 3, /**< Implemented in the library for device, endpoint and interface
-				                              *   recipients. Passed to the user application for other recipients
-				                              *   via the \ref EVENT_USB_Device_ControlRequest() event when received in
+				REQ_SetFeature          = 3, /**< Implemented in the library for device and endpoint recipients. Passed
+				                              *   to the user application for other recipients via the
+				                              *   \ref EVENT_USB_Device_ControlRequest() event when received in
 				                              *   device mode. */
 				REQ_SetAddress          = 5, /**< Implemented in the library for the device recipient. Passed
 				                              *   to the user application for other recipients via the
@@ -222,7 +227,7 @@
 			{
 				FEATURE_SEL_EndpointHalt       = 0x00, /**< Feature selector for Clear Feature or Set Feature commands. When
 				                                        *   used in a Set Feature or Clear Feature request this indicates that an
-				                                        *   endpoint (whose address is given elsewhere in the request should have
+				                                        *   endpoint (whose address is given elsewhere in the request) should have
 				                                        *   its stall condition changed.
 				                                        */
 				FEATURE_SEL_DeviceRemoteWakeup = 0x01, /**< Feature selector for Device level Remote Wakeup enable set or clear.
@@ -240,6 +245,11 @@
 			/* Macros: */
 				#define FEATURE_SELFPOWERED_ENABLED     (1 << 0)
 				#define FEATURE_REMOTE_WAKEUP_ENABLED   (1 << 1)
+		#endif
+
+	/* Disable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			}
 		#endif
 
 #endif

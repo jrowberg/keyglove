@@ -100,7 +100,7 @@
 					                    *   after \ref SI_Host_ConfigurePipes() is called and the Host state machine is in the
 					                    *   Configured state.
 					                    */
-					uint8_t  InterfaceNumber; /**< Interface index of the Mass Storage interface within the attached device. */
+					uint8_t  InterfaceNumber; /**< Interface index of the Still Image interface within the attached device. */
 
 					uint16_t DataINPipeSize; /**< Size in bytes of the Still Image interface's IN data pipe. */
 					uint16_t DataOUTPipeSize;  /**< Size in bytes of the Still Image interface's OUT data pipe. */
@@ -132,10 +132,6 @@
 			 *  Image Host instance's state values and configures the pipes required to communicate with the interface if it is
 			 *  found within the device. This should be called once after the stack has enumerated the attached device, while
 			 *  the host state machine is in the Addressed state.
-			 *
-			 *  \note The pipe index numbers as given in the interface's configuration structure must not overlap with any other
-			 *        interface, or pipe bank corruption will occur. Gaps in the allocated pipe numbers or non-sequential indexes
-			 *        within a single interface is allowed, but no two interfaces of any type have have interleaved pipe indexes.
 			 *
 			 *  \param[in,out] SIInterfaceInfo       Pointer to a structure containing a Still Image Class host configuration and state.
 			 *  \param[in]     ConfigDescriptorSize  Length of the attached device's Configuration Descriptor.
@@ -188,7 +184,7 @@
 			                                PIMA_Container_t* const PIMAHeader) ATTR_NON_NULL_PTR_ARG(1)
 			                                ATTR_NON_NULL_PTR_ARG(2);
 
-			/** Receives a raw PIMA block header to the device. This can be used to receive arbitrary PIMA blocks from the device with
+			/** Receives a raw PIMA block header from the device. This can be used to receive arbitrary PIMA blocks from the device with
 			 *  or without parameters.
 			 *
 			 *  \pre This function must only be called when the Host state machine is in the \ref HOST_STATE_Configured state or the
@@ -221,7 +217,7 @@
 			                            const uint8_t TotalParams,
 			                            uint32_t* const Params) ATTR_NON_NULL_PTR_ARG(1);
 
-			/** Receives and checks a response block from the attached PIMA device, once a command has been issued and all data
+			/** Receives and checks a response block from the attached Still Image device, once a command has been issued and all data
 			 *  associated with the command has been transferred.
 			 *
 			 *  \pre This function must only be called when the Host state machine is in the \ref HOST_STATE_Configured state or the

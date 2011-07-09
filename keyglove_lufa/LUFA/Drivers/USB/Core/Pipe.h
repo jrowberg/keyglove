@@ -45,7 +45,7 @@
 
 /** \ingroup Group_PipeRW
  *  \defgroup Group_PipePrimitiveRW Read/Write of Primitive Data Types
- *  \brief Pipe data primative read/write definitions.
+ *  \brief Pipe data primitive read/write definitions.
  *
  *  Functions, macros, variables, enums and types related to data reading and writing of primitive data types
  *  from and to pipes.
@@ -84,7 +84,12 @@
 
 	/* Includes: */
 		#include "../../../Common/Common.h"
-		#include "USBMode.h"		
+		#include "USBMode.h"
+
+	/* Enable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			extern "C" {
+		#endif
 
 	/* Preprocessor Checks: */
 		#if !defined(__INCLUDE_FROM_USB_DRIVER)
@@ -118,6 +123,11 @@
 			#include "AVR8/Pipe_AVR8.h"
 		#elif (ARCH == ARCH_UC3)
 			#include "UC3/Pipe_UC3.h"
+		#endif
+
+	/* Disable C linkage for C++ Compilers: */
+		#if defined(__cplusplus)
+			}
 		#endif
 
 #endif
