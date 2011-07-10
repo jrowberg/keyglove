@@ -100,5 +100,17 @@
         extern uint8_t HIDReportInData[GENERIC_REPORT_IN_SIZE];
         extern uint8_t HIDReportOutData[GENERIC_REPORT_OUT_SIZE];
 
+        /** Circular buffer to hold data from the host before it is processed on the AVR. */
+        extern RingBuffer_t HostRXSerial_Buffer;
+
+        /** Underlying data buffer for \ref HostRXSerial_Buffer, where the stored bytes are located. */
+        extern uint8_t      HostRXSerial_Buffer_Data[256];
+
+        /** Circular buffer to hold data from the AVR before it is sent to the host. */
+        extern RingBuffer_t HostTXSerial_Buffer;
+
+        /** Underlying data buffer for \ref HostTXSerial_Buffer, where the stored bytes are located. */
+        extern uint8_t      HostTXSerial_Buffer_Data[256];
+
 #endif
 

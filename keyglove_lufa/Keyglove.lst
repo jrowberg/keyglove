@@ -299,8 +299,8 @@
  321               	.LBE562:
  322               	.LBE561:
  323               	.LM47:
- 324 00fc 2091 0000 		lds r18,_ZL19HostTXSerial_Buffer+9
- 325 0100 3091 0000 		lds r19,(_ZL19HostTXSerial_Buffer+9)+1
+ 324 00fc 2091 0000 		lds r18,HostTXSerial_Buffer+9
+ 325 0100 3091 0000 		lds r19,(HostTXSerial_Buffer+9)+1
  326               	.LVL10:
  327               	.LBB563:
  328               	.LBB564:
@@ -318,10 +318,10 @@
  340 0108 3105      		cpc r19,__zero_reg__
  341 010a 01F4      		brne .+2
  342 010c 00C0      		rjmp .L26
- 343 010e 8091 0000 		lds r24,_ZL16LineEncodingData
- 344 0112 9091 0000 		lds r25,(_ZL16LineEncodingData)+1
- 345 0116 A091 0000 		lds r26,(_ZL16LineEncodingData)+2
- 346 011a B091 0000 		lds r27,(_ZL16LineEncodingData)+3
+ 343 010e 8091 0000 		lds r24,LineEncodingData
+ 344 0112 9091 0000 		lds r25,(LineEncodingData)+1
+ 345 0116 A091 0000 		lds r26,(LineEncodingData)+2
+ 346 011a B091 0000 		lds r27,(LineEncodingData)+3
  347               	.LVL11:
  348 011e 0097      		sbiw r24,0
  349 0120 A105      		cpc r26,__zero_reg__
@@ -342,8 +342,8 @@
  364               	.LBB570:
  365               	.LBB571:
  366               	.LM53:
- 367 0130 A0E0      		ldi r26,lo8(_ZL19HostTXSerial_Buffer)
- 368 0132 B0E0      		ldi r27,hi8(_ZL19HostTXSerial_Buffer)
+ 367 0130 A0E0      		ldi r26,lo8(HostTXSerial_Buffer)
+ 368 0132 B0E0      		ldi r27,hi8(HostTXSerial_Buffer)
  369               	.LBE571:
  370               	.LBE570:
  371               	.LBE569:
@@ -490,8 +490,8 @@
  512               	.LBB596:
  513               	.LBB597:
  514               	.LM79:
- 515 01b6 A0E0      		ldi r26,lo8(_ZL19HostRXSerial_Buffer)
- 516 01b8 B0E0      		ldi r27,hi8(_ZL19HostRXSerial_Buffer)
+ 515 01b6 A0E0      		ldi r26,lo8(HostRXSerial_Buffer)
+ 516 01b8 B0E0      		ldi r27,hi8(HostRXSerial_Buffer)
  517 01ba 00C0      		rjmp .L30
  518               	.LVL19:
  519               	.L32:
@@ -698,8 +698,8 @@
  722               	.LBE616:
  723               	.LBE615:
  724               	.LM109:
- 725 02a4 80E0      		ldi r24,lo8(_ZL16LineEncodingData)
- 726 02a6 90E0      		ldi r25,hi8(_ZL16LineEncodingData)
+ 725 02a4 80E0      		ldi r24,lo8(LineEncodingData)
+ 726 02a6 90E0      		ldi r25,hi8(LineEncodingData)
  727 02a8 67E0      		ldi r22,lo8(7)
  728 02aa 70E0      		ldi r23,hi8(7)
  729 02ac 0E94 0000 		call Endpoint_Write_Control_Stream_LE
@@ -726,8 +726,8 @@
  750               	.LBE620:
  751               	.LBE619:
  752               	.LM113:
- 753 02ca 80E0      		ldi r24,lo8(_ZL16LineEncodingData)
- 754 02cc 90E0      		ldi r25,hi8(_ZL16LineEncodingData)
+ 753 02ca 80E0      		ldi r24,lo8(LineEncodingData)
+ 754 02cc 90E0      		ldi r25,hi8(LineEncodingData)
  755 02ce 67E0      		ldi r22,lo8(7)
  756 02d0 70E0      		ldi r23,hi8(7)
  757 02d2 00C0      		rjmp .L46
@@ -790,10 +790,10 @@
  816 0320 E82E      		mov r14,r24
  817               	.LBE626:
  818               	.LM120:
- 819 0322 1092 0000 		sts _ZL16LineEncodingData,__zero_reg__
- 820 0326 1092 0000 		sts (_ZL16LineEncodingData)+1,__zero_reg__
- 821 032a 1092 0000 		sts (_ZL16LineEncodingData)+2,__zero_reg__
- 822 032e 1092 0000 		sts (_ZL16LineEncodingData)+3,__zero_reg__
+ 819 0322 1092 0000 		sts LineEncodingData,__zero_reg__
+ 820 0326 1092 0000 		sts (LineEncodingData)+1,__zero_reg__
+ 821 032a 1092 0000 		sts (LineEncodingData)+2,__zero_reg__
+ 822 032e 1092 0000 		sts (LineEncodingData)+3,__zero_reg__
  823               	.LBB627:
  824               	.LM121:
  825 0332 84E0      		ldi r24,lo8(4)
@@ -10789,8 +10789,8 @@
  10787               	.LBB754:
  10788               	.LBB755:
  10789               	.LM1371:
- 10790 4c08 E0E0      		ldi r30,lo8(_ZL19HostRXSerial_Buffer)
- 10791 4c0a F0E0      		ldi r31,hi8(_ZL19HostRXSerial_Buffer)
+ 10790 4c08 E0E0      		ldi r30,lo8(HostRXSerial_Buffer)
+ 10791 4c0a F0E0      		ldi r31,hi8(HostRXSerial_Buffer)
  10792               	.LVL409:
  10793               	.LBB756:
  10794               	.LBB757:
@@ -10813,8 +10813,8 @@
  10811               	.LBE759:
  10812               	.LBE758:
  10813               	.LM1377:
- 10814 4c10 80E0      		ldi r24,lo8(_ZL24HostRXSerial_Buffer_Data)
- 10815 4c12 90E0      		ldi r25,hi8(_ZL24HostRXSerial_Buffer_Data)
+ 10814 4c10 80E0      		ldi r24,lo8(HostRXSerial_Buffer_Data)
+ 10815 4c12 90E0      		ldi r25,hi8(HostRXSerial_Buffer_Data)
  10816 4c14 9183      		std Z+1,r25
  10817 4c16 8083      		st Z,r24
  10818               	.LM1378:
@@ -10824,1228 +10824,1258 @@
  10822 4c1c 9583      		std Z+5,r25
  10823 4c1e 8483      		std Z+4,r24
  10824               	.LM1380:
- 10825 4c20 80E0      		ldi r24,lo8(_ZL24HostRXSerial_Buffer_Data+128)
- 10826 4c22 90E0      		ldi r25,hi8(_ZL24HostRXSerial_Buffer_Data+128)
+ 10825 4c20 80E0      		ldi r24,lo8(HostRXSerial_Buffer_Data+256)
+ 10826 4c22 90E0      		ldi r25,hi8(HostRXSerial_Buffer_Data+256)
  10827 4c24 9783      		std Z+7,r25
  10828 4c26 8683      		std Z+6,r24
  10829               	.LM1381:
- 10830 4c28 80E8      		ldi r24,lo8(-128)
- 10831 4c2a 8087      		std Z+8,r24
- 10832               	.LM1382:
- 10833 4c2c 1286      		std Z+10,__zero_reg__
- 10834 4c2e 1186      		std Z+9,__zero_reg__
- 10835               	.LBB760:
- 10836               	.LBB761:
- 10837               	.LM1383:
- 10838               	.LM1384:
- 10839 4c30 2FBF      		out __SREG__,r18
- 10840               	.LM1385:
- 10841               	.LBE761:
- 10842               	.LBE760:
- 10843               	.LBE755:
- 10844               	.LBE754:
- 10845               	.LBE753:
- 10846               	.LBB762:
- 10847               	.LBB763:
- 10848               	.LBB764:
- 10849               	.LM1386:
- 10850 4c32 E0E0      		ldi r30,lo8(_ZL19HostTXSerial_Buffer)
- 10851 4c34 F0E0      		ldi r31,hi8(_ZL19HostTXSerial_Buffer)
- 10852               	.LVL411:
- 10853               	.LBB765:
- 10854               	.LBB766:
- 10855               	.LM1387:
- 10856               	.LM1388:
- 10857 4c36 2FB7      		in r18,__SREG__
- 10858               	.LVL412:
- 10859               	.LBE766:
- 10860               	.LBE765:
- 10861               	.LBB767:
- 10862               	.LBB768:
- 10863               	.LM1389:
- 10864               	.LM1390:
- 10865               	/* #APP */
- 10866               	 ;  370 "./LUFA/Drivers/USB/../../Common/Common.h" 1
- 10867 4c38 F894      		cli
- 10868               	 ;  0 "" 2
- 10869               	.LM1391:
- 10870               	/* #NOAPP */
- 10871               	.LBE768:
- 10872               	.LBE767:
- 10873               	.LM1392:
- 10874 4c3a 80E0      		ldi r24,lo8(_ZL24HostTXSerial_Buffer_Data)
- 10875 4c3c 90E0      		ldi r25,hi8(_ZL24HostTXSerial_Buffer_Data)
- 10876 4c3e 9183      		std Z+1,r25
- 10877 4c40 8083      		st Z,r24
- 10878               	.LM1393:
- 10879 4c42 9383      		std Z+3,r25
- 10880 4c44 8283      		std Z+2,r24
- 10881               	.LM1394:
- 10882 4c46 9583      		std Z+5,r25
- 10883 4c48 8483      		std Z+4,r24
- 10884               	.LM1395:
- 10885 4c4a 80E0      		ldi r24,lo8(_ZL24HostTXSerial_Buffer_Data+128)
- 10886 4c4c 90E0      		ldi r25,hi8(_ZL24HostTXSerial_Buffer_Data+128)
- 10887 4c4e 9783      		std Z+7,r25
- 10888 4c50 8683      		std Z+6,r24
- 10889               	.LM1396:
- 10890 4c52 80E8      		ldi r24,lo8(-128)
- 10891 4c54 8087      		std Z+8,r24
- 10892               	.LM1397:
- 10893 4c56 1286      		std Z+10,__zero_reg__
- 10894 4c58 1186      		std Z+9,__zero_reg__
- 10895               	.LBB769:
- 10896               	.LBB770:
- 10897               	.LM1398:
- 10898               	.LM1399:
- 10899 4c5a 2FBF      		out __SREG__,r18
- 10900               	.LM1400:
- 10901               	.LBE770:
- 10902               	.LBE769:
- 10903               	.LBE764:
- 10904               	.LBE763:
- 10905               	.LBE762:
- 10906               	.LM1401:
- 10907 4c5c 0E94 0000 		call SetupHardware
- 10908               	.LVL413:
- 10909               	.LM1402:
- 10910 4c60 0E94 0000 		call init
- 10911               	.LM1403:
- 10912 4c64 0E94 0000 		call setup
- 10913               	.L527:
- 10914               	.LM1404:
- 10915 4c68 0E94 0000 		call loop
- 10916               	.LM1405:
- 10917 4c6c 8091 0000 		lds r24,_ZL10CDCTaskRun
- 10918 4c70 8823      		tst r24
- 10919 4c72 01F4      		brne .L523
- 10920 4c74 0E94 0000 		call CDC_Task
- 10921 4c78 00C0      		rjmp .L524
- 10922               	.L523:
- 10923 4c7a 1092 0000 		sts _ZL10CDCTaskRun,__zero_reg__
- 10924               	.L524:
- 10925               	.LM1406:
- 10926 4c7e 8091 0000 		lds r24,_ZL10HIDTaskRun
- 10927 4c82 8823      		tst r24
- 10928 4c84 01F4      		brne .L525
- 10929 4c86 0E94 0000 		call HID_Task
- 10930 4c8a 00C0      		rjmp .L526
- 10931               	.L525:
- 10932 4c8c 1092 0000 		sts _ZL10HIDTaskRun,__zero_reg__
- 10933               	.L526:
- 10934               	.LM1407:
- 10935 4c90 0E94 0000 		call USB_USBTask
- 10936 4c94 00C0      		rjmp .L527
- 10937               	.LFE155:
- 10939               		.data
- 10940               	.LC25:
- 10941 01b9 746F 7563 		.string	"touchset mouseclick "
- 10941      6873 6574 
- 10941      206D 6F75 
- 10941      7365 636C 
- 10941      6963 6B20 
- 10942               		.text
- 10943               	.global	_Z10mouseclicki
- 10945               	_Z10mouseclicki:
- 10946               	.LFB136:
- 10947               	.LM1408:
- 10948               	.LVL414:
- 10949 4c96 EF92      		push r14
- 10950 4c98 FF92      		push r15
- 10951 4c9a 0F93      		push r16
- 10952 4c9c 1F93      		push r17
- 10953               	/* prologue: function */
- 10954               	/* frame size = 0 */
- 10955 4c9e 7C01      		movw r14,r24
- 10956               	.LM1409:
- 10957 4ca0 00E0      		ldi r16,lo8(Serial)
- 10958 4ca2 10E0      		ldi r17,hi8(Serial)
- 10959 4ca4 C801      		movw r24,r16
- 10960               	.LVL415:
- 10961 4ca6 60E0      		ldi r22,lo8(.LC25)
- 10962 4ca8 70E0      		ldi r23,hi8(.LC25)
- 10963 4caa 0E94 0000 		call _ZN16USBVirtualSerial5printEPKc
- 10964               	.LM1410:
- 10965 4cae C801      		movw r24,r16
- 10966 4cb0 B701      		movw r22,r14
- 10967 4cb2 0E94 0000 		call _ZN16USBVirtualSerial7printlnEi
- 10968               	.LM1411:
- 10969 4cb6 C701      		movw r24,r14
- 10970 4cb8 0E94 0000 		call _Z9mousedowni
- 10971               	.LM1412:
- 10972 4cbc 65E0      		ldi r22,lo8(5)
- 10973 4cbe 70E0      		ldi r23,hi8(5)
- 10974 4cc0 80E0      		ldi r24,hlo8(5)
- 10975 4cc2 90E0      		ldi r25,hhi8(5)
- 10976 4cc4 0E94 0000 		call delay
- 10977               	.LM1413:
- 10978 4cc8 C701      		movw r24,r14
- 10979 4cca 0E94 0000 		call _Z7mouseupi
- 10980               	/* epilogue start */
- 10981               	.LM1414:
- 10982 4cce 1F91      		pop r17
- 10983 4cd0 0F91      		pop r16
- 10984 4cd2 FF90      		pop r15
- 10985 4cd4 EF90      		pop r14
- 10986               	.LVL416:
- 10987 4cd6 0895      		ret
- 10988               	.LFE136:
- 10990               	.global	HIDReportInData
- 10991               	.global	HIDReportInData
- 10992               		.section .bss
- 10995               	HIDReportInData:
- 10996 0000 0000 0000 		.skip 9,0
- 10996      0000 0000 
- 10996      00
- 10997               	.global	HIDReportOutData
- 10998               	.global	HIDReportOutData
- 11001               	HIDReportOutData:
- 11002 0009 0000 0000 		.skip 9,0
- 11002      0000 0000 
- 11002      00
- 11003               	.global	ide_workaround
- 11004               	.global	ide_workaround
- 11007               	ide_workaround:
- 11008 0012 00        		.skip 1,0
- 11009               	.global	pins
- 11010               		.data
- 11013               	pins:
- 11014 01ce 0400      		.word	4
- 11015 01d0 0500      		.word	5
- 11016 01d2 0700      		.word	7
- 11017 01d4 0800      		.word	8
- 11018 01d6 0900      		.word	9
- 11019 01d8 0A00      		.word	10
- 11020 01da 0B00      		.word	11
- 11021 01dc 0C00      		.word	12
- 11022 01de 0D00      		.word	13
- 11023 01e0 0E00      		.word	14
- 11024 01e2 0F00      		.word	15
- 11025 01e4 1000      		.word	16
- 11026 01e6 1100      		.word	17
- 11027 01e8 1200      		.word	18
- 11028 01ea 1300      		.word	19
- 11029 01ec 1400      		.word	20
- 11030 01ee 1500      		.word	21
- 11031 01f0 1600      		.word	22
- 11032 01f2 1700      		.word	23
- 11033 01f4 1800      		.word	24
- 11034 01f6 1900      		.word	25
- 11035 01f8 1A00      		.word	26
- 11036 01fa 1B00      		.word	27
- 11037 01fc 1C00      		.word	28
- 11038 01fe 1D00      		.word	29
- 11039 0200 1E00      		.word	30
- 11040 0202 1F00      		.word	31
- 11041 0204 2000      		.word	32
- 11042 0206 2100      		.word	33
- 11043 0208 2200      		.word	34
- 11044 020a 2300      		.word	35
- 11045 020c 2600      		.word	38
- 11046 020e 2700      		.word	39
- 11047 0210 2800      		.word	40
- 11048               	.global	combinations
- 11051               	combinations:
- 11052 0212 1E00      		.word	30
- 11053 0214 2700      		.word	39
- 11054 0216 1D00      		.word	29
- 11055 0218 2700      		.word	39
- 11056 021a 0E00      		.word	14
- 11057 021c 2800      		.word	40
- 11058 021e 0E00      		.word	14
- 11059 0220 1D00      		.word	29
- 11060 0222 0F00      		.word	15
- 11061 0224 1D00      		.word	29
- 11062 0226 1000      		.word	16
- 11063 0228 1D00      		.word	29
- 11064 022a 0C00      		.word	12
- 11065 022c 1D00      		.word	29
- 11066 022e 1A00      		.word	26
- 11067 0230 1D00      		.word	29
- 11068 0232 1B00      		.word	27
- 11069 0234 1D00      		.word	29
- 11070 0236 1C00      		.word	28
- 11071 0238 1D00      		.word	29
- 11072 023a 1E00      		.word	30
- 11073 023c 2600      		.word	38
- 11074 023e 1D00      		.word	29
- 11075 0240 2600      		.word	38
- 11076 0242 0B00      		.word	11
- 11077 0244 2800      		.word	40
- 11078 0246 0B00      		.word	11
- 11079 0248 1D00      		.word	29
- 11080 024a 0D00      		.word	13
- 11081 024c 1D00      		.word	29
- 11082 024e 1700      		.word	23
- 11083 0250 1D00      		.word	29
- 11084 0252 1800      		.word	24
- 11085 0254 1D00      		.word	29
- 11086 0256 1900      		.word	25
- 11087 0258 1D00      		.word	29
- 11088 025a 0B00      		.word	11
- 11089 025c 2700      		.word	39
- 11090 025e 1E00      		.word	30
- 11091 0260 2300      		.word	35
- 11092 0262 1D00      		.word	29
- 11093 0264 2300      		.word	35
- 11094 0266 0800      		.word	8
- 11095 0268 2800      		.word	40
- 11096 026a 0800      		.word	8
- 11097 026c 1D00      		.word	29
- 11098 026e 0900      		.word	9
- 11099 0270 1D00      		.word	29
- 11100 0272 0A00      		.word	10
- 11101 0274 1D00      		.word	29
- 11102 0276 1400      		.word	20
- 11103 0278 1E00      		.word	30
- 11104 027a 1400      		.word	20
- 11105 027c 1D00      		.word	29
- 11106 027e 1500      		.word	21
- 11107 0280 1E00      		.word	30
- 11108 0282 1500      		.word	21
- 11109 0284 1D00      		.word	29
- 11110 0286 1600      		.word	22
- 11111 0288 1E00      		.word	30
- 11112 028a 1600      		.word	22
- 11113 028c 1D00      		.word	29
- 11114 028e 0800      		.word	8
- 11115 0290 2200      		.word	34
- 11116 0292 0800      		.word	8
- 11117 0294 2600      		.word	38
- 11118 0296 0800      		.word	8
- 11119 0298 2700      		.word	39
- 11120 029a 0800      		.word	8
- 11121 029c 1100      		.word	17
- 11122 029e 1E00      		.word	30
- 11123 02a0 2200      		.word	34
- 11124 02a2 1D00      		.word	29
- 11125 02a4 2200      		.word	34
- 11126 02a6 0400      		.word	4
- 11127 02a8 2800      		.word	40
- 11128 02aa 1100      		.word	17
- 11129 02ac 1D00      		.word	29
- 11130 02ae 0400      		.word	4
- 11131 02b0 1D00      		.word	29
- 11132 02b2 0500      		.word	5
- 11133 02b4 1D00      		.word	29
- 11134 02b6 0700      		.word	7
- 11135 02b8 1D00      		.word	29
- 11136 02ba 1100      		.word	17
- 11137 02bc 1E00      		.word	30
- 11138 02be 1200      		.word	18
- 11139 02c0 1E00      		.word	30
- 11140 02c2 1200      		.word	18
- 11141 02c4 1D00      		.word	29
- 11142 02c6 1300      		.word	19
- 11143 02c8 1E00      		.word	30
- 11144 02ca 1300      		.word	19
- 11145 02cc 1D00      		.word	29
- 11146 02ce 0400      		.word	4
- 11147 02d0 2100      		.word	33
- 11148 02d2 0400      		.word	4
- 11149 02d4 2000      		.word	32
- 11150 02d6 0400      		.word	4
- 11151 02d8 1F00      		.word	31
- 11152 02da 0800      		.word	8
- 11153 02dc 2100      		.word	33
- 11154 02de 0800      		.word	8
- 11155 02e0 2000      		.word	32
- 11156 02e2 0800      		.word	8
- 11157 02e4 1F00      		.word	31
- 11158 02e6 0B00      		.word	11
- 11159 02e8 2100      		.word	33
- 11160 02ea 0B00      		.word	11
- 11161 02ec 2000      		.word	32
- 11162 02ee 0B00      		.word	11
- 11163 02f0 1F00      		.word	31
- 11164 02f2 0E00      		.word	14
- 11165 02f4 2100      		.word	33
- 11166 02f6 0E00      		.word	14
- 11167 02f8 2000      		.word	32
- 11168 02fa 0E00      		.word	14
- 11169 02fc 1F00      		.word	31
- 11170 02fe 1D00      		.word	29
- 11171 0300 1F00      		.word	31
- 11172               	.global	counter
- 11173               	.global	counter
- 11174               		.section .bss
- 11177               	counter:
- 11178 0013 0000      		.skip 2,0
- 11179               	.global	ticks
- 11180               	.global	ticks
- 11183               	ticks:
- 11184 0015 0000      		.skip 2,0
- 11185               	.global	t
- 11186               	.global	t
- 11189               	t:
- 11190 0017 0000 0000 		.skip 4,0
- 11191               	.global	i
- 11192               	.global	i
- 11195               	i:
- 11196 001b 0000 0000 		.skip 4,0
- 11197               	.global	moveMouse
- 11198               	.global	moveMouse
- 11201               	moveMouse:
- 11202 001f 00        		.skip 1,0
- 11203               	.global	scrollMouse
- 11204               	.global	scrollMouse
- 11207               	scrollMouse:
- 11208 0020 00        		.skip 1,0
- 11209               	.global	mx
- 11210               	.global	mx
- 11213               	mx:
- 11214 0021 0000      		.skip 2,0
- 11215               	.global	my
- 11216               	.global	my
- 11219               	my:
- 11220 0023 0000      		.skip 2,0
- 11221               	.global	mz
- 11222               	.global	mz
- 11225               	mz:
- 11226 0025 0000      		.skip 2,0
- 11227               	.global	sy
- 11228               	.global	sy
- 11231               	sy:
- 11232 0027 0000      		.skip 2,0
- 11233               	.global	mx0
- 11234               	.global	mx0
- 11237               	mx0:
- 11238 0029 0000      		.skip 2,0
- 11239               	.global	my0
- 11240               	.global	my0
- 11243               	my0:
- 11244 002b 0000      		.skip 2,0
- 11245               	.global	mz0
- 11246               	.global	mz0
- 11249               	mz0:
- 11250 002d 0000      		.skip 2,0
- 11251               	.global	sy0
- 11252               	.global	sy0
- 11255               	sy0:
- 11256 002f 0000      		.skip 2,0
- 11257               	.global	mdx
- 11258               	.global	mdx
- 11261               	mdx:
- 11262 0031 0000      		.skip 2,0
- 11263               	.global	mdy
- 11264               	.global	mdy
- 11267               	mdy:
- 11268 0033 0000      		.skip 2,0
- 11269               	.global	mdz
- 11270               	.global	mdz
- 11273               	mdz:
- 11274 0035 0000      		.skip 2,0
- 11275               	.global	sdy
- 11276               	.global	sdy
- 11279               	sdy:
- 11280 0037 0000      		.skip 2,0
- 11281               	.global	opt_touch_detect_threshold
- 11282               		.data
- 11285               	opt_touch_detect_threshold:
- 11286 0302 1400      		.word	20
- 11287               	.global	opt_enable_calibration
- 11288               	.global	opt_enable_calibration
- 11289               		.section .bss
- 11292               	opt_enable_calibration:
- 11293 0039 0000      		.skip 2,0
- 11294               	.global	opt_accel_offset
- 11295               		.data
- 11298               	opt_accel_offset:
- 11299 0304 0700      		.word	7
- 11300 0306 F0FF      		.word	-16
- 11301 0308 0100      		.word	1
- 11302               	.global	opt_accel_calibrate
- 11305               	opt_accel_calibrate:
- 11306 030a 00        		.byte	0
- 11307 030b 00        		.byte	0
- 11308 030c 80        		.byte	-128
- 11309 030d 3F        		.byte	63
- 11310 030e 00        		.byte	0
- 11311 030f 00        		.byte	0
- 11312 0310 80        		.byte	-128
- 11313 0311 3F        		.byte	63
- 11314 0312 00        		.byte	0
- 11315 0313 00        		.byte	0
- 11316 0314 80        		.byte	-128
- 11317 0315 3F        		.byte	63
- 11318               	.global	opt_gyro_offset
- 11319               	.global	opt_gyro_offset
- 11320               		.section .bss
- 11323               	opt_gyro_offset:
- 11324 003b 0000 0000 		.skip 6,0
- 11324      0000 
- 11325               	.global	opt_gyro_calibrate
- 11326               		.data
- 11329               	opt_gyro_calibrate:
- 11330 0316 00        		.byte	0
- 11331 0317 00        		.byte	0
- 11332 0318 80        		.byte	-128
- 11333 0319 3F        		.byte	63
- 11334 031a 00        		.byte	0
- 11335 031b 00        		.byte	0
- 11336 031c 80        		.byte	-128
- 11337 031d 3F        		.byte	63
- 11338 031e 00        		.byte	0
- 11339 031f 00        		.byte	0
- 11340 0320 80        		.byte	-128
- 11341 0321 3F        		.byte	63
- 11342               	.global	opt_motion_sampling_div
- 11345               	opt_motion_sampling_div:
- 11346 0322 0C00      		.word	12
- 11347               	.global	opt_accel_kalman_constant
- 11350               	opt_accel_kalman_constant:
- 11351 0324 9A        		.byte	-102
- 11352 0325 99        		.byte	-103
- 11353 0326 19        		.byte	25
- 11354 0327 3F        		.byte	63
- 11355               	.global	opt_gyro_kalman_constant
- 11358               	opt_gyro_kalman_constant:
- 11359 0328 9A        		.byte	-102
- 11360 0329 99        		.byte	-103
- 11361 032a 99        		.byte	-103
- 11362 032b 3E        		.byte	62
- 11363               	.global	opt_accel_smooth_average
- 11366               	opt_accel_smooth_average:
- 11367 032c 04        		.byte	4
- 11368               	.global	opt_gyro_smooth_average
- 11369               	.global	opt_gyro_smooth_average
- 11370               		.section .bss
- 11373               	opt_gyro_smooth_average:
- 11374 0041 00        		.skip 1,0
- 11375               	.global	opt_accel_rot90
- 11376               	.global	opt_accel_rot90
- 11379               	opt_accel_rot90:
- 11380 0042 00        		.skip 1,0
- 11381               	.global	opt_gyro_rot90
- 11382               		.data
- 11385               	opt_gyro_rot90:
- 11386 032d 04        		.byte	4
- 11387               	.global	opt_mouse_invert_x
- 11390               	opt_mouse_invert_x:
- 11391 032e 01        		.byte	1
- 11392               	.global	opt_mouse_invert_y
- 11395               	opt_mouse_invert_y:
- 11396 032f 01        		.byte	1
- 11397               	.global	opt_mouse_invert_z
- 11398               	.global	opt_mouse_invert_z
- 11399               		.section .bss
- 11402               	opt_mouse_invert_z:
- 11403 0043 00        		.skip 1,0
- 11404               	.global	opt_mouse_mode
- 11405               	.global	opt_mouse_mode
- 11408               	opt_mouse_mode:
- 11409 0044 00        		.skip 1,0
- 11410               	.global	opt_scroll_mode
- 11411               	.global	opt_scroll_mode
- 11414               	opt_scroll_mode:
- 11415 0045 00        		.skip 1,0
- 11416               	.global	opt_mouse_scale_mode1
- 11417               		.data
- 11420               	opt_mouse_scale_mode1:
- 11421 0330 00        		.byte	0
- 11422 0331 00        		.byte	0
- 11423 0332 80        		.byte	-128
- 11424 0333 3F        		.byte	63
- 11425 0334 00        		.byte	0
- 11426 0335 00        		.byte	0
- 11427 0336 80        		.byte	-128
- 11428 0337 3F        		.byte	63
- 11429               	.global	opt_mouse_scale_mode2
- 11432               	opt_mouse_scale_mode2:
- 11433 0338 00        		.byte	0
- 11434 0339 00        		.byte	0
- 11435 033a 80        		.byte	-128
- 11436 033b 3F        		.byte	63
- 11437 033c 00        		.byte	0
- 11438 033d 00        		.byte	0
- 11439 033e 80        		.byte	-128
- 11440 033f 3F        		.byte	63
- 11441               	.global	opt_mouse_scale_mode3
- 11444               	opt_mouse_scale_mode3:
- 11445 0340 00        		.byte	0
- 11446 0341 00        		.byte	0
- 11447 0342 80        		.byte	-128
- 11448 0343 3F        		.byte	63
- 11449 0344 00        		.byte	0
- 11450 0345 00        		.byte	0
- 11451 0346 80        		.byte	-128
- 11452 0347 3F        		.byte	63
- 11453               	.global	opt_mouse_scale_mode4
- 11456               	opt_mouse_scale_mode4:
- 11457 0348 00        		.byte	0
- 11458 0349 00        		.byte	0
- 11459 034a 80        		.byte	-128
- 11460 034b 3F        		.byte	63
- 11461 034c 00        		.byte	0
- 11462 034d 00        		.byte	0
- 11463 034e 80        		.byte	-128
- 11464 034f 3F        		.byte	63
- 11465 0350 00        		.byte	0
- 11466 0351 00        		.byte	0
- 11467 0352 80        		.byte	-128
- 11468 0353 3F        		.byte	63
- 11469               	.global	accel
- 11470               	.global	accel
- 11471               		.section .bss
- 11474               	accel:
- 11475 0046 0000 0000 		.skip 6,0
- 11475      0000 
- 11476               	.global	accelMicros
- 11477               	.global	accelMicros
- 11480               	accelMicros:
- 11481 004c 0000 0000 		.skip 4,0
- 11482               	.global	accelDiff
- 11483               	.global	accelDiff
- 11486               	accelDiff:
- 11487 0050 0000 0000 		.skip 4,0
- 11488               	.global	accelTick
- 11489               	.global	accelTick
- 11492               	accelTick:
- 11493 0054 0000      		.skip 2,0
- 11494               	.global	xRaw
- 11495               	.global	xRaw
- 11498               	xRaw:
- 11499 0056 0000      		.skip 2,0
- 11500               	.global	yRaw
- 11501               	.global	yRaw
- 11504               	yRaw:
- 11505 0058 0000      		.skip 2,0
- 11506               	.global	zRaw
- 11507               	.global	zRaw
- 11510               	zRaw:
- 11511 005a 0000      		.skip 2,0
- 11512               	.global	x
- 11513               	.global	x
- 11516               	x:
- 11517 005c 0000      		.skip 2,0
- 11518               	.global	y
- 11519               	.global	y
- 11522               	y:
- 11523 005e 0000      		.skip 2,0
- 11524               	.global	z
- 11525               	.global	z
- 11528               	z:
- 11529 0060 0000      		.skip 2,0
- 11530               	.global	x0
- 11531               	.global	x0
- 11534               	x0:
- 11535 0062 0000      		.skip 2,0
- 11536               	.global	y0
- 11537               	.global	y0
- 11540               	y0:
- 11541 0064 0000      		.skip 2,0
- 11542               	.global	z0
- 11543               	.global	z0
- 11546               	z0:
- 11547 0066 0000      		.skip 2,0
- 11548               	.global	x00
- 11549               	.global	x00
- 11552               	x00:
- 11553 0068 0000      		.skip 2,0
- 11554               	.global	y00
- 11555               	.global	y00
- 11558               	y00:
- 11559 006a 0000      		.skip 2,0
- 11560               	.global	z00
- 11561               	.global	z00
- 11564               	z00:
- 11565 006c 0000      		.skip 2,0
- 11566               	.global	xv
- 11567               	.global	xv
- 11570               	xv:
- 11571 006e 0000      		.skip 2,0
- 11572               	.global	yv
- 11573               	.global	yv
- 11576               	yv:
- 11577 0070 0000      		.skip 2,0
- 11578               	.global	zv
- 11579               	.global	zv
- 11582               	zv:
- 11583 0072 0000      		.skip 2,0
- 11584               	.global	cx
- 11585               	.global	cx
- 11588               	cx:
- 11589 0074 0000 0000 		.skip 4,0
- 11590               	.global	cy
- 11591               	.global	cy
- 11594               	cy:
- 11595 0078 0000 0000 		.skip 4,0
- 11596               	.global	cz
- 11597               	.global	cz
- 11600               	cz:
- 11601 007c 0000 0000 		.skip 4,0
- 11602               	.global	xBase
- 11603               	.global	xBase
- 11606               	xBase:
- 11607 0080 0000      		.skip 2,0
- 11608               	.global	yBase
- 11609               	.global	yBase
- 11612               	yBase:
- 11613 0082 0000      		.skip 2,0
- 11614               	.global	zBase
- 11615               	.global	zBase
- 11618               	zBase:
- 11619 0084 0000      		.skip 2,0
- 11620               	.global	xHist
- 11621               	.global	xHist
- 11624               	xHist:
- 11625 0086 0000 0000 		.skip 40,0
- 11625      0000 0000 
- 11625      0000 0000 
- 11625      0000 0000 
- 11625      0000 0000 
- 11626               	.global	yHist
- 11627               	.global	yHist
- 11630               	yHist:
- 11631 00ae 0000 0000 		.skip 40,0
- 11631      0000 0000 
- 11631      0000 0000 
- 11631      0000 0000 
- 11631      0000 0000 
- 11632               	.global	zHist
- 11633               	.global	zHist
- 11636               	zHist:
- 11637 00d6 0000 0000 		.skip 40,0
- 11637      0000 0000 
- 11637      0000 0000 
- 11637      0000 0000 
- 11637      0000 0000 
- 11638               	.global	xMin
- 11639               	.global	xMin
- 11642               	xMin:
- 11643 00fe 0000      		.skip 2,0
- 11644               	.global	yMin
- 11645               	.global	yMin
- 11648               	yMin:
- 11649 0100 0000      		.skip 2,0
- 11650               	.global	zMin
- 11651               	.global	zMin
- 11654               	zMin:
- 11655 0102 0000      		.skip 2,0
- 11656               	.global	xMax
- 11657               	.global	xMax
- 11660               	xMax:
- 11661 0104 0000      		.skip 2,0
- 11662               	.global	yMax
- 11663               	.global	yMax
- 11666               	yMax:
- 11667 0106 0000      		.skip 2,0
- 11668               	.global	zMax
- 11669               	.global	zMax
- 11672               	zMax:
- 11673 0108 0000      		.skip 2,0
- 11674               	.global	ax
- 11675               	.global	ax
- 11678               	ax:
- 11679 010a 0000      		.skip 2,0
- 11680               	.global	ay
- 11681               	.global	ay
- 11684               	ay:
- 11685 010c 0000      		.skip 2,0
- 11686               	.global	az
- 11687               	.global	az
- 11690               	az:
- 11691 010e 0000      		.skip 2,0
- 11692               	.global	ax0
- 11693               	.global	ax0
- 11696               	ax0:
- 11697 0110 0000      		.skip 2,0
- 11698               	.global	ay0
- 11699               	.global	ay0
- 11702               	ay0:
- 11703 0112 0000      		.skip 2,0
- 11704               	.global	az0
- 11705               	.global	az0
- 11708               	az0:
- 11709 0114 0000      		.skip 2,0
- 11710               	.global	ax00
- 11711               	.global	ax00
- 11714               	ax00:
- 11715 0116 0000      		.skip 2,0
- 11716               	.global	ay00
- 11717               	.global	ay00
- 11720               	ay00:
- 11721 0118 0000      		.skip 2,0
- 11722               	.global	az00
- 11723               	.global	az00
- 11726               	az00:
- 11727 011a 0000      		.skip 2,0
- 11728               	.global	axBase
- 11729               	.global	axBase
- 11732               	axBase:
- 11733 011c 0000      		.skip 2,0
- 11734               	.global	ayBase
- 11735               	.global	ayBase
- 11738               	ayBase:
- 11739 011e 0000      		.skip 2,0
- 11740               	.global	azBase
- 11741               	.global	azBase
- 11744               	azBase:
- 11745 0120 0000      		.skip 2,0
- 11746               	.global	aset
- 11747               	.global	aset
- 11750               	aset:
- 11751 0122 00        		.skip 1,0
- 11752               	.global	calAccel
- 11753               	.global	calAccel
- 11756               	calAccel:
- 11757 0123 0000      		.skip 2,0
- 11758               	.global	accelCalibrated
- 11759               	.global	accelCalibrated
- 11762               	accelCalibrated:
- 11763 0125 00        		.skip 1,0
- 11764               	.global	gyro
- 11765               	.global	gyro
- 11768               	gyro:
- 11769 0126 0000 0000 		.skip 25,0
- 11769      0000 0000 
- 11769      0000 0000 
- 11769      0000 0000 
- 11769      0000 0000 
- 11770               	.global	gyroMicros
- 11771               	.global	gyroMicros
- 11774               	gyroMicros:
- 11775 013f 0000 0000 		.skip 4,0
- 11776               	.global	gyroDiff
- 11777               	.global	gyroDiff
- 11780               	gyroDiff:
- 11781 0143 0000 0000 		.skip 4,0
- 11782               	.global	gyroTick
- 11783               	.global	gyroTick
- 11786               	gyroTick:
- 11787 0147 0000      		.skip 2,0
- 11788               	.global	gxRaw
- 11789               	.global	gxRaw
- 11792               	gxRaw:
- 11793 0149 0000      		.skip 2,0
- 11794               	.global	gyRaw
- 11795               	.global	gyRaw
- 11798               	gyRaw:
- 11799 014b 0000      		.skip 2,0
- 11800               	.global	gzRaw
- 11801               	.global	gzRaw
- 11804               	gzRaw:
- 11805 014d 0000      		.skip 2,0
- 11806               	.global	gx
- 11807               	.global	gx
- 11810               	gx:
- 11811 014f 0000      		.skip 2,0
- 11812               	.global	gy
- 11813               	.global	gy
- 11816               	gy:
- 11817 0151 0000      		.skip 2,0
- 11818               	.global	gz
- 11819               	.global	gz
- 11822               	gz:
- 11823 0153 0000      		.skip 2,0
- 11824               	.global	gx0
- 11825               	.global	gx0
- 11828               	gx0:
- 11829 0155 0000      		.skip 2,0
- 11830               	.global	gy0
- 11831               	.global	gy0
- 11834               	gy0:
- 11835 0157 0000      		.skip 2,0
- 11836               	.global	gz0
- 11837               	.global	gz0
- 11840               	gz0:
- 11841 0159 0000      		.skip 2,0
- 11842               	.global	gx00
- 11843               	.global	gx00
- 11846               	gx00:
- 11847 015b 0000      		.skip 2,0
- 11848               	.global	gy00
- 11849               	.global	gy00
- 11852               	gy00:
- 11853 015d 0000      		.skip 2,0
- 11854               	.global	gz00
- 11855               	.global	gz00
- 11858               	gz00:
- 11859 015f 0000      		.skip 2,0
- 11860               	.global	cgx
- 11861               	.global	cgx
- 11864               	cgx:
- 11865 0161 0000 0000 		.skip 4,0
- 11866               	.global	cgy
- 11867               	.global	cgy
- 11870               	cgy:
- 11871 0165 0000 0000 		.skip 4,0
- 11872               	.global	cgz
- 11873               	.global	cgz
- 11876               	cgz:
- 11877 0169 0000 0000 		.skip 4,0
- 11878               	.global	gxBase
- 11879               	.global	gxBase
- 11882               	gxBase:
- 11883 016d 0000      		.skip 2,0
- 11884               	.global	gyBase
- 11885               	.global	gyBase
- 11888               	gyBase:
- 11889 016f 0000      		.skip 2,0
- 11890               	.global	gzBase
- 11891               	.global	gzBase
- 11894               	gzBase:
- 11895 0171 0000      		.skip 2,0
- 11896               	.global	gxHist
- 11897               	.global	gxHist
- 11900               	gxHist:
- 11901 0173 0000 0000 		.skip 40,0
- 11901      0000 0000 
- 11901      0000 0000 
- 11901      0000 0000 
- 11901      0000 0000 
- 11902               	.global	gyHist
- 11903               	.global	gyHist
- 11906               	gyHist:
- 11907 019b 0000 0000 		.skip 40,0
- 11907      0000 0000 
- 11907      0000 0000 
- 11907      0000 0000 
- 11907      0000 0000 
- 11908               	.global	gzHist
- 11909               	.global	gzHist
- 11912               	gzHist:
- 11913 01c3 0000 0000 		.skip 40,0
- 11913      0000 0000 
- 11913      0000 0000 
- 11913      0000 0000 
- 11913      0000 0000 
- 11914               	.global	gxMin
- 11915               	.global	gxMin
- 11918               	gxMin:
- 11919 01eb 0000      		.skip 2,0
- 11920               	.global	gyMin
- 11921               	.global	gyMin
- 11924               	gyMin:
- 11925 01ed 0000      		.skip 2,0
- 11926               	.global	gzMin
- 11927               	.global	gzMin
- 11930               	gzMin:
- 11931 01ef 0000      		.skip 2,0
- 11932               	.global	gxMax
- 11933               	.global	gxMax
- 11936               	gxMax:
- 11937 01f1 0000      		.skip 2,0
- 11938               	.global	gyMax
- 11939               	.global	gyMax
- 11942               	gyMax:
- 11943 01f3 0000      		.skip 2,0
- 11944               	.global	gzMax
- 11945               	.global	gzMax
- 11948               	gzMax:
- 11949 01f5 0000      		.skip 2,0
- 11950               	.global	gset
- 11951               	.global	gset
- 11954               	gset:
- 11955 01f7 00        		.skip 1,0
- 11956               	.global	calGyro
- 11957               	.global	calGyro
- 11960               	calGyro:
- 11961 01f8 0000      		.skip 2,0
- 11962               	.global	gyroCalibrated
- 11963               	.global	gyroCalibrated
- 11966               	gyroCalibrated:
- 11967 01fa 00        		.skip 1,0
- 11968               	.global	tricolorBlinkRed
- 11969               	.global	tricolorBlinkRed
- 11972               	tricolorBlinkRed:
- 11973 01fb 0000      		.skip 2,0
- 11974               	.global	tricolorBlinkGreen
- 11975               	.global	tricolorBlinkGreen
- 11978               	tricolorBlinkGreen:
- 11979 01fd 0000      		.skip 2,0
- 11980               	.global	tricolorBlinkBlue
- 11981               	.global	tricolorBlinkBlue
- 11984               	tricolorBlinkBlue:
- 11985 01ff 0000      		.skip 2,0
- 11986               	.global	blink_led
- 11987               	.global	blink_led
- 11990               	blink_led:
- 11991 0201 00        		.skip 1,0
- 11992               	.global	modifiersDown
- 11993               	.global	modifiersDown
- 11996               	modifiersDown:
- 11997 0202 0000      		.skip 2,0
- 11998               	.global	keysDown
- 11999               	.global	keysDown
- 12002               	keysDown:
- 12003 0204 0000 0000 		.skip 12,0
- 12003      0000 0000 
- 12003      0000 0000 
- 12004               	.global	mouseDown
- 12005               	.global	mouseDown
- 12008               	mouseDown:
- 12009 0210 0000      		.skip 2,0
- 12010               	.global	modeStack
- 12011               	.global	modeStack
- 12014               	modeStack:
- 12015 0212 0000 0000 		.skip 20,0
- 12015      0000 0000 
- 12015      0000 0000 
- 12015      0000 0000 
- 12015      0000 0000 
- 12016               	.global	modeStackPos
- 12017               	.global	modeStackPos
- 12020               	modeStackPos:
- 12021 0226 0000      		.skip 2,0
- 12022               	.global	touchTime
- 12023               	.global	touchTime
- 12026               	touchTime:
- 12027 0228 0000 0000 		.skip 4,0
- 12028               	.global	adding
- 12029               	.global	adding
- 12032               	adding:
- 12033 022c 00        		.skip 1,0
- 12034               	.global	removing
- 12035               	.global	removing
- 12038               	removing:
- 12039 022d 00        		.skip 1,0
- 12040               	.global	detect1
- 12041               	.global	detect1
- 12044               	detect1:
- 12045 022e 0000 0000 		.skip 4,0
- 12046               	.global	detect2
- 12047               	.global	detect2
- 12050               	detect2:
- 12051 0232 0000 0000 		.skip 4,0
- 12052               	.global	verify1
- 12053               	.global	verify1
- 12056               	verify1:
- 12057 0236 0000 0000 		.skip 4,0
- 12058               	.global	verify2
- 12059               	.global	verify2
- 12062               	verify2:
- 12063 023a 0000 0000 		.skip 4,0
- 12064               	.global	sensors1
- 12065               	.global	sensors1
- 12068               	sensors1:
- 12069 023e 0000 0000 		.skip 4,0
- 12070               	.global	sensors2
- 12071               	.global	sensors2
- 12074               	sensors2:
- 12075 0242 0000 0000 		.skip 4,0
- 12076               	.global	mode
- 12077               	.global	mode
- 12080               	mode:
- 12081 0246 00        		.skip 1,0
- 12082               		.lcomm _ZL19HostTXSerial_Buffer,11
- 12083               		.data
- 12086               	_ZL16LineEncodingData:
- 12087 0354 00        		.byte	0
- 12088 0355 00        		.byte	0
- 12089 0356 00        		.byte	0
- 12090 0357 00        		.byte	0
- 12091 0358 00        		.byte	0
- 12092 0359 00        		.byte	0
- 12093 035a 08        		.byte	8
- 12094               		.lcomm _ZL19HostRXSerial_Buffer,11
- 12095               		.lcomm _ZL24HostRXSerial_Buffer_Data,128
- 12096               		.lcomm _ZL24HostTXSerial_Buffer_Data,128
- 12097               		.lcomm _ZL10CDCTaskRun,1
- 12098               		.lcomm _ZL10HIDTaskRun,1
- 12435               	.Letext0:
+ 10830 4c28 1086      		std Z+8,__zero_reg__
+ 10831               	.LM1382:
+ 10832 4c2a 1286      		std Z+10,__zero_reg__
+ 10833 4c2c 1186      		std Z+9,__zero_reg__
+ 10834               	.LBB760:
+ 10835               	.LBB761:
+ 10836               	.LM1383:
+ 10837               	.LM1384:
+ 10838 4c2e 2FBF      		out __SREG__,r18
+ 10839               	.LM1385:
+ 10840               	.LBE761:
+ 10841               	.LBE760:
+ 10842               	.LBE755:
+ 10843               	.LBE754:
+ 10844               	.LBE753:
+ 10845               	.LBB762:
+ 10846               	.LBB763:
+ 10847               	.LBB764:
+ 10848               	.LM1386:
+ 10849 4c30 E0E0      		ldi r30,lo8(HostTXSerial_Buffer)
+ 10850 4c32 F0E0      		ldi r31,hi8(HostTXSerial_Buffer)
+ 10851               	.LVL411:
+ 10852               	.LBB765:
+ 10853               	.LBB766:
+ 10854               	.LM1387:
+ 10855               	.LM1388:
+ 10856 4c34 2FB7      		in r18,__SREG__
+ 10857               	.LVL412:
+ 10858               	.LBE766:
+ 10859               	.LBE765:
+ 10860               	.LBB767:
+ 10861               	.LBB768:
+ 10862               	.LM1389:
+ 10863               	.LM1390:
+ 10864               	/* #APP */
+ 10865               	 ;  370 "./LUFA/Drivers/USB/../../Common/Common.h" 1
+ 10866 4c36 F894      		cli
+ 10867               	 ;  0 "" 2
+ 10868               	.LM1391:
+ 10869               	/* #NOAPP */
+ 10870               	.LBE768:
+ 10871               	.LBE767:
+ 10872               	.LM1392:
+ 10873 4c38 80E0      		ldi r24,lo8(HostTXSerial_Buffer_Data)
+ 10874 4c3a 90E0      		ldi r25,hi8(HostTXSerial_Buffer_Data)
+ 10875 4c3c 9183      		std Z+1,r25
+ 10876 4c3e 8083      		st Z,r24
+ 10877               	.LM1393:
+ 10878 4c40 9383      		std Z+3,r25
+ 10879 4c42 8283      		std Z+2,r24
+ 10880               	.LM1394:
+ 10881 4c44 9583      		std Z+5,r25
+ 10882 4c46 8483      		std Z+4,r24
+ 10883               	.LM1395:
+ 10884 4c48 80E0      		ldi r24,lo8(HostTXSerial_Buffer_Data+256)
+ 10885 4c4a 90E0      		ldi r25,hi8(HostTXSerial_Buffer_Data+256)
+ 10886 4c4c 9783      		std Z+7,r25
+ 10887 4c4e 8683      		std Z+6,r24
+ 10888               	.LM1396:
+ 10889 4c50 1086      		std Z+8,__zero_reg__
+ 10890               	.LM1397:
+ 10891 4c52 1286      		std Z+10,__zero_reg__
+ 10892 4c54 1186      		std Z+9,__zero_reg__
+ 10893               	.LBB769:
+ 10894               	.LBB770:
+ 10895               	.LM1398:
+ 10896               	.LM1399:
+ 10897 4c56 2FBF      		out __SREG__,r18
+ 10898               	.LM1400:
+ 10899               	.LBE770:
+ 10900               	.LBE769:
+ 10901               	.LBE764:
+ 10902               	.LBE763:
+ 10903               	.LBE762:
+ 10904               	.LM1401:
+ 10905 4c58 0E94 0000 		call SetupHardware
+ 10906               	.LVL413:
+ 10907               	.LM1402:
+ 10908 4c5c 0E94 0000 		call init
+ 10909               	.LM1403:
+ 10910 4c60 0E94 0000 		call setup
+ 10911               	.L527:
+ 10912               	.LM1404:
+ 10913 4c64 0E94 0000 		call loop
+ 10914               	.LM1405:
+ 10915 4c68 8091 0000 		lds r24,CDCTaskRun
+ 10916 4c6c 8823      		tst r24
+ 10917 4c6e 01F4      		brne .L523
+ 10918 4c70 0E94 0000 		call CDC_Task
+ 10919 4c74 00C0      		rjmp .L524
+ 10920               	.L523:
+ 10921 4c76 1092 0000 		sts CDCTaskRun,__zero_reg__
+ 10922               	.L524:
+ 10923               	.LM1406:
+ 10924 4c7a 8091 0000 		lds r24,HIDTaskRun
+ 10925 4c7e 8823      		tst r24
+ 10926 4c80 01F4      		brne .L525
+ 10927 4c82 0E94 0000 		call HID_Task
+ 10928 4c86 00C0      		rjmp .L526
+ 10929               	.L525:
+ 10930 4c88 1092 0000 		sts HIDTaskRun,__zero_reg__
+ 10931               	.L526:
+ 10932               	.LM1407:
+ 10933 4c8c 0E94 0000 		call USB_USBTask
+ 10934 4c90 00C0      		rjmp .L527
+ 10935               	.LFE155:
+ 10937               		.data
+ 10938               	.LC25:
+ 10939 01b9 746F 7563 		.string	"touchset mouseclick "
+ 10939      6873 6574 
+ 10939      206D 6F75 
+ 10939      7365 636C 
+ 10939      6963 6B20 
+ 10940               		.text
+ 10941               	.global	_Z10mouseclicki
+ 10943               	_Z10mouseclicki:
+ 10944               	.LFB136:
+ 10945               	.LM1408:
+ 10946               	.LVL414:
+ 10947 4c92 EF92      		push r14
+ 10948 4c94 FF92      		push r15
+ 10949 4c96 0F93      		push r16
+ 10950 4c98 1F93      		push r17
+ 10951               	/* prologue: function */
+ 10952               	/* frame size = 0 */
+ 10953 4c9a 7C01      		movw r14,r24
+ 10954               	.LM1409:
+ 10955 4c9c 00E0      		ldi r16,lo8(Serial)
+ 10956 4c9e 10E0      		ldi r17,hi8(Serial)
+ 10957 4ca0 C801      		movw r24,r16
+ 10958               	.LVL415:
+ 10959 4ca2 60E0      		ldi r22,lo8(.LC25)
+ 10960 4ca4 70E0      		ldi r23,hi8(.LC25)
+ 10961 4ca6 0E94 0000 		call _ZN16USBVirtualSerial5printEPKc
+ 10962               	.LM1410:
+ 10963 4caa C801      		movw r24,r16
+ 10964 4cac B701      		movw r22,r14
+ 10965 4cae 0E94 0000 		call _ZN16USBVirtualSerial7printlnEi
+ 10966               	.LM1411:
+ 10967 4cb2 C701      		movw r24,r14
+ 10968 4cb4 0E94 0000 		call _Z9mousedowni
+ 10969               	.LM1412:
+ 10970 4cb8 65E0      		ldi r22,lo8(5)
+ 10971 4cba 70E0      		ldi r23,hi8(5)
+ 10972 4cbc 80E0      		ldi r24,hlo8(5)
+ 10973 4cbe 90E0      		ldi r25,hhi8(5)
+ 10974 4cc0 0E94 0000 		call delay
+ 10975               	.LM1413:
+ 10976 4cc4 C701      		movw r24,r14
+ 10977 4cc6 0E94 0000 		call _Z7mouseupi
+ 10978               	/* epilogue start */
+ 10979               	.LM1414:
+ 10980 4cca 1F91      		pop r17
+ 10981 4ccc 0F91      		pop r16
+ 10982 4cce FF90      		pop r15
+ 10983 4cd0 EF90      		pop r14
+ 10984               	.LVL416:
+ 10985 4cd2 0895      		ret
+ 10986               	.LFE136:
+ 10988               	.global	HIDReportInData
+ 10989               	.global	HIDReportInData
+ 10990               		.section .bss
+ 10993               	HIDReportInData:
+ 10994 0000 0000 0000 		.skip 9,0
+ 10994      0000 0000 
+ 10994      00
+ 10995               	.global	HIDReportOutData
+ 10996               	.global	HIDReportOutData
+ 10999               	HIDReportOutData:
+ 11000 0009 0000 0000 		.skip 9,0
+ 11000      0000 0000 
+ 11000      00
+ 11001               	.global	LineEncodingData
+ 11002               		.data
+ 11005               	LineEncodingData:
+ 11006 01ce 00        		.byte	0
+ 11007 01cf 00        		.byte	0
+ 11008 01d0 00        		.byte	0
+ 11009 01d1 00        		.byte	0
+ 11010 01d2 00        		.byte	0
+ 11011 01d3 00        		.byte	0
+ 11012 01d4 08        		.byte	8
+ 11013               	.global	HostRXSerial_Buffer
+ 11014               	.global	HostRXSerial_Buffer
+ 11015               		.section .bss
+ 11018               	HostRXSerial_Buffer:
+ 11019 0012 0000 0000 		.skip 11,0
+ 11019      0000 0000 
+ 11019      0000 00
+ 11020               	.global	HostRXSerial_Buffer_Data
+ 11021               	.global	HostRXSerial_Buffer_Data
+ 11024               	HostRXSerial_Buffer_Data:
+ 11025 001d 0000 0000 		.skip 256,0
+ 11025      0000 0000 
+ 11025      0000 0000 
+ 11025      0000 0000 
+ 11025      0000 0000 
+ 11026               	.global	HostTXSerial_Buffer
+ 11027               	.global	HostTXSerial_Buffer
+ 11030               	HostTXSerial_Buffer:
+ 11031 011d 0000 0000 		.skip 11,0
+ 11031      0000 0000 
+ 11031      0000 00
+ 11032               	.global	HostTXSerial_Buffer_Data
+ 11033               	.global	HostTXSerial_Buffer_Data
+ 11036               	HostTXSerial_Buffer_Data:
+ 11037 0128 0000 0000 		.skip 256,0
+ 11037      0000 0000 
+ 11037      0000 0000 
+ 11037      0000 0000 
+ 11037      0000 0000 
+ 11038               	.global	CDCTaskRun
+ 11039               	.global	CDCTaskRun
+ 11042               	CDCTaskRun:
+ 11043 0228 00        		.skip 1,0
+ 11044               	.global	HIDTaskRun
+ 11045               	.global	HIDTaskRun
+ 11048               	HIDTaskRun:
+ 11049 0229 00        		.skip 1,0
+ 11050               	.global	ide_workaround
+ 11051               	.global	ide_workaround
+ 11054               	ide_workaround:
+ 11055 022a 00        		.skip 1,0
+ 11056               	.global	pins
+ 11057               		.data
+ 11060               	pins:
+ 11061 01d5 0400      		.word	4
+ 11062 01d7 0500      		.word	5
+ 11063 01d9 0700      		.word	7
+ 11064 01db 0800      		.word	8
+ 11065 01dd 0900      		.word	9
+ 11066 01df 0A00      		.word	10
+ 11067 01e1 0B00      		.word	11
+ 11068 01e3 0C00      		.word	12
+ 11069 01e5 0D00      		.word	13
+ 11070 01e7 0E00      		.word	14
+ 11071 01e9 0F00      		.word	15
+ 11072 01eb 1000      		.word	16
+ 11073 01ed 1100      		.word	17
+ 11074 01ef 1200      		.word	18
+ 11075 01f1 1300      		.word	19
+ 11076 01f3 1400      		.word	20
+ 11077 01f5 1500      		.word	21
+ 11078 01f7 1600      		.word	22
+ 11079 01f9 1700      		.word	23
+ 11080 01fb 1800      		.word	24
+ 11081 01fd 1900      		.word	25
+ 11082 01ff 1A00      		.word	26
+ 11083 0201 1B00      		.word	27
+ 11084 0203 1C00      		.word	28
+ 11085 0205 1D00      		.word	29
+ 11086 0207 1E00      		.word	30
+ 11087 0209 1F00      		.word	31
+ 11088 020b 2000      		.word	32
+ 11089 020d 2100      		.word	33
+ 11090 020f 2200      		.word	34
+ 11091 0211 2300      		.word	35
+ 11092 0213 2600      		.word	38
+ 11093 0215 2700      		.word	39
+ 11094 0217 2800      		.word	40
+ 11095               	.global	combinations
+ 11098               	combinations:
+ 11099 0219 1E00      		.word	30
+ 11100 021b 2700      		.word	39
+ 11101 021d 1D00      		.word	29
+ 11102 021f 2700      		.word	39
+ 11103 0221 0E00      		.word	14
+ 11104 0223 2800      		.word	40
+ 11105 0225 0E00      		.word	14
+ 11106 0227 1D00      		.word	29
+ 11107 0229 0F00      		.word	15
+ 11108 022b 1D00      		.word	29
+ 11109 022d 1000      		.word	16
+ 11110 022f 1D00      		.word	29
+ 11111 0231 0C00      		.word	12
+ 11112 0233 1D00      		.word	29
+ 11113 0235 1A00      		.word	26
+ 11114 0237 1D00      		.word	29
+ 11115 0239 1B00      		.word	27
+ 11116 023b 1D00      		.word	29
+ 11117 023d 1C00      		.word	28
+ 11118 023f 1D00      		.word	29
+ 11119 0241 1E00      		.word	30
+ 11120 0243 2600      		.word	38
+ 11121 0245 1D00      		.word	29
+ 11122 0247 2600      		.word	38
+ 11123 0249 0B00      		.word	11
+ 11124 024b 2800      		.word	40
+ 11125 024d 0B00      		.word	11
+ 11126 024f 1D00      		.word	29
+ 11127 0251 0D00      		.word	13
+ 11128 0253 1D00      		.word	29
+ 11129 0255 1700      		.word	23
+ 11130 0257 1D00      		.word	29
+ 11131 0259 1800      		.word	24
+ 11132 025b 1D00      		.word	29
+ 11133 025d 1900      		.word	25
+ 11134 025f 1D00      		.word	29
+ 11135 0261 0B00      		.word	11
+ 11136 0263 2700      		.word	39
+ 11137 0265 1E00      		.word	30
+ 11138 0267 2300      		.word	35
+ 11139 0269 1D00      		.word	29
+ 11140 026b 2300      		.word	35
+ 11141 026d 0800      		.word	8
+ 11142 026f 2800      		.word	40
+ 11143 0271 0800      		.word	8
+ 11144 0273 1D00      		.word	29
+ 11145 0275 0900      		.word	9
+ 11146 0277 1D00      		.word	29
+ 11147 0279 0A00      		.word	10
+ 11148 027b 1D00      		.word	29
+ 11149 027d 1400      		.word	20
+ 11150 027f 1E00      		.word	30
+ 11151 0281 1400      		.word	20
+ 11152 0283 1D00      		.word	29
+ 11153 0285 1500      		.word	21
+ 11154 0287 1E00      		.word	30
+ 11155 0289 1500      		.word	21
+ 11156 028b 1D00      		.word	29
+ 11157 028d 1600      		.word	22
+ 11158 028f 1E00      		.word	30
+ 11159 0291 1600      		.word	22
+ 11160 0293 1D00      		.word	29
+ 11161 0295 0800      		.word	8
+ 11162 0297 2200      		.word	34
+ 11163 0299 0800      		.word	8
+ 11164 029b 2600      		.word	38
+ 11165 029d 0800      		.word	8
+ 11166 029f 2700      		.word	39
+ 11167 02a1 0800      		.word	8
+ 11168 02a3 1100      		.word	17
+ 11169 02a5 1E00      		.word	30
+ 11170 02a7 2200      		.word	34
+ 11171 02a9 1D00      		.word	29
+ 11172 02ab 2200      		.word	34
+ 11173 02ad 0400      		.word	4
+ 11174 02af 2800      		.word	40
+ 11175 02b1 1100      		.word	17
+ 11176 02b3 1D00      		.word	29
+ 11177 02b5 0400      		.word	4
+ 11178 02b7 1D00      		.word	29
+ 11179 02b9 0500      		.word	5
+ 11180 02bb 1D00      		.word	29
+ 11181 02bd 0700      		.word	7
+ 11182 02bf 1D00      		.word	29
+ 11183 02c1 1100      		.word	17
+ 11184 02c3 1E00      		.word	30
+ 11185 02c5 1200      		.word	18
+ 11186 02c7 1E00      		.word	30
+ 11187 02c9 1200      		.word	18
+ 11188 02cb 1D00      		.word	29
+ 11189 02cd 1300      		.word	19
+ 11190 02cf 1E00      		.word	30
+ 11191 02d1 1300      		.word	19
+ 11192 02d3 1D00      		.word	29
+ 11193 02d5 0400      		.word	4
+ 11194 02d7 2100      		.word	33
+ 11195 02d9 0400      		.word	4
+ 11196 02db 2000      		.word	32
+ 11197 02dd 0400      		.word	4
+ 11198 02df 1F00      		.word	31
+ 11199 02e1 0800      		.word	8
+ 11200 02e3 2100      		.word	33
+ 11201 02e5 0800      		.word	8
+ 11202 02e7 2000      		.word	32
+ 11203 02e9 0800      		.word	8
+ 11204 02eb 1F00      		.word	31
+ 11205 02ed 0B00      		.word	11
+ 11206 02ef 2100      		.word	33
+ 11207 02f1 0B00      		.word	11
+ 11208 02f3 2000      		.word	32
+ 11209 02f5 0B00      		.word	11
+ 11210 02f7 1F00      		.word	31
+ 11211 02f9 0E00      		.word	14
+ 11212 02fb 2100      		.word	33
+ 11213 02fd 0E00      		.word	14
+ 11214 02ff 2000      		.word	32
+ 11215 0301 0E00      		.word	14
+ 11216 0303 1F00      		.word	31
+ 11217 0305 1D00      		.word	29
+ 11218 0307 1F00      		.word	31
+ 11219               	.global	counter
+ 11220               	.global	counter
+ 11221               		.section .bss
+ 11224               	counter:
+ 11225 022b 0000      		.skip 2,0
+ 11226               	.global	ticks
+ 11227               	.global	ticks
+ 11230               	ticks:
+ 11231 022d 0000      		.skip 2,0
+ 11232               	.global	t
+ 11233               	.global	t
+ 11236               	t:
+ 11237 022f 0000 0000 		.skip 4,0
+ 11238               	.global	i
+ 11239               	.global	i
+ 11242               	i:
+ 11243 0233 0000 0000 		.skip 4,0
+ 11244               	.global	moveMouse
+ 11245               	.global	moveMouse
+ 11248               	moveMouse:
+ 11249 0237 00        		.skip 1,0
+ 11250               	.global	scrollMouse
+ 11251               	.global	scrollMouse
+ 11254               	scrollMouse:
+ 11255 0238 00        		.skip 1,0
+ 11256               	.global	mx
+ 11257               	.global	mx
+ 11260               	mx:
+ 11261 0239 0000      		.skip 2,0
+ 11262               	.global	my
+ 11263               	.global	my
+ 11266               	my:
+ 11267 023b 0000      		.skip 2,0
+ 11268               	.global	mz
+ 11269               	.global	mz
+ 11272               	mz:
+ 11273 023d 0000      		.skip 2,0
+ 11274               	.global	sy
+ 11275               	.global	sy
+ 11278               	sy:
+ 11279 023f 0000      		.skip 2,0
+ 11280               	.global	mx0
+ 11281               	.global	mx0
+ 11284               	mx0:
+ 11285 0241 0000      		.skip 2,0
+ 11286               	.global	my0
+ 11287               	.global	my0
+ 11290               	my0:
+ 11291 0243 0000      		.skip 2,0
+ 11292               	.global	mz0
+ 11293               	.global	mz0
+ 11296               	mz0:
+ 11297 0245 0000      		.skip 2,0
+ 11298               	.global	sy0
+ 11299               	.global	sy0
+ 11302               	sy0:
+ 11303 0247 0000      		.skip 2,0
+ 11304               	.global	mdx
+ 11305               	.global	mdx
+ 11308               	mdx:
+ 11309 0249 0000      		.skip 2,0
+ 11310               	.global	mdy
+ 11311               	.global	mdy
+ 11314               	mdy:
+ 11315 024b 0000      		.skip 2,0
+ 11316               	.global	mdz
+ 11317               	.global	mdz
+ 11320               	mdz:
+ 11321 024d 0000      		.skip 2,0
+ 11322               	.global	sdy
+ 11323               	.global	sdy
+ 11326               	sdy:
+ 11327 024f 0000      		.skip 2,0
+ 11328               	.global	opt_touch_detect_threshold
+ 11329               		.data
+ 11332               	opt_touch_detect_threshold:
+ 11333 0309 1400      		.word	20
+ 11334               	.global	opt_enable_calibration
+ 11335               	.global	opt_enable_calibration
+ 11336               		.section .bss
+ 11339               	opt_enable_calibration:
+ 11340 0251 0000      		.skip 2,0
+ 11341               	.global	opt_accel_offset
+ 11342               		.data
+ 11345               	opt_accel_offset:
+ 11346 030b 0700      		.word	7
+ 11347 030d F0FF      		.word	-16
+ 11348 030f 0100      		.word	1
+ 11349               	.global	opt_accel_calibrate
+ 11352               	opt_accel_calibrate:
+ 11353 0311 00        		.byte	0
+ 11354 0312 00        		.byte	0
+ 11355 0313 80        		.byte	-128
+ 11356 0314 3F        		.byte	63
+ 11357 0315 00        		.byte	0
+ 11358 0316 00        		.byte	0
+ 11359 0317 80        		.byte	-128
+ 11360 0318 3F        		.byte	63
+ 11361 0319 00        		.byte	0
+ 11362 031a 00        		.byte	0
+ 11363 031b 80        		.byte	-128
+ 11364 031c 3F        		.byte	63
+ 11365               	.global	opt_gyro_offset
+ 11366               	.global	opt_gyro_offset
+ 11367               		.section .bss
+ 11370               	opt_gyro_offset:
+ 11371 0253 0000 0000 		.skip 6,0
+ 11371      0000 
+ 11372               	.global	opt_gyro_calibrate
+ 11373               		.data
+ 11376               	opt_gyro_calibrate:
+ 11377 031d 00        		.byte	0
+ 11378 031e 00        		.byte	0
+ 11379 031f 80        		.byte	-128
+ 11380 0320 3F        		.byte	63
+ 11381 0321 00        		.byte	0
+ 11382 0322 00        		.byte	0
+ 11383 0323 80        		.byte	-128
+ 11384 0324 3F        		.byte	63
+ 11385 0325 00        		.byte	0
+ 11386 0326 00        		.byte	0
+ 11387 0327 80        		.byte	-128
+ 11388 0328 3F        		.byte	63
+ 11389               	.global	opt_motion_sampling_div
+ 11392               	opt_motion_sampling_div:
+ 11393 0329 0C00      		.word	12
+ 11394               	.global	opt_accel_kalman_constant
+ 11397               	opt_accel_kalman_constant:
+ 11398 032b 9A        		.byte	-102
+ 11399 032c 99        		.byte	-103
+ 11400 032d 19        		.byte	25
+ 11401 032e 3F        		.byte	63
+ 11402               	.global	opt_gyro_kalman_constant
+ 11405               	opt_gyro_kalman_constant:
+ 11406 032f 9A        		.byte	-102
+ 11407 0330 99        		.byte	-103
+ 11408 0331 99        		.byte	-103
+ 11409 0332 3E        		.byte	62
+ 11410               	.global	opt_accel_smooth_average
+ 11413               	opt_accel_smooth_average:
+ 11414 0333 04        		.byte	4
+ 11415               	.global	opt_gyro_smooth_average
+ 11416               	.global	opt_gyro_smooth_average
+ 11417               		.section .bss
+ 11420               	opt_gyro_smooth_average:
+ 11421 0259 00        		.skip 1,0
+ 11422               	.global	opt_accel_rot90
+ 11423               	.global	opt_accel_rot90
+ 11426               	opt_accel_rot90:
+ 11427 025a 00        		.skip 1,0
+ 11428               	.global	opt_gyro_rot90
+ 11429               		.data
+ 11432               	opt_gyro_rot90:
+ 11433 0334 04        		.byte	4
+ 11434               	.global	opt_mouse_invert_x
+ 11437               	opt_mouse_invert_x:
+ 11438 0335 01        		.byte	1
+ 11439               	.global	opt_mouse_invert_y
+ 11442               	opt_mouse_invert_y:
+ 11443 0336 01        		.byte	1
+ 11444               	.global	opt_mouse_invert_z
+ 11445               	.global	opt_mouse_invert_z
+ 11446               		.section .bss
+ 11449               	opt_mouse_invert_z:
+ 11450 025b 00        		.skip 1,0
+ 11451               	.global	opt_mouse_mode
+ 11452               	.global	opt_mouse_mode
+ 11455               	opt_mouse_mode:
+ 11456 025c 00        		.skip 1,0
+ 11457               	.global	opt_scroll_mode
+ 11458               	.global	opt_scroll_mode
+ 11461               	opt_scroll_mode:
+ 11462 025d 00        		.skip 1,0
+ 11463               	.global	opt_mouse_scale_mode1
+ 11464               		.data
+ 11467               	opt_mouse_scale_mode1:
+ 11468 0337 00        		.byte	0
+ 11469 0338 00        		.byte	0
+ 11470 0339 80        		.byte	-128
+ 11471 033a 3F        		.byte	63
+ 11472 033b 00        		.byte	0
+ 11473 033c 00        		.byte	0
+ 11474 033d 80        		.byte	-128
+ 11475 033e 3F        		.byte	63
+ 11476               	.global	opt_mouse_scale_mode2
+ 11479               	opt_mouse_scale_mode2:
+ 11480 033f 00        		.byte	0
+ 11481 0340 00        		.byte	0
+ 11482 0341 80        		.byte	-128
+ 11483 0342 3F        		.byte	63
+ 11484 0343 00        		.byte	0
+ 11485 0344 00        		.byte	0
+ 11486 0345 80        		.byte	-128
+ 11487 0346 3F        		.byte	63
+ 11488               	.global	opt_mouse_scale_mode3
+ 11491               	opt_mouse_scale_mode3:
+ 11492 0347 00        		.byte	0
+ 11493 0348 00        		.byte	0
+ 11494 0349 80        		.byte	-128
+ 11495 034a 3F        		.byte	63
+ 11496 034b 00        		.byte	0
+ 11497 034c 00        		.byte	0
+ 11498 034d 80        		.byte	-128
+ 11499 034e 3F        		.byte	63
+ 11500               	.global	opt_mouse_scale_mode4
+ 11503               	opt_mouse_scale_mode4:
+ 11504 034f 00        		.byte	0
+ 11505 0350 00        		.byte	0
+ 11506 0351 80        		.byte	-128
+ 11507 0352 3F        		.byte	63
+ 11508 0353 00        		.byte	0
+ 11509 0354 00        		.byte	0
+ 11510 0355 80        		.byte	-128
+ 11511 0356 3F        		.byte	63
+ 11512 0357 00        		.byte	0
+ 11513 0358 00        		.byte	0
+ 11514 0359 80        		.byte	-128
+ 11515 035a 3F        		.byte	63
+ 11516               	.global	accel
+ 11517               	.global	accel
+ 11518               		.section .bss
+ 11521               	accel:
+ 11522 025e 0000 0000 		.skip 6,0
+ 11522      0000 
+ 11523               	.global	accelMicros
+ 11524               	.global	accelMicros
+ 11527               	accelMicros:
+ 11528 0264 0000 0000 		.skip 4,0
+ 11529               	.global	accelDiff
+ 11530               	.global	accelDiff
+ 11533               	accelDiff:
+ 11534 0268 0000 0000 		.skip 4,0
+ 11535               	.global	accelTick
+ 11536               	.global	accelTick
+ 11539               	accelTick:
+ 11540 026c 0000      		.skip 2,0
+ 11541               	.global	xRaw
+ 11542               	.global	xRaw
+ 11545               	xRaw:
+ 11546 026e 0000      		.skip 2,0
+ 11547               	.global	yRaw
+ 11548               	.global	yRaw
+ 11551               	yRaw:
+ 11552 0270 0000      		.skip 2,0
+ 11553               	.global	zRaw
+ 11554               	.global	zRaw
+ 11557               	zRaw:
+ 11558 0272 0000      		.skip 2,0
+ 11559               	.global	x
+ 11560               	.global	x
+ 11563               	x:
+ 11564 0274 0000      		.skip 2,0
+ 11565               	.global	y
+ 11566               	.global	y
+ 11569               	y:
+ 11570 0276 0000      		.skip 2,0
+ 11571               	.global	z
+ 11572               	.global	z
+ 11575               	z:
+ 11576 0278 0000      		.skip 2,0
+ 11577               	.global	x0
+ 11578               	.global	x0
+ 11581               	x0:
+ 11582 027a 0000      		.skip 2,0
+ 11583               	.global	y0
+ 11584               	.global	y0
+ 11587               	y0:
+ 11588 027c 0000      		.skip 2,0
+ 11589               	.global	z0
+ 11590               	.global	z0
+ 11593               	z0:
+ 11594 027e 0000      		.skip 2,0
+ 11595               	.global	x00
+ 11596               	.global	x00
+ 11599               	x00:
+ 11600 0280 0000      		.skip 2,0
+ 11601               	.global	y00
+ 11602               	.global	y00
+ 11605               	y00:
+ 11606 0282 0000      		.skip 2,0
+ 11607               	.global	z00
+ 11608               	.global	z00
+ 11611               	z00:
+ 11612 0284 0000      		.skip 2,0
+ 11613               	.global	xv
+ 11614               	.global	xv
+ 11617               	xv:
+ 11618 0286 0000      		.skip 2,0
+ 11619               	.global	yv
+ 11620               	.global	yv
+ 11623               	yv:
+ 11624 0288 0000      		.skip 2,0
+ 11625               	.global	zv
+ 11626               	.global	zv
+ 11629               	zv:
+ 11630 028a 0000      		.skip 2,0
+ 11631               	.global	cx
+ 11632               	.global	cx
+ 11635               	cx:
+ 11636 028c 0000 0000 		.skip 4,0
+ 11637               	.global	cy
+ 11638               	.global	cy
+ 11641               	cy:
+ 11642 0290 0000 0000 		.skip 4,0
+ 11643               	.global	cz
+ 11644               	.global	cz
+ 11647               	cz:
+ 11648 0294 0000 0000 		.skip 4,0
+ 11649               	.global	xBase
+ 11650               	.global	xBase
+ 11653               	xBase:
+ 11654 0298 0000      		.skip 2,0
+ 11655               	.global	yBase
+ 11656               	.global	yBase
+ 11659               	yBase:
+ 11660 029a 0000      		.skip 2,0
+ 11661               	.global	zBase
+ 11662               	.global	zBase
+ 11665               	zBase:
+ 11666 029c 0000      		.skip 2,0
+ 11667               	.global	xHist
+ 11668               	.global	xHist
+ 11671               	xHist:
+ 11672 029e 0000 0000 		.skip 40,0
+ 11672      0000 0000 
+ 11672      0000 0000 
+ 11672      0000 0000 
+ 11672      0000 0000 
+ 11673               	.global	yHist
+ 11674               	.global	yHist
+ 11677               	yHist:
+ 11678 02c6 0000 0000 		.skip 40,0
+ 11678      0000 0000 
+ 11678      0000 0000 
+ 11678      0000 0000 
+ 11678      0000 0000 
+ 11679               	.global	zHist
+ 11680               	.global	zHist
+ 11683               	zHist:
+ 11684 02ee 0000 0000 		.skip 40,0
+ 11684      0000 0000 
+ 11684      0000 0000 
+ 11684      0000 0000 
+ 11684      0000 0000 
+ 11685               	.global	xMin
+ 11686               	.global	xMin
+ 11689               	xMin:
+ 11690 0316 0000      		.skip 2,0
+ 11691               	.global	yMin
+ 11692               	.global	yMin
+ 11695               	yMin:
+ 11696 0318 0000      		.skip 2,0
+ 11697               	.global	zMin
+ 11698               	.global	zMin
+ 11701               	zMin:
+ 11702 031a 0000      		.skip 2,0
+ 11703               	.global	xMax
+ 11704               	.global	xMax
+ 11707               	xMax:
+ 11708 031c 0000      		.skip 2,0
+ 11709               	.global	yMax
+ 11710               	.global	yMax
+ 11713               	yMax:
+ 11714 031e 0000      		.skip 2,0
+ 11715               	.global	zMax
+ 11716               	.global	zMax
+ 11719               	zMax:
+ 11720 0320 0000      		.skip 2,0
+ 11721               	.global	ax
+ 11722               	.global	ax
+ 11725               	ax:
+ 11726 0322 0000      		.skip 2,0
+ 11727               	.global	ay
+ 11728               	.global	ay
+ 11731               	ay:
+ 11732 0324 0000      		.skip 2,0
+ 11733               	.global	az
+ 11734               	.global	az
+ 11737               	az:
+ 11738 0326 0000      		.skip 2,0
+ 11739               	.global	ax0
+ 11740               	.global	ax0
+ 11743               	ax0:
+ 11744 0328 0000      		.skip 2,0
+ 11745               	.global	ay0
+ 11746               	.global	ay0
+ 11749               	ay0:
+ 11750 032a 0000      		.skip 2,0
+ 11751               	.global	az0
+ 11752               	.global	az0
+ 11755               	az0:
+ 11756 032c 0000      		.skip 2,0
+ 11757               	.global	ax00
+ 11758               	.global	ax00
+ 11761               	ax00:
+ 11762 032e 0000      		.skip 2,0
+ 11763               	.global	ay00
+ 11764               	.global	ay00
+ 11767               	ay00:
+ 11768 0330 0000      		.skip 2,0
+ 11769               	.global	az00
+ 11770               	.global	az00
+ 11773               	az00:
+ 11774 0332 0000      		.skip 2,0
+ 11775               	.global	axBase
+ 11776               	.global	axBase
+ 11779               	axBase:
+ 11780 0334 0000      		.skip 2,0
+ 11781               	.global	ayBase
+ 11782               	.global	ayBase
+ 11785               	ayBase:
+ 11786 0336 0000      		.skip 2,0
+ 11787               	.global	azBase
+ 11788               	.global	azBase
+ 11791               	azBase:
+ 11792 0338 0000      		.skip 2,0
+ 11793               	.global	aset
+ 11794               	.global	aset
+ 11797               	aset:
+ 11798 033a 00        		.skip 1,0
+ 11799               	.global	calAccel
+ 11800               	.global	calAccel
+ 11803               	calAccel:
+ 11804 033b 0000      		.skip 2,0
+ 11805               	.global	accelCalibrated
+ 11806               	.global	accelCalibrated
+ 11809               	accelCalibrated:
+ 11810 033d 00        		.skip 1,0
+ 11811               	.global	gyro
+ 11812               	.global	gyro
+ 11815               	gyro:
+ 11816 033e 0000 0000 		.skip 25,0
+ 11816      0000 0000 
+ 11816      0000 0000 
+ 11816      0000 0000 
+ 11816      0000 0000 
+ 11817               	.global	gyroMicros
+ 11818               	.global	gyroMicros
+ 11821               	gyroMicros:
+ 11822 0357 0000 0000 		.skip 4,0
+ 11823               	.global	gyroDiff
+ 11824               	.global	gyroDiff
+ 11827               	gyroDiff:
+ 11828 035b 0000 0000 		.skip 4,0
+ 11829               	.global	gyroTick
+ 11830               	.global	gyroTick
+ 11833               	gyroTick:
+ 11834 035f 0000      		.skip 2,0
+ 11835               	.global	gxRaw
+ 11836               	.global	gxRaw
+ 11839               	gxRaw:
+ 11840 0361 0000      		.skip 2,0
+ 11841               	.global	gyRaw
+ 11842               	.global	gyRaw
+ 11845               	gyRaw:
+ 11846 0363 0000      		.skip 2,0
+ 11847               	.global	gzRaw
+ 11848               	.global	gzRaw
+ 11851               	gzRaw:
+ 11852 0365 0000      		.skip 2,0
+ 11853               	.global	gx
+ 11854               	.global	gx
+ 11857               	gx:
+ 11858 0367 0000      		.skip 2,0
+ 11859               	.global	gy
+ 11860               	.global	gy
+ 11863               	gy:
+ 11864 0369 0000      		.skip 2,0
+ 11865               	.global	gz
+ 11866               	.global	gz
+ 11869               	gz:
+ 11870 036b 0000      		.skip 2,0
+ 11871               	.global	gx0
+ 11872               	.global	gx0
+ 11875               	gx0:
+ 11876 036d 0000      		.skip 2,0
+ 11877               	.global	gy0
+ 11878               	.global	gy0
+ 11881               	gy0:
+ 11882 036f 0000      		.skip 2,0
+ 11883               	.global	gz0
+ 11884               	.global	gz0
+ 11887               	gz0:
+ 11888 0371 0000      		.skip 2,0
+ 11889               	.global	gx00
+ 11890               	.global	gx00
+ 11893               	gx00:
+ 11894 0373 0000      		.skip 2,0
+ 11895               	.global	gy00
+ 11896               	.global	gy00
+ 11899               	gy00:
+ 11900 0375 0000      		.skip 2,0
+ 11901               	.global	gz00
+ 11902               	.global	gz00
+ 11905               	gz00:
+ 11906 0377 0000      		.skip 2,0
+ 11907               	.global	cgx
+ 11908               	.global	cgx
+ 11911               	cgx:
+ 11912 0379 0000 0000 		.skip 4,0
+ 11913               	.global	cgy
+ 11914               	.global	cgy
+ 11917               	cgy:
+ 11918 037d 0000 0000 		.skip 4,0
+ 11919               	.global	cgz
+ 11920               	.global	cgz
+ 11923               	cgz:
+ 11924 0381 0000 0000 		.skip 4,0
+ 11925               	.global	gxBase
+ 11926               	.global	gxBase
+ 11929               	gxBase:
+ 11930 0385 0000      		.skip 2,0
+ 11931               	.global	gyBase
+ 11932               	.global	gyBase
+ 11935               	gyBase:
+ 11936 0387 0000      		.skip 2,0
+ 11937               	.global	gzBase
+ 11938               	.global	gzBase
+ 11941               	gzBase:
+ 11942 0389 0000      		.skip 2,0
+ 11943               	.global	gxHist
+ 11944               	.global	gxHist
+ 11947               	gxHist:
+ 11948 038b 0000 0000 		.skip 40,0
+ 11948      0000 0000 
+ 11948      0000 0000 
+ 11948      0000 0000 
+ 11948      0000 0000 
+ 11949               	.global	gyHist
+ 11950               	.global	gyHist
+ 11953               	gyHist:
+ 11954 03b3 0000 0000 		.skip 40,0
+ 11954      0000 0000 
+ 11954      0000 0000 
+ 11954      0000 0000 
+ 11954      0000 0000 
+ 11955               	.global	gzHist
+ 11956               	.global	gzHist
+ 11959               	gzHist:
+ 11960 03db 0000 0000 		.skip 40,0
+ 11960      0000 0000 
+ 11960      0000 0000 
+ 11960      0000 0000 
+ 11960      0000 0000 
+ 11961               	.global	gxMin
+ 11962               	.global	gxMin
+ 11965               	gxMin:
+ 11966 0403 0000      		.skip 2,0
+ 11967               	.global	gyMin
+ 11968               	.global	gyMin
+ 11971               	gyMin:
+ 11972 0405 0000      		.skip 2,0
+ 11973               	.global	gzMin
+ 11974               	.global	gzMin
+ 11977               	gzMin:
+ 11978 0407 0000      		.skip 2,0
+ 11979               	.global	gxMax
+ 11980               	.global	gxMax
+ 11983               	gxMax:
+ 11984 0409 0000      		.skip 2,0
+ 11985               	.global	gyMax
+ 11986               	.global	gyMax
+ 11989               	gyMax:
+ 11990 040b 0000      		.skip 2,0
+ 11991               	.global	gzMax
+ 11992               	.global	gzMax
+ 11995               	gzMax:
+ 11996 040d 0000      		.skip 2,0
+ 11997               	.global	gset
+ 11998               	.global	gset
+ 12001               	gset:
+ 12002 040f 00        		.skip 1,0
+ 12003               	.global	calGyro
+ 12004               	.global	calGyro
+ 12007               	calGyro:
+ 12008 0410 0000      		.skip 2,0
+ 12009               	.global	gyroCalibrated
+ 12010               	.global	gyroCalibrated
+ 12013               	gyroCalibrated:
+ 12014 0412 00        		.skip 1,0
+ 12015               	.global	tricolorBlinkRed
+ 12016               	.global	tricolorBlinkRed
+ 12019               	tricolorBlinkRed:
+ 12020 0413 0000      		.skip 2,0
+ 12021               	.global	tricolorBlinkGreen
+ 12022               	.global	tricolorBlinkGreen
+ 12025               	tricolorBlinkGreen:
+ 12026 0415 0000      		.skip 2,0
+ 12027               	.global	tricolorBlinkBlue
+ 12028               	.global	tricolorBlinkBlue
+ 12031               	tricolorBlinkBlue:
+ 12032 0417 0000      		.skip 2,0
+ 12033               	.global	blink_led
+ 12034               	.global	blink_led
+ 12037               	blink_led:
+ 12038 0419 00        		.skip 1,0
+ 12039               	.global	modifiersDown
+ 12040               	.global	modifiersDown
+ 12043               	modifiersDown:
+ 12044 041a 0000      		.skip 2,0
+ 12045               	.global	keysDown
+ 12046               	.global	keysDown
+ 12049               	keysDown:
+ 12050 041c 0000 0000 		.skip 12,0
+ 12050      0000 0000 
+ 12050      0000 0000 
+ 12051               	.global	mouseDown
+ 12052               	.global	mouseDown
+ 12055               	mouseDown:
+ 12056 0428 0000      		.skip 2,0
+ 12057               	.global	modeStack
+ 12058               	.global	modeStack
+ 12061               	modeStack:
+ 12062 042a 0000 0000 		.skip 20,0
+ 12062      0000 0000 
+ 12062      0000 0000 
+ 12062      0000 0000 
+ 12062      0000 0000 
+ 12063               	.global	modeStackPos
+ 12064               	.global	modeStackPos
+ 12067               	modeStackPos:
+ 12068 043e 0000      		.skip 2,0
+ 12069               	.global	touchTime
+ 12070               	.global	touchTime
+ 12073               	touchTime:
+ 12074 0440 0000 0000 		.skip 4,0
+ 12075               	.global	adding
+ 12076               	.global	adding
+ 12079               	adding:
+ 12080 0444 00        		.skip 1,0
+ 12081               	.global	removing
+ 12082               	.global	removing
+ 12085               	removing:
+ 12086 0445 00        		.skip 1,0
+ 12087               	.global	detect1
+ 12088               	.global	detect1
+ 12091               	detect1:
+ 12092 0446 0000 0000 		.skip 4,0
+ 12093               	.global	detect2
+ 12094               	.global	detect2
+ 12097               	detect2:
+ 12098 044a 0000 0000 		.skip 4,0
+ 12099               	.global	verify1
+ 12100               	.global	verify1
+ 12103               	verify1:
+ 12104 044e 0000 0000 		.skip 4,0
+ 12105               	.global	verify2
+ 12106               	.global	verify2
+ 12109               	verify2:
+ 12110 0452 0000 0000 		.skip 4,0
+ 12111               	.global	sensors1
+ 12112               	.global	sensors1
+ 12115               	sensors1:
+ 12116 0456 0000 0000 		.skip 4,0
+ 12117               	.global	sensors2
+ 12118               	.global	sensors2
+ 12121               	sensors2:
+ 12122 045a 0000 0000 		.skip 4,0
+ 12123               	.global	mode
+ 12124               	.global	mode
+ 12127               	mode:
+ 12128 045e 00        		.skip 1,0
+ 12465               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 Keyglove.cpp
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:18     .text:00000000 _Z9modeCheckii
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12020  .bss:00000226 modeStackPos
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12014  .bss:00000212 modeStack
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:59     .text:00000032 EVENT_USB_Device_Connect
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:80     .text:0000003c EVENT_USB_Device_Disconnect
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:101    .text:00000046 ProcessHIDReport
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:114    .text:00000048 _Z25Keyboard_ProcessLEDReporth
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:156    .text:00000062 _GLOBAL__I_HIDReportInData
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11474  .bss:00000046 accel
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11768  .bss:00000126 gyro
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:184    .text:00000074 HID_Task
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11001  .bss:00000009 HIDReportOutData
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:10995  .bss:00000000 HIDReportInData
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:287    .text:000000ea CDC_Task
-                             .bss:00000247 _ZL19HostTXSerial_Buffer
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12086  .data:00000354 _ZL16LineEncodingData
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12082  .bss:00000252 _ZL19HostRXSerial_Buffer
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:626    .text:00000210 EVENT_USB_Device_ControlRequest
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:783    .text:000002f0 EVENT_USB_Device_ConfigurationChanged
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:903    .text:000003a6 SetupHardware
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:954    .text:000003dc _Z8tricolorhhh
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1008   .text:00000410 _Z8mouseoffi
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11408  .bss:00000044 opt_mouse_mode
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11414  .bss:00000045 opt_scroll_mode
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1056   .text:00000444 _Z7mouseoni
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1108   .text:0000047c _Z7vibrateii
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1165   .text:000004c6 _Z7blueledii
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11984  .bss:000001ff tricolorBlinkBlue
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1272   .text:0000056c _Z8greenledii
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11978  .bss:000001fd tricolorBlinkGreen
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1378   .text:00000610 _Z6redledii
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11972  .bss:000001fb tricolorBlinkRed
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1483   .text:000006b2 _Z4beepiii
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1623   .text:0000076c _Z10modifierupi
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11996  .bss:00000202 modifiersDown
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1677   .text:000007be _Z15deactivate_modei
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1702   .text:000007cc _Z12modifierdowni
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1752   .text:0000081a _Z13activate_modei
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1912   .text:0000090e _Z7popmodev
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:1973   .text:0000097c _Z8pushmodei
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2030   .text:000009ca _Z10togglemodei
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2135   .text:00000a5e _Z7setmodei
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2202   .text:00000acc setup
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11990  .bss:00000201 blink_led
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11195  .bss:0000001b i
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11013  .data:000001ce pins
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12080  .bss:00000246 mode
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11528  .bss:00000060 z
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11522  .bss:0000005e y
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11516  .bss:0000005c x
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11600  .bss:0000007c cz
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11594  .bss:00000078 cy
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11588  .bss:00000074 cx
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11690  .bss:0000010e az
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11684  .bss:0000010c ay
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11678  .bss:0000010a ax
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11480  .bss:0000004c accelMicros
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11492  .bss:00000054 accelTick
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11762  .bss:00000125 accelCalibrated
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11654  .bss:00000102 zMin
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11648  .bss:00000100 yMin
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11642  .bss:000000fe xMin
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11672  .bss:00000108 zMax
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11666  .bss:00000106 yMax
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11660  .bss:00000104 xMax
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11822  .bss:00000153 gz
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11816  .bss:00000151 gy
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11810  .bss:0000014f gx
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11774  .bss:0000013f gyroMicros
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11786  .bss:00000147 gyroTick
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11966  .bss:000001fa gyroCalibrated
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11930  .bss:000001ef gzMin
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11924  .bss:000001ed gyMin
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11918  .bss:000001eb gxMin
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11948  .bss:000001f5 gzMax
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11942  .bss:000001f3 gyMax
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11936  .bss:000001f1 gxMax
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11249  .bss:0000002d mz0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11243  .bss:0000002b my0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11237  .bss:00000029 mx0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11225  .bss:00000025 mz
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11219  .bss:00000023 my
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11213  .bss:00000021 mx
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11255  .bss:0000002f sy0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11231  .bss:00000027 sy
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11189  .bss:00000017 t
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2486   .text:00000d92 _Z13modifierpressi
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2537   .text:00000dd4 _Z14togglemodifieri
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2589   .text:00000e16 _Z5keyupi
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12002  .bss:00000204 keysDown
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2739   .text:00000ee4 _Z7keydowni
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2893   .text:00000fb4 _Z8keypressi
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:2944   .text:00000ff6 _Z7mouseupi
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12008  .bss:00000210 mouseDown
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:3005   .text:00001054 _Z21check_sensors_releasemmi
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:7058   .text:000029dc _Z9mousedowni
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:7111   .text:00002a2e _Z19check_sensors_touchmmi
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:7552   .text:00002cca loop
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11201  .bss:0000001f moveMouse
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11207  .bss:00000020 scrollMouse
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11345  .data:00000322 opt_motion_sampling_div
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11177  .bss:00000013 counter
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11534  .bss:00000062 x0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11552  .bss:00000068 x00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11540  .bss:00000064 y0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11558  .bss:0000006a y00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11546  .bss:00000066 z0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11564  .bss:0000006c z00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11379  .bss:00000042 opt_accel_rot90
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11498  .bss:00000056 xRaw
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11504  .bss:00000058 yRaw
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11510  .bss:0000005a zRaw
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11486  .bss:00000050 accelDiff
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11298  .data:00000304 opt_accel_offset
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11305  .data:0000030a opt_accel_calibrate
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11350  .data:00000324 opt_accel_kalman_constant
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11366  .data:0000032c opt_accel_smooth_average
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11624  .bss:00000086 xHist
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11630  .bss:000000ae yHist
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11636  .bss:000000d6 zHist
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11570  .bss:0000006e xv
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11576  .bss:00000070 yv
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11582  .bss:00000072 zv
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11292  .bss:00000039 opt_enable_calibration
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11696  .bss:00000110 ax0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11714  .bss:00000116 ax00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11702  .bss:00000112 ay0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11720  .bss:00000118 ay00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11708  .bss:00000114 az0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11726  .bss:0000011a az00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11828  .bss:00000155 gx0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11846  .bss:0000015b gx00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11834  .bss:00000157 gy0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11852  .bss:0000015d gy00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11840  .bss:00000159 gz0
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11858  .bss:0000015f gz00
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11385  .data:0000032d opt_gyro_rot90
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11792  .bss:00000149 gxRaw
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11798  .bss:0000014b gyRaw
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11804  .bss:0000014d gzRaw
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11780  .bss:00000143 gyroDiff
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11323  .bss:0000003b opt_gyro_offset
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11329  .data:00000316 opt_gyro_calibrate
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11358  .data:00000328 opt_gyro_kalman_constant
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11373  .bss:00000041 opt_gyro_smooth_average
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11900  .bss:00000173 gxHist
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11906  .bss:0000019b gyHist
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11912  .bss:000001c3 gzHist
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11750  .bss:00000122 aset
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11732  .bss:0000011c axBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11420  .data:00000330 opt_mouse_scale_mode1
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11738  .bss:0000011e ayBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11744  .bss:00000120 azBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11606  .bss:00000080 xBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11444  .data:00000340 opt_mouse_scale_mode3
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11618  .bss:00000084 zBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11612  .bss:00000082 yBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11456  .data:00000348 opt_mouse_scale_mode4
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11261  .bss:00000031 mdx
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11267  .bss:00000033 mdy
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11273  .bss:00000035 mdz
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11390  .data:0000032e opt_mouse_invert_x
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11395  .data:0000032f opt_mouse_invert_y
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11402  .bss:00000043 opt_mouse_invert_z
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11279  .bss:00000037 sdy
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12044  .bss:0000022e detect1
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12050  .bss:00000232 detect2
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12038  .bss:0000022d removing
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11051  .data:00000212 combinations
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12056  .bss:00000236 verify1
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12062  .bss:0000023a verify2
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12026  .bss:00000228 touchTime
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12068  .bss:0000023e sensors1
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12074  .bss:00000242 sensors2
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11285  .data:00000302 opt_touch_detect_threshold
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12032  .bss:0000022c adding
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11183  .bss:00000015 ticks
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:10781  .text:00004c08 main
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12094  .bss:0000025d _ZL24HostRXSerial_Buffer_Data
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12095  .bss:000002dd _ZL24HostTXSerial_Buffer_Data
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12096  .bss:0000035d _ZL10CDCTaskRun
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:12097  .bss:0000035e _ZL10HIDTaskRun
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:10945  .text:00004c96 _Z10mouseclicki
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11007  .bss:00000012 ide_workaround
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11432  .data:00000338 opt_mouse_scale_mode2
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11756  .bss:00000123 calAccel
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11864  .bss:00000161 cgx
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11870  .bss:00000165 cgy
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11876  .bss:00000169 cgz
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11882  .bss:0000016d gxBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11888  .bss:0000016f gyBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11894  .bss:00000171 gzBase
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11954  .bss:000001f7 gset
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccBdwlY2.s:11960  .bss:000001f8 calGyro
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:18     .text:00000000 _Z9modeCheckii
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12067  .bss:0000043e modeStackPos
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12061  .bss:0000042a modeStack
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:59     .text:00000032 EVENT_USB_Device_Connect
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:80     .text:0000003c EVENT_USB_Device_Disconnect
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:101    .text:00000046 ProcessHIDReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:114    .text:00000048 _Z25Keyboard_ProcessLEDReporth
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:156    .text:00000062 _GLOBAL__I_HIDReportInData
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11521  .bss:0000025e accel
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11815  .bss:0000033e gyro
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:184    .text:00000074 HID_Task
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:10999  .bss:00000009 HIDReportOutData
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:10993  .bss:00000000 HIDReportInData
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:287    .text:000000ea CDC_Task
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11030  .bss:0000011d HostTXSerial_Buffer
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11005  .data:000001ce LineEncodingData
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11018  .bss:00000012 HostRXSerial_Buffer
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:626    .text:00000210 EVENT_USB_Device_ControlRequest
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:783    .text:000002f0 EVENT_USB_Device_ConfigurationChanged
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:903    .text:000003a6 SetupHardware
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:954    .text:000003dc _Z8tricolorhhh
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1008   .text:00000410 _Z8mouseoffi
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11455  .bss:0000025c opt_mouse_mode
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11461  .bss:0000025d opt_scroll_mode
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1056   .text:00000444 _Z7mouseoni
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1108   .text:0000047c _Z7vibrateii
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1165   .text:000004c6 _Z7blueledii
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12031  .bss:00000417 tricolorBlinkBlue
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1272   .text:0000056c _Z8greenledii
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12025  .bss:00000415 tricolorBlinkGreen
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1378   .text:00000610 _Z6redledii
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12019  .bss:00000413 tricolorBlinkRed
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1483   .text:000006b2 _Z4beepiii
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1623   .text:0000076c _Z10modifierupi
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12043  .bss:0000041a modifiersDown
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1677   .text:000007be _Z15deactivate_modei
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1702   .text:000007cc _Z12modifierdowni
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1752   .text:0000081a _Z13activate_modei
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1912   .text:0000090e _Z7popmodev
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:1973   .text:0000097c _Z8pushmodei
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2030   .text:000009ca _Z10togglemodei
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2135   .text:00000a5e _Z7setmodei
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2202   .text:00000acc setup
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12037  .bss:00000419 blink_led
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11242  .bss:00000233 i
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11060  .data:000001d5 pins
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12127  .bss:0000045e mode
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11575  .bss:00000278 z
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11569  .bss:00000276 y
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11563  .bss:00000274 x
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11647  .bss:00000294 cz
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11641  .bss:00000290 cy
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11635  .bss:0000028c cx
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11737  .bss:00000326 az
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11731  .bss:00000324 ay
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11725  .bss:00000322 ax
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11527  .bss:00000264 accelMicros
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11539  .bss:0000026c accelTick
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11809  .bss:0000033d accelCalibrated
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11701  .bss:0000031a zMin
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11695  .bss:00000318 yMin
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11689  .bss:00000316 xMin
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11719  .bss:00000320 zMax
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11713  .bss:0000031e yMax
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11707  .bss:0000031c xMax
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11869  .bss:0000036b gz
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11863  .bss:00000369 gy
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11857  .bss:00000367 gx
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11821  .bss:00000357 gyroMicros
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11833  .bss:0000035f gyroTick
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12013  .bss:00000412 gyroCalibrated
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11977  .bss:00000407 gzMin
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11971  .bss:00000405 gyMin
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11965  .bss:00000403 gxMin
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11995  .bss:0000040d gzMax
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11989  .bss:0000040b gyMax
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11983  .bss:00000409 gxMax
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11296  .bss:00000245 mz0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11290  .bss:00000243 my0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11284  .bss:00000241 mx0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11272  .bss:0000023d mz
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11266  .bss:0000023b my
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11260  .bss:00000239 mx
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11302  .bss:00000247 sy0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11278  .bss:0000023f sy
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11236  .bss:0000022f t
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2486   .text:00000d92 _Z13modifierpressi
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2537   .text:00000dd4 _Z14togglemodifieri
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2589   .text:00000e16 _Z5keyupi
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12049  .bss:0000041c keysDown
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2739   .text:00000ee4 _Z7keydowni
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2893   .text:00000fb4 _Z8keypressi
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:2944   .text:00000ff6 _Z7mouseupi
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12055  .bss:00000428 mouseDown
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:3005   .text:00001054 _Z21check_sensors_releasemmi
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:7058   .text:000029dc _Z9mousedowni
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:7111   .text:00002a2e _Z19check_sensors_touchmmi
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:7552   .text:00002cca loop
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11248  .bss:00000237 moveMouse
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11254  .bss:00000238 scrollMouse
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11392  .data:00000329 opt_motion_sampling_div
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11224  .bss:0000022b counter
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11581  .bss:0000027a x0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11599  .bss:00000280 x00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11587  .bss:0000027c y0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11605  .bss:00000282 y00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11593  .bss:0000027e z0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11611  .bss:00000284 z00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11426  .bss:0000025a opt_accel_rot90
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11545  .bss:0000026e xRaw
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11551  .bss:00000270 yRaw
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11557  .bss:00000272 zRaw
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11533  .bss:00000268 accelDiff
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11345  .data:0000030b opt_accel_offset
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11352  .data:00000311 opt_accel_calibrate
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11397  .data:0000032b opt_accel_kalman_constant
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11413  .data:00000333 opt_accel_smooth_average
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11671  .bss:0000029e xHist
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11677  .bss:000002c6 yHist
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11683  .bss:000002ee zHist
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11617  .bss:00000286 xv
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11623  .bss:00000288 yv
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11629  .bss:0000028a zv
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11339  .bss:00000251 opt_enable_calibration
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11743  .bss:00000328 ax0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11761  .bss:0000032e ax00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11749  .bss:0000032a ay0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11767  .bss:00000330 ay00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11755  .bss:0000032c az0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11773  .bss:00000332 az00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11875  .bss:0000036d gx0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11893  .bss:00000373 gx00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11881  .bss:0000036f gy0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11899  .bss:00000375 gy00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11887  .bss:00000371 gz0
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11905  .bss:00000377 gz00
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11432  .data:00000334 opt_gyro_rot90
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11839  .bss:00000361 gxRaw
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11845  .bss:00000363 gyRaw
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11851  .bss:00000365 gzRaw
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11827  .bss:0000035b gyroDiff
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11370  .bss:00000253 opt_gyro_offset
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11376  .data:0000031d opt_gyro_calibrate
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11405  .data:0000032f opt_gyro_kalman_constant
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11420  .bss:00000259 opt_gyro_smooth_average
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11947  .bss:0000038b gxHist
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11953  .bss:000003b3 gyHist
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11959  .bss:000003db gzHist
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11797  .bss:0000033a aset
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11779  .bss:00000334 axBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11467  .data:00000337 opt_mouse_scale_mode1
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11785  .bss:00000336 ayBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11791  .bss:00000338 azBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11653  .bss:00000298 xBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11491  .data:00000347 opt_mouse_scale_mode3
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11665  .bss:0000029c zBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11659  .bss:0000029a yBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11503  .data:0000034f opt_mouse_scale_mode4
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11308  .bss:00000249 mdx
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11314  .bss:0000024b mdy
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11320  .bss:0000024d mdz
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11437  .data:00000335 opt_mouse_invert_x
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11442  .data:00000336 opt_mouse_invert_y
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11449  .bss:0000025b opt_mouse_invert_z
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11326  .bss:0000024f sdy
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12091  .bss:00000446 detect1
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12097  .bss:0000044a detect2
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12085  .bss:00000445 removing
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11098  .data:00000219 combinations
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12103  .bss:0000044e verify1
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12109  .bss:00000452 verify2
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12073  .bss:00000440 touchTime
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12115  .bss:00000456 sensors1
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12121  .bss:0000045a sensors2
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11332  .data:00000309 opt_touch_detect_threshold
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12079  .bss:00000444 adding
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11230  .bss:0000022d ticks
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:10781  .text:00004c08 main
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11024  .bss:0000001d HostRXSerial_Buffer_Data
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11036  .bss:00000128 HostTXSerial_Buffer_Data
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11042  .bss:00000228 CDCTaskRun
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11048  .bss:00000229 HIDTaskRun
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:10943  .text:00004c92 _Z10mouseclicki
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11054  .bss:0000022a ide_workaround
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11479  .data:0000033f opt_mouse_scale_mode2
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11803  .bss:0000033b calAccel
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11911  .bss:00000379 cgx
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11917  .bss:0000037d cgy
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11923  .bss:00000381 cgz
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11929  .bss:00000385 gxBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11935  .bss:00000387 gyBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:11941  .bss:00000389 gzBase
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12001  .bss:0000040f gset
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccnR7F8J.s:12007  .bss:00000410 calGyro
 
 UNDEFINED SYMBOLS
 _ZN13AccelerometerC1Ev
