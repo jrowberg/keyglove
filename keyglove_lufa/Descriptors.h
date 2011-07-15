@@ -1,12 +1,12 @@
 /*
-             LUFA Library
-     Copyright (C) Dean Camera, 2011.
 
-  dean [at] fourwalledcubicle [dot] com
-           www.lufa-lib.org
+  Keyglove controller source code - LUFA-powered USB descriptors header file
+  7/15/2011 by Jeff Rowberg <jeff@rowberg.net>
+
 */
 
 /*
+  LUFA Library code:
   Copyright 2011  Dean Camera (dean [at] fourwalledcubicle [dot] com)
   Copyright 2010  Denver Gingerich (denver [at] ossguy [dot] com)
 

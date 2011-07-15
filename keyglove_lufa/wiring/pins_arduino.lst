@@ -98,17 +98,17 @@
  117               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 pins_arduino.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:20     .progmem.data:00000000 port_to_mode_PGM
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:29     .progmem.data:0000000a port_to_output_PGM
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:38     .progmem.data:00000014 port_to_input_PGM
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:47     .progmem.data:0000001e digital_pin_to_port_PGM
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:71     .progmem.data:00000032 digital_pin_to_bit_mask_PGM
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccANwg9A.s:95     .progmem.data:00000046 digital_pin_to_timer_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:20     .progmem.data:00000000 port_to_mode_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:29     .progmem.data:0000000a port_to_output_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:38     .progmem.data:00000014 port_to_input_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:47     .progmem.data:0000001e digital_pin_to_port_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:71     .progmem.data:00000032 digital_pin_to_bit_mask_PGM
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccl3sZR1.s:95     .progmem.data:00000046 digital_pin_to_timer_PGM
 
 NO UNDEFINED SYMBOLS

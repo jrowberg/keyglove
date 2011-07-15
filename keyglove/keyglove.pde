@@ -596,11 +596,12 @@ void setup() {
      * INITIALIZE AUDIO FEEDBACK
     =============================================== */
     #ifdef ENABLE_BEEP
-        tone(SOUND_PIN, 1760, 25);
+        tone(SOUND_PIN, 1760, 100);
         delay(100);
-        tone(SOUND_PIN, 1760, 25);
+        tone(SOUND_PIN, 1760, 100);
+        delay(100);
     #endif /* ENABLE_BEEP */
-    
+
     #ifdef ENABLE_TOUCH
         setmode(0); // default touchset mode is always 0
     #endif /* ENABLE_TOUCH */

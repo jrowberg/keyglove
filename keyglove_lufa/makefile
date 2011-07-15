@@ -2,6 +2,7 @@
 #----------------------------------------------------------------------------
 # WinAVR Makefile Template written by Eric B. Weddington, Jörg Wunsch, et al.
 #  >> Modified for use with the LUFA project. <<
+#  >>>> Modified further for use with the Keyglove project. <<<<
 #
 # Released to the Public Domain
 #
@@ -17,6 +18,7 @@
 # Dean Camera
 # Opendous Inc.
 # Denver Gingerich
+# Jeff Rowberg
 #
 #----------------------------------------------------------------------------
 # On command line:
@@ -84,7 +86,7 @@ BOARD = USER
 #     does not *change* the processor frequency - it should merely be updated to
 #     reflect the processor speed set externally so that the code can use accurate
 #     software delays.
-F_CPU = 4000000
+F_CPU = 8000000
 
 
 # Input clock frequency.
@@ -144,6 +146,7 @@ SRC = wiring/wiring.c \
 
 # List C++ source files here. (C dependencies are automatically generated.)
 CPPSRC = $(TARGET).cpp \
+         wiring/Tone.cpp \
          ArduinoWrapper.cpp \
          ../keyglove/Adxl345.cpp \
          ../keyglove/ITG3200.cpp \

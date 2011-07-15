@@ -71,10 +71,10 @@
   79 0038 CA01      		movw r24,r20
   80 003a B901      		movw r22,r18
   81               	.LVL7:
-  82 003c 20EA      		ldi r18,lo8(4000)
-  83 003e 3FE0      		ldi r19,hi8(4000)
-  84 0040 40E0      		ldi r20,hlo8(4000)
-  85 0042 50E0      		ldi r21,hhi8(4000)
+  82 003c 20E4      		ldi r18,lo8(8000)
+  83 003e 3FE1      		ldi r19,hi8(8000)
+  84 0040 40E0      		ldi r20,hlo8(8000)
+  85 0042 50E0      		ldi r21,hhi8(8000)
   86               	.LVL8:
   87 0044 0E94 0000 		call __mulsi3
   88 0048 20E8      		ldi r18,lo8(16000)
@@ -224,10 +224,10 @@
  232 0100 714C      		sbci r23,hi8(-(16000))
  233 0102 8F4F      		sbci r24,hlo8(-(16000))
  234 0104 9F4F      		sbci r25,hhi8(-(16000))
- 235 0106 20EA      		ldi r18,lo8(4000)
- 236 0108 3FE0      		ldi r19,hi8(4000)
- 237 010a 40E0      		ldi r20,hlo8(4000)
- 238 010c 50E0      		ldi r21,hhi8(4000)
+ 235 0106 20E4      		ldi r18,lo8(8000)
+ 236 0108 3FE1      		ldi r19,hi8(8000)
+ 237 010a 40E0      		ldi r20,hlo8(8000)
+ 238 010c 50E0      		ldi r21,hhi8(8000)
  239 010e 0E94 0000 		call __udivmodsi4
  240 0112 C901      		movw r24,r18
  241 0114 DA01      		movw r26,r20
@@ -270,13 +270,13 @@
  303               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 wiring_pulse.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cclcAboN.s:19     .text.pulseIn:00000000 pulseIn
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:19     .text.pulseIn:00000000 pulseIn
 
 UNDEFINED SYMBOLS
 digital_pin_to_bit_mask_PGM

@@ -9,11 +9,11 @@
   16               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 Host_AVR8.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdGT96g.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdGT96g.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdGT96g.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdGT96g.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdGT96g.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccdGT96g.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccSi7jbo.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccSi7jbo.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccSi7jbo.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccSi7jbo.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccSi7jbo.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccSi7jbo.s:7      *ABS*:00000001 __zero_reg__
 
 NO UNDEFINED SYMBOLS

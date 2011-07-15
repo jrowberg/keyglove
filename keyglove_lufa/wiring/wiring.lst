@@ -40,13 +40,13 @@
   48               	.LSM3:
   49 0032 DA01      		movw r26,r20
   50 0034 C901      		movw r24,r18
-  51 0036 0496      		adiw r24,4
+  51 0036 0296      		adiw r24,2
   52 0038 A11D      		adc r26,__zero_reg__
   53 003a B11D      		adc r27,__zero_reg__
   54               	.LVL2:
   55               	.LSM4:
   56 003c 672F      		mov r22,r23
-  57 003e 645F      		subi r22,lo8(-(12))
+  57 003e 6A5F      		subi r22,lo8(-(6))
   58               	.LVL3:
   59               	.LSM5:
   60 0040 6D37      		cpi r22,lo8(125)
@@ -56,7 +56,7 @@
   64               	.LSM7:
   65 0046 DA01      		movw r26,r20
   66 0048 C901      		movw r24,r18
-  67 004a 0596      		adiw r24,5
+  67 004a 0396      		adiw r24,3
   68 004c A11D      		adc r26,__zero_reg__
   69 004e B11D      		adc r27,__zero_reg__
   70               	.L2:
@@ -178,7 +178,7 @@
  190 0032 311D      		adc r19,__zero_reg__
  191 0034 411D      		adc r20,__zero_reg__
  192 0036 511D      		adc r21,__zero_reg__
- 193 0038 84E0      		ldi r24,4
+ 193 0038 83E0      		ldi r24,3
  194 003a 220F      	1:	lsl r18
  195 003c 331F      		rol r19
  196 003e 441F      		rol r20
@@ -398,21 +398,21 @@
  485               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 wiring.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:19     .text.__vector_23:00000000 __vector_23
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:418    .bss:00000004 timer0_millis
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:19     .text.__vector_23:00000000 __vector_23
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:418    .bss:00000004 timer0_millis
                              .bss:00000008 timer0_fract
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:412    .bss:00000000 timer0_overflow_count
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:114    .text.millis:00000000 millis
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:148    .text.micros:00000000 micros
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:211    .text.delay:00000000 delay
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:271    .text.delayMicroseconds:00000000 delayMicroseconds
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccsyJEPg.s:305    .text.init:00000000 init
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:412    .bss:00000000 timer0_overflow_count
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:114    .text.millis:00000000 millis
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:148    .text.micros:00000000 micros
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:211    .text.delay:00000000 delay
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:271    .text.delayMicroseconds:00000000 delayMicroseconds
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:305    .text.init:00000000 init
 
 UNDEFINED SYMBOLS
 __do_clear_bss
