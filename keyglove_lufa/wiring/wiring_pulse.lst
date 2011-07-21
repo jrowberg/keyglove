@@ -270,13 +270,13 @@
  303               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 wiring_pulse.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccVr19qe.s:19     .text.pulseIn:00000000 pulseIn
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc28KzA3.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc28KzA3.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc28KzA3.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc28KzA3.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc28KzA3.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc28KzA3.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc28KzA3.s:19     .text.pulseIn:00000000 pulseIn
 
 UNDEFINED SYMBOLS
 digital_pin_to_bit_mask_PGM

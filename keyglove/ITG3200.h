@@ -28,11 +28,11 @@
 #ifndef ITG3200_h
 #define ITG3200_h
 
-#ifdef USE_LUFA
+#ifdef LUFA
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef USE_LUFA
+#ifndef LUFA
     #include "WProgram.h"
 #endif
 
@@ -118,25 +118,25 @@ class ITG3200 {
 
 public:
   float scalefactor[3];    // Scale Factor for gain and polarity
-  int offsets[3];
+  int16_t offsets[3];
 
   ITG3200();
   
   // Gyro initialization
-  void init(unsigned int address);
-  void init(unsigned int address, byte _SRateDiv, byte _Range, byte _filterBW, byte _ClockSrc, bool _ITGReady, bool _INTRawDataReady);      
+  void init(uint8_t address);
+  void init(uint8_t address, uint8_t _SRateDiv, uint8_t _Range, uint8_t _filterBW, uint8_t _ClockSrc, bool _ITGReady, bool _INTRawDataReady);
     
   // Who Am I
-  byte getDevAddr();
-  void setDevAddr(unsigned int _addr);
+  uint8_t getDevAddr();
+  void setDevAddr(uint8_t _addr);
   // Sample Rate Divider
-  byte getSampleRateDiv();          
-  void setSampleRateDiv(byte _SampleRate);
+  uint8_t getSampleRateDiv();
+  void setSampleRateDiv(uint8_t _SampleRate);
   // Digital Low Pass Filter BandWidth and SampleRate 
-  byte getFSRange();
-  void setFSRange(byte _Range); // RANGE2000
-  byte getFilterBW(); 
-  void setFilterBW(byte _BW); // see register parameters above
+  uint8_t getFSRange();
+  void setFSRange(uint8_t _Range); // RANGE2000
+  uint8_t getFilterBW();
+  void setFilterBW(uint8_t _BW); // see register parameters above
   // Interrupt Configuration
   bool isINTActiveOnLow();
   void setINTLogiclvl(bool _State); //ACTIVE_ONHIGH, ACTIVE_ONLOW
@@ -158,16 +158,16 @@ public:
   bool isITGReady();
   bool isRawDataReady();
   // Gyro Sensors
-  void readTemp(float *_Temp);  
-  void readGyroRaw( int *_GyroX, int *_GyroY, int *_GyroZ); // uncalibrated raw values
-  void readGyroRaw( int *_GyroXYZ); // uncalibrated raw values
+  void readTemp(float *_Temp);
+  void readGyroRaw(int16_t *_GyroX, int16_t *_GyroY, int16_t *_GyroZ); // uncalibrated raw values
+  void readGyroRaw(int16_t *_GyroXYZ); // uncalibrated raw values
   void setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff, bool _Radians);  // negative ciefficient = Reversed
-  void setOffsets(int _Xoffset, int _Yoffset, int _Zoffset);
-  void zeroCalibrate(unsigned int totSamples, unsigned int sampleDelayMS);	// assuming gyroscope is stationary (updates XYZ offsets)
-  void readGyroRawCal(int *_GyroX, int *_GyroY, int *_GyroZ); // raw value with offset
-  void readGyroRawCal(int *_GyroXYZ); // raw value with offset
-  void readGyro(float *_GyroX, float *_GyroY, float *_GyroZ); // deg/sec calibrated & ScaleFactor 
-  void readGyro(float *_GyroXYZ); // deg/sec calibrated & ScaleFactor  
+  void setOffsets(int16_t _Xoffset, int16_t _Yoffset, int16_t _Zoffset);
+  void zeroCalibrate(uint16_t totSamples, uint16_t sampleDelayMS);	// assuming gyroscope is stationary (updates XYZ offsets)
+  void readGyroRawCal(int16_t *_GyroX, int16_t *_GyroY, int16_t *_GyroZ); // raw value with offset
+  void readGyroRawCal(int16_t *_GyroXYZ); // raw value with offset
+  void readGyro(float *_GyroX, float *_GyroY, float *_GyroZ); // deg/sec calibrated & ScaleFactor
+  void readGyro(float *_GyroXYZ); // deg/sec calibrated & ScaleFactor
   // Power management
   void reset(); // after reset all registers have default values
   bool isLowPower();
@@ -178,8 +178,8 @@ public:
   void setXgyroStandby(bool _Status); // NORMAL, STANDBY
   void setYgyroStandby(bool _Status);
   void setZgyroStandby(bool _Status);
-  byte getClockSource();
-  void setClockSource(byte _CLKsource); // see register parameters above
+  uint8_t getClockSource();
+  void setClockSource(uint8_t _CLKsource); // see register parameters above
   
   void writemem(uint8_t _addr, uint8_t _val);
   void readmem(uint8_t _addr, uint8_t _nbytes, uint8_t __buff[]);

@@ -13,11 +13,11 @@
 #ifndef ps2dev_h
 #define ps2dev_h
 
-#ifdef USE_LUFA
+#ifdef LUFA
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef USE_LUFA
+#ifndef LUFA
     #include "WProgram.h"
     #include "wiring.h"
 #endif
@@ -28,14 +28,15 @@
 
 class PS2dev {
     public:
-        PS2dev(int clockPin, int dataPin);
-        int write(unsigned char data);
-        int read(unsigned char * data);
+        PS2dev(uint8_t clockPin, uint8_t dataPin);
+        int8_t write(uint8_t data);
+        uint8_t read();
+
     private:
-        int _ps2clk;
-        int _ps2data;
-        void golo(int pin);
-        void gohi(int pin);
+        uint8_t _ps2clk;
+        uint8_t _ps2data;
+        void golo(uint8_t pin);
+        void gohi(uint8_t pin);
 };
 
 #endif /* ps2dev_h */

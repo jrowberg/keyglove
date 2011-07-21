@@ -398,21 +398,21 @@
  485               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 wiring.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:19     .text.__vector_23:00000000 __vector_23
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:418    .bss:00000004 timer0_millis
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:19     .text.__vector_23:00000000 __vector_23
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:418    .bss:00000004 timer0_millis
                              .bss:00000008 timer0_fract
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:412    .bss:00000000 timer0_overflow_count
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:114    .text.millis:00000000 millis
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:148    .text.micros:00000000 micros
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:211    .text.delay:00000000 delay
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:271    .text.delayMicroseconds:00000000 delayMicroseconds
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccLF0nYd.s:305    .text.init:00000000 init
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:412    .bss:00000000 timer0_overflow_count
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:114    .text.millis:00000000 millis
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:148    .text.micros:00000000 micros
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:211    .text.delay:00000000 delay
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:271    .text.delayMicroseconds:00000000 delayMicroseconds
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccQ3Qj8R.s:305    .text.init:00000000 init
 
 UNDEFINED SYMBOLS
 __do_clear_bss

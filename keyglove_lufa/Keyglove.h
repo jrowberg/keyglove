@@ -112,5 +112,5 @@
         /** Underlying data buffer for \ref HostTXSerial_Buffer, where the stored bytes are located. */
         extern uint8_t      HostTXSerial_Buffer_Data[256];
 
-#endif
+#endif // _KEYGLOVE_H_
 

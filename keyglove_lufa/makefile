@@ -127,7 +127,8 @@ LUFA_OPTS += -D FIXED_CONTROL_ENDPOINT_SIZE=8
 LUFA_OPTS += -D FIXED_NUM_CONFIGURATIONS=1
 LUFA_OPTS += -D USE_FLASH_DESCRIPTORS
 LUFA_OPTS += -D USE_STATIC_OPTIONS="(USB_DEVICE_OPT_FULLSPEED | USB_OPT_REG_ENABLED | USB_OPT_AUTO_PLL)"
-LUFA_OPTS += -D USE_LUFA
+LUFA_OPTS += -D LUFA
+# use "LUFA" definition for global environment recognition in Arduino sketch source files
 
 
 # Create the LUFA source path variables by including the LUFA root makefile
@@ -148,13 +149,13 @@ SRC = wiring/wiring.c \
 CPPSRC = $(TARGET).cpp \
          wiring/Tone.cpp \
          ArduinoWrapper.cpp \
-         ../keyglove/Adxl345.cpp \
+         ../keyglove/ADXL345.cpp \
          ../keyglove/ITG3200.cpp \
-         ../keyglove/iwrap.cpp \
-         ../keyglove/logitech.cpp \
-         ../keyglove/ps2dev.cpp \
-         ../keyglove/ps2keyboard.cpp \
-         ../keyglove/ps2mouse.cpp
+         ../keyglove/iWRAP.cpp \
+         ../keyglove/LogitechR400.cpp \
+         ../keyglove/PS2dev.cpp \
+         ../keyglove/PS2keyboard.cpp \
+         ../keyglove/PS2mouse.cpp
 
 # List Assembler source files here.
 #     Make them always end in a capital .S.  Files ending in a lowercase .s

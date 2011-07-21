@@ -28,11 +28,11 @@ THE SOFTWARE.
 #ifndef ps2mouse_h
 #define ps2mouse_h
 
-#ifdef USE_LUFA
+#ifdef LUFA
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef USE_LUFA
+#ifndef LUFA
     #include "WProgram.h"
 #endif
 
@@ -58,20 +58,20 @@ THE SOFTWARE.
 class PS2mouse {
     public:
         PS2mouse(PS2dev *m);
-        void move(int dx, int dy);
+        void move(int16_t dx, int16_t dy);
         void initialize();
         void process_command();
     
     private:
         PS2dev *mouse;
-        int mode;
-        boolean reporting_enabled;
-        byte sample_rate;
-        byte resolution;
-        byte scaling;
-        char buttons[3];
-        byte last_sent_byte;
-        byte last_mode;
+        uint8_t mode;
+        bool reporting_enabled;
+        uint8_t sample_rate;
+        uint8_t resolution;
+        uint8_t scaling;
+        uint8_t buttons[3];
+        uint8_t last_sent_byte;
+        uint8_t last_mode;
         
         void run_bat();
         void set_defaults();
@@ -92,7 +92,7 @@ class PS2mouse {
         void cmd_echo();
         
         // send mouse movement data
-        void cmd_move(int dx, int dy);
+        void cmd_move(int16_t dx, int16_t dy);
 };
 
 #endif /* ps2mouse_h */

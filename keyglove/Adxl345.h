@@ -1,11 +1,11 @@
 #ifndef Accelerometer_h
 #define Accelerometer_h
 
-#ifdef USE_LUFA
+#ifdef LUFA
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef USE_LUFA
+#ifndef LUFA
     #include "WProgram.h"
 #endif
 
@@ -62,33 +62,33 @@
 #define ADXL345_INT_WATERMARK_BIT  0x01
 #define ADXL345_INT_OVERRUNY_BIT   0x00
 
-class Accelerometer
+class ADXL345
 {
 public:
-  Accelerometer();
+  ADXL345();
   void powerOn();
-  void readAccel(int* x, int* y, int* z);
+  void readAccel(int16_t* x, int16_t* y, int16_t* z);
 
-  void setTapThreshold(int tapThreshold);
-  int getTapThreshold();
-  void setAxisOffset(int x, int y, int z);
-  void getAxisOffset(int* x, int* y, int*z);
-  void setTapDuration(int tapDuration);
-  int getTapDuration();
-  void setDoubleTapLatency(int doubleTapLatency);
-  int getDoubleTapLatency();
-  void setDoubleTapWindow(int doubleTapWindow);
-  int getDoubleTapWindow();
-  void setActivityThreshold(int activityThreshold);
-  int getActivityThreshold();
-  void setInactivityThreshold(int inactivityThreshold);
-  int getInactivityThreshold();
-  void setTimeInactivity(int timeInactivity);
-  int getTimeInactivity();
-  void setFreeFallThreshold(int freeFallthreshold);
-  int getFreeFallThreshold();
-  void setFreeFallDuration(int freeFallDuration);
-  int getFreeFallDuration();
+  void setTapThreshold(int16_t tapThreshold);
+  int16_t getTapThreshold();
+  void setAxisOffset(int16_t x, int16_t y, int16_t z);
+  void getAxisOffset(int16_t* x, int16_t* y, int16_t*z);
+  void setTapDuration(int16_t tapDuration);
+  int16_t getTapDuration();
+  void setDoubleTapLatency(int16_t doubleTapLatency);
+  int16_t getDoubleTapLatency();
+  void setDoubleTapWindow(int16_t doubleTapWindow);
+  int16_t getDoubleTapWindow();
+  void setActivityThreshold(int16_t activityThreshold);
+  int16_t getActivityThreshold();
+  void setInactivityThreshold(int16_t inactivityThreshold);
+  int16_t getInactivityThreshold();
+  void setTimeInactivity(int16_t timeInactivity);
+  int16_t getTimeInactivity();
+  void setFreeFallThreshold(int16_t freeFallthreshold);
+  int16_t getFreeFallThreshold();
+  void setFreeFallDuration(int16_t freeFallDuration);
+  int16_t getFreeFallDuration();
 
   bool isActivityXEnabled();
   bool isActivityYEnabled();
@@ -130,15 +130,15 @@ public:
   float getRate();
   void setRate(float rate);
 
-  byte getInterruptSource();
-  bool getInterruptSource(byte interruptBit);
-  bool getInterruptMapping(byte interruptBit);
-  void setInterruptMapping(byte interruptBit, bool interruptPin);
-  bool isInterruptEnabled(byte interruptBit);
-  void setInterrupt(byte interruptBit, bool state);
+  uint8_t getInterruptSource();
+  bool getInterruptSource(uint8_t interruptBit);
+  bool getInterruptMapping(uint8_t interruptBit);
+  void setInterruptMapping(uint8_t interruptBit, bool interruptPin);
+  bool isInterruptEnabled(uint8_t interruptBit);
+  void setInterrupt(uint8_t interruptBit, bool state);
 
-  void getRangeSetting(byte* rangeSetting);
-  void setRangeSetting(int val);
+  void getRangeSetting(uint8_t* rangeSetting);
+  void setRangeSetting(int16_t val);
   bool getSelfTestBit();
   void setSelfTestBit(bool selfTestBit);
   bool getSpiBit();
@@ -152,11 +152,11 @@ public:
   void printAllRegister();
 
 private:
-  void writeTo(int device, byte address, byte val);
-  void readFrom(int device, byte address, int num, byte buff[]);
-  void setRegisterBit(byte regAdress, int bitPos, bool state);
-  bool getRegisterBit(byte regAdress, int bitPos);  
-  byte _buff[6] ;    //6 bytes buffer for saving data read from the device
+  void writeTo(int16_t device, uint8_t address, uint8_t val);
+  void readFrom(int16_t device, uint8_t address, uint8_t num, uint8_t buff[]);
+  void setRegisterBit(uint8_t regAdress, int16_t bitPos, bool state);
+  bool getRegisterBit(uint8_t regAdress, int16_t bitPos);
+  uint8_t _buff[6] ;    // 6 bytes buffer for saving data read from the device
 };
 
 #endif

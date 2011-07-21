@@ -1,4 +1,5 @@
 #include "ps2dev.h"
+#include "debug.h"
 
 //since for the device side we are going to be in charge of the clock,
 //the two defines below are how long each _phase_ of the clock cycle is
@@ -12,7 +13,7 @@
  * the clock and data pins can be wired directly to the clk and data pins
  * of the PS2 connector.  No external parts are needed.
  */
-PS2dev::PS2dev(int clockPin, int dataPin) {
+PS2dev::PS2dev(uint8_t clockPin, uint8_t dataPin) {
     _ps2clk = clockPin;
     _ps2data = dataPin;
     gohi(_ps2clk);
@@ -25,22 +26,22 @@ PS2dev::PS2dev(int clockPin, int dataPin) {
  * various conditions.  It's done this way so you don't need
  * pullup resistors.
  */
-void PS2dev::gohi(int pin) {
+void PS2dev::gohi(uint8_t pin) {
     pinMode(pin, INPUT);
     digitalWrite(pin, HIGH);
 }
 
-void PS2dev::golo(int pin) {
+void PS2dev::golo(uint8_t pin) {
     pinMode(pin, OUTPUT);
     digitalWrite(pin, LOW);
 }
 
-int PS2dev::write(unsigned char data) {
-    unsigned char i;
-    unsigned char parity = 1;
+int8_t PS2dev::write(uint8_t data) {
+    uint8_t i;
+    uint8_t parity = 1;
 
-    Serial.print("PS2dev debug: sending ");
-    Serial.println(data, HEX);
+    DEBUG_PRN_PS2("PS2dev debug: sending ");
+    DEBUG_PRNLF_PS2(data, HEX);
     
     if (digitalRead(_ps2clk) == LOW) return -1;
     if (digitalRead(_ps2data) == LOW) return -2;
@@ -90,15 +91,15 @@ int PS2dev::write(unsigned char data) {
     delayMicroseconds(CLKHALF);
 
     delayMicroseconds(50);
+    
     return 0;
 }
 
-
-int PS2dev::read(unsigned char *value) {
-    unsigned char data = 0x00;
-    unsigned char i;
-    unsigned char bit = 0x01;
-    unsigned char parity = 1;
+uint8_t PS2dev::read() {
+    uint8_t data = 0x00;
+    uint8_t i;
+    uint8_t bit = 0x01;
+    uint8_t parity = 1;
   
     // wait for data line to go low
     while (digitalRead(_ps2data) == HIGH);
@@ -143,7 +144,5 @@ int PS2dev::read(unsigned char *value) {
     delayMicroseconds(CLKHALF);
     gohi(_ps2data);
 
-    *value = data;
-    return 0;
+    return data;
 }
-

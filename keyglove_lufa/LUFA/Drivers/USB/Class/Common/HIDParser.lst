@@ -1662,16 +1662,16 @@
  1725               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 HIDParser.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:19     .text.USB_GetHIDReportItemInfo:00000000 USB_GetHIDReportItemInfo
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:161    .text.USB_SetHIDReportItemInfo:00000000 USB_SetHIDReportItemInfo
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:304    .text.USB_GetHIDReportSize:00000000 USB_GetHIDReportSize
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccGfEASM.s:379    .text.USB_ProcessHIDReport:00000000 USB_ProcessHIDReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:19     .text.USB_GetHIDReportItemInfo:00000000 USB_GetHIDReportItemInfo
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:161    .text.USB_SetHIDReportItemInfo:00000000 USB_SetHIDReportItemInfo
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:304    .text.USB_GetHIDReportSize:00000000 USB_GetHIDReportSize
+C:\Users\JEFFRO~1\AppData\Local\Temp/cc1WkcsC.s:379    .text.USB_ProcessHIDReport:00000000 USB_ProcessHIDReport
 
 UNDEFINED SYMBOLS
 CALLBACK_HIDParser_FilterHIDReportItem

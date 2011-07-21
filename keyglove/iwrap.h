@@ -25,14 +25,14 @@ THE SOFTWARE.
 ===============================================
 */
 
-#ifndef iwrap_h
-#define iwrap_h
+#ifndef _IWRAP_H_
+#define _IWRAP_H_
 
-#ifdef USE_LUFA
+#ifdef LUFA
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef USE_LUFA
+#ifndef LUFA
     #include "WProgram.h"
 #endif
 
@@ -43,7 +43,7 @@ THE SOFTWARE.
 class iWRAP {
     public:
         iWRAP(HardwareSerial *u);
-        void parse(int ch);
+        void parse(uint8_t ch);
         void set_modifier(uint8_t c);
         void set_key1(uint8_t c);
         void set_key2(uint8_t c);
@@ -65,4 +65,4 @@ class iWRAP {
         HardwareSerial *uart;
 };
 
-#endif /* iwrap_h */
+#endif /* _IWRAP_H_ */

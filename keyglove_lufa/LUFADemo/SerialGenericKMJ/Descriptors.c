@@ -196,7 +196,7 @@ const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor =
 
             .ConfigAttributes       = (USB_CONFIG_ATTR_BUSPOWERED | USB_CONFIG_ATTR_SELFPOWERED),
 
-            .MaxPowerConsumption    = USB_CONFIG_POWER_MA(500)
+            .MaxPowerConsumption    = USB_CONFIG_POWER_MA(100)
         },
 
     .CDC_IAD =
@@ -368,7 +368,7 @@ const USB_Descriptor_String_t PROGMEM ManufacturerString =
 {
     .Header                 = {.Size = USB_STRING_LEN(12), .Type = DTYPE_String},
 
-    .UnicodeString          = L"Jeff Rowberg"
+    .UnicodeString          = L"Dean Camera"
 };
 
 /** Product descriptor string. This is a Unicode string containing the product's details in human readable form,
@@ -377,9 +377,9 @@ const USB_Descriptor_String_t PROGMEM ManufacturerString =
  */
 const USB_Descriptor_String_t PROGMEM ProductString =
 {
-    .Header                 = {.Size = USB_STRING_LEN(21), .Type = DTYPE_String},
+    .Header                 = {.Size = USB_STRING_LEN(41), .Type = DTYPE_String},
 
-    .UnicodeString          = L"Keyglove Input Device"
+    .UnicodeString          = L"LUFA CDC and Generic MultiReport HID Demo"
 };
 
 /** Product descriptor string. This is a Unicode string containing the product's details in human readable form,
@@ -388,9 +388,9 @@ const USB_Descriptor_String_t PROGMEM ProductString =
  */
 const USB_Descriptor_String_t PROGMEM ProductStringSerial =
 {
-    .Header                 = {.Size = USB_STRING_LEN(20), .Type = DTYPE_String},
+    .Header                 = {.Size = USB_STRING_LEN(41), .Type = DTYPE_String},
 
-    .UnicodeString          = L"Keyglove Serial Port"
+    .UnicodeString          = L"LUFA CDC and Generic MultiReport HID Demo"
 };
 
 /** Product descriptor string. This is a Unicode string containing the product's details in human readable form,
@@ -399,9 +399,9 @@ const USB_Descriptor_String_t PROGMEM ProductStringSerial =
  */
 const USB_Descriptor_String_t PROGMEM ProductStringHID =
 {
-    .Header                 = {.Size = USB_STRING_LEN(21), .Type = DTYPE_String},
+    .Header                 = {.Size = USB_STRING_LEN(41), .Type = DTYPE_String},
 
-    .UnicodeString          = L"Keyglove Input Device"
+    .UnicodeString          = L"LUFA CDC and Generic MultiReport HID Demo"
 };
 
 /** This function is called by the library when in device mode, and must be overridden (see library "USB Descriptors"

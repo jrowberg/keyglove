@@ -281,16 +281,16 @@
  336               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 wiring_analog.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:19     .text.analogReference:00000000 analogReference
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:294    .data:00000000 analog_reference
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:35     .text.analogRead:00000000 analogRead
-C:\Users\JEFFRO~1\AppData\Local\Temp/ccmc1Vft.s:90     .text.analogWrite:00000000 analogWrite
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:19     .text.analogReference:00000000 analogReference
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:294    .data:00000000 analog_reference
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:35     .text.analogRead:00000000 analogRead
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccBtSUTu.s:90     .text.analogWrite:00000000 analogWrite
 
 UNDEFINED SYMBOLS
 pinMode

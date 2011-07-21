@@ -28,11 +28,11 @@ THE SOFTWARE.
 #ifndef ps2keyboard_h
 #define ps2keyboard_h
 
-#ifdef USE_LUFA
+#ifdef LUFA
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef USE_LUFA
+#ifndef LUFA
     #include "WProgram.h"
 #endif
 
@@ -174,7 +174,7 @@ THE SOFTWARE.
 
 
 // info gleaned from http://www.computer-engineering.org/ps2keyboard/scancodes2.html
-unsigned char scancodes[125][3] = {
+uint8_t scancodes[125][3] = {
     { 0x1C, 0 },        // KEY_A 0
     { 0x32, 0 },        // KEY_B 1
     { 0x21, 0 },        // KEY_C 2
@@ -305,56 +305,56 @@ unsigned char scancodes[125][3] = {
     { 0xE0, 0x18, 0 }   // KEY_WWW_FAVORITES 124
 };
 
-unsigned char scancode_prtsc[5] = { 0xE0, 0x12, 0xE0, 0x7C, 0 };
-unsigned char scancode_pause[9] = { 0xE1, 0x14, 0x77, 0xE1, 0xF0, 0x14, 0xF0, 0x77, 0 };
+uint8_t scancode_prtsc[5] = { 0xE0, 0x12, 0xE0, 0x7C, 0 };
+uint8_t scancode_pause[9] = { 0xE1, 0x14, 0x77, 0xE1, 0xF0, 0x14, 0xF0, 0x77, 0 };
 
 class PS2keyboard {
     public:
         PS2keyboard(PS2dev *k);
-        void keydown(int keycode);
-        void keyup(int keycode);
-        void keypress(int keycode);
+        void keydown(uint16_t keycode);
+        void keyup(uint16_t keycode);
+        void keypress(uint16_t keycode);
         void initialize();
         void process_command();
     
     private:
         PS2dev *keyboard;
-        boolean enabled;
-        int typematic_delay;
+        bool enabled;
+        uint8_t typematic_delay;
         float typematic_rate;
-        int scancode_set;
-        int keys_mode;
-        boolean led_numlock;
-        boolean led_capslock;
-        boolean led_scrolllock;
-        unsigned char buffer[16];
-        unsigned char last_sent_byte;
-        int buf_length;
+        uint8_t scancode_set;
+        uint8_t keys_mode;
+        bool led_numlock;
+        bool led_capslock;
+        bool led_scrolllock;
+        uint8_t buffer[16];
+        uint8_t last_sent_byte;
+        uint16_t buf_length;
         
         // get/set keyboard typematic delay in ms (250, 500, 750, 1000)
-        int get_typematic_delay();
-        void set_typematic_delay(int d);
+        uint16_t get_typematic_delay();
+        void set_typematic_delay(uint16_t d);
         
         // get/set keyboard typematic rate
-        int get_typematic_rate();
+        float get_typematic_rate();
         void set_typematic_rate(float r);
         
         // get/set keyboard scan code set
-        int get_scancode_set();
-        void set_scancode_set(int s);
+        uint8_t get_scancode_set();
+        void set_scancode_set(uint8_t s);
         
         // get/set all keys to all states
-        int get_allkeys_mode();
-        void set_allkeys_mode(int mode);
+        uint8_t get_allkeys_mode();
+        void set_allkeys_mode(uint8_t mode);
         
-        boolean get_led_numlock();
-        void set_led_numlock(boolean state);
+        bool get_led_numlock();
+        void set_led_numlock(bool state);
 
-        boolean get_led_capslock();
-        void set_led_capslock(boolean state);
+        bool get_led_capslock();
+        void set_led_capslock(bool state);
 
-        boolean get_led_scrolllock();
-        void set_led_scrolllock(boolean state);
+        bool get_led_scrolllock();
+        void set_led_scrolllock(bool state);
         
         void run_bat();
         void set_defaults();
@@ -375,7 +375,7 @@ class PS2keyboard {
         void cmd_echo();
         
         // send key scancodes (make or break)
-        void cmd_keypress(int keycode, boolean make);
+        void cmd_keypress(uint16_t keycode, bool make);
 };
 
 #endif /* ps2keyboard_h */

@@ -584,20 +584,20 @@
  633               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 Descriptors.c
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:2      *ABS*:0000003f __SREG__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:5      *ABS*:00000034 __CCP__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:19     .text.CALLBACK_USB_GetDescriptor:00000000 CALLBACK_USB_GetDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:384    .progmem.data:000000b1 DeviceDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:402    .progmem.data:000000c3 ConfigurationDescriptor
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:499    .progmem.data:00000129 LanguageString
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:506    .progmem.data:0000012d ManufacturerString
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:526    .progmem.data:00000149 ProductString
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:555    .progmem.data:00000177 ProductStringSerial
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:583    .progmem.data:000001a3 ProductStringHID
-C:\Users\JEFFRO~1\AppData\Local\Temp/cc33VKET.s:203    .progmem.data:00000000 HIDReport
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:2      *ABS*:0000003f __SREG__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:5      *ABS*:00000034 __CCP__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:19     .text.CALLBACK_USB_GetDescriptor:00000000 CALLBACK_USB_GetDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:384    .progmem.data:000000b1 DeviceDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:402    .progmem.data:000000c3 ConfigurationDescriptor
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:499    .progmem.data:00000129 LanguageString
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:506    .progmem.data:0000012d ManufacturerString
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:526    .progmem.data:00000149 ProductString
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:555    .progmem.data:00000177 ProductStringSerial
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:583    .progmem.data:000001a3 ProductStringHID
+C:\Users\JEFFRO~1\AppData\Local\Temp/ccDr9jER.s:203    .progmem.data:00000000 HIDReport
 
 NO UNDEFINED SYMBOLS

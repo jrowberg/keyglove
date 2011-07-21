@@ -84,9 +84,19 @@ Keyglove.o: Keyglove.cpp Keyglove.h Descriptors.h LUFA/Drivers/USB/USB.h \
   LUFA/Drivers/Peripheral/AVR8/../../Misc/TerminalCodes.h \
   LUFA/Drivers/Peripheral/TWI.h LUFA/Drivers/Peripheral/AVR8/TWI_AVR8.h \
   LUFA/Drivers/Misc/RingBuffer.h LUFA/Drivers/Misc/../../Common/Common.h \
-  ../keyglove/keyglove.pde ArduinoWrapper.h wiring/wiring.h \
-  wiring/binary.h ../keyglove/pins.h ../keyglove/Adxl345.h \
-  ../keyglove/ITG3200.h ../keyglove/touchset_helpers.h \
+  ../keyglove/keyglove.pde ../keyglove/config.h ../keyglove/debug.h \
+  ../keyglove/hardware.h ArduinoWrapper.h wiring/wiring.h wiring/binary.h \
+  ../keyglove/pins.h ../keyglove/setup.h \
+  ../keyglove/setup_board_at90usb.h ../keyglove/setup_touchconn_direct.h \
+  ../keyglove/setup_hostif_serial.h ../keyglove/setup_hostif_usb.h \
+  ../keyglove/setup_hostif_bt_hid.h ../keyglove/iWRAP.h \
+  ../keyglove/setup_hostif_bt_spp.h ../keyglove/setup_motion_adxl345.h \
+  ../keyglove/ADXL345.h ../keyglove/setup_motion_itg3200.h \
+  ../keyglove/ITG3200.h ../keyglove/setup_feedback_blink.h \
+  ../keyglove/setup_feedback_piezo.h ../keyglove/setup_feedback_vibrate.h \
+  ../keyglove/setup_feedback_rgb.h ../keyglove/setup_keyboard.h \
+  ../keyglove/setup_mouse.h ../keyglove/setup_joystick.h \
+  ../keyglove/setup_touch.h ../keyglove/touchset_helpers.h \
   ../keyglove/touchset.h
 
 Keyglove.h:
@@ -299,6 +309,12 @@ LUFA/Drivers/Misc/../../Common/Common.h:
 
 ../keyglove/keyglove.pde:
 
+../keyglove/config.h:
+
+../keyglove/debug.h:
+
+../keyglove/hardware.h:
+
 ArduinoWrapper.h:
 
 wiring/wiring.h:
@@ -307,9 +323,45 @@ wiring/binary.h:
 
 ../keyglove/pins.h:
 
-../keyglove/Adxl345.h:
+../keyglove/setup.h:
+
+../keyglove/setup_board_at90usb.h:
+
+../keyglove/setup_touchconn_direct.h:
+
+../keyglove/setup_hostif_serial.h:
+
+../keyglove/setup_hostif_usb.h:
+
+../keyglove/setup_hostif_bt_hid.h:
+
+../keyglove/iWRAP.h:
+
+../keyglove/setup_hostif_bt_spp.h:
+
+../keyglove/setup_motion_adxl345.h:
+
+../keyglove/ADXL345.h:
+
+../keyglove/setup_motion_itg3200.h:
 
 ../keyglove/ITG3200.h:
+
+../keyglove/setup_feedback_blink.h:
+
+../keyglove/setup_feedback_piezo.h:
+
+../keyglove/setup_feedback_vibrate.h:
+
+../keyglove/setup_feedback_rgb.h:
+
+../keyglove/setup_keyboard.h:
+
+../keyglove/setup_mouse.h:
+
+../keyglove/setup_joystick.h:
+
+../keyglove/setup_touch.h:
 
 ../keyglove/touchset_helpers.h:
 

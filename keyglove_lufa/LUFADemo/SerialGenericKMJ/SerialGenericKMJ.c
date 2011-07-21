@@ -65,14 +65,14 @@ static uint8_t      HostTXSerial_Buffer_Data[128];
 static uint8_t HIDReportInData[GENERIC_REPORT_SIZE];
 static uint8_t HIDReportOutData[GENERIC_REPORT_SIZE]; // extra byte for the ReportID value
 
-long tickCounter = 0;
-long outputCounter = 1;
+uint32_t tickCounter = 0;
+uint32_t outputCounter = 1;
 bool HostSerialLocalEcho = true;
 
 /** Main program entry point. This routine configures the hardware required by the application, then
  *  enters a loop to run the application tasks in sequence.
  */
-int main(void)
+int8_t main(void)
 {
     RingBuffer_InitBuffer(&HostRXSerial_Buffer, HostRXSerial_Buffer_Data, sizeof(HostRXSerial_Buffer_Data));
     RingBuffer_InitBuffer(&HostTXSerial_Buffer, HostTXSerial_Buffer_Data, sizeof(HostTXSerial_Buffer_Data));
@@ -353,7 +353,7 @@ void CDC_Task(void)
         Endpoint_SelectEndpoint(CDC_TX_EPNUM);
 
         /* Write the byte(s) to the Endpoint */
-        for (int i = 0; i < CDC_TXRX_EPSIZE && BufferCount; i++, BufferCount--)
+        for (uint16_t i = 0; i < CDC_TXRX_EPSIZE && BufferCount; i++, BufferCount--)
         {
             UEDATX = RingBuffer_Remove(&HostTXSerial_Buffer); // write one byte
         }
@@ -384,7 +384,7 @@ void CDC_Task(void)
     if (Endpoint_IsOUTReceived())
     {
         BufferCount = Endpoint_BytesInEndpoint();
-        for (int i = 0; i < BufferCount; i++)
+        for (uint16_t i = 0; i < BufferCount; i++)
         {
             uint8_t b = UEDATX;
             RingBuffer_Insert(&HostRXSerial_Buffer, b); // read byte from endpoint

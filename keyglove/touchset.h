@@ -1,114 +1,82 @@
-
 // Keyglove controller source code - Custom touchset definition
-
 // 4/5/2011 by Jeff Rowberg <jeff@rowberg.net>
-
 // (Generated Fri, 17 Jun 2011 00:25:04 -0600 @ host132.hostmonster.com)
 
-
-
 /* ============================================
-
 Controller code is placed under the MIT license
-
 Copyright (c) 2011 Jeff Rowberg
 
-
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
-
 of this software and associated documentation files (the "Software"), to deal
-
 in the Software without restriction, including without limitation the rights
-
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-
 copies of the Software, and to permit persons to whom the Software is
-
 furnished to do so, subject to the following conditions:
 
-
-
 The above copyright notice and this permission notice shall be included in
-
 all copies or substantial portions of the Software.
 
-
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-
 THE SOFTWARE.
-
 ===============================================
-
 */
 
-
-
 // TOTAL: 43 unique combinations used, 5 modes
-
 // ===============================================================
 
-
-
 // numeric mode definitions
- 
+
 #define KMODE_DEFAULT 0
 #define KMODE_NUMBERS 1
 #define KMODE_SYMBOLS 2
 #define KMODE_FUNCTIONS 3
 #define KMODE_GUI 4
  
-void activate_mode(int mode) {
+static void activate_mode(uint8_t mode) {
     switch (mode) {
         case KMODE_DEFAULT:
-            beep(2000, KBEEP_SHORTBEEP, 1);
-            redled(KLED_OFF, 0);
-            greenled(KLED_SOLID, 0);
-            blueled(KLED_OFF, 0);
+            beep(2000, KG_PIEZO_SHORTBEEP, 1);
+            redled(KG_RGB_OFF, 0);
+            greenled(KG_RGB_SOLID, 0);
+            blueled(KG_RGB_OFF, 0);
             return;
             break;
         case KMODE_NUMBERS:
-            beep(2000, KBEEP_SHORTBEEP, 2);
-            redled(KLED_OFF, 0);
-            greenled(KLED_OFF, 0);
-            blueled(KLED_SOLID, 0);
+            beep(2000, KG_PIEZO_SHORTBEEP, 2);
+            redled(KG_RGB_OFF, 0);
+            greenled(KG_RGB_OFF, 0);
+            blueled(KG_RGB_SOLID, 0);
             return;
             break;
         case KMODE_SYMBOLS:
-            beep(2000, KBEEP_SHORTBEEP, 3);
-            redled(KLED_OFF, 0);
-            greenled(KLED_SOLID, 0);
-            blueled(KLED_SOLID, 0);
+            beep(2000, KG_PIEZO_SHORTBEEP, 3);
+            redled(KG_RGB_OFF, 0);
+            greenled(KG_RGB_SOLID, 0);
+            blueled(KG_RGB_SOLID, 0);
             return;
             break;
         case KMODE_FUNCTIONS:
-            beep(2000, KBEEP_SHORTBEEP, 4);
-            redled(KLED_SOLID, 0);
-            greenled(KLED_OFF, 0);
-            blueled(KLED_OFF, 0);
+            beep(2000, KG_PIEZO_SHORTBEEP, 4);
+            redled(KG_RGB_SOLID, 0);
+            greenled(KG_RGB_OFF, 0);
+            blueled(KG_RGB_OFF, 0);
             return;
             break;
         case KMODE_GUI:
-            beep(1600, KBEEP_SHORTPULSE, 1);
-            greenled(KLED_SHORTBLINK, 0);
+            beep(1600, KG_PIEZO_SHORTPULSE, 1);
+            greenled(KG_RGB_SHORTBLINK, 0);
             modifierdown(MODIFIERKEY_GUI);
             return;
             break;
     }
 }
  
-void deactivate_mode(int mode) {
+static void deactivate_mode(uint8_t mode) {
     switch (mode) {
         case KMODE_GUI:
             modifierup(MODIFIERKEY_GUI);
@@ -248,21 +216,21 @@ void deactivate_mode(int mode) {
 #define KS1_J1 0x0
 #define KS2_J1 0x4000000
  
-void check_sensors_touch(long unsigned int sensors1, long unsigned int sensors2, int pos) {
+void check_sensors_touch(uint32_t sensors1, uint32_t sensors2, uint8_t pos) {
     if ((sensors1 & KS1_D8) == KS1_D8 && (sensors2 & KS2_D8) == KS2_D8 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mouseon(KMOUSE_SCROLL);
+        mouseon(MOUSE_ACTION_SCROLL);
         return;
     } else if ((sensors1 & KS1_A8) == KS1_A8 && (sensors2 & KS2_A8) == KS2_A8 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mouseon(KMOUSE_MOVE);
+        mouseon(MOUSE_ACTION_MOVE);
         return;
     } else if ((sensors1 & KS1_J3) == KS1_J3 && (sensors2 & KS2_J3) == KS2_J3 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mousedown(KMOUSE_RIGHT);
+        mousedown(MOUSE_RIGHT);
         return;
     } else if ((sensors1 & KS1_J2) == KS1_J2 && (sensors2 & KS2_J2) == KS2_J2 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mousedown(KMOUSE_MIDDLE);
+        mousedown(MOUSE_MIDDLE);
         return;
     } else if ((sensors1 & KS1_J1) == KS1_J1 && (sensors2 & KS2_J1) == KS2_J1 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mousedown(KMOUSE_LEFT);
+        mousedown(MOUSE_LEFT);
         return;
     }
  
@@ -273,7 +241,7 @@ void check_sensors_touch(long unsigned int sensors1, long unsigned int sensors2,
     }
 }
  
-void check_sensors_release(long unsigned int sensors1, long unsigned int sensors2, int pos) {
+void check_sensors_release(uint32_t sensors1, uint32_t sensors2, uint8_t pos) {
     if ((sensors1 & KS1_Y7) == KS1_Y7 && (sensors2 & KS2_Y7) == KS2_Y7) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
             keypress(KEY_PERIOD);
@@ -633,7 +601,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         modifierup(MODIFIERKEY_ALT);
         return;
     } else if ((sensors1 & KS1_D8) == KS1_D8 && (sensors2 & KS2_D8) == KS2_D8 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mouseoff(KMOUSE_SCROLL);
+        mouseoff(MOUSE_ACTION_SCROLL);
         return;
     } else if ((sensors1 & KS1_DY) == KS1_DY && (sensors2 & KS2_DY) == KS2_DY) {
         if ((sensors1 & KS1_ADY) == KS1_ADY && (sensors2 & KS2_ADY) == KS2_ADY) {
@@ -802,7 +770,7 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         modifierup(MODIFIERKEY_ALT);
         return;
     } else if ((sensors1 & KS1_A8) == KS1_A8 && (sensors2 & KS2_A8) == KS2_A8 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mouseoff(KMOUSE_MOVE);
+        mouseoff(MOUSE_ACTION_MOVE);
         return;
     } else if ((sensors1 & KS1_MY) == KS1_MY && (sensors2 & KS2_MY) == KS2_MY) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
@@ -982,13 +950,13 @@ void check_sensors_release(long unsigned int sensors1, long unsigned int sensors
         // UNKNOWN: array (   'action' => 'togglemodifier',   'code' => 'MODIFIERKEY_SHIFT', )
         return;
     } else if ((sensors1 & KS1_J3) == KS1_J3 && (sensors2 & KS2_J3) == KS2_J3 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mouseup(KMOUSE_RIGHT);
+        mouseup(MOUSE_RIGHT);
         return;
     } else if ((sensors1 & KS1_J2) == KS1_J2 && (sensors2 & KS2_J2) == KS2_J2 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mouseup(KMOUSE_MIDDLE);
+        mouseup(MOUSE_MIDDLE);
         return;
     } else if ((sensors1 & KS1_J1) == KS1_J1 && (sensors2 & KS2_J1) == KS2_J1 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
-        mouseup(KMOUSE_LEFT);
+        mouseup(MOUSE_LEFT);
         return;
     }
  

@@ -122,7 +122,7 @@ static void turnOffPWM(uint8_t timer)
 	}
 }
 
-/*void digitalWrite(uint8_t pin, uint8_t val)
+void digitalWrite(uint8_t pin, uint8_t val)
 {
 	uint8_t timer = digitalPinToTimer(pin);
 	uint8_t bit = digitalPinToBitMask(pin);

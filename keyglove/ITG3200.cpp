@@ -27,8 +27,9 @@
 *****************************************************************************/
 
 #include "ITG3200.h"
+#include "debug.h"
 
-#ifndef USE_LUFA
+#ifndef LUFA
     #include <Wire.h>
 #endif
 
@@ -41,7 +42,7 @@ ITG3200::ITG3200() {
                         //Uncomment if needed.
 }
 
-void ITG3200::init(unsigned int  address) {
+void ITG3200::init(uint8_t address) {
   // Uncomment or change your default ITG3200 initialization
   
   // fast sample rate - divisor = 0 filter = 0 clocksrc = 0, 1, 2, or 3  (raw values)
@@ -57,7 +58,7 @@ void ITG3200::init(unsigned int  address) {
   //init(NOSRDIVIDER, RANGE2000, BW010_SR1, PLL_EXTERNAL32, true, true);
 }
 
-void ITG3200::init(unsigned int address, byte _SRateDiv, byte _Range, byte _filterBW, byte _ClockSrc, bool _ITGReady, bool _INTRawDataReady) {
+void ITG3200::init(uint8_t address, uint8_t _SRateDiv, uint8_t _Range, uint8_t _filterBW, uint8_t _ClockSrc, bool _ITGReady, bool _INTRawDataReady) {
   _dev_address = address;
   setSampleRateDiv(_SRateDiv);
   setFSRange(_Range);
@@ -68,42 +69,42 @@ void ITG3200::init(unsigned int address, byte _SRateDiv, byte _Range, byte _filt
   delay(GYROSTART_UP_DELAY);  // startup 
 }
 
-byte ITG3200::getDevAddr() {
+uint8_t ITG3200::getDevAddr() {
   /*readmem(WHO_AM_I, 1, &_buff[0]); 
   return _buff[0];  */
   return _dev_address;
 }
 
-void ITG3200::setDevAddr(unsigned int  _addr) {
+void ITG3200::setDevAddr(uint8_t _addr) {
   writemem(WHO_AM_I, _addr); 
   _dev_address = _addr;
 }
 
-byte ITG3200::getSampleRateDiv() {
+uint8_t ITG3200::getSampleRateDiv() {
   readmem(SMPLRT_DIV, 1, &_buff[0]);
   return _buff[0];
 }
 
-void ITG3200::setSampleRateDiv(byte _SampleRate) {
+void ITG3200::setSampleRateDiv(uint8_t _SampleRate) {
   writemem(SMPLRT_DIV, _SampleRate);
 }
 
-byte ITG3200::getFSRange() {
+uint8_t ITG3200::getFSRange() {
   readmem(DLPF_FS, 1, &_buff[0]);
   return ((_buff[0] & DLPFFS_FS_SEL) >> 3);
 }
 
-void ITG3200::setFSRange(byte _Range) {
+void ITG3200::setFSRange(uint8_t _Range) {
   readmem(DLPF_FS, 1, &_buff[0]);   
   writemem(DLPF_FS, ((_buff[0] & ~DLPFFS_FS_SEL) | (_Range << 3)) ); 
 }
 
-byte ITG3200::getFilterBW() {  
+uint8_t ITG3200::getFilterBW() {
   readmem(DLPF_FS, 1, &_buff[0]);
   return (_buff[0] & DLPFFS_DLPF_CFG); 
 }
 
-void ITG3200::setFilterBW(byte _BW) {   
+void ITG3200::setFilterBW(uint8_t _BW) {
   readmem(DLPF_FS, 1, &_buff[0]);
   writemem(DLPF_FS, ((_buff[0] & ~DLPFFS_DLPF_CFG) | _BW)); 
 }
@@ -183,18 +184,18 @@ void ITG3200::readTemp(float *_Temp) {
   *_Temp = 35 + ((_buff[0] << 8 | _buff[1]) + 13200) / 280.0;    // F=C*9/5+32
 }
 
-void ITG3200::readGyroRaw( int *_GyroX, int *_GyroY, int *_GyroZ){
+void ITG3200::readGyroRaw(int16_t *_GyroX, int16_t *_GyroY, int16_t *_GyroZ){
   readmem(GYRO_XOUT, 6, _buff);
   *_GyroX = _buff[0] << 8 | _buff[1];
   *_GyroY = _buff[2] << 8 | _buff[3]; 
   *_GyroZ = _buff[4] << 8 | _buff[5];
 }
 
-void ITG3200::readGyroRaw( int *_GyroXYZ){
+void ITG3200::readGyroRaw(int16_t *_GyroXYZ){
   readGyroRaw(_GyroXYZ, _GyroXYZ+1, _GyroXYZ+2);
 }
 
-void ITG3200::setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff, bool _Radians) { 
+void ITG3200::setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff, bool _Radians) {
   scalefactor[0] = 14.375 * _Xcoeff;   
   scalefactor[1] = 14.375 * _Ycoeff;
   scalefactor[2] = 14.375 * _Zcoeff;    
@@ -206,17 +207,17 @@ void ITG3200::setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff, bool _
   }
 }
 
-void ITG3200::setOffsets(int _Xoffset, int _Yoffset, int _Zoffset) {
+void ITG3200::setOffsets(int16_t _Xoffset, int16_t _Yoffset, int16_t _Zoffset) {
   offsets[0] = _Xoffset;
   offsets[1] = _Yoffset;
   offsets[2] = _Zoffset;
 }
 
-void ITG3200::zeroCalibrate(unsigned int totSamples, unsigned int sampleDelayMS) {
+void ITG3200::zeroCalibrate(uint16_t totSamples, uint16_t sampleDelayMS) {
   float tmpOffsets[] = {0,0,0};
-  int xyz[3];
+  int16_t xyz[3];
 
-  for (unsigned int i = 0;i < totSamples;i++){
+  for (uint16_t i = 0;i < totSamples;i++){
     delay(sampleDelayMS);
     readGyroRaw(xyz);
     tmpOffsets[0] += xyz[0];
@@ -226,19 +227,19 @@ void ITG3200::zeroCalibrate(unsigned int totSamples, unsigned int sampleDelayMS)
   setOffsets(-tmpOffsets[0] / totSamples + 0.5, -tmpOffsets[1] / totSamples + 0.5, -tmpOffsets[2] / totSamples + 0.5);
 }
 
-void ITG3200::readGyroRawCal(int *_GyroX, int *_GyroY, int *_GyroZ) { 
+void ITG3200::readGyroRawCal(int16_t *_GyroX, int16_t *_GyroY, int16_t *_GyroZ) {
   readGyroRaw(_GyroX, _GyroY, _GyroZ); 
   *_GyroX += offsets[0]; 
   *_GyroY += offsets[1]; 
   *_GyroZ += offsets[2]; 
 } 
 
-void ITG3200::readGyroRawCal(int *_GyroXYZ) { 
+void ITG3200::readGyroRawCal(int16_t *_GyroXYZ) {
   readGyroRawCal(_GyroXYZ, _GyroXYZ+1, _GyroXYZ+2); 
 } 
 
 void ITG3200::readGyro(float *_GyroX, float *_GyroY, float *_GyroZ){
-  int x, y, z; 
+  int16_t x, y, z;
   readGyroRawCal(&x, &y, &z); // x,y,z will contain calibrated integer values from the sensor 
   *_GyroX =  x / scalefactor[0]; 
   *_GyroY =  y / scalefactor[1]; 
@@ -294,12 +295,12 @@ void ITG3200::setZgyroStandby(bool _Status) {
   writemem(PWR_MGM, ((_buff[0] & PWRMGM_STBY_ZG) | _Status << 3));
 }
 
-byte ITG3200::getClockSource() {  
+uint8_t ITG3200::getClockSource() {  
   readmem(PWR_MGM, 1, &_buff[0]);
   return (_buff[0] & PWRMGM_CLK_SEL);
 }
 
-void ITG3200::setClockSource(byte _CLKsource) {   
+void ITG3200::setClockSource(uint8_t _CLKsource) {
   readmem(PWR_MGM, 1, &_buff[0]);
   writemem(PWR_MGM, ((_buff[0] & ~PWRMGM_CLK_SEL) | _CLKsource)); 
 }
@@ -325,5 +326,3 @@ void ITG3200::readmem(uint8_t _addr, uint8_t _nbytes, uint8_t __buff[]) {
   }
   Wire.endTransmission(); // end transmission
 }
-
-

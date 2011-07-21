@@ -25,11 +25,12 @@ THE SOFTWARE.
 ===============================================
 */
 
-#ifndef USE_LUFA
+#ifndef LUFA
     #include "WProgram.h"
 #endif
 
-#include "iwrap.h"
+#include "iWRAP.h"
+#include "debug.h"
 
 #ifdef round
     #undef round
@@ -47,7 +48,7 @@ iWRAP::iWRAP(HardwareSerial *u) {
     uart = u;
 }
 
-void iWRAP::parse(int ch) {
+void iWRAP::parse(uint8_t ch) {
     Serial.print(ch, BYTE);
 }
 

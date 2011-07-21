@@ -1,4 +1,4 @@
-// Keyglove controller source code - pins constant definition file
+// Keyglove controller source code - pin definition file
 // 10/1/2010 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
@@ -24,6 +24,64 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ===============================================
 */
+
+/* ===============================================
+ * ARCHITECTURE PIN ALIASES
+=============================================== */
+
+#if (defined(__AVR_ATmega168__) || defined(__AVR_ATmega328__))
+     // 32-pin ATMegaxxx MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+#if (defined(__AVR_AT90USB162__))
+     // 32-pin AT90USB MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+#if (defined(__AVR_ATmega16U4__) || defined(__AVR_ATmega32U4__))
+     // 44-pin ATMEGAxxUx MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+#if (defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__))
+     // 100-pin ATMegaxxx0 MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+#if (defined(__AVR_AT90USB1287__) || defined(__AVR_AT90USB647__) || \
+     defined(__AVR_AT90USB1286__) || defined(__AVR_AT90USB646__) || \
+     defined(__AVR_ATmega32U6__))
+     // 64-pin AT90USB MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+
 
 #ifdef USE_ARDUINO
     #define KSP_A 16
@@ -72,9 +130,9 @@ THE SOFTWARE.
     #define VIBRATE_PIN 10
     #define SOUND_PIN 9
 
-    #define TRICOLOR_RED_PIN 11
-    #define TRICOLOR_GREEN_PIN 12
-    #define TRICOLOR_BLUE_PIN 13
+    #define RGB_RED_PIN 11
+    #define RGB_GREEN_PIN 12
+    #define RGB_BLUE_PIN 13
 
     #define KB_PIN_CLOCK    19
     #define KB_PIN_DATA     18
@@ -87,7 +145,7 @@ THE SOFTWARE.
     #define MOUSE_INT2      1
 #endif /* USE_ARDUINO */
 
-#ifdef USE_TEENSY
+#ifdef LUFA //USE_TEENSY
     #define KSP_A 4 // D4
     #define KSP_B 5 // D5
     #define KSP_C 7 // D7
@@ -123,14 +181,14 @@ THE SOFTWARE.
     #define KSP_7 39 // F1
     #define KSP_8 40 // F2
 
-    #define BLINK_LED_PIN 6 // Teensy++ LED pin 6
+    #define KG_PIN_BLINK 6 // Teensy++ LED pin 6
 
-    #define VIBRATE_PIN 41 // F3
-    #define SOUND_PIN 42 // F4
+    #define KG_PIN_VIBRATE 41 // F3
+    #define KG_PIN_PIEZO 42 // F4
 
-    #define TRICOLOR_RED_PIN 43   // F5
-    #define TRICOLOR_GREEN_PIN 44 // F6
-    #define TRICOLOR_BLUE_PIN 45  // F7
+    #define KG_PIN_RGB_RED 43   // F5
+    #define KG_PIN_RGB_GREEN 44 // F6
+    #define KG_PIN_RGB_BLUE 45  // F7
     
     #define KB_PIN_CLOCK    19
     #define KB_PIN_DATA     18
@@ -142,7 +200,7 @@ THE SOFTWARE.
 #define KG_TOTAL_SENSORS 34
 #define KG_BASE_COMBINATIONS 60
 
-int pins[KG_TOTAL_SENSORS] = {
+uint8_t pins[KG_TOTAL_SENSORS] = {
     KSP_A, KSP_B, KSP_C, KSP_D, KSP_E,
     KSP_F, KSP_G, KSP_H, KSP_I, KSP_J,
     KSP_K, KSP_L, KSP_M, KSP_N, KSP_O,
@@ -151,7 +209,7 @@ int pins[KG_TOTAL_SENSORS] = {
     KSP_Z, KSP_1, KSP_2, KSP_3, KSP_4,
     KSP_5, KSP_6, KSP_7, KSP_8 };
     
-int combinations[KG_BASE_COMBINATIONS][2] = {
+uint8_t combinations[KG_BASE_COMBINATIONS][2] = {
     { KSP_Z, KSP_7 /* Z7 */ },
     { KSP_Y, KSP_7 /* Y7 */ },
     { KSP_J, KSP_8 /* J8 */ },
