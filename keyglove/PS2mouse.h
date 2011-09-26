@@ -28,11 +28,11 @@ THE SOFTWARE.
 #ifndef ps2mouse_h
 #define ps2mouse_h
 
-#ifdef LUFA
+#ifdef LUFA_ARDUINO_WRAPPER
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef LUFA
+#ifndef LUFA_ARDUINO_WRAPPER
     #include "WProgram.h"
 #endif
 
@@ -96,3 +96,5 @@ class PS2mouse {
 };
 
 #endif /* ps2mouse_h */
+
+

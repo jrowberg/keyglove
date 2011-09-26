@@ -38,3 +38,5 @@ void setup_motion_hmc5843() {
 }
 
 #endif // _SETUP_MOTION_HMC5843_H_
+
+

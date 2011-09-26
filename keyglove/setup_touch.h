@@ -54,6 +54,8 @@ void setup_touch() {
 
     mode = 0; // set to base mode, no alt/shift/mouse/prog
     setmode(0); // default touchset mode is always 0
+
+    activeTouch = true; // this is always on if touch control is enabled
 }
 
 void update_touch() {
@@ -121,3 +123,5 @@ void update_touch() {
 }  
 
 #endif // _SETUP_TOUCH_H_
+
+

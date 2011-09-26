@@ -28,11 +28,11 @@ THE SOFTWARE.
 #ifndef ps2keyboard_h
 #define ps2keyboard_h
 
-#ifdef LUFA
+#ifdef LUFA_ARDUINO_WRAPPER
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef LUFA
+#ifndef LUFA_ARDUINO_WRAPPER
     #include "WProgram.h"
 #endif
 
@@ -379,3 +379,5 @@ class PS2keyboard {
 };
 
 #endif /* ps2keyboard_h */
+
+

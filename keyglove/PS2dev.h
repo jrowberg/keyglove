@@ -13,17 +13,13 @@
 #ifndef ps2dev_h
 #define ps2dev_h
 
-#ifdef LUFA
+#ifdef LUFA_ARDUINO_WRAPPER
     #include "ArduinoWrapper.h"
 #endif
 
-#ifndef LUFA
+#ifndef LUFA_ARDUINO_WRAPPER
     #include "WProgram.h"
     #include "wiring.h"
-#endif
-
-#ifdef round
-    #undef round
 #endif
 
 class PS2dev {
@@ -40,3 +36,5 @@ class PS2dev {
 };
 
 #endif /* ps2dev_h */
+
+

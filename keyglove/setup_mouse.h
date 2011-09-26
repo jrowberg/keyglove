@@ -73,9 +73,11 @@ float opt_mouse_scale_mode4[] = { 1, 1, 1 };      // speed scale [x,y,z] for mod
 void setup_mouse() {
     mx = my = mz = mx0 = my0 = mz0 = 0;
     sy = sy0 = 0;
+    opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
 }
 
 void update_mouse() {
+    moveMouse = false;
     switch (opt_mouse_mode) {
         case MOUSE_MODE_TILT_VELOCITY:
             if (aset) {
@@ -83,7 +85,7 @@ void update_mouse() {
                 my0 = my;
                 mx -= (float)(ax - axBase) / opt_mouse_scale_mode1[0];
                 my -= (float)(ay - ayBase) / opt_mouse_scale_mode1[1];
-                moveMouse = true;
+                moveMouse = mx0 != mx || my0 != my;
             } else {
                 axBase = ax;
                 ayBase = ay;
@@ -107,7 +109,7 @@ void update_mouse() {
             my0 = my;
             mx += (gx < 0) ? -sqrt(-gx) : sqrt(gx);
             my += (gy < 0) ? -sqrt(-gy) : sqrt(gy);
-            moveMouse = true;
+            moveMouse = mx0 != mx || my0 != my;
             break;
         case MOUSE_MODE_MOVEMENT_POSITION:
             if (aset) {
@@ -115,7 +117,7 @@ void update_mouse() {
                 my0 = my;
                 mx -= (float)(x - xBase) / opt_mouse_scale_mode3[0];
                 my -= (float)((z - 256) - zBase) / opt_mouse_scale_mode3[1];
-                moveMouse = true;
+                moveMouse = mx0 != mx || my0 != my;
             } else {
                 xBase = x;
                 yBase = y;
@@ -130,7 +132,7 @@ void update_mouse() {
             mx -= xv / opt_mouse_scale_mode4[0];
             my -= zv / opt_mouse_scale_mode4[1];
             mz -= yv / opt_mouse_scale_mode4[2];
-            moveMouse = true;
+            moveMouse = mx0 != mx || my0 != my || mz0 != mz;
             break;
     }
     switch (opt_scroll_mode) {
@@ -171,12 +173,12 @@ void update_mouse() {
 
     //if (BOUND_MOUSEX > 0 && abs(mx) > BOUND_MOUSEX) mx = mx < 0 ? -BOUND_MOUSEX : BOUND_MOUSEX;
     //if (BOUND_MOUSEY > 0 && abs(my) > BOUND_MOUSEY) my = my < 0 ? -BOUND_MOUSEY : BOUND_MOUSEY;
-    
+
     // get relative movement amounts
     mdx = mx - mx0;
     mdy = my - my0;
     mdz = mz - mz0;
-    
+
     if (opt_mouse_invert_x == 1) mdx = -mdx;
     if (opt_mouse_invert_y == 1) mdy = -mdy;
     if (opt_mouse_invert_z == 1) mdz = -mdz;
@@ -196,6 +198,7 @@ void update_mouse() {
         DEBUG_PRN_MOUSE("mouse ");
         DEBUG_PRN_MOUSE(mx); DEBUG_PRN_MOUSE(" ");
         DEBUG_PRN_MOUSE(my); DEBUG_PRN_MOUSE(" ");
+        DEBUG_PRN_MOUSE(mz); DEBUG_PRN_MOUSE(" ");
         DEBUG_PRN_MOUSE(mdx); DEBUG_PRN_MOUSE(" ");
         DEBUG_PRN_MOUSE(mdy); DEBUG_PRN_MOUSE(" ");
         DEBUG_PRN_MOUSE(mdz); DEBUG_PRN_MOUSE(" ");
@@ -220,3 +223,5 @@ void update_mouse() {
 }
 
 #endif // _SETUP_MOUSE_H_
+
+

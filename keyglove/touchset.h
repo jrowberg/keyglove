@@ -967,3 +967,5 @@ void check_sensors_release(uint32_t sensors1, uint32_t sensors2, uint8_t pos) {
     }
 }
  
+
+

@@ -38,3 +38,5 @@ void setup_feedback_vibrate() {
 }
 
 #endif // _SETUP_FEEDBACK_VIBRATE_H_
+
+

@@ -34,10 +34,6 @@ THE SOFTWARE.
     #error Selected board has no I2C support. I2C devices cannot be enabled under these circumstances.
 #endif
 
-#ifndef LUFA
-    #include <Wire.h>
-#endif
-
 #include "ADXL345.h"
 
 ADXL345 accelerometer;
@@ -79,7 +75,7 @@ int16_t calAccel = 0;
 uint8_t accelCalibrated = false;
 
 void setup_motion_accelerometer() {
-    accelerometer.powerOn();
+    accelerometer.initialize();
     accelerometer.setRate(100);
     x = y = z = 0;
     cx = cy = cz = 0;
@@ -89,6 +85,9 @@ void setup_motion_accelerometer() {
     accelCalibrated = false;
     xMin = yMin = zMin = 0;
     xMax = yMax = zMax = 0;
+
+    activeAccelerometer = true;
+    activeMouse = true;
 }
 
 void update_motion_accelerometer() {
@@ -101,37 +100,37 @@ void update_motion_accelerometer() {
     
     // read accelerometer with correct rotation settings
     if      (opt_accel_rot90 == 0) { // no rotation:            x = +x, y = +y, z = +z
-        accelerometer.readAccel(&xRaw, &yRaw, &zRaw);
+        accelerometer.getAcceleration(&xRaw, &yRaw, &zRaw);
     }
     else if (opt_accel_rot90 == 1) { // 90 around x axis:       x = +x, y = -z, z = +y
-        accelerometer.readAccel(&xRaw, &zRaw, &yRaw);
+        accelerometer.getAcceleration(&xRaw, &zRaw, &yRaw);
         zRaw = -zRaw;
     }
     else if (opt_accel_rot90 == 2) { // 90 around y axis:       x = -z, y = +y, z = +x
-        accelerometer.readAccel(&zRaw, &yRaw, &xRaw);
+        accelerometer.getAcceleration(&zRaw, &yRaw, &xRaw);
         zRaw = -zRaw;
     }
     else if (opt_accel_rot90 == 4) { // 90 around z axis;       x = -y, y = +x, z = +z
-        accelerometer.readAccel(&yRaw, &xRaw, &zRaw);
+        accelerometer.getAcceleration(&yRaw, &xRaw, &zRaw);
         yRaw = -yRaw;
     }
     else if (opt_accel_rot90 == 3) { // 90 around x, y axes:    x = -z, y = -x, z = +y
-        accelerometer.readAccel(&zRaw, &xRaw, &yRaw);
+        accelerometer.getAcceleration(&zRaw, &xRaw, &yRaw);
         xRaw = -xRaw;
         zRaw = -zRaw;
     }
     else if (opt_accel_rot90 == 5) { // 90 around x, z axes:    x = -y, y = -z, z = +x
-        accelerometer.readAccel(&yRaw, &zRaw, &xRaw);
+        accelerometer.getAcceleration(&yRaw, &zRaw, &xRaw);
         yRaw = -yRaw;
         zRaw = -zRaw;
     }
     else if (opt_accel_rot90 == 6) { // 90 around y, z axes:    x = -z, y = +x, z = -y
-        accelerometer.readAccel(&zRaw, &xRaw, &yRaw);
+        accelerometer.getAcceleration(&zRaw, &xRaw, &yRaw);
         yRaw = -yRaw;
         zRaw = -zRaw;
     }
     else if (opt_accel_rot90 == 7) { // 90 around x, y, z axes: x = -z, y = +y, z = +x
-        accelerometer.readAccel(&zRaw, &yRaw, &xRaw);
+        accelerometer.getAcceleration(&zRaw, &yRaw, &xRaw);
         zRaw = -zRaw;
     }
     
@@ -242,3 +241,5 @@ void update_motion_accelerometer() {
 }  
 
 #endif // _SETUP_MOTION_ADXL345_H_
+
+

@@ -1,192 +1,178 @@
-/****************************************************************************
-* ITG3200.h - ITG-3200/I2C library v0.5 for Arduino                         *
-* Copyright 2010-2011 Filipe Vieira & various contributors                  *
-* http://code.google.com/p/itg-3200driver                                   *
-* This file is part of ITG-3200 Arduino library.                            *
-*                                                                           *
-* This library is free software: you can redistribute it and/or modify      *
-* it under the terms of the GNU Lesser General Public License as published  *
-* by the Free Software Foundation, either version 3 of the License, or      *
-* (at your option) any later version.                                       *
-*                                                                           *
-* This program is distributed in the hope that it will be useful,           *
-* but WITHOUT ANY WARRANTY; without even the implied warranty of            *
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
-* GNU Lesser General Public License for more details.                       *
-*                                                                           *
-* You should have received a copy of the GNU Lesser General Public License  *
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.     *
-****************************************************************************/
-/****************************************************************************
-* Tested on Arduino Mega with ITG-3200 Breakout                             *
-* SCL     -> pin 21     (no pull up resistors)                              *
-* SDA     -> pin 20     (no pull up resistors)                              *
-* CLK & GND -> pin GND                                                      *
-* INT       -> not connected  (but can be used)                             *
-* VIO & VDD -> pin 3.3V                                                     *
-*****************************************************************************/
-#ifndef ITG3200_h
-#define ITG3200_h
+// I2Cdev library collection - ITG3200 I2C device class header file
+// Based on InvenSense ITG-3200 datasheet rev. 1.4, 3/30/2010 (PS-ITG-3200A-00-01.4)
+// 7/31/2011 by Jeff Rowberg <jeff@rowberg.net>
+// Updates should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
 
-#ifdef LUFA
-    #include "ArduinoWrapper.h"
-#endif
+/* ============================================
+I2Cdev device library code is placed under the MIT license
+Copyright (c) 2011 Jeff Rowberg
 
-#ifndef LUFA
-    #include "WProgram.h"
-#endif
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-#define ITG3200_ADDR_AD0_HIGH  0x69   //AD0=1 0x69 I2C address when AD0 is connected to HIGH (VCC) - default for sparkfun breakout
-#define ITG3200_ADDR_AD0_LOW   0x68   //AD0=0 0x68 I2C address when AD0 is connected to LOW (GND)
-// "The LSB bit of the 7 bit address is determined by the logic level on pin 9. 
-// This allows two ITG-3200 devices to be connected to the same I2C bus.
-// One device should have pin9 (or bit0) LOW and the other should be HIGH." source: ITG3200 datasheet
-// Note that pin9 (AD0 - I2C Slave Address LSB) may not be available on some breakout boards so check 
-// the schematics of your breakout board for the correct address to use.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-#define GYROSTART_UP_DELAY  70    // 50ms from gyro startup + 20ms register r/w startup
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+===============================================
+*/
 
-/* ---- Registers ---- */
-#define WHO_AM_I           0x00  // RW   SETUP: I2C address   
-#define SMPLRT_DIV         0x15  // RW   SETUP: Sample Rate Divider       
-#define DLPF_FS            0x16  // RW   SETUP: Digital Low Pass Filter/ Full Scale range
-#define INT_CFG            0x17  // RW   Interrupt: Configuration
-#define INT_STATUS         0x1A  // R	Interrupt: Status
-#define TEMP_OUT           0x1B  // R	SENSOR: Temperature 2bytes
-#define GYRO_XOUT          0x1D  // R	SENSOR: Gyro X 2bytes  
-#define GYRO_YOUT          0x1F  // R	SENSOR: Gyro Y 2bytes
-#define GYRO_ZOUT          0x21  // R	SENSOR: Gyro Z 2bytes
-#define PWR_MGM            0x3E  // RW	Power Management
+#ifndef _ITG3200_H_
+#define _ITG3200_H_
 
-/* ---- bit maps ---- */
-#define DLPFFS_FS_SEL             0x18  // 00011000
-#define DLPFFS_DLPF_CFG           0x07  // 00000111
-#define INTCFG_ACTL               0x80  // 10000000
-#define INTCFG_OPEN               0x40  // 01000000
-#define INTCFG_LATCH_INT_EN       0x20  // 00100000
-#define INTCFG_INT_ANYRD_2CLEAR   0x10  // 00010000
-#define INTCFG_ITG_RDY_EN         0x04  // 00000100
-#define INTCFG_RAW_RDY_EN         0x01  // 00000001
-#define INTSTATUS_ITG_RDY         0x04  // 00000100
-#define INTSTATUS_RAW_DATA_RDY    0x01  // 00000001
-#define PWRMGM_HRESET             0x80  // 10000000
-#define PWRMGM_SLEEP              0x40  // 01000000
-#define PWRMGM_STBY_XG            0x20  // 00100000
-#define PWRMGM_STBY_YG            0x10  // 00010000
-#define PWRMGM_STBY_ZG            0x08  // 00001000
-#define PWRMGM_CLK_SEL            0x07  // 00000111
+#include "I2Cdev.h"
 
-/************************************/
-/*    REGISTERS PARAMETERS    */
-/************************************/
-// Sample Rate Divider
-#define NOSRDIVIDER         0 // default    FsampleHz=SampleRateHz/(divider+1)
-// Gyro Full Scale Range
-#define RANGE2000           3   // default
-// Digital Low Pass Filter BandWidth and SampleRate
-#define BW256_SR8           0   // default    256Khz BW and 8Khz SR
-#define BW188_SR1           1
-#define BW098_SR1           2
-#define BW042_SR1           3
-#define BW020_SR1           4
-#define BW010_SR1           5
-#define BW005_SR1           6
-// Interrupt Active logic lvl
-#define ACTIVE_ONHIGH       0 // default
-#define ACTIVE_ONLOW        1
-// Interrupt drive type
-#define PUSH_PULL           0 // default
-#define OPEN_DRAIN          1
-// Interrupt Latch mode
-#define PULSE_50US          0 // default
-#define UNTIL_INT_CLEARED   1
-// Interrupt Latch clear method
-#define READ_STATUSREG      0 // default
-#define READ_ANYREG         1
-// Power management
-#define NORMAL              0 // default
-#define STANDBY             1
-// Clock Source - user parameters
-#define INTERNALOSC         0   // default
-#define PLL_XGYRO_REF       1
-#define PLL_YGYRO_REF       2
-#define PLL_ZGYRO_REF       3
-#define PLL_EXTERNAL32      4   // 32.768 kHz
-#define PLL_EXTERNAL19      5   // 19.2 Mhz
+#define ITG3200_ADDRESS_AD0_LOW     0x68 // address pin low (GND), default for SparkFun IMU Digital Combo board
+#define ITG3200_ADDRESS_AD0_HIGH    0x69 // address pin high (VCC), default for SparkFun ITG-3200 Breakout board
+#define ITG3200_DEFAULT_ADDRESS     ITG3200_ADDRESS_AD0_LOW
+
+#define ITG3200_RA_WHO_AM_I         0x00
+#define ITG3200_RA_SMPLRT_DIV       0x15
+#define ITG3200_RA_DLPF_FS          0x16
+#define ITG3200_RA_INT_CFG          0x17
+#define ITG3200_RA_INT_STATUS       0x1A
+#define ITG3200_RA_TEMP_OUT_H       0x1B
+#define ITG3200_RA_TEMP_OUT_L       0x1C
+#define ITG3200_RA_GYRO_XOUT_H      0x1D
+#define ITG3200_RA_GYRO_XOUT_L      0x1E
+#define ITG3200_RA_GYRO_YOUT_H      0x1F
+#define ITG3200_RA_GYRO_YOUT_L      0x20
+#define ITG3200_RA_GYRO_ZOUT_H      0x21
+#define ITG3200_RA_GYRO_ZOUT_L      0x22
+#define ITG3200_RA_PWR_MGM          0x3E
+
+#define ITG3200_DEVID_BIT           6
+#define ITG3200_DEVID_LENGTH        6
+
+#define ITG3200_DF_FS_SEL_BIT       4
+#define ITG3200_DF_FS_SEL_LENGTH    2
+#define ITG3200_DF_DLPF_CFG_BIT     2
+#define ITG3200_DF_DLPF_CFG_LENGTH  3
+
+#define ITG3200_FULLSCALE_2000      0x03
+
+#define ITG3200_DLPF_BW_256         0x00
+#define ITG3200_DLPF_BW_188         0x01
+#define ITG3200_DLPF_BW_98          0x02
+#define ITG3200_DLPF_BW_42          0x03
+#define ITG3200_DLPF_BW_20          0x04
+#define ITG3200_DLPF_BW_10          0x05
+#define ITG3200_DLPF_BW_5           0x06
+
+#define ITG3200_INTCFG_ACTL_BIT             7
+#define ITG3200_INTCFG_OPEN_BIT             6
+#define ITG3200_INTCFG_LATCH_INT_EN_BIT     5
+#define ITG3200_INTCFG_INT_ANYRD_2CLEAR_BIT 4
+#define ITG3200_INTCFG_ITG_RDY_EN_BIT       2
+#define ITG3200_INTCFG_RAW_RDY_EN_BIT       0
+
+#define ITG3200_INTMODE_ACTIVEHIGH  0x00
+#define ITG3200_INTMODE_ACTIVELOW   0x01
+
+#define ITG3200_INTDRV_PUSHPULL     0x00
+#define ITG3200_INTDRV_OPENDRAIN    0x01
+
+#define ITG3200_INTLATCH_50USPULSE  0x00
+#define ITG3200_INTLATCH_WAITCLEAR  0x01
+
+#define ITG3200_INTCLEAR_STATUSREAD 0x00
+#define ITG3200_INTCLEAR_ANYREAD    0x01
+
+#define ITG3200_INTSTAT_ITG_RDY_BIT         2
+#define ITG3200_INTSTAT_RAW_DATA_READY_BIT  0
+
+#define ITG3200_PWR_H_RESET_BIT     7
+#define ITG3200_PWR_SLEEP_BIT       6
+#define ITG3200_PWR_STBY_XG_BIT     5
+#define ITG3200_PWR_STBY_YG_BIT     4
+#define ITG3200_PWR_STBY_ZG_BIT     3
+#define ITG3200_PWR_CLK_SEL_BIT     2
+#define ITG3200_PWR_CLK_SEL_LENGTH  3
+
+#define ITG3200_CLOCK_INTERNAL      0x00
+#define ITG3200_CLOCK_PLL_XGYRO     0x01
+#define ITG3200_CLOCK_PLL_YGYRO     0x02
+#define ITG3200_CLOCK_PLL_ZGYRO     0x03
+#define ITG3200_CLOCK_PLL_EXT32K    0x04
+#define ITG3200_CLOCK_PLL_EXT19M    0x05
 
 class ITG3200 {
+    public:
+        ITG3200();
+        ITG3200(uint8_t address);
+        
+        void initialize();
+        bool testConnection();
+        
+        // WHO_AM_I register
+        uint8_t getDeviceID();
+        void setDeviceID(uint8_t id);
 
-public:
-  float scalefactor[3];    // Scale Factor for gain and polarity
-  int16_t offsets[3];
+        // SMPLRT_DIV register
+        uint8_t getRate();
+        void setRate(uint8_t rate);
 
-  ITG3200();
-  
-  // Gyro initialization
-  void init(uint8_t address);
-  void init(uint8_t address, uint8_t _SRateDiv, uint8_t _Range, uint8_t _filterBW, uint8_t _ClockSrc, bool _ITGReady, bool _INTRawDataReady);
-    
-  // Who Am I
-  uint8_t getDevAddr();
-  void setDevAddr(uint8_t _addr);
-  // Sample Rate Divider
-  uint8_t getSampleRateDiv();
-  void setSampleRateDiv(uint8_t _SampleRate);
-  // Digital Low Pass Filter BandWidth and SampleRate 
-  uint8_t getFSRange();
-  void setFSRange(uint8_t _Range); // RANGE2000
-  uint8_t getFilterBW();
-  void setFilterBW(uint8_t _BW); // see register parameters above
-  // Interrupt Configuration
-  bool isINTActiveOnLow();
-  void setINTLogiclvl(bool _State); //ACTIVE_ONHIGH, ACTIVE_ONLOW
-  // Interrupt drive type
-  bool isINTOpenDrain();
-  void setINTDriveType(bool _State); //OPEN_DRAIN, PUSH_PULL
-  // Interrupt Latch mode
-  bool isLatchUntilCleared();
-  void setLatchMode(bool _State); //UNTIL_INT_CLEARED, PULSE_50US
-  // Interrupt Latch clear method
-  bool isAnyRegClrMode();
-  void setLatchClearMode(bool _State); //READ_ANYREG, READ_STATUSREG
-  // INT pin triggers
-  bool isITGReadyOn();          
-  void setITGReady(bool _State);
-  bool isRawDataReadyOn();
-  void setRawDataReady(bool _State);      
-  // Trigger Status
-  bool isITGReady();
-  bool isRawDataReady();
-  // Gyro Sensors
-  void readTemp(float *_Temp);
-  void readGyroRaw(int16_t *_GyroX, int16_t *_GyroY, int16_t *_GyroZ); // uncalibrated raw values
-  void readGyroRaw(int16_t *_GyroXYZ); // uncalibrated raw values
-  void setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff, bool _Radians);  // negative ciefficient = Reversed
-  void setOffsets(int16_t _Xoffset, int16_t _Yoffset, int16_t _Zoffset);
-  void zeroCalibrate(uint16_t totSamples, uint16_t sampleDelayMS);	// assuming gyroscope is stationary (updates XYZ offsets)
-  void readGyroRawCal(int16_t *_GyroX, int16_t *_GyroY, int16_t *_GyroZ); // raw value with offset
-  void readGyroRawCal(int16_t *_GyroXYZ); // raw value with offset
-  void readGyro(float *_GyroX, float *_GyroY, float *_GyroZ); // deg/sec calibrated & ScaleFactor
-  void readGyro(float *_GyroXYZ); // deg/sec calibrated & ScaleFactor
-  // Power management
-  void reset(); // after reset all registers have default values
-  bool isLowPower();
-  void setPowerMode(bool _State); // NORMAL, STANDBY
-  bool isXgyroStandby();            
-  bool isYgyroStandby();
-  bool isZgyroStandby();
-  void setXgyroStandby(bool _Status); // NORMAL, STANDBY
-  void setYgyroStandby(bool _Status);
-  void setZgyroStandby(bool _Status);
-  uint8_t getClockSource();
-  void setClockSource(uint8_t _CLKsource); // see register parameters above
-  
-  void writemem(uint8_t _addr, uint8_t _val);
-  void readmem(uint8_t _addr, uint8_t _nbytes, uint8_t __buff[]);
-  
-private:
+        // DLPF_FS register
+        uint8_t getFullScaleRange();
+        void setFullScaleRange(uint8_t range);
+        uint8_t getDLPFBandwidth();
+        void setDLPFBandwidth(uint8_t bandwidth);
+        
+        // INT_CFG register
+        bool getInterruptMode();
+        void setInterruptMode(bool mode);
+        bool getInterruptDrive();
+        void setInterruptDrive(bool drive);
+        bool getInterruptLatch();
+        void setInterruptLatch(bool latch);
+        bool getInterruptLatchClear();
+        void setInterruptLatchClear(bool clear);
+        bool getIntDeviceReadyEnabled();
+        void setIntDeviceReadyEnabled(bool enabled);
+        bool getIntDataReadyEnabled();
+        void setIntDataReadyEnabled(bool enabled);
 
-  uint8_t _dev_address;
-  uint8_t _buff[6];      
+        // INT_STATUS register
+        bool getIntDeviceReadyStatus();
+        bool getIntDataReadyStatus();
+        
+        // TEMP_OUT_* registers
+        int16_t getTemperature();
+        
+        // GYRO_*OUT_* registers
+        void getRotation(int16_t* x, int16_t* y, int16_t* z);
+        int16_t getRotationX();
+        int16_t getRotationY();
+        int16_t getRotationZ();
+
+        // PWR_MGM register
+        void reset();
+        bool getSleepEnabled();
+        void setSleepEnabled(bool enabled);
+        bool getStandbyXEnabled();
+        void setStandbyXEnabled(bool enabled);
+        bool getStandbyYEnabled();
+        void setStandbyYEnabled(bool enabled);
+        bool getStandbyZEnabled();
+        void setStandbyZEnabled(bool enabled);
+        uint8_t getClockSource();
+        void setClockSource(uint8_t source);
+
+    private:
+        uint8_t devAddr;
+        uint8_t buffer[6];
 };
-#endif
+
+#endif /* _ITG3200_H_ */
+
+

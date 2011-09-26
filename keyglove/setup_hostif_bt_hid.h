@@ -31,7 +31,7 @@ THE SOFTWARE.
 #define _SETUP_HOSTIF_BT_HID_H_
 
 #include "iWRAP.h"
-#ifdef LUFA
+#if LUFA_ARDUINO_WRAPPER || KG_BOARD == KG_BOARD_TEENSYPP2
     HardwareSerial Uart = HardwareSerial();
 #endif /* USE_TEENSY */
 #ifdef USE_ARDUINO
@@ -45,3 +45,5 @@ void setup_hostif_bt_hid() {
 }
 
 #endif // _SETUP_HOSTIF_BT_HID_H_
+
+

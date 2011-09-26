@@ -45,3 +45,5 @@ void update_bluetooth_serial() {
 }  
 
 #endif // _SETUP_HOSTIF_BT_SPP_H_
+
+

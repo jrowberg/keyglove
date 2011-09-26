@@ -132,7 +132,7 @@ class HardwareSerial {
 class USBMouse {
 
     private:
-        byte report[8];
+        uint8_t report[8];
 
     public:
         void move(uint8_t x, uint8_t y);
@@ -145,7 +145,7 @@ class USBMouse {
 class USBKeyboard {
 
     private:
-        byte report[8];
+        uint8_t report[8];
 
     public:
         void set_modifier(uint8_t modifier);
@@ -166,7 +166,7 @@ class WireI2C {
         void beginTransmission(int);
         void endTransmission();
         void send(byte);
-        byte receive();
+        uint8_t receive();
         void requestFrom(int, int);
         bool available();
 
@@ -175,7 +175,7 @@ class WireI2C {
 // Keyglove-specific implementations of these, not using Wiring's
 int digitalRead(uint8_t pin);
 void digitalWrite(uint8_t pin, uint8_t level);
-void pinMode(byte pin, byte mode);
+void pinMode(uint8_t pin, uint8_t mode);
 
 void tone(uint8_t _pin, uint16_t frequency, uint32_t duration);
 void noTone(uint8_t _pin);

@@ -34,3 +34,5 @@ void setup_hostif_usb() {
 }
 
 #endif // _SETUP_HOSTIF_USB_H_
+
+

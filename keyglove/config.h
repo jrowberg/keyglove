@@ -32,13 +32,15 @@ THE SOFTWARE.
  * HARDWARE OPTIONS
 =============================================== */
 
-#define KG_BOARD            KG_BOARD_KEYGLOVE
+#define KG_BOARD            KG_BOARD_TEENSYPP2
+//#define KG_BOARD            KG_BOARD_KEYGLOVE
 #define KG_EEPROM           KG_EEPROM_NONE
 #define KG_SRAM             KG_SRAM_NONE
 #define KG_TOUCHCONN        KG_TOUCHCONN_DIRECT
 
 #define KG_HOSTIF           (KG_HOSTIF_SERIAL | KG_HOSTIF_USB | KG_HOSTIF_BT_HID | KG_HOSTIF_BT_SPP)
 #define KG_MOTION           (KG_MOTION_ADXL345 | KG_MOTION_ITG3200)
+//#define KG_MOTION           (KG_MOTION_ADXL345 | KG_MOTION_ITG3200 | KG_MOTION_HMC5883L)
 #define KG_FEEDBACK         (KG_FEEDBACK_BLINK | KG_FEEDBACK_PIEZO | KG_FEEDBACK_VIBRATE | KG_FEEDBACK_RGB)
 
 /* ===============================================
@@ -62,3 +64,5 @@ THE SOFTWARE.
 #define DEBUG_JOYSTICK
 
 #endif // _CONFIG_H_
+
+

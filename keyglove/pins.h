@@ -145,7 +145,7 @@ THE SOFTWARE.
     #define MOUSE_INT2      1
 #endif /* USE_ARDUINO */
 
-#ifdef LUFA //USE_TEENSY
+#if LUFA_ARDUINO_WRAPPER || KG_BOARD == KG_BOARD_TEENSYPP2 //USE_TEENSY
     #define KSP_A 4 // D4
     #define KSP_B 5 // D5
     #define KSP_C 7 // D7
@@ -271,3 +271,5 @@ uint8_t combinations[KG_BASE_COMBINATIONS][2] = {
     { KSP_J, KSP_1 /* J1 */ },
     { KSP_Y, KSP_1 /* Y1 */ }
 };
+
+

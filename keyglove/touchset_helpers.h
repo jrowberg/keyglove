@@ -459,3 +459,5 @@ void vibrate(uint8_t mode, uint16_t duration) {
 }
 
 #endif /* _TOUCHSET_HELPERS_H_ */
+
+

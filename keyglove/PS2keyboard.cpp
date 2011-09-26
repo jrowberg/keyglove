@@ -25,7 +25,7 @@ THE SOFTWARE.
 ===============================================
 */
 
-#ifndef LUFA
+#ifndef LUFA_ARDUINO_WRAPPER
     #include "WProgram.h"
 #endif
 
@@ -260,4 +260,6 @@ void PS2keyboard::process_command() {
             cmd_resend();
     }
 }
+
+
 

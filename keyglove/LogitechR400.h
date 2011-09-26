@@ -10,18 +10,14 @@
 #ifndef _LOGITECHR400_H_
 #define _LOGITECHR400_H_
 
-#ifdef LUFA
+#ifdef LUFA_ARDUINO_WRAPPER
     #include "ArduinoWrapper.h"
 #endif
 
 #include <stdarg.h>
 
-#ifndef LUFA
+#ifndef LUFA_ARDUINO_WRAPPER
     #include "WProgram.h"
-#endif
-
-#ifdef round
-    #undef round
 #endif
 
 #define READ                  0x00
@@ -142,3 +138,5 @@ class LogitechR400 {
 };
 
 #endif /* _LOGITECHR400_H_ */
+
+

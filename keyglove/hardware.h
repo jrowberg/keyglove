@@ -104,3 +104,5 @@ THE SOFTWARE.
 #define KG_FEEDBACK_RGB                 8           /* Combined RGB LED for visual feedback */
 
 #endif // _HARDWARE_H_
+
+

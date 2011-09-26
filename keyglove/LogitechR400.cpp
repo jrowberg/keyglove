@@ -14,7 +14,7 @@
 //   Cypress stuff based on code by dunk (http://sites.google.com/site/mrdunk/Home/rc-system-firmware)
 // License: GPLv3
 
-#ifndef LUFA
+#ifndef LUFA_ARDUINO_WRAPPER
     #include "WProgram.h"
 #endif
 
@@ -270,3 +270,5 @@ void LogitechR400::move(uint8_t x, uint8_t y, uint8_t z) {
 void LogitechR400::scroll(uint8_t s) {
     move(0, 0, s);
 }
+
+

@@ -38,3 +38,5 @@ void setup_hostif_serial() {
 }
 
 #endif // _SETUP_HOSTIF_SERIAL_H_
+
+

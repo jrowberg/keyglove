@@ -34,10 +34,6 @@ THE SOFTWARE.
     #error Selected board has no I2C support. I2C devices cannot be enabled under these circumstances.
 #endif
 
-#ifndef LUFA
-    #include <Wire.h>
-#endif
-
 #include "ITG3200.h"
 
 ITG3200 gyroscope = ITG3200();
@@ -69,13 +65,17 @@ uint8_t calGyro = 0;
 uint8_t gyroCalibrated = false;
 
 void setup_motion_gyroscope() {
-    gyroscope.init(ITG3200_ADDR_AD0_LOW);
+    //ITG3200_ADDR_AD0_LOW
+    gyroscope.initialize();
     gx = gy = gz = 0;
     gyroMicros = 0;
     gyroTick = 0;
     gyroCalibrated = false;
     gxMin = gyMin = gzMin = 0;
     gxMax = gyMax = gzMax = 0;
+    
+    activeGyroscope = true;
+    activeMouse = true;
 }
 
 void update_motion_gyroscope() {
@@ -88,37 +88,37 @@ void update_motion_gyroscope() {
 
     // read gyroscope with correct rotation settings
     if      (opt_gyro_rot90 == 0) { // no rotation:            x = +x, y = +y, z = +z
-        gyroscope.readGyroRaw(&gxRaw, &gyRaw, &gzRaw);
+        gyroscope.getRotation(&gxRaw, &gyRaw, &gzRaw);
     }
     else if (opt_gyro_rot90 == 1) { // 90 around x axis:       x = +x, y = -z, z = +y
-        gyroscope.readGyroRaw(&gxRaw, &gzRaw, &gyRaw);
+        gyroscope.getRotation(&gxRaw, &gzRaw, &gyRaw);
         gzRaw = -gzRaw;
     }
     else if (opt_gyro_rot90 == 2) { // 90 around y axis:       x = -z, y = +y, z = +x
-        gyroscope.readGyroRaw(&gzRaw, &gyRaw, &gxRaw);
+        gyroscope.getRotation(&gzRaw, &gyRaw, &gxRaw);
         gzRaw = -gzRaw;
     }
     else if (opt_gyro_rot90 == 4) { // 90 around z axis;       x = -y, y = +x, z = +z
-        gyroscope.readGyroRaw(&gyRaw, &gxRaw, &gzRaw);
+        gyroscope.getRotation(&gyRaw, &gxRaw, &gzRaw);
         gyRaw = -gyRaw;
     }
     else if (opt_gyro_rot90 == 3) { // 90 around x, y axes:    x = -z, y = -x, z = +y
-        gyroscope.readGyroRaw(&gzRaw, &gxRaw, &gyRaw);
+        gyroscope.getRotation(&gzRaw, &gxRaw, &gyRaw);
         gxRaw = -gxRaw;
         gzRaw = -gzRaw;
     }
     else if (opt_gyro_rot90 == 5) { // 90 around x, z axes:    x = -y, y = -z, z = +x
-        gyroscope.readGyroRaw(&gyRaw, &gzRaw, &gxRaw);
+        gyroscope.getRotation(&gyRaw, &gzRaw, &gxRaw);
         gyRaw = -gyRaw;
         gzRaw = -gzRaw;
     }
     else if (opt_gyro_rot90 == 6) { // 90 around y, z axes:    x = -z, y = +x, z = -y
-        gyroscope.readGyroRaw(&gzRaw, &gxRaw, &gyRaw);
+        gyroscope.getRotation(&gzRaw, &gxRaw, &gyRaw);
         gyRaw = -gyRaw;
         gzRaw = -gzRaw;
     }
     else if (opt_gyro_rot90 == 7) { // 90 around x, y, z axes: x = -z, y = +y, z = +x
-        gyroscope.readGyroRaw(&gzRaw, &gyRaw, &gxRaw);
+        gyroscope.getRotation(&gzRaw, &gyRaw, &gxRaw);
         gzRaw = -gzRaw;
     }
     
@@ -169,7 +169,7 @@ void update_motion_gyroscope() {
         DEBUG_PRN_GYROSCOPE(gzMin); DEBUG_PRN_GYROSCOPE(" ");
         DEBUG_PRN_GYROSCOPE(gxMax); DEBUG_PRN_GYROSCOPE(" ");
         DEBUG_PRN_GYROSCOPE(gyMax); DEBUG_PRN_GYROSCOPE(" ");
-        DEBUG_PRN_GYROSCOPE(gzMax);
+        DEBUG_PRNL_GYROSCOPE(gzMax);
     }
 
     DEBUG_PRN_GYROSCOPE("gyro ");
@@ -178,9 +178,11 @@ void update_motion_gyroscope() {
     DEBUG_PRN_GYROSCOPE(gzRaw); DEBUG_PRN_GYROSCOPE(" ");
     DEBUG_PRN_GYROSCOPE(gx); DEBUG_PRN_GYROSCOPE(" ");
     DEBUG_PRN_GYROSCOPE(gy); DEBUG_PRN_GYROSCOPE(" ");
-    DEBUG_PRN_GYROSCOPE(gz);
+    DEBUG_PRNL_GYROSCOPE(gz);
 
     gyroTick++;
 }
 
 #endif // _SETUP_MOTION_ITG3200_H_
+
+

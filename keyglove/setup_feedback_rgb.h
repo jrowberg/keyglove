@@ -56,4 +56,21 @@ void setup_feedback_rgb() {
     set_rgb(0, 0, 0); // turn everything off again
 }
 
+void update_feedback_rgb() {
+    if      (rgbBlinkRed   == 1 && counter % 500 == 0) set_rgb(counter % 1000 >= 500 ? 0 : 1, 255, 255);
+    else if (rgbBlinkRed   == 2 && counter % 100 == 0) set_rgb(counter % 1000 >= 100 ? 0 : 1, 255, 255);
+    else if (rgbBlinkRed   == 3 && counter %  50 == 0) set_rgb(counter %  100 >=  50 ? 0 : 1, 255, 255);
+    else if (rgbBlinkRed   == 4 && counter %  10 == 0) set_rgb(counter %  100 >=  10 ? 0 : 1, 255, 255);
+    if      (rgbBlinkGreen == 1 && counter % 500 == 0) set_rgb(255, counter % 1000 >= 500 ? 0 : 1, 255);
+    else if (rgbBlinkGreen == 3 && counter % 100 == 0) set_rgb(255, counter % 1000 >= 100 ? 0 : 1, 255);
+    else if (rgbBlinkGreen == 2 && counter %  50 == 0) set_rgb(255, counter %  100 >=  50 ? 0 : 1, 255);
+    else if (rgbBlinkGreen == 4 && counter %  10 == 0) set_rgb(255, counter %  100 >=  10 ? 0 : 1, 255);
+    if      (rgbBlinkBlue  == 1 && counter % 500 == 0) set_rgb(255, 255, counter % 1000 >= 500 ? 0 : 1);
+    else if (rgbBlinkBlue  == 2 && counter % 100 == 0) set_rgb(255, 255, counter % 1000 >= 100 ? 0 : 1);
+    else if (rgbBlinkBlue  == 3 && counter %  50 == 0) set_rgb(255, 255, counter %  100 >=  50 ? 0 : 1);
+    else if (rgbBlinkBlue  == 4 && counter %  10 == 0) set_rgb(255, 255, counter %  100 >=  10 ? 0 : 1);
+}
+
 #endif // _SETUP_FEEDBACK_RGB_H_
+
+

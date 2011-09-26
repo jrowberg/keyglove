@@ -38,4 +38,12 @@ void setup_feedback_blink() {
     blink_led = false;
 }
 
+void update_feedback_blink() {
+    blink_led = !blink_led;
+    if (blink_led) digitalWrite(KG_PIN_BLINK, HIGH);
+    else digitalWrite(KG_PIN_BLINK, LOW);
+}  
+
 #endif // _SETUP_FEEDBACK_BLINK_H_
+
+
