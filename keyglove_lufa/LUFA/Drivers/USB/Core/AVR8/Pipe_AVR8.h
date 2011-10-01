@@ -804,7 +804,7 @@
 			 *  \note This variable should be treated as read-only in the user application, and never manually
 			 *        changed in value.
 			 */
-			extern uint8_t USB_ControlPipeSize;
+			extern uint8_t USB_Host_ControlPipeSize;
 
 		/* Function Prototypes: */
 			/** Configures the specified pipe number with the given pipe type, token, target endpoint number in the
@@ -860,7 +860,7 @@
 			                        const uint16_t Size,
 			                        const uint8_t Banks);
 
-			/** Spin-loops until the currently selected non-control pipe is ready for the next packed of data to be read
+			/** Spin-loops until the currently selected non-control pipe is ready for the next packet of data to be read
 			 *  or written to it, aborting in the case of an error condition (such as a timeout or device disconnect).
 			 *
 			 *  \ingroup Group_PipeRW_AVR8
@@ -877,7 +877,7 @@
 			 *  \return Boolean \c true if a pipe bound to the given endpoint address of the specified direction is found,
 			 *          \c false otherwise.
 			 */
-			bool Pipe_IsEndpointBound(const uint8_t EndpointAddress);
+			bool Pipe_IsEndpointBound(const uint8_t EndpointAddress) ATTR_WARN_UNUSED_RESULT;
 
 	/* Private Interface - For use in library only: */
 	#if !defined(__DOXYGEN__)

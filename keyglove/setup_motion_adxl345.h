@@ -85,9 +85,6 @@ void setup_motion_accelerometer() {
     accelCalibrated = false;
     xMin = yMin = zMin = 0;
     xMax = yMax = zMax = 0;
-
-    activeAccelerometer = true;
-    activeMouse = true;
 }
 
 void update_motion_accelerometer() {

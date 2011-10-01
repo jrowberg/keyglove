@@ -38,12 +38,13 @@ THE SOFTWARE.
 
 ITG3200 gyroscope = ITG3200();
 
-//uint16_t opt_gyro_offset[] = { 0, 0, 0 };            // amount to offset raw gyroscope readings [x,y,z]
+//int16_t opt_gyro_offset[] = { 0, 0, 0 };            // amount to offset raw gyroscope readings [x,y,z]
 //float opt_gyro_calibrate[] = { 1, 1, 1 };       // amount to scale raw gyroscope readings [x,y,z] (post-offset)
-uint16_t opt_gyro_offset[] = { 0, 0, 0 };
+
+int16_t opt_gyro_offset[] = { -145, 45, 15 };
 float opt_gyro_calibrate[] = { 1, 1, 1 };
 
-float opt_gyro_kalman_constant = 0.3;
+float opt_gyro_kalman_constant = 0.2;
 uint8_t opt_gyro_smooth_average = 0;
 uint8_t opt_gyro_rot90 = 4;
 
@@ -65,7 +66,6 @@ uint8_t calGyro = 0;
 uint8_t gyroCalibrated = false;
 
 void setup_motion_gyroscope() {
-    //ITG3200_ADDR_AD0_LOW
     gyroscope.initialize();
     gx = gy = gz = 0;
     gyroMicros = 0;
@@ -73,9 +73,6 @@ void setup_motion_gyroscope() {
     gyroCalibrated = false;
     gxMin = gyMin = gzMin = 0;
     gxMax = gyMax = gzMax = 0;
-    
-    activeGyroscope = true;
-    activeMouse = true;
 }
 
 void update_motion_gyroscope() {
@@ -130,11 +127,11 @@ void update_motion_gyroscope() {
     gxRaw += opt_gyro_offset[0];
     gyRaw += opt_gyro_offset[1];
     gzRaw += opt_gyro_offset[2];
-    
+
     // calibrate
-    gxRaw = (float)gxRaw * opt_gyro_calibrate[0] / 15; //14.375;
-    gyRaw = (float)gyRaw * opt_gyro_calibrate[1] / 15; //14.375;
-    gzRaw = (float)gzRaw * opt_gyro_calibrate[2] / 15; //14.375;
+    gxRaw = (float)gxRaw * opt_gyro_calibrate[0]; // / 14.375;
+    gyRaw = (float)gyRaw * opt_gyro_calibrate[1];
+    gzRaw = (float)gzRaw * opt_gyro_calibrate[2];
     
     // Kalman filtering
     gx = gx0 + (opt_gyro_kalman_constant * (gxRaw - gx0));

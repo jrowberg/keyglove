@@ -183,7 +183,7 @@
 				/* Switch /SS to input mode after configuration to allow for forced mode changes */
 				DDRB &= ~(1 << 0);
 
-				SPCR   = ((1 << SPE) | SPIOptions);
+				SPCR  = ((1 << SPE) | SPIOptions);
 			}
 
 			/** Turns off the SPI driver, disabling and returning used hardware to their default configuration. */
@@ -200,6 +200,7 @@
 			 *
 			 *  \return \ref SPI_MODE_MASTER if the interface is currently in SPI Master mode, \ref SPI_MODE_SLAVE otherwise
 			 */
+			static inline uint8_t SPI_GetCurrentMode(void) ATTR_ALWAYS_INLINE;
 			static inline uint8_t SPI_GetCurrentMode(void)
 			{
 				return (SPCR & SPI_MODE_MASTER);

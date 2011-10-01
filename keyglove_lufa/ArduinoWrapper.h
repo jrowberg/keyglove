@@ -62,32 +62,33 @@ class USBVirtualSerial {
         void print(const char *str);
         void println(const char *str);
 
+        void write(byte val);
         void print(byte val);
-        void print(int val);
-        void print(unsigned int val);
-        void print(long int val);
-        void print(long unsigned int val);
+        void print(int16_t val);
+        void print(uint16_t val);
+        void print(int32_t val);
+        void print(uint32_t val);
         void print(double val);
 
         void print(byte val, byte base);
-        void print(int val, byte base);
-        void print(unsigned int val, byte base);
-        void print(long int val, byte base);
-        void print(long unsigned int val, byte base);
+        void print(int16_t val, byte base);
+        void print(uint16_t val, byte base);
+        void print(int32_t val, byte base);
+        void print(uint32_t val, byte base);
         void print(double val, byte base);
 
         void println(byte val);
-        void println(int val);
-        void println(unsigned int val);
-        void println(long int val);
-        void println(long unsigned int val);
+        void println(int16_t val);
+        void println(uint16_t val);
+        void println(int32_t val);
+        void println(uint32_t val);
         void println(double val);
 
         void println(byte val, byte base);
-        void println(int val, byte base);
-        void println(unsigned int val, byte base);
-        void println(long int val, byte base);
-        void println(long unsigned int val, byte base);
+        void println(int16_t val, byte base);
+        void println(uint16_t val, byte base);
+        void println(int32_t val, byte base);
+        void println(uint32_t val, byte base);
         void println(double val, byte base);
         
         uint8_t read();
@@ -100,28 +101,29 @@ class HardwareSerial {
     public:
         void begin(uint32_t baud);
 
+        void write(byte val);
         void print(const char *str);
         void print(byte val);
-        void print(int val);
-        void print(long unsigned int val);
+        void print(uint16_t val);
+        void print(uint32_t val);
         void print(long double val);
 
         void print(const char *str, int format);
         void print(byte val, int format);
-        void print(int val, int format);
-        void print(long unsigned int val, int format);
+        void print(uint16_t val, int format);
+        void print(uint32_t val, int format);
         void print(long double val, int format);
 
         void println(const char *str);
         void println(byte val);
-        void println(int val);
-        void println(long unsigned int val);
+        void println(uint16_t val);
+        void println(uint32_t val);
         void println(long double val);
 
         void println(const char *str, int format);
         void println(byte val, int format);
-        void println(int val, int format);
-        void println(long unsigned int val, int format);
+        void println(uint16_t val, int format);
+        void println(uint32_t val, int format);
         void println(long double val, int format);
 
         uint8_t read();
@@ -159,19 +161,6 @@ class USBKeyboard {
 
 };
 
-class WireI2C {
-    
-    public:
-        void begin();
-        void beginTransmission(int);
-        void endTransmission();
-        void send(byte);
-        uint8_t receive();
-        void requestFrom(int, int);
-        bool available();
-
-};
-
 // Keyglove-specific implementations of these, not using Wiring's
 int digitalRead(uint8_t pin);
 void digitalWrite(uint8_t pin, uint8_t level);
@@ -183,6 +172,5 @@ void noTone(uint8_t _pin);
 extern USBVirtualSerial Serial;
 extern USBMouse Mouse;
 extern USBKeyboard Keyboard;
-extern WireI2C Wire;
 
 #endif /* _ARDUINO_WRAPPER_H_ */

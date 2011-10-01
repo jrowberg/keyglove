@@ -92,46 +92,19 @@
 			 *  generation module. This indicates that an external oscillator should be used directly instead of an
 			 *  internal PLL clock source.
 			 */
-			#define USB_OPT_GCLK_SRC_OSC               (1 << 1)
+			#define USB_OPT_GCLK_SRC_OSC               (1 << 2)
 
 			/** Selects one of the system's PLL oscillators as the input clock to the USB Generic Clock source
 			 *  generation module. This indicates that one of the device's PLL outputs should be used instead of an
 			 *  external oscillator source.
 			 */
-			#define USB_OPT_GCLK_SRC_PLL               (0 << 1)
+			#define USB_OPT_GCLK_SRC_PLL               (0 << 2)
 
 			/** Selects PLL or External Oscillator 0 as the USB Generic Clock source module input clock. */
-			#define USB_OPT_GCLK_CHANNEL_0             (1 << 2)
+			#define USB_OPT_GCLK_CHANNEL_0             (1 << 3)
 
 			/** Selects PLL or External Oscillator 1 as the USB Generic Clock source module input clock. */
-			#define USB_OPT_GCLK_CHANNEL_1             (0 << 2)
-			//@}
-
-			/** \name Endpoint/Pipe Type Masks */
-			//@{
-			/** Mask for a CONTROL type endpoint or pipe.
-			 *
-			 *  \note See \ref Group_EndpointManagement and \ref Group_PipeManagement for endpoint/pipe functions.
-			 */
-			#define EP_TYPE_CONTROL                    0x00
-
-			/** Mask for an ISOCHRONOUS type endpoint or pipe.
-			 *
-			 *  \note See \ref Group_EndpointManagement and \ref Group_PipeManagement for endpoint/pipe functions.
-			 */
-			#define EP_TYPE_ISOCHRONOUS                0x01
-
-			/** Mask for a BULK type endpoint or pipe.
-			 *
-			 *  \note See \ref Group_EndpointManagement and \ref Group_PipeManagement for endpoint/pipe functions.
-			 */
-			#define EP_TYPE_BULK                       0x02
-
-			/** Mask for an INTERRUPT type endpoint or pipe.
-			 *
-			 *  \note See \ref Group_EndpointManagement and \ref Group_PipeManagement for endpoint/pipe functions.
-			 */
-			#define EP_TYPE_INTERRUPT                  0x03
+			#define USB_OPT_GCLK_CHANNEL_1             (0 << 3)
 			//@}
 
 			#if !defined(USB_STREAM_TIMEOUT_MS) || defined(__DOXYGEN__)
@@ -298,7 +271,7 @@
 	/* Private Interface - For use in library only: */
 	#if !defined(__DOXYGEN__)
 		/* Macros: */			
-			#if (defined(USB_SERIES_UC3A3_AVR32) || defined(USB_SERIES_UC3A4_AVR32))
+			#if defined(USB_SERIES_UC3A3_AVR32) || defined(USB_SERIES_UC3A4_AVR32)
 				#define USB_CLOCK_REQUIRED_FREQ  12000000UL
 			#else
 				#define USB_CLOCK_REQUIRED_FREQ  48000000UL

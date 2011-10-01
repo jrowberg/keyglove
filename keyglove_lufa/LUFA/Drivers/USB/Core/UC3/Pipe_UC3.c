@@ -35,7 +35,7 @@
 
 #include "../Pipe.h"
 
-uint8_t USB_ControlPipeSize = PIPE_CONTROLPIPE_DEFAULT_SIZE;
+uint8_t USB_Host_ControlPipeSize = PIPE_CONTROLPIPE_DEFAULT_SIZE;
 
 volatile uint32_t USB_SelectedPipe = PIPE_CONTROLPIPE;
 volatile uint8_t* USB_PipeFIFOPos[PIPE_TOTAL_PIPES];
@@ -47,6 +47,7 @@ bool Pipe_ConfigurePipe(const uint8_t Number,
                         const uint16_t Size,
                         const uint8_t Banks)
 {
+#if defined(ORDERED_EP_CONFIG)
 	Pipe_SelectPipe(Number);
 	Pipe_EnablePipe();
 
@@ -61,6 +62,44 @@ bool Pipe_ConfigurePipe(const uint8_t Number,
 	Pipe_SetInfiniteINRequests();
 
 	return Pipe_IsConfigured();
+#else
+	for (uint8_t PNum = Number; PNum < PIPE_TOTAL_PIPES; PNum++)
+	{
+		uint8_t UPCFG0Temp;
+
+		Pipe_SelectPipe(PNum);
+		
+		if (PNum == Number)
+		{
+			UPCFG0Temp = (AVR32_USBB_ALLOC_MASK |
+			              ((uint32_t)Type  << AVR32_USBB_PTYPE_OFFSET)  |
+			              ((uint32_t)Token << AVR32_USBB_PTOKEN_OFFSET) |
+			              ((uint32_t)Banks << AVR32_USBB_PBK_OFFSET)    |
+			              ((EndpointNumber & PIPE_EPNUM_MASK) << AVR32_USBB_PEPNUM_OFFSET));
+		}
+		else
+		{
+			UPCFG0Temp = (&AVR32_USBB.upcfg0)[PNum]
+		}
+
+		if (!(UPCFG0Temp & AVR32_USBB_ALLOC_MASK))
+		  continue;
+		  
+		Pipe_DisablePipe();
+		(&AVR32_USBB.upcfg0)[PNum] &= ~AVR32_USBB_ALLOC_MASK;
+
+		Pipe_EnablePipe();
+		(&AVR32_USBB.upcfg0)[PNum] = UPCFG0Temp;
+
+		Pipe_SetInfiniteINRequests();
+	
+		if (!(Pipe_IsConfigured()))
+		  return false;		
+	}
+		
+	Pipe_SelectPipe(Number);	
+	return true;
+#endif
 }
 
 void Pipe_ClearPipes(void)

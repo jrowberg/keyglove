@@ -77,7 +77,7 @@ extern "C" {
 }
 
 // include Arduino release code
-#include "../keyglove/keyglove.pde"
+#include "../keyglove/keyglove.ino"
 
 /** Main program entry point. This routine configures the hardware required by the application, then
  *  enters a loop to run the application tasks in sequence.

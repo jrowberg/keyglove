@@ -55,8 +55,6 @@
 			#define DF_STATUS_BINARYPAGESIZE_ON             (1 << 0)
 			//@}
 
-			#define DF_MANUFACTURER_ATMEL                   0x1F
-
 			/** \name Dataflash Commands */
 			//@{
 			#define DF_CMD_GETSTATUS                        0xD7
@@ -100,8 +98,17 @@
 			#define DF_CMD_SECTORPROTECTIONOFF_BYTE3        0x7F
 			#define DF_CMD_SECTORPROTECTIONOFF_BYTE4        0x9A
 
+			#define DF_CMD_BINARYPAGESIZEMODEON             ((char[]){0x3D, 0x2A, 0x80, 0xA6})
+			#define DF_CMD_BINARYPAGESIZEMODEON_BYTE1       0x3D
+			#define DF_CMD_BINARYPAGESIZEMODEON_BYTE2       0x2A
+			#define DF_CMD_BINARYPAGESIZEMODEON_BYTE3       0x80
+			#define DF_CMD_BINARYPAGESIZEMODEON_BYTE4       0xA6
+
 			#define DF_CMD_READMANUFACTURERDEVICEINFO       0x9F
 			//@}
+
+			/** Manufacturer code for Atmel Corporation, returned by Atmel Dataflash ICs in response to the \c DF_CMD_READMANUFACTURERDEVICEINFO command. */
+			#define DF_MANUFACTURER_ATMEL                   0x1F
 
 #endif
 

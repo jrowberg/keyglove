@@ -92,20 +92,26 @@ void togglemode(uint8_t mode) {
 void mouseon(uint8_t mode) {
     DEBUG_PRN_TOUCHSET("touchset mouseon ");
     DEBUG_PRNL_TOUCHSET(mode);
+    activeMouse = true;
     if (mode == MOUSE_ACTION_MOVE) {
         opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
+        activeGyroscope = true;
     } else if (mode == MOUSE_ACTION_SCROLL) {
         opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
+        activeGyroscope = true;
     }
 }
 
 void mouseoff(uint8_t mode) {
     DEBUG_PRN_TOUCHSET("touchset mouseoff ");
     DEBUG_PRNL_TOUCHSET(mode);
+    activeMouse = false;
     if (mode == MOUSE_ACTION_MOVE) {
         opt_mouse_mode = 0;
+        activeGyroscope = false;
     } else if (mode == MOUSE_ACTION_SCROLL) {
         opt_scroll_mode = 0;
+        activeGyroscope = false;
     }
 }
 

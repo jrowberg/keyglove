@@ -36,6 +36,8 @@
 #define  __INCLUDE_FROM_HOSTSTDREQ_C
 #include "HostStandardReq.h"
 
+uint8_t USB_Host_ConfigurationNumber;
+
 uint8_t USB_Host_SendControlRequest(void* const BufferPtr)
 {
 	uint8_t* DataStream   = (uint8_t*)BufferPtr;
@@ -53,12 +55,19 @@ uint8_t USB_Host_SendControlRequest(void* const BufferPtr)
 
 	Pipe_Unfreeze();
 
+	#if defined(ARCH_BIG_ENDIAN)
 	Pipe_Write_8(USB_ControlRequest.bmRequestType);
 	Pipe_Write_8(USB_ControlRequest.bRequest);
 	Pipe_Write_16_LE(USB_ControlRequest.wValue);
 	Pipe_Write_16_LE(USB_ControlRequest.wIndex);
 	Pipe_Write_16_LE(USB_ControlRequest.wLength);
+	#else
+	uint8_t* HeaderStream = (uint8_t*)&USB_ControlRequest;
 
+	for (uint8_t HeaderByte = 0; HeaderByte < sizeof(USB_Request_Header_t); HeaderByte++)
+	  Pipe_Write_Byte(*(HeaderStream++));	
+	#endif
+	
 	Pipe_ClearSETUP();
 
 	if ((ReturnStatus = USB_Host_WaitForIOS(USB_HOST_WAITFOR_SetupSent)) != HOST_SENDCONTROL_Successful)
@@ -119,7 +128,7 @@ uint8_t USB_Host_SendControlRequest(void* const BufferPtr)
 				if ((ReturnStatus = USB_Host_WaitForIOS(USB_HOST_WAITFOR_OutReady)) != HOST_SENDCONTROL_Successful)
 				  goto End_Of_Control_Send;
 
-				while (DataLen && (Pipe_BytesInPipe() < USB_ControlPipeSize))
+				while (DataLen && (Pipe_BytesInPipe() < USB_Host_ControlPipeSize))
 				{
 					Pipe_Write_8(*(DataStream++));
 					DataLen--;
@@ -176,6 +185,113 @@ static uint8_t USB_Host_WaitForIOS(const uint8_t WaitType)
 	}
 
 	return HOST_SENDCONTROL_Successful;
+}
+
+uint8_t USB_Host_SetDeviceConfiguration(const uint8_t ConfigNumber)
+{
+	uint8_t ErrorCode;
+
+	USB_ControlRequest = (USB_Request_Header_t)
+		{
+			.bmRequestType = (REQDIR_HOSTTODEVICE | REQTYPE_STANDARD | REQREC_DEVICE),
+			.bRequest      = REQ_SetConfiguration,
+			.wValue        = ConfigNumber,
+			.wIndex        = 0,
+			.wLength       = 0,
+		};
+
+	Pipe_SelectPipe(PIPE_CONTROLPIPE);
+	
+	if ((ErrorCode = USB_Host_SendControlRequest(NULL)) == HOST_SENDCONTROL_Successful)
+	{
+		USB_Host_ConfigurationNumber = ConfigNumber;
+		USB_HostState                = (ConfigNumber) ? HOST_STATE_Configured : HOST_STATE_Addressed;
+	}
+
+	return ErrorCode;
+}
+
+uint8_t USB_Host_GetDeviceDescriptor(void* const DeviceDescriptorPtr)
+{
+	USB_ControlRequest = (USB_Request_Header_t)
+		{
+			.bmRequestType = (REQDIR_DEVICETOHOST | REQTYPE_STANDARD | REQREC_DEVICE),
+			.bRequest      = REQ_GetDescriptor,
+			.wValue        = (DTYPE_Device << 8),
+			.wIndex        = 0,
+			.wLength       = sizeof(USB_Descriptor_Device_t),
+		};
+
+	Pipe_SelectPipe(PIPE_CONTROLPIPE);
+
+	return USB_Host_SendControlRequest(DeviceDescriptorPtr);
+}
+
+uint8_t USB_Host_GetDeviceStringDescriptor(const uint8_t Index,
+                                           void* const Buffer,
+                                           const uint8_t BufferLength)
+{
+	USB_ControlRequest = (USB_Request_Header_t)
+		{
+			.bmRequestType = (REQDIR_DEVICETOHOST | REQTYPE_STANDARD | REQREC_DEVICE),
+			.bRequest      = REQ_GetDescriptor,
+			.wValue        = (DTYPE_String << 8) | Index,
+			.wIndex        = 0,
+			.wLength       = BufferLength,
+		};
+
+	Pipe_SelectPipe(PIPE_CONTROLPIPE);
+
+	return USB_Host_SendControlRequest(Buffer);
+}
+
+uint8_t USB_Host_GetDeviceStatus(uint8_t* const FeatureStatus)
+{
+	USB_ControlRequest = (USB_Request_Header_t)
+		{
+			.bmRequestType = (REQDIR_DEVICETOHOST | REQTYPE_STANDARD | REQREC_DEVICE),
+			.bRequest      = REQ_GetStatus,
+			.wValue        = 0,
+			.wIndex        = 0,
+			.wLength       = 0,
+		};
+
+	Pipe_SelectPipe(PIPE_CONTROLPIPE);
+
+	return USB_Host_SendControlRequest(FeatureStatus);
+}
+
+uint8_t USB_Host_ClearEndpointStall(const uint8_t EndpointAddress)
+{
+	USB_ControlRequest = (USB_Request_Header_t)
+		{
+			.bmRequestType = (REQDIR_HOSTTODEVICE | REQTYPE_STANDARD | REQREC_ENDPOINT),
+			.bRequest      = REQ_ClearFeature,
+			.wValue        = FEATURE_SEL_EndpointHalt,
+			.wIndex        = EndpointAddress,
+			.wLength       = 0,
+		};
+
+	Pipe_SelectPipe(PIPE_CONTROLPIPE);
+
+	return USB_Host_SendControlRequest(NULL);
+}
+
+uint8_t USB_Host_SetInterfaceAltSetting(const uint8_t InterfaceIndex,
+                                        const uint8_t AltSetting)
+{
+	USB_ControlRequest = (USB_Request_Header_t)
+		{
+			.bmRequestType = (REQDIR_HOSTTODEVICE | REQTYPE_STANDARD | REQREC_INTERFACE),
+			.bRequest      = REQ_SetInterface,
+			.wValue        = AltSetting,
+			.wIndex        = InterfaceIndex,
+			.wLength       = 0,
+		};
+
+	Pipe_SelectPipe(PIPE_CONTROLPIPE);
+
+	return USB_Host_SendControlRequest(NULL);
 }
 
 #endif

@@ -93,11 +93,6 @@
 			 */
 			#define ENDPOINT_EPNUM_MASK                     0x07
 
-			/** Endpoint direction mask, for masking against endpoint addresses to retrieve the endpoint's
-			 *  direction for comparing with the \c ENDPOINT_DESCRIPTOR_DIR_* masks.
-			 */
-			#define ENDPOINT_EPDIR_MASK                     0x80
-
 			/** Endpoint address for the default control endpoint, which always resides in address 0. This is
 			 *  defined for convenience to give more readable code when used with the endpoint macros.
 			 */
@@ -108,6 +103,8 @@
 			#include "AVR8/Endpoint_AVR8.h"
 		#elif (ARCH == ARCH_UC3)
 			#include "UC3/Endpoint_UC3.h"
+		#elif (ARCH == ARCH_XMEGA)
+			#include "XMEGA/Endpoint_XMEGA.h"
 		#endif
 
 	/* Disable C linkage for C++ Compilers: */

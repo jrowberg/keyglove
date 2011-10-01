@@ -50,9 +50,9 @@ THE SOFTWARE.
 #define SCROLL_MODE_MOVEMENT_POSITION 3
 
 // mouse measurements
-uint16_t mx, my, mz, sy;                   // absolute coordinates
-uint16_t mx0, my0, mz0, sy0;               // last-iteration absolute coordinates
-uint16_t mdx, mdy, mdz, sdy;               // relative movement
+int16_t mx, my, mz, sy;                   // absolute coordinates
+int16_t mx0, my0, mz0, sy0;               // last-iteration absolute coordinates
+int16_t mdx, mdy, mdz, sdy;               // relative movement
 // (note z is for 3D movement, sy is for scrolling)
 
 uint8_t moveMouse;                    // whether any mouse movement should possibly occur
@@ -73,7 +73,6 @@ float opt_mouse_scale_mode4[] = { 1, 1, 1 };      // speed scale [x,y,z] for mod
 void setup_mouse() {
     mx = my = mz = mx0 = my0 = mz0 = 0;
     sy = sy0 = 0;
-    opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
 }
 
 void update_mouse() {
@@ -107,8 +106,8 @@ void update_mouse() {
         case MOUSE_MODE_TILT_POSITION:
             mx0 = mx;
             my0 = my;
-            mx += (gx < 0) ? -sqrt(-gx) : sqrt(gx);
-            my += (gy < 0) ? -sqrt(-gy) : sqrt(gy);
+            mx += ((gx < 0) ? -pow(-gx/100.0, 1.3)*3 : pow(gx/100.0, 1.3)*3) + ((gz < 0) ? -pow(-gz/100.0, 1.3)*3 : pow(gz/100.0, 1.3)*3);
+            my += (gy < 0) ? -pow(-gy/100.0, 1.3)*3 : pow(gy/100.0, 1.3)*3;
             moveMouse = mx0 != mx || my0 != my;
             break;
         case MOUSE_MODE_MOVEMENT_POSITION:
@@ -201,7 +200,6 @@ void update_mouse() {
         DEBUG_PRN_MOUSE(mz); DEBUG_PRN_MOUSE(" ");
         DEBUG_PRN_MOUSE(mdx); DEBUG_PRN_MOUSE(" ");
         DEBUG_PRN_MOUSE(mdy); DEBUG_PRN_MOUSE(" ");
-        DEBUG_PRN_MOUSE(mdz); DEBUG_PRN_MOUSE(" ");
         DEBUG_PRNL_MOUSE(mdz);
     }
     if (scrollMouse && opt_scroll_mode > 0 && sdy != 0) {

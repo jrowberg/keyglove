@@ -44,6 +44,7 @@ void USBVirtualSerial::println(const char *str) {
     CDC_Task();
 }
 
+void USBVirtualSerial::write(uint8_t val) { print(val, BYTE); }
 void USBVirtualSerial::print(uint8_t val) { print(val, BYTE); }
 void USBVirtualSerial::print(int16_t val) { print(val, BYTE); }
 void USBVirtualSerial::print(uint16_t val) { print(val, BYTE); }
@@ -86,27 +87,28 @@ uint8_t USBVirtualSerial::available() { return 0; }
 void HardwareSerial::begin(uint32_t baud) { /*Serial_Init(baud, false);*/ }
 // bool Serial_IsCharReceived();
 
+void HardwareSerial::write(uint8_t val) { print(val, BYTE); }
 void HardwareSerial::print(const char *str) { }
 void HardwareSerial::print(uint8_t val) { }
-void HardwareSerial::print(int16_t val) { }
+void HardwareSerial::print(uint16_t val) { }
 void HardwareSerial::print(uint32_t val) { }
 void HardwareSerial::print(long double val) { }
 
 void HardwareSerial::print(const char *str, int16_t format) { }
 void HardwareSerial::print(uint8_t val, int16_t format) { }
-void HardwareSerial::print(int16_t val, int16_t format) { }
+void HardwareSerial::print(uint16_t val, int16_t format) { }
 void HardwareSerial::print(uint32_t val, int16_t format) { }
 void HardwareSerial::print(long double val, int16_t format) { }
 
 void HardwareSerial::println(const char *str) { }
 void HardwareSerial::println(uint8_t val) { }
-void HardwareSerial::println(int16_t val) { }
+void HardwareSerial::println(uint16_t val) { }
 void HardwareSerial::println(uint32_t val) { }
 void HardwareSerial::println(long double val) { }
 
 void HardwareSerial::println(const char *str, int16_t format) { }
 void HardwareSerial::println(uint8_t val, int16_t format) { }
-void HardwareSerial::println(int16_t val, int16_t format) { }
+void HardwareSerial::println(uint16_t val, int16_t format) { }
 void HardwareSerial::println(uint32_t val, int16_t format) { }
 void HardwareSerial::println(long double val, int16_t format) { }
 
@@ -165,14 +167,6 @@ void USBKeyboard::send_now() {
     memcpy(HIDReportInData + 1, report, 8);
     HID_Task();
 }
-
-void WireI2C::begin() { }
-void WireI2C::beginTransmission(int16_t) { }
-void WireI2C::endTransmission() { }
-void WireI2C::send(uint8_t) { }
-uint8_t WireI2C::receive() { return 0; }
-void WireI2C::requestFrom(int16_t, int16_t) { }
-bool WireI2C::available() { return false; }
 
 int16_t digitalRead(uint8_t pin) {
     if (pin >= 0 && pin < 8) {
@@ -297,4 +291,3 @@ void noTone(uint8_t _pin) {
 USBVirtualSerial Serial;
 USBMouse Mouse;
 USBKeyboard Keyboard;
-WireI2C Wire;

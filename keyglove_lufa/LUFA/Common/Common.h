@@ -42,12 +42,6 @@
  *
  *  @{
  */
-
-/** \defgroup Group_Debugging Debugging Macros
- *  \brief Convenience macros to aid in debugging applications.
- *
- *  Macros to aid debugging of a user application.
- */
  
 /** \defgroup Group_GlobalInt Global Interrupt Macros
  *  \brief Convenience macros for the management of interrupts globally within the device.
@@ -71,6 +65,7 @@
 			#include "LUFAConfig.h"
 		#endif
 
+		#include "ArchitectureSpecific.h"
 		#include "CompilerSpecific.h"
 		#include "Architectures.h"
 		#include "Attributes.h"
@@ -119,6 +114,21 @@
 			#define ARCH_BIG_ENDIAN
 
 			#include "Endianness.h"
+		#elif (ARCH == ARCH_XMEGA)
+			#include <avr/io.h>
+			#include <avr/interrupt.h>
+			#include <avr/pgmspace.h>
+			#include <avr/eeprom.h>
+			#include <util/delay.h>
+			
+			typedef uint8_t uint_reg_t;
+			
+			#define ARCH_HAS_EEPROM_ADDRESS_SPACE
+			#define ARCH_HAS_FLASH_ADDRESS_SPACE
+			#define ARCH_HAS_MULTI_ADDRESS_SPACE
+			#define ARCH_LITTLE_ENDIAN
+
+			#include "Endianness.h"		
 		#else
 			#error Unknown device architecture specified.
 		#endif
@@ -150,7 +160,7 @@
 			 *  \return The larger of the two input parameters
 			 */
 			#if !defined(MAX) || defined(__DOXYGEN__)
-				#define MAX(x, y)               ((x > y) ? x : y)
+				#define MAX(x, y)               (((x) > (y)) ? (x) : (y))
 			#endif
 
 			/** Convenience macro to determine the smaller of two values.
@@ -164,70 +174,27 @@
 			 *  \return The smaller of the two input parameters
 			 */
 			#if !defined(MIN) || defined(__DOXYGEN__)
-				#define MIN(x, y)               ((x < y) ? x : y)
+				#define MIN(x, y)               (((x) < (y)) ? (x) : (y))
 			#endif
-
-			#if (ARCH == ARCH_AVR8) || defined(__DOXYGEN__)
-				/** Defines a volatile \c NOP statement which cannot be optimized out by the compiler, and thus can always
-				 *  be set as a breakpoint in the resulting code. Useful for debugging purposes, where the optimizer
-				 *  removes/reorders code to the point where break points cannot reliably be set.
+			
+			#if !defined(STRINGIFY) || defined(__DOXYGEN__)
+				/** Converts the given input into a string, via the C Preprocessor. This macro puts literal quotation
+				 *  marks around the input, converting the source into a string literal.
 				 *
-				 *  \note This macro is not available for all architectures.
+				 *  \param[in] x  Input to convert into a string literal.
 				 *
-				 *  \ingroup Group_Debugging
+				 *  \return String version of the input.
 				 */
-				#define JTAG_DEBUG_POINT()      __asm__ __volatile__ ("NOP" ::)
+				#define STRINGIFY(x)            #x
 
-				/** Defines an explicit JTAG break point in the resulting binary via the assembly \c BREAK statement. When
-				 *  a JTAG is used, this causes the program execution to halt when reached until manually resumed.
+				/** Converts the given input into a string after macro expansion, via the C Preprocessor. This macro puts
+				 *  literal quotation marks around the expanded input, converting the source into a string literal.
 				 *
-				 *  \note This macro is not available for all architectures.
+				 *  \param[in] x  Input to expand and convert into a string literal.
 				 *
-				 *  \ingroup Group_Debugging
+				 *  \return String version of the expanded input.
 				 */
-				#define JTAG_DEBUG_BREAK()      __asm__ __volatile__ ("BREAK" ::)
-
-				/** Macro for testing condition "x" and breaking via \ref JTAG_DEBUG_BREAK() if the condition is false.
-				 *
-				 *  \note This macro is not available for all architectures.
-				 *
-				 *  \param[in] Condition  Condition that will be evaluated.
-				 *
-				 *  \ingroup Group_Debugging
-				*/
-				#define JTAG_DEBUG_ASSERT(Condition)    MACROS{ if (!(Condition)) { JTAG_DEBUG_BREAK(); } }MACROE
-
-				/** Macro for testing condition "x" and writing debug data to the stdout stream if \c false. The stdout stream
-				 *  must be pre-initialized before this macro is run and linked to an output device, such as the microcontroller's
-				 *  USART peripheral.
-				 *
-				 *  The output takes the form "{FILENAME}: Function {FUNCTION NAME}, Line {LINE NUMBER}: Assertion {Condition} failed."
-				 *
-				 *  \note This macro is not available for all architectures.
-				 *
-				 *  \param[in] Condition  Condition that will be evaluated,
-				 *
-				 *  \ingroup Group_Debugging
-				 */
-				#define STDOUT_ASSERT(Condition)        MACROS{ if (!(x)) { printf_P(PSTR("%s: Function \"%s\", Line %d: "   \
-				                                                "Assertion \"%s\" failed.\r\n"),     \
-				                                                __FILE__, __func__, __LINE__, #Condition); } }MACROE
-
-				#if !defined(pgm_read_ptr) || defined(__DOXYGEN__)
-					/** Reads a pointer out of PROGMEM space on the AVR8 architecture. This is currently a wrapper for the
-					 *  avr-libc \c pgm_read_ptr() macro with a \c void* cast, so that its value can be assigned directly
-					 *  to a pointer variable or used in pointer arithmetic without further casting in C. In a future
-					 *  avr-libc distribution this will be part of the standard API and will be implemented in a more formal
-					 *  manner.
-					 *
-					 *  \note This macro is not available for all architectures.
-					 *
-					 *  \param[in] Address  Address of the pointer to read.
-					 *
-					 *  \return Pointer retrieved from PROGMEM space.
-					 */
-					#define pgm_read_ptr(Address)        (void*)pgm_read_word(Address)
-				#endif
+				#define STRINGIFY_EXPANDED(x)   STRINGIFY(x)
 			#endif
 
 			#if !defined(ISR) || defined(__DOXYGEN__)
@@ -253,6 +220,8 @@
 			 *  etc.
 			 *
 			 *  \param[in] Byte  Byte of data whose bits are to be reversed.
+			 *
+			 *  \return Input data with the individual bits reversed (mirrored).
 			 */
 			static inline uint8_t BitReverse(uint8_t Byte) ATTR_WARN_UNUSED_RESULT ATTR_CONST;
 			static inline uint8_t BitReverse(uint8_t Byte)
@@ -270,8 +239,8 @@
 			 *
 			 *  \param[in] Milliseconds  Number of milliseconds to delay
 			 */
-			static inline void Delay_MS(uint8_t Milliseconds) ATTR_ALWAYS_INLINE;
-			static inline void Delay_MS(uint8_t Milliseconds)
+			static inline void Delay_MS(uint16_t Milliseconds) ATTR_ALWAYS_INLINE;
+			static inline void Delay_MS(uint16_t Milliseconds)
 			{
 				#if (ARCH == ARCH_AVR8)
 				if (GCC_IS_COMPILE_CONST(Milliseconds))
@@ -289,6 +258,16 @@
 					__builtin_mtsr(AVR32_COUNT, 0);
 					while (__builtin_mfsr(AVR32_COUNT) < (F_CPU / 1000));				
 				}
+				#elif (ARCH == ARCH_XMEGA)
+				if (GCC_IS_COMPILE_CONST(Milliseconds))
+				{
+					_delay_ms(Milliseconds);
+				}
+				else
+				{
+					while (Milliseconds--)
+					  _delay_ms(1);
+				}				
 				#endif
 			}
 
@@ -308,7 +287,9 @@
 				#if (ARCH == ARCH_AVR8)
 				return SREG;
 				#elif (ARCH == ARCH_UC3)
-				return __builtin_mfsr(AVR32_SR);				
+				return __builtin_mfsr(AVR32_SR);
+				#elif (ARCH == ARCH_XMEGA)
+				return SREG;
 				#endif
 
 				GCC_MEMORY_BARRIER();
@@ -334,6 +315,8 @@
 				  __builtin_ssrf(AVR32_SR_GM_OFFSET);
 				else
 				  __builtin_csrf(AVR32_SR_GM_OFFSET);
+				#elif (ARCH == ARCH_XMEGA)
+				SREG = GlobalIntState;				
 				#endif
 				
 				GCC_MEMORY_BARRIER();
@@ -352,6 +335,8 @@
 				sei();
 				#elif (ARCH == ARCH_UC3)
 				__builtin_csrf(AVR32_SR_GM_OFFSET);
+				#elif (ARCH == ARCH_XMEGA)
+				sei();
 				#endif
 
 				GCC_MEMORY_BARRIER();
@@ -370,6 +355,8 @@
 				cli();
 				#elif (ARCH == ARCH_UC3)
 				__builtin_ssrf(AVR32_SR_GM_OFFSET);
+				#elif (ARCH == ARCH_XMEGA)
+				cli();
 				#endif
 
 				GCC_MEMORY_BARRIER();

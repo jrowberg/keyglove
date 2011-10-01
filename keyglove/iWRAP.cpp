@@ -1571,5 +1571,3 @@ void iWRAP::move(uint8_t x, uint8_t y, uint8_t z) {
 void iWRAP::scroll(uint8_t s) {
     move(0, 0, s);
 }
-
-

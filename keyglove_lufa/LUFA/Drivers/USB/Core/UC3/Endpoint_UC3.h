@@ -112,12 +112,13 @@
 				#define ENDPOINT_DETAILS_MAXEP                 8
 
 				#define ENDPOINT_DETAILS_EP0                   64,  1
-				#define ENDPOINT_DETAILS_EP1                   512, 2
-				#define ENDPOINT_DETAILS_EP2                   512, 2
-				#define ENDPOINT_DETAILS_EP3                   512, 2
-				#define ENDPOINT_DETAILS_EP4                   512, 2
-				#define ENDPOINT_DETAILS_EP5                   512, 2
-				#define ENDPOINT_DETAILS_EP6                   512, 2			
+				#define ENDPOINT_DETAILS_EP1                   512, 3
+				#define ENDPOINT_DETAILS_EP2                   512, 3
+				#define ENDPOINT_DETAILS_EP3                   512, 3
+				#define ENDPOINT_DETAILS_EP4                   512, 3
+				#define ENDPOINT_DETAILS_EP5                   512, 3
+				#define ENDPOINT_DETAILS_EP6                   512, 3
+				#define ENDPOINT_DETAILS_EP7                   512, 3
 			#elif defined(USB_SERIES_UC3B0_AVR32) || defined(USB_SERIES_UC3B1_AVR32) 
 				#define ENDPOINT_DETAILS_MAXEP                 7
 
@@ -127,7 +128,7 @@
 				#define ENDPOINT_DETAILS_EP3                   64,  2
 				#define ENDPOINT_DETAILS_EP4                   64,  2
 				#define ENDPOINT_DETAILS_EP5                   256, 2
-				#define ENDPOINT_DETAILS_EP6                   256, 2			
+				#define ENDPOINT_DETAILS_EP6                   256, 2
 			#endif
 
 			#define ENDPOINT_HSB_ADDRESS_SPACE_SIZE            (64 * 1024UL)
@@ -160,20 +161,7 @@
 	#endif
 
 	/* Public Interface - May be used in end-application: */
-		/* Macros: */
-			/** \name Endpoint Direction Masks */
-			//@{
-			/** Endpoint data direction mask for \ref Endpoint_ConfigureEndpoint(). This indicates that the endpoint
-			 *  should be initialized in the OUT direction - i.e. data flows from host to device.
-			 */
-			#define ENDPOINT_DIR_OUT                        AVR32_USBB_UECFG0_EPDIR_OUT
-
-			/** Endpoint data direction mask for \ref Endpoint_ConfigureEndpoint(). This indicates that the endpoint
-			 *  should be initialized in the IN direction - i.e. data flows from device to host.
-			 */
-			#define ENDPOINT_DIR_IN                         AVR32_USBB_UECFG0_EPDIR_IN
-			//@}
-			
+		/* Macros: */			
 			/** \name Endpoint Bank Mode Masks */
 			//@{
 			/** Mask for the bank mode selection for the \ref Endpoint_ConfigureEndpoint() macro. This indicates
@@ -189,6 +177,17 @@
 			 *  accesses the second bank.
 			 */
 			#define ENDPOINT_BANK_DOUBLE                    AVR32_USBB_UECFG0_EPBK_DOUBLE
+
+			#if defined(USB_SERIES_UC3A3_AVR32) || defined(USB_SERIES_UC3A4_AVR32) || defined(__DOXYGEN__)
+				/** Mask for the bank mode selection for the \ref Endpoint_ConfigureEndpoint() macro. This indicates
+				 *  that the endpoint should have three banks, which requires more USB FIFO memory but results
+				 *  in faster transfers as one USB device (the AVR or the host) can access one bank while the other
+				 *  accesses the remaining banks.
+				 *
+				 *  \note Not available on all AVR models.
+				 */
+				#define ENDPOINT_BANK_TRIPLE                AVR32_USBB_UECFG0_EPBK_TRIPLE
+			#endif
 			//@}
 
 			#if (!defined(FIXED_CONTROL_ENDPOINT_SIZE) || defined(__DOXYGEN__))
@@ -304,9 +303,9 @@
 			{
 				return Endpoint_ConfigureEndpoint_Prv(Number, (AVR32_USBB_ALLOC_MASK |
 				                                               ((uint32_t)Type      << AVR32_USBB_EPTYPE_OFFSET) | 
-				                                               ((uint32_t)Direction << AVR32_USBB_EPDIR_OFFSET)  |
+				                                               ((uint32_t)(Direction ? AVR32_USBB_UECFG0_EPDIR_MASK : 0) |
 				                                               ((uint32_t)Banks     << AVR32_USBB_EPBK_OFFSET)   |
-				                                               Endpoint_BytesToEPSizeMask(Size)));
+				                                               Endpoint_BytesToEPSizeMask(Size))));
 			}
 
 			/** Indicates the number of bytes currently stored in the current endpoint's selected bank.
@@ -830,9 +829,9 @@
 			 *        changed in value.
 			 */
 			#if (!defined(FIXED_CONTROL_ENDPOINT_SIZE) || defined(__DOXYGEN__))
-				extern uint8_t USB_ControlEndpointSize;
+				extern uint8_t USB_Device_ControlEndpointSize;
 			#else
-				#define USB_ControlEndpointSize FIXED_CONTROL_ENDPOINT_SIZE
+				#define USB_Device_ControlEndpointSize FIXED_CONTROL_ENDPOINT_SIZE
 			#endif
 
 		/* Function Prototypes: */

@@ -150,7 +150,6 @@ CPPSRC = $(TARGET).cpp \
          wiring/Tone.cpp \
          ArduinoWrapper.cpp \
          ../keyglove/I2Cdev.cpp \
-         ../keyglove/AK8975.cpp \
          ../keyglove/ADXL345.cpp \
          ../keyglove/ITG3200.cpp \
          ../keyglove/HMC5883L.cpp \

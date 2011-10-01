@@ -73,7 +73,7 @@ uint8_t HID_Host_ConfigurePipes(USB_ClassInfo_HID_Host_t* const HIDInterfaceInfo
 					 (HIDInterface->Protocol != HIDInterfaceInfo->Config.HIDInterfaceProtocol));
 
 			if (USB_GetNextDescriptorComp(&ConfigDescriptorSize, &ConfigDescriptorData,
-			                              DCOMP_HID_Host_NextHID) != DESCRIPTOR_SEARCH_COMP_Found)
+			                              DCOMP_HID_Host_NextHIDDescriptor) != DESCRIPTOR_SEARCH_COMP_Found)
 			{
 				return HID_ENUMERROR_NoCompatibleInterfaceFound;
 			}
@@ -88,7 +88,7 @@ uint8_t HID_Host_ConfigurePipes(USB_ClassInfo_HID_Host_t* const HIDInterfaceInfo
 
 		USB_Descriptor_Endpoint_t* EndpointData = DESCRIPTOR_PCAST(ConfigDescriptorData, USB_Descriptor_Endpoint_t);
 
-		if (EndpointData->EndpointAddress & ENDPOINT_DESCRIPTOR_DIR_IN)
+		if ((EndpointData->EndpointAddress & ENDPOINT_DIR_MASK) == ENDPOINT_DIR_IN)
 		  DataINEndpoint  = EndpointData;
 		else
 		  DataOUTEndpoint = EndpointData;
@@ -105,7 +105,7 @@ uint8_t HID_Host_ConfigurePipes(USB_ClassInfo_HID_Host_t* const HIDInterfaceInfo
 
 		if (PipeNum == HIDInterfaceInfo->Config.DataINPipeNumber)
 		{
-			Size            = DataINEndpoint->EndpointSize;
+			Size            = le16_to_cpu(DataINEndpoint->EndpointSize);
 			EndpointAddress = DataINEndpoint->EndpointAddress;
 			Token           = PIPE_TOKEN_IN;
 			Type            = EP_TYPE_INTERRUPT;
@@ -119,7 +119,7 @@ uint8_t HID_Host_ConfigurePipes(USB_ClassInfo_HID_Host_t* const HIDInterfaceInfo
 			if (DataOUTEndpoint == NULL)
 			  continue;
 		
-			Size            = DataOUTEndpoint->EndpointSize;
+			Size            = le16_to_cpu(DataOUTEndpoint->EndpointSize);
 			EndpointAddress = DataOUTEndpoint->EndpointAddress;
 			Token           = PIPE_TOKEN_OUT;
 			Type            = EP_TYPE_INTERRUPT;
@@ -145,7 +145,7 @@ uint8_t HID_Host_ConfigurePipes(USB_ClassInfo_HID_Host_t* const HIDInterfaceInfo
 	}
 
 	HIDInterfaceInfo->State.InterfaceNumber      = HIDInterface->InterfaceNumber;
-	HIDInterfaceInfo->State.HIDReportSize        = HIDDescriptor->HIDReportLength;
+	HIDInterfaceInfo->State.HIDReportSize        = LE16_TO_CPU(HIDDescriptor->HIDReportLength);
 	HIDInterfaceInfo->State.SupportsBootProtocol = (HIDInterface->SubClass != HID_CSCP_NonBootProtocol);
 	HIDInterfaceInfo->State.LargestReportSize    = 8;
 	HIDInterfaceInfo->State.IsActive             = true;
@@ -168,7 +168,7 @@ static uint8_t DCOMP_HID_Host_NextHIDInterface(void* const CurrentDescriptor)
 	return DESCRIPTOR_SEARCH_NotFound;
 }
 
-static uint8_t DCOMP_HID_Host_NextHID(void* const CurrentDescriptor)
+static uint8_t DCOMP_HID_Host_NextHIDDescriptor(void* const CurrentDescriptor)
 {
 	USB_Descriptor_Header_t* Header = DESCRIPTOR_PCAST(CurrentDescriptor, USB_Descriptor_Header_t);
 
@@ -334,6 +334,9 @@ uint8_t HID_Host_SetBootProtocol(USB_ClassInfo_HID_Host_t* const HIDInterfaceInf
 {
 	uint8_t ErrorCode;
 
+	if (!(HIDInterfaceInfo->State.SupportsBootProtocol))
+	  return HID_ERROR_LOGICAL;
+
 	USB_ControlRequest = (USB_Request_Header_t)
 		{
 			.bmRequestType = (REQDIR_HOSTTODEVICE | REQTYPE_CLASS | REQREC_INTERFACE),
@@ -344,9 +347,6 @@ uint8_t HID_Host_SetBootProtocol(USB_ClassInfo_HID_Host_t* const HIDInterfaceInf
 		};
 
 	Pipe_SelectPipe(PIPE_CONTROLPIPE);
-
-	if (!(HIDInterfaceInfo->State.SupportsBootProtocol))
-	  return HID_ERROR_LOGICAL;
 
 	if ((ErrorCode = USB_Host_SendControlRequest(NULL)) != HOST_SENDCONTROL_Successful)
 	  return ErrorCode;
@@ -421,7 +421,7 @@ uint8_t HID_Host_SetReportProtocol(USB_ClassInfo_HID_Host_t* const HIDInterfaceI
 		return HID_ERROR_LOGICAL | ErrorCode;
 	}
 
-	uint8_t LargestReportSizeBits = HIDInterfaceInfo->Config.HIDParserData->LargestReportSizeBits;
+	uint16_t LargestReportSizeBits = HIDInterfaceInfo->Config.HIDParserData->LargestReportSizeBits;
 	HIDInterfaceInfo->State.LargestReportSize = (LargestReportSizeBits >> 3) + ((LargestReportSizeBits & 0x07) != 0);
 
 	return 0;

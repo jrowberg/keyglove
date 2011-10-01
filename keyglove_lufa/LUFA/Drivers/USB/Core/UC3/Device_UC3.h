@@ -50,6 +50,7 @@
 
 	/* Includes: */
 		#include "../../../../Common/Common.h"
+		#include "../USBController.h"
 		#include "../StdDescriptors.h"
 		#include "../USBInterrupt.h"
 		#include "../Endpoint.h"
@@ -80,6 +81,13 @@
 			 *  USB interface should be initialized in full speed (12Mb/s) mode.
 			 */
 			#define USB_DEVICE_OPT_FULLSPEED               (0 << 0)
+			
+			#if defined(USB_SERIES_UC3A3_AVR32) || defined(USB_SERIES_UC3A4_AVR32) || defined(__DOXYGEN__)
+				/** Mask for the Options parameter of the \ref USB_Init() function. This indicates that the
+				 *  USB interface should be initialized in high speed (480Mb/s) mode.
+				 */
+				#define USB_DEVICE_OPT_HIGHSPEED           (1 << 1)			
+			#endif
 			//@}
 			
 			#if (!defined(NO_INTERNAL_SERIAL) && \
@@ -122,8 +130,8 @@
 			 *  \note This macro should only be used if the device has indicated to the host that it
 			 *        supports the Remote Wakeup feature in the device descriptors, and should only be
 			 *        issued if the host is currently allowing remote wakeup events from the device (i.e.,
-			 *        the \ref USB_RemoteWakeupEnabled flag is set). When the \c NO_DEVICE_REMOTE_WAKEUP compile
-			 *        time option is used, this macro is unavailable.
+			 *        the \ref USB_Device_RemoteWakeupEnabled flag is set). When the \c NO_DEVICE_REMOTE_WAKEUP
+			 *        compile time option is used, this macro is unavailable.
 			 *        \n\n
 			 *
 			 *  \note The USB clock must be running for this function to operate. If the stack is initialized with
@@ -137,6 +145,8 @@
 		/* Inline Functions: */
 			/** Returns the current USB frame number, when in device mode. Every millisecond the USB bus is active (i.e. enumerated to a host)
 			 *  the frame number is incremented by one.
+			 *
+			 *  \return Current USB frame number from the USB controller.
 			 */
 			static inline uint16_t USB_Device_GetFrameNumber(void) ATTR_ALWAYS_INLINE ATTR_WARN_UNUSED_RESULT;
 			static inline uint16_t USB_Device_GetFrameNumber(void)
@@ -145,28 +155,28 @@
 			}
 
 			#if !defined(NO_SOF_EVENTS)
-			/** Enables the device mode Start Of Frame events. When enabled, this causes the
-			 *  \ref EVENT_USB_Device_StartOfFrame() event to fire once per millisecond, synchronized to the USB bus,
-			 *  at the start of each USB frame when enumerated in device mode.
-			 *
-			 *  \note Not available when the \c NO_SOF_EVENTS compile time token is defined.
-			 */
-			static inline void USB_Device_EnableSOFEvents(void) ATTR_ALWAYS_INLINE;
-			static inline void USB_Device_EnableSOFEvents(void)
-			{
-				USB_INT_Enable(USB_INT_SOFI);
-			}
+				/** Enables the device mode Start Of Frame events. When enabled, this causes the
+				 *  \ref EVENT_USB_Device_StartOfFrame() event to fire once per millisecond, synchronized to the USB bus,
+				 *  at the start of each USB frame when enumerated in device mode.
+				 *
+				 *  \note Not available when the \c NO_SOF_EVENTS compile time token is defined.
+				 */
+				static inline void USB_Device_EnableSOFEvents(void) ATTR_ALWAYS_INLINE;
+				static inline void USB_Device_EnableSOFEvents(void)
+				{
+					USB_INT_Enable(USB_INT_SOFI);
+				}
 
-			/** Disables the device mode Start Of Frame events. When disabled, this stops the firing of the
-			 *  \ref EVENT_USB_Device_StartOfFrame() event when enumerated in device mode.
-			 *
-			 *  \note Not available when the \c NO_SOF_EVENTS compile time token is defined.
-			 */
-			static inline void USB_Device_DisableSOFEvents(void) ATTR_ALWAYS_INLINE;
-			static inline void USB_Device_DisableSOFEvents(void)
-			{
-				USB_INT_Disable(USB_INT_SOFI);
-			}
+				/** Disables the device mode Start Of Frame events. When disabled, this stops the firing of the
+				 *  \ref EVENT_USB_Device_StartOfFrame() event when enumerated in device mode.
+				 *
+				 *  \note Not available when the \c NO_SOF_EVENTS compile time token is defined.
+				 */
+				static inline void USB_Device_DisableSOFEvents(void) ATTR_ALWAYS_INLINE;
+				static inline void USB_Device_DisableSOFEvents(void)
+				{
+					USB_INT_Disable(USB_INT_SOFI);
+				}
 			#endif
 
 	/* Private Interface - For use in library only: */
@@ -175,14 +185,26 @@
 			static inline void USB_Device_SetLowSpeed(void) ATTR_ALWAYS_INLINE;
 			static inline void USB_Device_SetLowSpeed(void)
 			{
-				AVR32_USBB.UDCON.ls = true;
+				AVR32_USBB.UDCON.ls      = true;
 			}
 
 			static inline void USB_Device_SetFullSpeed(void) ATTR_ALWAYS_INLINE;
 			static inline void USB_Device_SetFullSpeed(void)
 			{
-				AVR32_USBB.UDCON.ls = false;
+				AVR32_USBB.UDCON.ls      = false;
+				#if defined(USB_DEVICE_OPT_HIGHSPEED)
+				AVR32_USBB.UDCON.spdconf = 3;
+				#endif
 			}
+
+			#if defined(USB_DEVICE_OPT_HIGHSPEED)
+			static inline void USB_Device_SetHighSpeed(void) ATTR_ALWAYS_INLINE;
+			static inline void USB_Device_SetHighSpeed(void)
+			{
+				AVR32_USBB.UDCON.ls      = false;
+				AVR32_USBB.UDCON.spdconf = 0;
+			}
+			#endif
 
 			static inline void USB_Device_SetDeviceAddress(const uint8_t Address) ATTR_ALWAYS_INLINE;
 			static inline void USB_Device_SetDeviceAddress(const uint8_t Address)
@@ -198,6 +220,7 @@
 			}
 
 			#if (USE_INTERNAL_SERIAL != NO_DESCRIPTOR)
+			static inline void USB_Device_GetSerialString(uint16_t* const UnicodeString) ATTR_NON_NULL_PTR_ARG(1);
 			static inline void USB_Device_GetSerialString(uint16_t* const UnicodeString)
 			{
 				uint_reg_t CurrentGlobalInt = GetGlobalInterruptMask();

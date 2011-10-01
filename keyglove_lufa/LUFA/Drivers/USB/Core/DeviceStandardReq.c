@@ -36,23 +36,30 @@
 #define  __INCLUDE_FROM_DEVICESTDREQ_C
 #include "DeviceStandardReq.h"
 
-uint8_t USB_ConfigurationNumber;
+uint8_t USB_Device_ConfigurationNumber;
 
 #if !defined(NO_DEVICE_SELF_POWER)
-bool    USB_CurrentlySelfPowered;
+bool    USB_Device_CurrentlySelfPowered;
 #endif
 
 #if !defined(NO_DEVICE_REMOTE_WAKEUP)
-bool    USB_RemoteWakeupEnabled;
+bool    USB_Device_RemoteWakeupEnabled;
 #endif
 
 void USB_Device_ProcessControlRequest(void)
 {
+	#if defined(ARCH_BIG_ENDIAN)
 	USB_ControlRequest.bmRequestType = Endpoint_Read_8();
 	USB_ControlRequest.bRequest      = Endpoint_Read_8();
 	USB_ControlRequest.wValue        = Endpoint_Read_16_LE();
 	USB_ControlRequest.wIndex        = Endpoint_Read_16_LE();
 	USB_ControlRequest.wLength       = Endpoint_Read_16_LE();
+	#else
+	uint8_t* RequestHeader = (uint8_t*)&USB_ControlRequest;
+
+	for (uint8_t RequestHeaderByte = 0; RequestHeaderByte < sizeof(USB_Request_Header_t); RequestHeaderByte++)
+	  *(RequestHeader++) = Endpoint_Read_8();
+	#endif
 
 	EVENT_USB_Device_ControlRequest();
 
@@ -184,11 +191,11 @@ static void USB_Device_SetConfiguration(void)
 
 	Endpoint_ClearSETUP();
 
-	USB_ConfigurationNumber = (uint8_t)USB_ControlRequest.wValue;
+	USB_Device_ConfigurationNumber = (uint8_t)USB_ControlRequest.wValue;
 
 	Endpoint_ClearStatusStage();
 
-	if (USB_ConfigurationNumber)
+	if (USB_Device_ConfigurationNumber)
 	  USB_DeviceState = DEVICE_STATE_Configured;
 	else
 	  USB_DeviceState = (USB_Device_IsAddressSet()) ? DEVICE_STATE_Configured : DEVICE_STATE_Powered;
@@ -200,7 +207,7 @@ static void USB_Device_GetConfiguration(void)
 {
 	Endpoint_ClearSETUP();
 
-	Endpoint_Write_8(USB_ConfigurationNumber);
+	Endpoint_Write_8(USB_Device_ConfigurationNumber);
 	Endpoint_ClearIN();
 
 	Endpoint_ClearStatusStage();
@@ -285,12 +292,12 @@ static void USB_Device_GetStatus(void)
 		#if !defined(NO_DEVICE_SELF_POWER) || !defined(NO_DEVICE_REMOTE_WAKEUP)
 		case (REQDIR_DEVICETOHOST | REQTYPE_STANDARD | REQREC_DEVICE):
 			#if !defined(NO_DEVICE_SELF_POWER)
-			if (USB_CurrentlySelfPowered)
+			if (USB_Device_CurrentlySelfPowered)
 			  CurrentStatus |= FEATURE_SELFPOWERED_ENABLED;
 			#endif
 
 			#if !defined(NO_DEVICE_REMOTE_WAKEUP)
-			if (USB_RemoteWakeupEnabled)
+			if (USB_Device_RemoteWakeupEnabled)
 			  CurrentStatus |= FEATURE_REMOTE_WAKEUP_ENABLED;
 			#endif
 			break;
@@ -324,7 +331,7 @@ static void USB_Device_ClearSetFeature(void)
 		#if !defined(NO_DEVICE_REMOTE_WAKEUP)
 		case REQREC_DEVICE:
 			if ((uint8_t)USB_ControlRequest.wValue == FEATURE_SEL_DeviceRemoteWakeup)
-			  USB_RemoteWakeupEnabled = (USB_ControlRequest.bRequest == REQ_SetFeature);
+			  USB_Device_RemoteWakeupEnabled = (USB_ControlRequest.bRequest == REQ_SetFeature);
 			else
 			  return;
 

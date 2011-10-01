@@ -1189,5 +1189,3 @@ class iWRAP {
 };
 
 #endif /* _IWRAP_H_ */
-
-

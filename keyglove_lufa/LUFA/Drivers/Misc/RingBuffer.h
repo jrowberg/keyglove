@@ -29,7 +29,7 @@
 */
 
 /** \file
- *  \brief Lightweight ring buffer, for fast insertion/deletion of bytes.
+ *  \brief Lightweight ring (circular) buffer, for fast insertion/deletion of bytes.
  *
  *  Lightweight ring buffer, for fast insertion/deletion. Multiple buffers can be created of
  *  different sizes to suit different needs.
@@ -127,6 +127,8 @@
 		 *  \param[out] Size     Maximum number of bytes that can be stored in the underlying data array.
 		 */
 		static inline void RingBuffer_InitBuffer(RingBuffer_t* Buffer, uint8_t* const DataPtr, const uint16_t Size)
+		                                         ATTR_NON_NULL_PTR_ARG(1) ATTR_NON_NULL_PTR_ARG(2);
+		static inline void RingBuffer_InitBuffer(RingBuffer_t* Buffer, uint8_t* const DataPtr, const uint16_t Size)
 		{
 			GCC_FORCE_POINTER_ACCESS(Buffer);
 
@@ -143,19 +145,21 @@
 			SetGlobalInterruptMask(CurrentGlobalInt);
 		}
 
-		/** Retrieves the minimum number of bytes stored in a particular buffer. This value is computed
-		 *  by entering an atomic lock on the buffer while the IN and OUT locations are fetched, so that
-		 *  the buffer cannot be modified while the computation takes place. This value should be cached
-		 *  when reading out the contents of the buffer, so that as small a time as possible is spent
-		 *  in an atomic lock.
+		/** Retrieves the current number of bytes stored in a particular buffer. This value is computed
+		 *  by entering an atomic lock on the buffer, so that the buffer cannot be modified while the
+		 *  computation takes place. This value should be cached when reading out the contents of the buffer,
+		 *  so that as small a time as possible is spent in an atomic lock.
 		 *
 		 *  \note The value returned by this function is guaranteed to only be the minimum number of bytes
-		 *        stored in the given buffer; this value may change as other threads write new data and so
+		 *        stored in the given buffer; this value may change as other threads write new data, thus
 		 *        the returned number should be used only to determine how many successive reads may safely
 		 *        be performed on the buffer.
 		 *
 		 *  \param[in] Buffer  Pointer to a ring buffer structure whose count is to be computed.
+		 *
+		 *  \return Number of bytes currently stored in the buffer.
 		 */
+		static inline uint16_t RingBuffer_GetCount(RingBuffer_t* const Buffer) ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(1);
 		static inline uint16_t RingBuffer_GetCount(RingBuffer_t* const Buffer)
 		{
 			uint16_t Count;
@@ -169,17 +173,22 @@
 			return Count;
 		}
 
-		/** Atomically determines if the specified ring buffer contains any free space. This should
-		 *  be tested before storing data to the buffer, to ensure that no data is lost due to a
-		 *  buffer overrun.
+		/** Retrieves the free space in a particular buffer. This value is computed by entering an atomic lock
+		 *  on the buffer, so that the buffer cannot be modified while the computation takes place.
 		 *
-		 *  \param[in,out] Buffer  Pointer to a ring buffer structure to insert into.
+		 *  \note The value returned by this function is guaranteed to only be the maximum number of bytes
+		 *        free in the given buffer; this value may change as other threads write new data, thus
+		 *        the returned number should be used only to determine how many successive writes may safely
+		 *        be performed on the buffer when there is a single writer thread.
 		 *
-		 *  \return Boolean \c true if the buffer contains no free space, false otherwise.
+		 *  \param[in] Buffer  Pointer to a ring buffer structure whose free count is to be computed.
+		 *
+		 *  \return Number of free bytes in the buffer.
 		 */
-		static inline bool RingBuffer_IsFull(RingBuffer_t* const Buffer)
+		static inline uint16_t RingBuffer_GetFreeCount(RingBuffer_t* const Buffer) ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(1);
+		static inline uint16_t RingBuffer_GetFreeCount(RingBuffer_t* const Buffer)
 		{
-			return (RingBuffer_GetCount(Buffer) == Buffer->Size);
+			return (Buffer->Size - RingBuffer_GetCount(Buffer));
 		}
 
 		/** Atomically determines if the specified ring buffer contains any data. This should
@@ -194,9 +203,24 @@
 		 *
 		 *  \return Boolean \c true if the buffer contains no free space, false otherwise.
 		 */
+		static inline bool RingBuffer_IsEmpty(RingBuffer_t* const Buffer) ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(1);
 		static inline bool RingBuffer_IsEmpty(RingBuffer_t* const Buffer)
 		{
 			return (RingBuffer_GetCount(Buffer) == 0);
+		}
+
+		/** Atomically determines if the specified ring buffer contains any free space. This should
+		 *  be tested before storing data to the buffer, to ensure that no data is lost due to a
+		 *  buffer overrun.
+		 *
+		 *  \param[in,out] Buffer  Pointer to a ring buffer structure to insert into.
+		 *
+		 *  \return Boolean \c true if the buffer contains no free space, false otherwise.
+		 */
+		static inline bool RingBuffer_IsFull(RingBuffer_t* const Buffer) ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(1);
+		static inline bool RingBuffer_IsFull(RingBuffer_t* const Buffer)
+		{
+			return (RingBuffer_GetCount(Buffer) == Buffer->Size);
 		}
 
 		/** Inserts an element into the ring buffer.
@@ -208,8 +232,8 @@
 		 *  \param[in,out] Buffer  Pointer to a ring buffer structure to insert into.
 		 *  \param[in]     Data    Data element to insert into the buffer.
 		 */
-		static inline void RingBuffer_Insert(RingBuffer_t* Buffer,
-		                                     const uint8_t Data)
+		static inline void RingBuffer_Insert(RingBuffer_t* Buffer, const uint8_t Data) ATTR_NON_NULL_PTR_ARG(1);
+		static inline void RingBuffer_Insert(RingBuffer_t* Buffer, const uint8_t Data)
 		{
 			GCC_FORCE_POINTER_ACCESS(Buffer);
 
@@ -236,6 +260,7 @@
 		 *
 		 *  \return Next data element stored in the buffer.
 		 */
+		static inline uint8_t RingBuffer_Remove(RingBuffer_t* Buffer) ATTR_NON_NULL_PTR_ARG(1);
 		static inline uint8_t RingBuffer_Remove(RingBuffer_t* Buffer)
 		{
 			GCC_FORCE_POINTER_ACCESS(Buffer);
@@ -261,6 +286,7 @@
 		 *
 		 *  \return Next data element stored in the buffer.
 		 */
+		static inline uint8_t RingBuffer_Peek(RingBuffer_t* const Buffer) ATTR_WARN_UNUSED_RESULT ATTR_NON_NULL_PTR_ARG(1);
 		static inline uint8_t RingBuffer_Peek(RingBuffer_t* const Buffer)
 		{
 			return *Buffer->Out;

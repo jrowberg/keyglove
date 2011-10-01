@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "config.h"
 
-#include <Wire.h>
+//#include <Wire.h>
 
 // =============================================================================
 // !!! NO EDITING SHOULD BE NECESSARY BEYOND THIS POINT !!!
@@ -114,10 +114,10 @@ void loop() {
     if (activeTouch) update_touch();
 
     // keyboard is almost always done in real time, this is usually not necessary
-    if (activeKeyboard) update_keyboard();
+    //if (activeKeyboard) update_keyboard();
 
     // send any unsent mouse control data
-    if (activeMouse && counter) update_mouse();
+    if (activeMouse && counter % 10 == 0) update_mouse();
 
     // send any unsent joystick control data
     if (activeJoystick) update_joystick();
@@ -142,9 +142,8 @@ void loop() {
         DEBUG_PRN_BENCHMARK(millis() - t);
         DEBUG_PRN_BENCHMARK(" ");
         DEBUG_PRNL_BENCHMARK(ticks);
+        t = millis();
     }
-
-    t = millis();
 }
 
 

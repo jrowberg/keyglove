@@ -54,10 +54,6 @@
 		#include "USBMode.h"
 		#include "Events.h"
 
-		#if defined(USB_CAN_BE_DEVICE)
-			#include "Device.h"
-		#endif
-
 	/* Enable C linkage for C++ Compilers: */
 		#if defined(__cplusplus)
 			extern "C" {
@@ -105,21 +101,6 @@
 			 *  to indicate that the English language is supported by the device in its string descriptors.
 			 */
 			#define LANGUAGE_ID_ENG                   0x0409
-
-			/** \name Endpoint Address Direction Masks */
-			//@{
-			/** Can be masked with an endpoint address for a \ref USB_Descriptor_Endpoint_t endpoint descriptor's
-			 *  EndpointAddress value to indicate to the host that the endpoint is of the IN direction (i.e, from
-			 *  device to host).
-			 */
-			#define ENDPOINT_DESCRIPTOR_DIR_IN        0x80
-
-			/** Can be masked with an endpoint address for a \ref USB_Descriptor_Endpoint_t endpoint descriptor's
-			 *  EndpointAddress value to indicate to the host that the endpoint is of the OUT direction (i.e, from
-			 *  host to device).
-			 */
-			#define ENDPOINT_DESCRIPTOR_DIR_OUT       0x00
-			//@}
 
 			/** \name USB Configuration Descriptor Attribute Masks */
 			//@{
@@ -254,6 +235,8 @@
 			 *  uses LUFA-specific element names to make each element's purpose clearer.
 			 *
 			 *  \see \ref USB_StdDescriptor_Header_t for the version of this type with standard element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -269,6 +252,8 @@
 			 *  uses the relevant standard's given element names to ensure compatibility with the standard.
 			 *
 			 *  \see \ref USB_Descriptor_Header_t for the version of this type with non-standard LUFA specific element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -284,6 +269,8 @@
 			 *  element's purpose clearer.
 			 *
 			 *  \see \ref USB_StdDescriptor_Device_t for the version of this type with standard element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -333,6 +320,8 @@
 			 *  to ensure compatibility with the standard.
 			 *
 			 *  \see \ref USB_Descriptor_Device_t for the version of this type with non-standard LUFA specific element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -375,12 +364,61 @@
 				                              */
 			} ATTR_PACKED USB_StdDescriptor_Device_t;
 
+			/** \brief Standard USB Device Qualifier Descriptor (LUFA naming conventions).
+			 *
+			 *  Type define for a standard Device Qualifier Descriptor. This structure uses LUFA-specific element names
+			 *  to make each element's purpose clearer.
+			 *
+			 *  \see \ref USB_StdDescriptor_DeviceQualifier_t for the version of this type with standard element names.
+			 */
+			typedef struct
+			{
+				USB_Descriptor_Header_t Header; /**< Descriptor header, including type and size. */
+
+				uint16_t USBSpecification; /**< BCD of the supported USB specification. */
+				uint8_t  Class; /**< USB device class. */
+				uint8_t  SubClass; /**< USB device subclass. */
+				uint8_t  Protocol; /**< USB device protocol. */
+
+				uint8_t  Endpoint0Size; /**< Size of the control (address 0) endpoint's bank in bytes. */
+				uint8_t  NumberOfConfigurations; /**< Total number of configurations supported by
+				                                  *   the device.
+				                                  */
+				uint8_t  Reserved; /**< Reserved for future use, must be 0. */
+			} ATTR_PACKED USB_Descriptor_DeviceQualifier_t;
+
+			/** \brief Standard USB Device Qualifier Descriptor (USB-IF naming conventions).
+			 *
+			 *  Type define for a standard Device Qualifier Descriptor. This structure uses the relevant standard's given element names
+			 *  to ensure compatibility with the standard.
+			 *
+			 *  \see \ref USB_Descriptor_DeviceQualifier_t for the version of this type with non-standard LUFA specific element names.
+			 */
+			typedef struct
+			{
+				uint8_t  bLength; /**< Size of the descriptor, in bytes. */
+				uint8_t  bDescriptorType; /**< Type of the descriptor, either a value in \ref USB_DescriptorTypes_t or a value
+				                              *   given by the specific class.
+				                              */
+				uint16_t bcdUSB; /**< BCD of the supported USB specification. */
+				uint8_t  bDeviceClass; /**< USB device class. */
+				uint8_t  bDeviceSubClass; /**< USB device subclass. */
+				uint8_t  bDeviceProtocol; /**< USB device protocol. */
+				uint8_t  bMaxPacketSize0; /**< Size of the control (address 0) endpoint's bank in bytes. */
+				uint8_t  bNumConfigurations; /**< Total number of configurations supported by
+				                              *   the device.
+				                              */
+				uint8_t  bReserved; /**< Reserved for future use, must be 0. */
+			} ATTR_PACKED USB_StdDescriptor_DeviceQualifier_t;
+
 			/** \brief Standard USB Configuration Descriptor (LUFA naming conventions).
 			 *
 			 *  Type define for a standard Configuration Descriptor header. This structure uses LUFA-specific element names
 			 *  to make each element's purpose clearer.
 			 *
 			 *  \see \ref USB_StdDescriptor_Configuration_Header_t for the version of this type with standard element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -410,6 +448,8 @@
 			 *  to ensure compatibility with the standard.
 			 *
 			 *  \see \ref USB_Descriptor_Device_t for the version of this type with non-standard LUFA specific element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -438,6 +478,8 @@
 			 *  to make each element's purpose clearer.
 			 *
 			 *  \see \ref USB_StdDescriptor_Interface_t for the version of this type with standard element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -464,6 +506,8 @@
 			 *  to ensure compatibility with the standard.
 			 *
 			 *  \see \ref USB_Descriptor_Interface_t for the version of this type with non-standard LUFA specific element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -498,6 +542,8 @@
 			 *  function. Read the ECN for more information.
 			 *
 			 *  \see \ref USB_StdDescriptor_Interface_Association_t for the version of this type with standard element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -528,6 +574,8 @@
 			 *
 			 *  \see \ref USB_Descriptor_Interface_Association_t for the version of this type with non-standard LUFA specific
 			 *       element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -551,6 +599,8 @@
 			 *  to make each element's purpose clearer.
 			 *
 			 *  \see \ref USB_StdDescriptor_Endpoint_t for the version of this type with standard element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -577,6 +627,8 @@
 			 *
 			 *  \see \ref USB_Descriptor_Endpoint_t for the version of this type with non-standard LUFA specific
 			 *       element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
@@ -610,12 +662,14 @@
 			 *  This structure uses LUFA-specific element names to make each element's purpose clearer.
 			 *
 			 *  \see \ref USB_StdDescriptor_String_t for the version of this type with standard element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
 				USB_Descriptor_Header_t Header; /**< Descriptor header, including type and size. */
 
-				#if (ARCH == ARCH_AVR8)
+				#if (((ARCH == ARCH_AVR8) || (ARCH == ARCH_XMEGA)) && !defined(__DOXYGEN__))
 				wchar_t  UnicodeString[];
 				#else
 				uint16_t UnicodeString[]; /**< String data, as unicode characters (alternatively,
@@ -627,7 +681,8 @@
 				                           *   Under GCC, strings prefixed with the "L" character (before
 				                           *   the opening string quotation mark) are considered to be
 				                           *   Unicode strings, and may be used instead of an explicit
-				                           *   array of ASCII characters.
+				                           *   array of ASCII characters on little endian devices with
+				                           *   UTF-16-LE \c wchar_t encoding.
 				                           */
 				#endif
 			} ATTR_PACKED USB_Descriptor_String_t;
@@ -645,6 +700,8 @@
 			 *
 			 *  \see \ref USB_Descriptor_String_t for the version of this type with with non-standard LUFA specific
 			 *       element names.
+			 *
+			 *  \note Regardless of CPU architecture, these values should be stored as little endian.
 			 */
 			typedef struct
 			{
