@@ -1,8 +1,9 @@
 // I2Cdev library collection - Main I2C device class header file
 // Abstracts bit and byte I2C R/W functions into a convenient class
-// 8/31/2011 by Jeff Rowberg <jeff@rowberg.net>
+// 10/2/2011 by Jeff Rowberg <jeff@rowberg.net>
 //
 // Changelog:
+//     2011-10-02 - added Gene Knight's NBWire TwoWire class implementation with small modifications
 //     2011-08-31 - added support for Arduino 1.0 Wire library (methods are different from 0.x)
 //     2011-08-03 - added optional timeout parameter to read* methods to easily change from default
 //     2011-08-02 - added support for 16-bit registers
@@ -129,9 +130,9 @@ class I2Cdev {
             void begin(int);
             void beginTransmission(uint8_t);
             //void beginTransmission(int);
-            uint8_t endTransmission(void);
+            uint8_t endTransmission(uint16_t timeout=0);
             void nbendTransmission(void (*function)(int)) ;
-            uint8_t requestFrom(uint8_t, int);
+            uint8_t requestFrom(uint8_t, int, uint16_t timeout=0);
             //uint8_t requestFrom(int, int);
             void nbrequestFrom(uint8_t, int, void (*function)(int));
             void send(uint8_t);

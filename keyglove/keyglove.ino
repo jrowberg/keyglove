@@ -66,12 +66,8 @@ uint8_t  opt_enable_calibration = 0;        // whether calibration should be ena
 // hardware constant option definitions
 #include "hardware.h"
 
-// LUFA framework Arduino wrapper
-#ifdef LUFA_ARDUINO_WRAPPER
-    // the Keyglove LUFA code release makefile defines the LUFA_ARDUINO_WRAPPER
-    // constant for all compiled source files, including this one...LUFA is not
-    // automatically Arduino-friendly, so a wrapper is required (like LUFAduino,
-    // but not)
+// minimal Arduino support wrapper if we're outside of the Arduino environment
+#ifndef ARDUINO
     #include "ArduinoWrapper.h"
 #endif
 

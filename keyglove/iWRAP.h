@@ -29,12 +29,15 @@ THE SOFTWARE.
 #ifndef _IWRAP_H_
 #define _IWRAP_H_
 
-#ifdef LUFA_ARDUINO_WRAPPER
+// minimal Arduino support wrapper if we're outside of the Arduino environment
+#ifndef ARDUINO
     #include "ArduinoWrapper.h"
-#endif
-
-#ifndef LUFA_ARDUINO_WRAPPER
-    #include "Arduino.h"
+#else
+    #if ARDUINO < 100
+        #include "WProgram.h"
+    #else
+        #include "Arduino.h"
+    #endif
 #endif
 
 #define IWRAP_VERSION 400

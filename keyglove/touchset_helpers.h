@@ -95,9 +95,11 @@ void mouseon(uint8_t mode) {
     activeMouse = true;
     if (mode == MOUSE_ACTION_MOVE) {
         opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
+        activeAccelerometer = true;
         activeGyroscope = true;
     } else if (mode == MOUSE_ACTION_SCROLL) {
         opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
+        activeAccelerometer = true;
         activeGyroscope = true;
     }
 }
@@ -108,10 +110,20 @@ void mouseoff(uint8_t mode) {
     activeMouse = false;
     if (mode == MOUSE_ACTION_MOVE) {
         opt_mouse_mode = 0;
+        activeAccelerometer = false;
         activeGyroscope = false;
+        axv = ayv = azv = 0;
+        axp = ayp = azp = 0;
+        gxv = gyv = gzv = 0;
+        gxp = gyp = gzp = 0;
     } else if (mode == MOUSE_ACTION_SCROLL) {
         opt_scroll_mode = 0;
+        activeAccelerometer = false;
         activeGyroscope = false;
+        axv = ayv = azv = 0;
+        axp = ayp = azp = 0;
+        gxv = gyv = gzv = 0;
+        gxp = gyp = gzp = 0;
     }
 }
 

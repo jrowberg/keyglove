@@ -25,17 +25,8 @@ THE SOFTWARE.
 ===============================================
 */
 
-#ifndef LUFA_ARDUINO_WRAPPER
-    #include "WProgram.h"
-#endif
-
-#include "ps2dev.h"
 #include "ps2mouse.h"
 #include "debug.h"
-
-#ifdef round
-    #undef round
-#endif
 
 PS2mouse::PS2mouse(PS2dev *m) {
     mouse = m;

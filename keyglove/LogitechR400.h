@@ -10,15 +10,18 @@
 #ifndef _LOGITECHR400_H_
 #define _LOGITECHR400_H_
 
-#ifdef LUFA_ARDUINO_WRAPPER
+// minimal Arduino support wrapper if we're outside of the Arduino environment
+#ifndef ARDUINO
     #include "ArduinoWrapper.h"
+#else
+    #if ARDUINO < 100
+        #include "WProgram.h"
+    #else
+        #include "Arduino.h"
+    #endif
 #endif
 
 #include <stdarg.h>
-
-#ifndef LUFA_ARDUINO_WRAPPER
-    #include "WProgram.h"
-#endif
 
 #define READ                  0x00
 #define WRITE                 0x80

@@ -127,8 +127,6 @@ LUFA_OPTS += -D FIXED_CONTROL_ENDPOINT_SIZE=8
 LUFA_OPTS += -D FIXED_NUM_CONFIGURATIONS=1
 LUFA_OPTS += -D USE_FLASH_DESCRIPTORS
 LUFA_OPTS += -D USE_STATIC_OPTIONS="(USB_DEVICE_OPT_FULLSPEED | USB_OPT_REG_ENABLED | USB_OPT_AUTO_PLL)"
-LUFA_OPTS += -D LUFA_ARDUINO_WRAPPER
-# use "LUFA_ARDUINO_WRAPPER" definition for global environment recognition in Arduino sketch source files
 
 
 # Create the LUFA source path variables by including the LUFA root makefile

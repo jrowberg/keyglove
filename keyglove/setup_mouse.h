@@ -50,10 +50,10 @@ THE SOFTWARE.
 #define SCROLL_MODE_MOVEMENT_POSITION 3
 
 // mouse measurements
-int16_t mx, my, mz, sy;                   // absolute coordinates
-int16_t mx0, my0, mz0, sy0;               // last-iteration absolute coordinates
-int16_t mdx, mdy, mdz, sdy;               // relative movement
-// (note z is for 3D movement, sy is for scrolling)
+int16_t mousex, mousey, mousez, scrolly;  // absolute coordinates
+int16_t mousex0, mousey0, mousez0, scrolly0;               // last-iteration absolute coordinates
+int16_t mousedx, mousedy, mousedz, scrolldy;               // relative movement
+// (note z is for 3D movement, scrolly is for scrolling)
 
 uint8_t moveMouse;                    // whether any mouse movement should possibly occur
 uint8_t scrollMouse;                  // whether any mouse scrolling should possibly occur
@@ -71,8 +71,9 @@ float opt_mouse_scale_mode3[] = { 1, 1 };         // speed scale [x,y] for mode 
 float opt_mouse_scale_mode4[] = { 1, 1, 1 };      // speed scale [x,y,z] for mode 4 (3D)
 
 void setup_mouse() {
-    mx = my = mz = mx0 = my0 = mz0 = 0;
-    sy = sy0 = 0;
+    mousex = mousey = mousez = 0;
+    mousex0 = mousey0 = mousez0 = 0;
+    scrolly = scrolly0 = 0;
 }
 
 void update_mouse() {
@@ -80,11 +81,11 @@ void update_mouse() {
     switch (opt_mouse_mode) {
         case MOUSE_MODE_TILT_VELOCITY:
             if (aset) {
-                mx0 = mx;
-                my0 = my;
-                mx -= (float)(ax - axBase) / opt_mouse_scale_mode1[0];
-                my -= (float)(ay - ayBase) / opt_mouse_scale_mode1[1];
-                moveMouse = mx0 != mx || my0 != my;
+                mousex0 = mousex;
+                mousey0 = mousey;
+                mousex -= (float)(ax - axBase) / opt_mouse_scale_mode1[0];
+                mousey -= (float)(ay - ayBase) / opt_mouse_scale_mode1[1];
+                moveMouse = mousex0 != mousex || mousey0 != mousey;
             } else {
                 axBase = ax;
                 ayBase = ay;
@@ -95,8 +96,8 @@ void update_mouse() {
         /*case MOUSE_MODE_TILT_POSITION:
             if (aset) {
                 // progressive scaling
-                mx -= (pow(2, abs(axv)) * opt_mouse_scale_mode2[0]) * (float)(ax - axBase);
-                my -= (pow(2, abs(ayv)) * opt_mouse_scale_mode2[1]) * (float)(ay - ayBase);
+                mousex -= (pow(2, abs(axv)) * opt_mouse_scale_mode2[0]) * (float)(ax - axBase);
+                mousey -= (pow(2, abs(ayv)) * opt_mouse_scale_mode2[1]) * (float)(ay - ayBase);
             }
             axBase = ax;
             ayBase = ay;
@@ -104,43 +105,43 @@ void update_mouse() {
             aset = true;
             break;*/
         case MOUSE_MODE_TILT_POSITION:
-            mx0 = mx;
-            my0 = my;
-            mx += ((gx < 0) ? -pow(-gx/100.0, 1.3)*3 : pow(gx/100.0, 1.3)*3) + ((gz < 0) ? -pow(-gz/100.0, 1.3)*3 : pow(gz/100.0, 1.3)*3);
-            my += (gy < 0) ? -pow(-gy/100.0, 1.3)*3 : pow(gy/100.0, 1.3)*3;
-            moveMouse = mx0 != mx || my0 != my;
+            mousex0 = mousex;
+            mousey0 = mousey;
+            mousex += ((gx < 0) ? -pow(-gx/100.0, 1.3)*3 : pow(gx/100.0, 1.3)*3) + ((gz < 0) ? -pow(-gz/100.0, 1.3)*3 : pow(gz/100.0, 1.3)*3);
+            mousey += (gy < 0) ? -pow(-gy/100.0, 1.3)*3 : pow(gy/100.0, 1.3)*3;
+            moveMouse = mousex0 != mousex || mousey0 != mousey;
             break;
         case MOUSE_MODE_MOVEMENT_POSITION:
             if (aset) {
-                mx0 = mx;
-                my0 = my;
-                mx -= (float)(x - xBase) / opt_mouse_scale_mode3[0];
-                my -= (float)((z - 256) - zBase) / opt_mouse_scale_mode3[1];
-                moveMouse = mx0 != mx || my0 != my;
+                mousex0 = mousex;
+                mousey0 = mousey;
+                mousex -= (float)(ax - axBase) / opt_mouse_scale_mode3[0];
+                mousey -= (float)((az - 256) - azBase) / opt_mouse_scale_mode3[1];
+                moveMouse = mousex0 != mousex || mousey0 != mousey;
             } else {
-                xBase = x;
-                yBase = y;
-                zBase = z - 256;
+                axBase = ax;
+                ayBase = ay;
+                azBase = az - 256;
                 aset = true;
             }
             break;
         case MOUSE_MODE_3D:
-            mx0 = mx;
-            my0 = my;
-            mz0 = mz;
-            mx -= xv / opt_mouse_scale_mode4[0];
-            my -= zv / opt_mouse_scale_mode4[1];
-            mz -= yv / opt_mouse_scale_mode4[2];
-            moveMouse = mx0 != mx || my0 != my || mz0 != mz;
+            mousex0 = mousex;
+            mousey0 = mousey;
+            mousez0 = mousez;
+            mousex -= axv / opt_mouse_scale_mode4[0];
+            mousey -= azv / opt_mouse_scale_mode4[1];
+            mousez -= ayv / opt_mouse_scale_mode4[2];
+            moveMouse = mousex0 != mousex || mousey0 != mousey || mousez0 != mousez;
             break;
     }
     switch (opt_scroll_mode) {
         case SCROLL_MODE_TILT_VELOCITY: // gyro
             if (aset) {
-                mx0 = mx;
-                my0 = my;
-                mx -= (float)(ax - axBase) / opt_mouse_scale_mode1[0];
-                my -= (float)(ay - ayBase) / opt_mouse_scale_mode1[1];
+                mousex0 = mousex;
+                mousey0 = mousey;
+                mousex -= (float)(ax - axBase) / opt_mouse_scale_mode1[0];
+                mousey -= (float)(ay - ayBase) / opt_mouse_scale_mode1[1];
                 scrollMouse = true;
             } else {
                 axBase = ax;
@@ -150,76 +151,74 @@ void update_mouse() {
             }
             break;
         case SCROLL_MODE_TILT_POSITION: // gyro
-            sy0 = sy;
-            sy -= (gx < 0) ? -sqrt(-gx / 30) : sqrt(gx / 30);
+            scrolly0 = scrolly;
+            scrolly -= (gx < 0) ? -sqrt(-gx / 30) : sqrt(gx / 30);
             scrollMouse = true;
             break;
         case SCROLL_MODE_MOVEMENT_POSITION: // accel
             if (aset) {
-                mx0 = mx;
-                my0 = my;
-                mx -= (float)(x - xBase) / opt_mouse_scale_mode3[0];
-                my -= (float)((z - 256) - zBase) / opt_mouse_scale_mode3[1];
+                mousex0 = mousex;
+                mousey0 = mousey;
+                mousex -= (float)(ax - axBase) / opt_mouse_scale_mode3[0];
+                mousey -= (float)((az - 256) - azBase) / opt_mouse_scale_mode3[1];
                 scrollMouse = true;
             } else {
-                xBase = x;
-                yBase = y;
-                zBase = z - 256;
+                axBase = ax;
+                ayBase = ay;
+                azBase = az - 256;
                 aset = true;
             }
             break;
     }
 
-    //if (BOUND_MOUSEX > 0 && abs(mx) > BOUND_MOUSEX) mx = mx < 0 ? -BOUND_MOUSEX : BOUND_MOUSEX;
-    //if (BOUND_MOUSEY > 0 && abs(my) > BOUND_MOUSEY) my = my < 0 ? -BOUND_MOUSEY : BOUND_MOUSEY;
+    //if (BOUND_MOUSEX > 0 && abs(mousex) > BOUND_MOUSEX) mousex = mousex < 0 ? -BOUND_MOUSEX : BOUND_MOUSEX;
+    //if (BOUND_MOUSEY > 0 && abs(mousey) > BOUND_MOUSEY) mousey = mousey < 0 ? -BOUND_MOUSEY : BOUND_MOUSEY;
 
     // get relative movement amounts
-    mdx = mx - mx0;
-    mdy = my - my0;
-    mdz = mz - mz0;
+    mousedx = mousex - mousex0;
+    mousedy = mousey - mousey0;
+    mousedz = mousez - mousez0;
 
-    if (opt_mouse_invert_x == 1) mdx = -mdx;
-    if (opt_mouse_invert_y == 1) mdy = -mdy;
-    if (opt_mouse_invert_z == 1) mdz = -mdz;
-    if (moveMouse && opt_mouse_mode > 0 && (mdx != 0 || mdy != 0 || mdz != 0)) {
+    if (opt_mouse_invert_x == 1) mousedx = -mousedx;
+    if (opt_mouse_invert_y == 1) mousedy = -mousedy;
+    if (opt_mouse_invert_z == 1) mousedz = -mousedz;
+    if (moveMouse && opt_mouse_mode > 0 && (mousedx != 0 || mousedy != 0 || mousedz != 0)) {
         #ifdef ENABLE_USB
-            if (mdz > 0) Mouse.move(mdx, mdy, mdz);
-            else Mouse.move(mdx, mdy);
+            if (mousedz > 0) Mouse.move(mousedx, mousedy, mousedz);
+            else Mouse.move(mousedx, mousedy);
         #endif /* ENABLE_USB */
         #ifdef ENABLE_BLUETOOTH
-            if (mdz > 0) bluetooth.move(mdx, mdy, mdz);
-            else bluetooth.move(mdx, mdy);
+            if (mousedz > 0) bluetooth.move(mousedx, mousedy, mousedz);
+            else bluetooth.move(mousedx, mousedy);
         #endif /* ENABLE_BLUETOOTH */
         #ifdef ENABLE_RX400
-            if (mdz > 0) RX400.move(mdx, mdy, mdz);
-            else RX400.move(mdx, mdy);
+            if (mousedz > 0) RX400.move(mousedx, mousedy, mousedz);
+            else RX400.move(mousedx, mousedy);
         #endif /* ENABLE_RX400 */
         DEBUG_PRN_MOUSE("mouse ");
-        DEBUG_PRN_MOUSE(mx); DEBUG_PRN_MOUSE(" ");
-        DEBUG_PRN_MOUSE(my); DEBUG_PRN_MOUSE(" ");
-        DEBUG_PRN_MOUSE(mz); DEBUG_PRN_MOUSE(" ");
-        DEBUG_PRN_MOUSE(mdx); DEBUG_PRN_MOUSE(" ");
-        DEBUG_PRN_MOUSE(mdy); DEBUG_PRN_MOUSE(" ");
-        DEBUG_PRNL_MOUSE(mdz);
+        DEBUG_PRN_MOUSE(mousex); DEBUG_PRN_MOUSE(" ");
+        DEBUG_PRN_MOUSE(mousey); DEBUG_PRN_MOUSE(" ");
+        DEBUG_PRN_MOUSE(mousez); DEBUG_PRN_MOUSE(" ");
+        DEBUG_PRN_MOUSE(mousedx); DEBUG_PRN_MOUSE(" ");
+        DEBUG_PRN_MOUSE(mousedy); DEBUG_PRN_MOUSE(" ");
+        DEBUG_PRNL_MOUSE(mousedz);
     }
-    if (scrollMouse && opt_scroll_mode > 0 && sdy != 0) {
+    if (scrollMouse && opt_scroll_mode > 0 && scrolldy != 0) {
         #ifdef ENABLE_USB
-            Mouse.scroll(sdy);
+            Mouse.scroll(scrolldy);
         #endif /* ENABLE_USB */
         #ifdef ENABLE_BLUETOOTH
-            bluetooth.scroll(sdy);
+            bluetooth.scroll(scrolldy);
         #endif /* ENABLE_BLUETOOTH */
         #ifdef ENABLE_RX400
-            RX400.scroll(sdy);
+            RX400.scroll(scrolldy);
         #endif /* ENABLE_RX400 */
         #ifdef SERIAL_DEBUG_MOUSE
             Serial.print("scroll ");
-            Serial.print(sy); Serial.print(" ");
-            Serial.println(sdy);
+            Serial.print(scrolly); Serial.print(" ");
+            Serial.println(scrolldy);
         #endif /* SERIAL_DEBUG_MOUSE */
     }
 }
 
 #endif // _SETUP_MOUSE_H_
-
-

@@ -14,16 +14,8 @@
 //   Cypress stuff based on code by dunk (http://sites.google.com/site/mrdunk/Home/rc-system-firmware)
 // License: GPLv3
 
-#ifndef LUFA_ARDUINO_WRAPPER
-    #include "WProgram.h"
-#endif
-
 #include "LogitechR400.h"
 #include "debug.h"
-
-#ifdef round
-    #undef round
-#endif
 
 LogitechR400::LogitechR400() {
     keyboard_keys[0] = 0;

@@ -13,13 +13,15 @@
 #ifndef ps2dev_h
 #define ps2dev_h
 
-#ifdef LUFA_ARDUINO_WRAPPER
+// minimal Arduino support wrapper if we're outside of the Arduino environment
+#ifndef ARDUINO
     #include "ArduinoWrapper.h"
-#endif
-
-#ifndef LUFA_ARDUINO_WRAPPER
-    #include "WProgram.h"
-    #include "wiring.h"
+#else
+    #if ARDUINO < 100
+        #include "WProgram.h"
+    #else
+        #include "Arduino.h"
+    #endif
 #endif
 
 class PS2dev {

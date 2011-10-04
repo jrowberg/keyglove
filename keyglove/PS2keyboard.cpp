@@ -25,17 +25,8 @@ THE SOFTWARE.
 ===============================================
 */
 
-#ifndef LUFA_ARDUINO_WRAPPER
-    #include "WProgram.h"
-#endif
-
-#include "ps2dev.h"
-#include "ps2keyboard.h"
+#include "PS2keyboard.h"
 #include "debug.h"
-
-#ifdef round
-    #undef round
-#endif
 
 PS2keyboard::PS2keyboard(PS2dev *k) {
     keyboard = k;

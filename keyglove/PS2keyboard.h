@@ -28,19 +28,18 @@ THE SOFTWARE.
 #ifndef ps2keyboard_h
 #define ps2keyboard_h
 
-#ifdef LUFA_ARDUINO_WRAPPER
+// minimal Arduino support wrapper if we're outside of the Arduino environment
+#ifndef ARDUINO
     #include "ArduinoWrapper.h"
-#endif
-
-#ifndef LUFA_ARDUINO_WRAPPER
-    #include "WProgram.h"
+#else
+    #if ARDUINO < 100
+        #include "WProgram.h"
+    #else
+        #include "Arduino.h"
+    #endif
 #endif
 
 #include "ps2dev.h"
-
-#ifdef round
-    #undef round
-#endif
 
 // NUMERIC SCANCODE ARRAY INDEXES
 #define PKEY_A 0

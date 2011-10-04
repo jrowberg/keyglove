@@ -1,8 +1,9 @@
 // I2Cdev library collection - Main I2C device class
 // Abstracts bit and byte I2C R/W functions into a convenient class
-// 8/31/2011 by Jeff Rowberg <jeff@rowberg.net>
+// 10/2/2011 by Jeff Rowberg <jeff@rowberg.net>
 //
 // Changelog:
+//     2011-10-02 - added Gene Knight's NBWire TwoWire class implementation with small modifications
 //     2011-08-31 - added support for Arduino 1.0 Wire library (methods are different from 0.x)
 //     2011-08-03 - added optional timeout parameter to read* methods to easily change from default
 //     2011-08-02 - added support for 16-bit registers
@@ -607,7 +608,7 @@ uint16_t I2Cdev::readTimeout = I2CDEV_DEFAULT_READ_TIMEOUT;
         fNextInterruptFunction = 0;
     }
     
-    uint8_t twii_WaitForDone() {
+    uint8_t twii_WaitForDone(uint16_t timeout) {
         while (!twi_Done) continue;
         return twi_Return_Value;
     }
@@ -690,11 +691,11 @@ uint16_t I2Cdev::readTimeout = I2CDEV_DEFAULT_READ_TIMEOUT;
         fNextInterruptFunction = twi_write00;
         return twi_write00();
     }
-    
+
     void twi_read01() {
         if (TWI_MRX == twi_state) return; // blocking test
         if (twi_masterBufferIndex < ptwv -> length) ptwv -> length = twi_masterBufferIndex;
-        twii_CopyFromBuf(ptwv -> data, ptwv->length) ;
+        twii_CopyFromBuf(ptwv -> data, ptwv -> length);
         twi_Finish(ptwv -> length);
         if (twi_cbreadFromDone) return twi_cbreadFromDone(twi_Return_Value);
         return;
@@ -756,7 +757,7 @@ uint16_t I2Cdev::readTimeout = I2CDEV_DEFAULT_READ_TIMEOUT;
     }
     
     SIGNAL(TWI_vect) {
-        switch(TW_STATUS ){
+        switch (TW_STATUS) {
             // All Master
             case TW_START:     // sent start condition
             case TW_REP_START: // sent repeated start condition
@@ -953,12 +954,12 @@ uint16_t I2Cdev::readTimeout = I2CDEV_DEFAULT_READ_TIMEOUT;
         txBufferLength = 0;
     }
     
-    uint8_t TwoWire::endTransmission(void) {
+    uint8_t TwoWire::endTransmission(uint16_t timeout) {
         // transmit buffer (blocking)
         //int8_t ret =
         twi_cbendTransmissionDone = NULL;
         twi_writeTo(txAddress, txBuffer, txBufferLength, 1);
-        int8_t ret = twii_WaitForDone();
+        int8_t ret = twii_WaitForDone(timeout);
 
         // reset tx buffer iterator vars
         txBufferIndex = 0;
@@ -1010,17 +1011,17 @@ uint16_t I2Cdev::readTimeout = I2CDEV_DEFAULT_READ_TIMEOUT;
         return value;
     }
     
-    uint8_t TwoWire::requestFrom(uint8_t address, int quantity) {
+    uint8_t TwoWire::requestFrom(uint8_t address, int quantity, uint16_t timeout) {
         // clamp to buffer length
-        if (quantity > NBWIRE_BUFFER_LENGTH){
+        if (quantity > NBWIRE_BUFFER_LENGTH) {
             quantity = NBWIRE_BUFFER_LENGTH;
         }
 
         // perform blocking read into buffer
         twi_cbreadFromDone = NULL;
         twi_readFrom(address, rxBuffer, quantity);
-        uint8_t read = twii_WaitForDone();
-        
+        uint8_t read = twii_WaitForDone(timeout);
+
         // set rx buffer iterator vars
         rxBufferIndex = 0;
         rxBufferLength = read;
