@@ -33,6 +33,9 @@ THE SOFTWARE.
 #include "touchset_helpers.h"
 #include "touchset.h"
 
+uint32_t touchBench0, touchBench;
+uint8_t touchTick;
+
 uint32_t touchTime; // detection timestamp
 uint8_t adding = false;
 uint8_t removing = false;
@@ -47,7 +50,7 @@ void setup_touch() {
     sensors1 = sensors2 = 0;
 
     // make sure we enable internal pullup resistors
-    for (i = 0; i < KG_TOTAL_SENSORS; i++) {
+    for (uint8_t i = 0; i < KG_TOTAL_SENSORS; i++) {
         pinMode(pins[i], INPUT);
         digitalWrite(pins[i], HIGH);
     }
@@ -59,11 +62,14 @@ void setup_touch() {
 }
 
 void update_touch() {
+    //touchBench0 = micros();
+
     detect1 = 0;
     detect2 = 0;
     removing = false;
     
     uint8_t p1, p2;
+    uint8_t i;
 
     // loop through every possible 1-to-1 sensor combination and record levels
     for (i = 0; i < KG_BASE_COMBINATIONS; i++) {
@@ -113,14 +119,25 @@ void update_touch() {
             check_sensors_release(sensors1, sensors2, 1);
         }
         
-        // set official sensor readings to current readings 
+        // set official sensor readings to current readings
         sensors1 = verify1;
         sensors2 = verify2;
     }
     
     verify1 = detect1;
     verify2 = detect2;
-}  
+    
+    /*touchBench += (micros() - touchBench0);
+    touchTick++;
+    if (touchTick % 100 == 0) {
+        // starting point: 1596 us per cycle
+        touchTick = 0;
+        Serial.println(millis() - touchBench);
+        Serial.println(touchBench / 100);
+        Serial.println("100 touch");
+        touchBench = 0;
+    }*/
+}
 
 #endif // _SETUP_TOUCH_H_
 

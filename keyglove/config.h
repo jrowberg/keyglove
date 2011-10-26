@@ -48,10 +48,10 @@ THE SOFTWARE.
  * DEBUG SETTINGS
 =============================================== */
 
-#define DEBUG_BENCHMARK
-#define DEBUG_ACCELEROMETER
-#define DEBUG_GYROSCOPE
-#define DEBUG_MAGNETOMETER
+//#define DEBUG_BENCHMARK
+//#define DEBUG_ACCELEROMETER
+//#define DEBUG_GYROSCOPE
+//#define DEBUG_MAGNETOMETER
 #define DEBUG_MOTIONFUSION
 #define DEBUG_GESTURE
 #define DEBUG_TOUCH
@@ -61,7 +61,7 @@ THE SOFTWARE.
 #define DEBUG_R400
 #define DEBUG_IWRAP
 #define DEBUG_KEYBOARD
-#define DEBUG_MOUSE
+//#define DEBUG_MOUSE
 #define DEBUG_JOYSTICK
 
 #endif // _CONFIG_H_

@@ -1,8 +1,9 @@
 // I2Cdev library collection - Main I2C device class header file
 // Abstracts bit and byte I2C R/W functions into a convenient class
-// 10/2/2011 by Jeff Rowberg <jeff@rowberg.net>
+// 10/3/2011 by Jeff Rowberg <jeff@rowberg.net>
 //
 // Changelog:
+//     2011-10-03 - added automatic Arduino version detection for ease of use
 //     2011-10-02 - added Gene Knight's NBWire TwoWire class implementation with small modifications
 //     2011-08-31 - added support for Arduino 1.0 Wire library (methods are different from 0.x)
 //     2011-08-03 - added optional timeout parameter to read* methods to easily change from default
@@ -48,27 +49,25 @@ THE SOFTWARE.
 // -----------------------------------------------------------------------------
 // I2C interface implementation options
 // -----------------------------------------------------------------------------
-#define I2CDEV_ARDUINO0_WIRE        1 // Wire object from Arduino 0.x
-#define I2CDEV_ARDUINO1_WIRE        2 // Wire object from Arduino 1.x
-#define I2CDEV_BUILTIN_NBWIRE       3 // Tweaked Wire object from Gene Knight's NBWire project
+#define I2CDEV_ARDUINO_WIRE         1 // Wire object from Arduino
+#define I2CDEV_BUILTIN_NBWIRE       2 // Tweaked Wire object from Gene Knight's NBWire project
 
 // -----------------------------------------------------------------------------
 // Arduino-style "Serial.print" debug constant (uncomment to enable)
 // -----------------------------------------------------------------------------
 //#define I2CDEV_SERIAL_DEBUG
 
-#ifdef LUFA_ARDUINO_WRAPPER
-    #include "ArduinoWrapper.h"
-#else
-    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO0_WIRE
-        #include <Wire.h>
+#ifdef ARDUINO
+    #if ARDUINO < 100
         #include "WProgram.h"
-    #elif I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO1_WIRE
-        #include <Wire.h>
-        #include "Arduino.h"
     #else
         #include "Arduino.h"
     #endif
+    #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+        #include <Wire.h>
+    #endif
+#else
+    #include "ArduinoWrapper.h"
 #endif
 
 // 1000ms default read timeout (modify with "I2Cdev::readTimeout = [ms];")

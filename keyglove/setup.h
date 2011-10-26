@@ -49,6 +49,28 @@ THE SOFTWARE.
 
 #endif
 
+#define KG_PACKET_TYPE_REPORT_ACCEL         0x17 // AVP, default
+#define KG_PACKET_TYPE_REPORT_ACCEL_R       0x18
+#define KG_PACKET_TYPE_REPORT_ACCEL_RA      0x1C
+#define KG_PACKET_TYPE_REPORT_ACCEL_RAV     0x1E
+#define KG_PACKET_TYPE_REPORT_ACCEL_RAVP    0x1F
+#define KG_PACKET_TYPE_REPORT_ACCEL_A       0x14
+#define KG_PACKET_TYPE_REPORT_ACCEL_AV      0x16
+#define KG_PACKET_TYPE_REPORT_ACCEL_AVP     0x17
+#define KG_PACKET_TYPE_REPORT_ACCEL_V       0x12
+#define KG_PACKET_TYPE_REPORT_ACCEL_VP      0x13
+
+#define KG_PACKET_TYPE_REPORT_GYRO          0x27 // AVP, default
+#define KG_PACKET_TYPE_REPORT_GYRO_R        0x28
+#define KG_PACKET_TYPE_REPORT_GYRO_RA       0x2C
+#define KG_PACKET_TYPE_REPORT_GYRO_RAV      0x2E
+#define KG_PACKET_TYPE_REPORT_GYRO_RAVP     0x2F
+#define KG_PACKET_TYPE_REPORT_GYRO_A        0x24
+#define KG_PACKET_TYPE_REPORT_GYRO_AV       0x26
+#define KG_PACKET_TYPE_REPORT_GYRO_AVP      0x27
+#define KG_PACKET_TYPE_REPORT_GYRO_V        0x22
+#define KG_PACKET_TYPE_REPORT_GYRO_VP       0x23
+
 #ifdef DEBUG_BENCHMARK
     #define DEBUG_PRN_BENCHMARK(x)          Serial.print(x)
     #define DEBUG_PRNF_BENCHMARK(x, y)      Serial.print(x, y)
@@ -313,7 +335,6 @@ THE SOFTWARE.
 
 #if (KG_HOSTIF & KG_HOSTIF_SERIAL)
     #define ENABLE_SERIAL
-    #include "setup_hostif_serial.h"
 #endif
 
 #if (KG_HOSTIF & KG_HOSTIF_PS2)
@@ -403,6 +424,10 @@ THE SOFTWARE.
     #include "setup_motion_mpu6050.h"
 #endif
 
+#if defined(ENABLE_ACCELEROMETER) && defined(ENABLE_GYROSCOPE)
+    #include "setup_motion.h"
+#endif
+
 /* ===============================================
  * FEEDBACK SETUP
 =============================================== */
@@ -421,6 +446,14 @@ THE SOFTWARE.
 
 #if (KG_FEEDBACK & KG_FEEDBACK_RGB)
     #include "setup_feedback_rgb.h"
+#endif
+
+/* ===============================================
+ * HOST INTERFACE SETUP PART 2, SERIAL (INCLUDE ORDER MATTERS)
+=============================================== */
+
+#if (KG_HOSTIF & KG_HOSTIF_SERIAL)
+    #include "setup_hostif_serial.h"
 #endif
 
 
@@ -500,6 +533,9 @@ void keyglove_setup() {
     #endif
     #ifdef ENABLE_FUSION
         setup_motion_fusion();
+    #endif
+    #if defined(ENABLE_ACCELEROMETER) && defined(ENABLE_GYROSCOPE)
+        setup_motion();
     #endif
 
     // multi-option feedback

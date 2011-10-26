@@ -38,13 +38,17 @@ THE SOFTWARE.
 
 ITG3200 gyroscope = ITG3200();
 
+bool activeGyroscope;
+volatile bool readyGyroscopeData;
+uint8_t gyroPacket[15] = { 0xB8, 0x07, KG_PACKET_TYPE_REPORT_GYRO, 0,0,0, 0,0,0, 0,0,0 };
+
 //int16_t opt_gyro_offset[] = { 0, 0, 0 };        // amount to offset raw gyroscope readings [x,y,z]
 //float opt_gyro_calibrate[] = { 1, 1, 1 };       // amount to scale raw gyroscope readings [x,y,z] (post-offset)
 
-int16_t opt_gyro_offset[] = { -145, 45, 15 };
+int16_t opt_gyro_offset[] = { 0, 0, 0 }; //-590, 210, 50 };
 float opt_gyro_calibrate[] = { 1, 1, 1 };
 
-float opt_gyro_kalman_constant = 0.4;
+float opt_gyro_kalman_constant = 0.25;
 uint8_t opt_gyro_autozero_samples = 50;
 uint8_t opt_gyro_autozero_threshold = 25;
 uint8_t opt_gyro_smooth_average = 0;
@@ -52,172 +56,214 @@ uint8_t opt_gyro_rot90 = 4;
 float opt_gyro_lsb_scale = 14.375; // ITG-3200 sensitivity is 14.375 LSBs per degree/sec
 
 // gyroscope measurements
-uint32_t gyroMicros;         // microsecond timestamp of last gyroscope read
-uint32_t gyroDiff;           // time gap between readings
+uint32_t gyroGroup;
+uint32_t gyroGroupTime, gyroGroupTime0;
 uint8_t gyroTick;                     // history position counter
-int16_t gxRaw, gyRaw, gzRaw;          // raw accel values (no calibration, no filtering)
-int16_t gx, gy, gz;                   // immediate gyro acceleration values
-int16_t gx0, gy0, gz0;                // last-iteration gyro acceleration values
-int16_t gxv, gyv, gzv;                // immediate gyro velocity values
+int16_t gxvRaw, gyvRaw, gzvRaw;       // raw gyro values (read from device)
+int16_t gxv, gyv, gzv;                // immediate gyro acceleration values
 int16_t gxv0, gyv0, gzv0;             // last-iteration gyro velocity values
 int16_t gxp, gyp, gzp;                // immediate gyro position values
-int32_t cgx, cgy, cgz;                // calibration offsets
-int16_t gxBase, gyBase, gzBase;       // initial gyro values
-int16_t gxAuto[50], gyAuto[50], gzAuto[50];  // history for auto-zero (offset calibration)
-int16_t gxHist[20], gyHist[20], gzHist[20];  // history for averaging (smoothing)
-int16_t gxMin, gyMin, gzMin;          // minimum values (for calibration)
-int16_t gxMax, gyMax, gzMax;          // maximum values (for calibration)
-uint8_t gset = false;             // bool to tell whether initial (*Base) values have been set yet
+int16_t gxvMin, gyvMin, gzvMin;       // minimum values (for calibration)
+int16_t gxvMax, gyvMax, gzvMax;       // maximum values (for calibration)
+
+bool gyroEnableAutoZero;
+int16_t gxvAvg, gyvAvg, gzvAvg;       // rolling average for auto-zero adjustment
+int16_t gxvRef, gyvRef, gzvRef;       // reference points for auto-zero detection
+uint8_t gyroZeroTick;
+
 uint8_t calGyro = 0;
 uint8_t gyroCalibrated = false;
 bool gxAutoZero, gyAutoZero, gzAutoZero;
 
+void itg3200_interrupt() {
+    if (!(PINE & 0b00100000)) readyGyroscopeData = true;
+}
+
 void setup_motion_gyroscope() {
     gyroscope.initialize();
-    gx = gy = gz = 0;
+    gyroscope.setFullScaleRange(ITG3200_FULLSCALE_2000);
+    gyroscope.setDLPFBandwidth(ITG3200_DLPF_BW_42); // 42 Hz DLPF, 1kHz internal sampling
+    gyroscope.setRate(9); // 1kHz/(9+1) = 100Hz
+    DDRE &= 0b11011111; // E5 = input
+    PORTE |= 0b00100000; // E5 = pullup
+    gyroscope.setInterruptMode(1); // active low
+    gyroscope.setInterruptDrive(1); // open drain
+    gyroscope.setInterruptLatchClear(1); // clear on any read
+    gyroscope.setIntDataReadyEnabled(1); // trigger interrupt on data ready
+    activeGyroscope = false;
+    readyGyroscopeData = false;
+    gyroEnableAutoZero = true;
+}
+
+void enable_motion_gyroscope() {
     gxv = gyv = gzv = 0;
     gxp = gyp = gzp = 0;
-    gyroMicros = 0;
+    gyroGroup = 0;
+    gyroGroupTime = 0;
     gyroTick = 0;
+    gyroZeroTick = 0;
     gyroCalibrated = false;
-    gxMin = gyMin = gzMin = 0;
-    gxMax = gyMax = gzMax = 0;
+    gxvMin = gyvMin = gzvMin = 0;
+    gxvMax = gyvMax = gzvMax = 0;
+    activeGyroscope = true;
+    attachInterrupt(5, itg3200_interrupt, CHANGE);
+    readyGyroscopeData = true;
+}
+
+void disable_motion_gyroscope() {
+    detachInterrupt(5);
+    activeGyroscope = false;
 }
 
 void update_motion_gyroscope() {
+    readyGyroscopeData = false;
+    //gyroGroupTime0 = micros();
+
     // read gyroscope with correct rotation settings
     if      (opt_gyro_rot90 == 0) { // no rotation:            x = +x, y = +y, z = +z
-        gyroscope.getRotation(&gxRaw, &gyRaw, &gzRaw);
+        gyroscope.getRotation(&gxvRaw, &gyvRaw, &gzvRaw);
     }
     else if (opt_gyro_rot90 == 1) { // 90 around x axis:       x = +x, y = -z, z = +y
-        gyroscope.getRotation(&gxRaw, &gzRaw, &gyRaw);
-        gzRaw = -gzRaw;
+        gyroscope.getRotation(&gxvRaw, &gzvRaw, &gyvRaw);
+        gzvRaw = -gzvRaw;
     }
     else if (opt_gyro_rot90 == 2) { // 90 around y axis:       x = -z, y = +y, z = +x
-        gyroscope.getRotation(&gzRaw, &gyRaw, &gxRaw);
-        gzRaw = -gzRaw;
+        gyroscope.getRotation(&gzvRaw, &gyvRaw, &gxvRaw);
+        gzvRaw = -gzvRaw;
     }
     else if (opt_gyro_rot90 == 4) { // 90 around z axis;       x = -y, y = +x, z = +z
-        gyroscope.getRotation(&gyRaw, &gxRaw, &gzRaw);
-        gyRaw = -gyRaw;
+        gyroscope.getRotation(&gyvRaw, &gxvRaw, &gzvRaw);
+        gyvRaw = -gyvRaw;
     }
     else if (opt_gyro_rot90 == 3) { // 90 around x, y axes:    x = -z, y = -x, z = +y
-        gyroscope.getRotation(&gzRaw, &gxRaw, &gyRaw);
-        gxRaw = -gxRaw;
-        gzRaw = -gzRaw;
+        gyroscope.getRotation(&gzvRaw, &gxvRaw, &gyvRaw);
+        gxvRaw = -gxvRaw;
+        gzvRaw = -gzvRaw;
     }
     else if (opt_gyro_rot90 == 5) { // 90 around x, z axes:    x = -y, y = -z, z = +x
-        gyroscope.getRotation(&gyRaw, &gzRaw, &gxRaw);
-        gyRaw = -gyRaw;
-        gzRaw = -gzRaw;
+        gyroscope.getRotation(&gyvRaw, &gzvRaw, &gxvRaw);
+        gyvRaw = -gyvRaw;
+        gzvRaw = -gzvRaw;
     }
     else if (opt_gyro_rot90 == 6) { // 90 around y, z axes:    x = -z, y = +x, z = -y
-        gyroscope.getRotation(&gzRaw, &gxRaw, &gyRaw);
-        gyRaw = -gyRaw;
-        gzRaw = -gzRaw;
+        gyroscope.getRotation(&gzvRaw, &gxvRaw, &gyvRaw);
+        gyvRaw = -gyvRaw;
+        gzvRaw = -gzvRaw;
     }
     else if (opt_gyro_rot90 == 7) { // 90 around x, y, z axes: x = -z, y = +y, z = +x
-        gyroscope.getRotation(&gzRaw, &gyRaw, &gxRaw);
-        gzRaw = -gzRaw;
-    }
-    
-    // calculate reading time difference
-    gyroDiff = gyroMicros > 0 ? (micros() - gyroMicros) : 1; // eliminate error from large gaps of inactivity
-    gyroMicros = micros();
-
-    // auto offset detection (like a ThinkPad TrackPoint)
-    gxAuto[gyroTick % opt_gyro_autozero_samples] = gxRaw;
-    gyAuto[gyroTick % opt_gyro_autozero_samples] = gyRaw;
-    gzAuto[gyroTick % opt_gyro_autozero_samples] = gzRaw;
-    gxAutoZero = gyAutoZero = gzAutoZero = true;
-    for (i = 1; i < opt_gyro_autozero_samples && i < gyroTick; i++) {
-        if (gxAutoZero && abs(gxRaw - gxAuto[(gyroTick + i) % opt_gyro_autozero_samples]) > opt_gyro_autozero_threshold) gxAutoZero = false;
-        if (gyAutoZero && abs(gyRaw - gyAuto[(gyroTick + i) % opt_gyro_autozero_samples]) > opt_gyro_autozero_threshold) gyAutoZero = false;
-        if (gzAutoZero && abs(gzRaw - gzAuto[(gyroTick + i) % opt_gyro_autozero_samples]) > opt_gyro_autozero_threshold) gzAutoZero = false;
-        if (!gxAutoZero && !gyAutoZero && !gzAutoZero) break;
-    }
-    if (gxAutoZero) { opt_gyro_offset[0] = -gxRaw; gxv = 0; }
-    if (gyAutoZero) { opt_gyro_offset[1] = -gyRaw; gyv = 0; }
-    if (gzAutoZero) { opt_gyro_offset[2] = -gzRaw; gzv = 0; }
-
-    // offset
-    gxRaw += opt_gyro_offset[0];
-    gyRaw += opt_gyro_offset[1];
-    gzRaw += opt_gyro_offset[2];
-
-    // calibrate
-    if (opt_gyro_calibrate[0] != 1) gxRaw = (float)gxRaw * opt_gyro_calibrate[0] / opt_gyro_lsb_scale;
-    if (opt_gyro_calibrate[1] != 1) gyRaw = (float)gyRaw * opt_gyro_calibrate[1] / opt_gyro_lsb_scale;
-    if (opt_gyro_calibrate[2] != 1) gzRaw = (float)gzRaw * opt_gyro_calibrate[2] / opt_gyro_lsb_scale;
-
-    // store previous acceleration values
-    gx0 = gx;
-    gy0 = gy;
-    gz0 = gz;
-
-    // Kalman filtering
-    gx = gx0 + (opt_gyro_kalman_constant * (gxRaw - gx0));
-    gy = gy0 + (opt_gyro_kalman_constant * (gyRaw - gy0));
-    gz = gz0 + (opt_gyro_kalman_constant * (gzRaw - gz0));
-
-    // averaging
-    if (opt_gyro_smooth_average > 0) {
-        for (i = 1; i < opt_gyro_smooth_average; i++) {
-            gx += gxHist[(gyroTick + i) % opt_gyro_smooth_average];
-            gy += gyHist[(gyroTick + i) % opt_gyro_smooth_average];
-            gz += gzHist[(gyroTick + i) % opt_gyro_smooth_average];
-        }
-        gx /= opt_gyro_smooth_average;
-        gy /= opt_gyro_smooth_average;
-        gz /= opt_gyro_smooth_average;
-        gxHist[gyroTick % opt_gyro_smooth_average] = gx;
-        gyHist[gyroTick % opt_gyro_smooth_average] = gy;
-        gzHist[gyroTick % opt_gyro_smooth_average] = gz;
-    }
-
-    // calculate linear velocity (dead reckoning)
-    gxv += gx/100.0;
-    gyv += gy/100.0;
-    gzv += gz/100.0;
-
-    // calculate linear position (dead reckoning)
-    gxp += gxv;
-    gyp += gyv;
-    gzp += gzv;
-
-    if (opt_enable_calibration) {
-        gxMin = min(gxMin, gx);
-        gyMin = min(gyMin, gy);
-        gzMin = min(gzMin, gz);
-        gxMax = max(gxMax, gx);
-        gyMax = max(gyMax, gy);
-        gzMax = max(gzMax, gz);
-        DEBUG_PRN_GYROSCOPE("calibrategyro\t");
-        DEBUG_PRN_GYROSCOPE(gxMin); DEBUG_PRN_GYROSCOPE("\t");
-        DEBUG_PRN_GYROSCOPE(gyMin); DEBUG_PRN_GYROSCOPE("\t");
-        DEBUG_PRN_GYROSCOPE(gzMin); DEBUG_PRN_GYROSCOPE("\t");
-        DEBUG_PRN_GYROSCOPE(gxMax); DEBUG_PRN_GYROSCOPE("\t");
-        DEBUG_PRN_GYROSCOPE(gyMax); DEBUG_PRN_GYROSCOPE("\t");
-        DEBUG_PRNL_GYROSCOPE(gzMax);
+        gyroscope.getRotation(&gzvRaw, &gyvRaw, &gxvRaw);
+        gzvRaw = -gzvRaw;
     }
 
     DEBUG_PRN_GYROSCOPE("gyro\t");
-    DEBUG_PRN_GYROSCOPE(gxRaw); DEBUG_PRN_GYROSCOPE("\t");
-    DEBUG_PRN_GYROSCOPE(gyRaw); DEBUG_PRN_GYROSCOPE("\t");
-    DEBUG_PRN_GYROSCOPE(gzRaw); DEBUG_PRN_GYROSCOPE("\t");
-    DEBUG_PRN_GYROSCOPE(gx); DEBUG_PRN_GYROSCOPE("\t");
-    DEBUG_PRN_GYROSCOPE(gy); DEBUG_PRN_GYROSCOPE("\t");
-    DEBUG_PRN_GYROSCOPE(gz); DEBUG_PRN_GYROSCOPE("\t");
+    DEBUG_PRN_GYROSCOPE(gxvRaw); DEBUG_PRN_GYROSCOPE("\t");
+    DEBUG_PRN_GYROSCOPE(gyvRaw); DEBUG_PRN_GYROSCOPE("\t");
+    DEBUG_PRN_GYROSCOPE(gzvRaw); DEBUG_PRN_GYROSCOPE("\t");
+
+    // auto zero detection (like a ThinkPad TrackPoint)
+    if (gyroEnableAutoZero) {
+        if (gyroZeroTick == 0) {
+            gyroZeroTick++;
+            gxvRef = gxvAvg = gxvRaw;
+            gyvRef = gyvAvg = gyvRaw;
+            gzvRef = gzvAvg = gzvRaw;
+        } else {
+            if (abs(gxvRaw - gxvRef) > 300 || abs(gyvRaw - gyvRef) > 300 || abs(gzvRaw - gzvRef) > 300) {
+                // too much deviation, reset zero detection
+                gyroZeroTick = 0;
+            } else if (gyroZeroTick == 50) {
+                // no deviation for 50 iterations, so adjust auto zero offset
+                gyroZeroTick = 0;   // reset zero detection to continue fine-tuning if necessary
+                gxvRef = gxvAvg;    // reset the reference point to the new average
+                gyvRef = gyvAvg;
+                gzvRef = gzvAvg;
+                opt_gyro_offset[0] = -gxvAvg;   // update offsets
+                opt_gyro_offset[1] = -gyvAvg;
+                opt_gyro_offset[2] = -gzvAvg;
+                gyroEnableAutoZero = false;
+            } else if (gyroZeroTick < 50) {
+                // no deviation, but not enough data to zero
+                // update running average: avg += (current - avg) / iteration
+                gyroZeroTick++;
+                gxvAvg += (gxvRaw - gxvAvg) / gyroZeroTick;
+                gyvAvg += (gyvRaw - gyvAvg) / gyroZeroTick;
+                gzvAvg += (gzvRaw - gzvAvg) / gyroZeroTick;
+            }
+        }
+    }
+
+    // offset
+    gxvRaw += opt_gyro_offset[0];
+    gyvRaw += opt_gyro_offset[1];
+    gzvRaw += opt_gyro_offset[2];
+
+    // rescale if necessary
+    if (opt_gyro_calibrate[0] != 1) gxvRaw = (float)gxvRaw * opt_gyro_calibrate[0];
+    if (opt_gyro_calibrate[1] != 1) gyvRaw = (float)gyvRaw * opt_gyro_calibrate[1];
+    if (opt_gyro_calibrate[2] != 1) gzvRaw = (float)gzvRaw * opt_gyro_calibrate[2];
+
+    // store previous acceleration values
+    gxv0 = gxv;
+    gyv0 = gyv;
+    gzv0 = gzv;
+
+    // Kalman filtering
+    gxv = gxv0 + (opt_gyro_kalman_constant * (gxvRaw - gxv0));
+    gyv = gyv0 + (opt_gyro_kalman_constant * (gyvRaw - gyv0));
+    gzv = gzv0 + (opt_gyro_kalman_constant * (gzvRaw - gzv0));
+
+    gyroPacket[3] = (uint8_t)gxv >> 6; // cut range down by 64x (1 LSB ~= 4.45 degree/sec)
+    gyroPacket[4] = (uint8_t)gyv >> 6;
+    gyroPacket[5] = (uint8_t)gzv >> 6;
+
     DEBUG_PRN_GYROSCOPE(gxv); DEBUG_PRN_GYROSCOPE("\t");
     DEBUG_PRN_GYROSCOPE(gyv); DEBUG_PRN_GYROSCOPE("\t");
     DEBUG_PRN_GYROSCOPE(gzv); DEBUG_PRN_GYROSCOPE("\t");
+
+    /*
+    // approximate position (time interval is constant @ gyro rate)
+    gxp += ((gxv + gxv0) / 2) >> 2;
+    gyp += ((gyv + gxv0) / 2) >> 2;
+    gzp += ((gzv + gxv0) / 2) >> 2;
+
+    gyroPacket[6] = (uint8_t)gxp;
+    gyroPacket[7] = (uint8_t)gyp;
+    gyroPacket[8] = (uint8_t)gzp;
+
     DEBUG_PRN_GYROSCOPE(gxp); DEBUG_PRN_GYROSCOPE("\t");
     DEBUG_PRN_GYROSCOPE(gyp); DEBUG_PRN_GYROSCOPE("\t");
-    DEBUG_PRNL_GYROSCOPE(gzp);
+    DEBUG_PRN_GYROSCOPE(gzp); DEBUG_PRN_GYROSCOPE("\t");
 
+    //Serial.write(gyroPacket, 9);
+
+    if (opt_enable_calibration) {
+        gxvMin = min(gxvMin, gxv);
+        gyvMin = min(gyvMin, gyv);
+        gzvMin = min(gzvMin, gzv);
+        gxvMax = max(gxvMax, gxv);
+        gyvMax = max(gyvMax, gyv);
+        gzvMax = max(gzvMax, gzv);
+
+        DEBUG_PRN_GYROSCOPE("calibrategyro\t");
+        DEBUG_PRN_GYROSCOPE(gxvMin); DEBUG_PRN_GYROSCOPE("\t");
+        DEBUG_PRN_GYROSCOPE(gyvMin); DEBUG_PRN_GYROSCOPE("\t");
+        DEBUG_PRN_GYROSCOPE(gzvMin); DEBUG_PRN_GYROSCOPE("\t");
+        DEBUG_PRN_GYROSCOPE(gxvMax); DEBUG_PRN_GYROSCOPE("\t");
+        DEBUG_PRN_GYROSCOPE(gyvMax); DEBUG_PRN_GYROSCOPE("\t");
+        DEBUG_PRNL_GYROSCOPE(gzvMax);
+    }
+
+    /*gyroGroupTime += (micros() - gyroGroupTime0);
     gyroTick++;
+    if (gyroTick % 100 == 0) {
+        // 770 us per cycle @ 100 Hz = 7.7% duty cycle when gyro is active (w/o Serial.write)
+        gyroTick = 0;
+        Serial.println(millis() - gyroGroup);
+        Serial.println(gyroGroupTime / 100);
+        Serial.println("100 gyro");
+        gyroGroup = millis();
+        gyroGroupTime = 0;
+    }*/
 }
 
 #endif // _SETUP_MOTION_ITG3200_H_
-
-

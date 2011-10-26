@@ -30,11 +30,46 @@ THE SOFTWARE.
 #ifndef _SETUP_FEEDBACK_VIBRATE_H_
 #define _SETUP_FEEDBACK_VIBRATE_H_
 
+#define KG_VIBRATE_OFF 0
+#define KG_VIBRATE_LONGBUZZ 1
+#define KG_VIBRATE_LONGPULSE 2
+#define KG_VIBRATE_SHORTBUZZ 3
+#define KG_VIBRATE_SHORTPULSE 4
+#define KG_VIBRATE_TINYBUZZ 5
+#define KG_VIBRATE_SOLID 6
+
+uint8_t vibrateMode;
+uint16_t vibrateTick;
+uint16_t vibrateTickLimit;
+
+void set_vibrate_mode(uint8_t mode, uint8_t duration) {
+    vibrateMode = mode;
+    if (mode == KG_VIBRATE_OFF) digitalWrite(KG_PIN_VIBRATE, HIGH);
+    else if (mode == KG_VIBRATE_SOLID) digitalWrite(KG_PIN_VIBRATE, LOW);
+    vibrateTick = 0;
+    vibrateTickLimit = duration;
+}
+
+void set_vibrate_mode(uint8_t mode) {
+    set_vibrate_mode(mode, 0);
+}
+
 void setup_feedback_vibrate() {
     pinMode(KG_PIN_VIBRATE, OUTPUT);
-    digitalWrite(KG_PIN_VIBRATE, LOW);
-    delay(100);
-    digitalWrite(KG_PIN_VIBRATE, HIGH);
+    digitalWrite(KG_PIN_VIBRATE, HIGH); // transistor switch makes it active-low
+    // SELF-TEST
+    //set_vibrate_mode(KG_VIBRATE_TINYBUZZ, 20);
+}
+
+void update_feedback_vibrate() {
+    if (vibrateMode > 0) {
+        if      (vibrateMode == 1 && vibrateTick % 50 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick % 100 >= 50 ? HIGH : LOW);
+        else if (vibrateMode == 2 && vibrateTick % 25 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick % 100 >= 25 ? HIGH : LOW);
+        else if (vibrateMode == 3 && vibrateTick % 10 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick %  20 >= 10 ? HIGH : LOW);
+        else if (vibrateMode == 4 && vibrateTick %  5 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick %  20 >=  5 ? HIGH : LOW);
+        else if (vibrateMode == 5 && vibrateTick %  5 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick %  10 >=  5 ? HIGH : LOW);
+        if (++vibrateTick >= vibrateTickLimit && vibrateTickLimit > 0) set_vibrate_mode(KG_VIBRATE_OFF);
+    }
 }
 
 #endif // _SETUP_FEEDBACK_VIBRATE_H_

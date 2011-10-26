@@ -35,13 +35,51 @@ THE SOFTWARE.
 #define KG_PIEZO_LONGPULSE 2
 #define KG_PIEZO_SHORTBEEP 3
 #define KG_PIEZO_SHORTPULSE 4
-#define KG_PIEZO_SOLID 5
+#define KG_PIEZO_TINYBEEP 5
+#define KG_PIEZO_TINYPULSE 6
+#define KG_PIEZO_SOLID 7
+
+#define KG_PIEZO_DEFAULT_FREQ 1760
+
+uint8_t piezoMode;
+uint16_t piezoTick;
+uint16_t piezoTickLimit;
+uint16_t piezoFrequency;
+
+void set_piezo_mode(uint8_t mode, uint8_t duration, uint16_t frequency) {
+    piezoMode = mode;
+    piezoFrequency = frequency;
+    if (mode == KG_PIEZO_OFF) noTone(KG_PIN_PIEZO);
+    else if (mode == KG_PIEZO_SOLID) tone(KG_PIN_PIEZO, frequency);
+    piezoTick = 0;
+    piezoTickLimit = duration;
+}
+
+void set_piezo_mode(uint8_t mode, uint8_t duration) {
+    set_piezo_mode(mode, duration, KG_PIEZO_DEFAULT_FREQ);
+}
+
+void set_piezo_mode(uint8_t mode) {
+    set_piezo_mode(mode, 0, KG_PIEZO_DEFAULT_FREQ);
+}
 
 void setup_feedback_piezo() {
-    tone(KG_PIN_PIEZO, 1760, 20);
-    delay(100);
-    tone(KG_PIN_PIEZO, 1760, 20);
-    delay(100);
+    pinMode(KG_PIN_PIEZO, OUTPUT);
+    digitalWrite(KG_PIN_PIEZO, LOW);
+    // SELF-TEST
+    //set_piezo_mode(KG_PIEZO_TINYPULSE, 20);
+}
+
+void update_feedback_piezo() {
+    if (piezoMode > 0) {
+        if      (piezoMode == 1 && piezoTick % 50 == 0) { if (piezoTick % 100 >= 50) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
+        else if (piezoMode == 2 && piezoTick % 25 == 0) { if (piezoTick % 100 >= 25) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
+        else if (piezoMode == 3 && piezoTick % 10 == 0) { if (piezoTick %  20 >= 10) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
+        else if (piezoMode == 4 && piezoTick %  5 == 0) { if (piezoTick %  20 >=  5) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
+        else if (piezoMode == 5 && piezoTick %  5 == 0) { if (piezoTick %  10 >=  5) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
+        else if (piezoMode == 6 && piezoTick %  2 == 0) { if (piezoTick %  10 >=  2) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
+        if (++piezoTick >= piezoTickLimit && piezoTickLimit > 0) set_piezo_mode(KG_PIEZO_OFF);
+    }
 }
 
 #endif // _SETUP_FEEDBACK_PIEZO_H_

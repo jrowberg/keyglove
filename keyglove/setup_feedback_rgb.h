@@ -41,34 +41,52 @@ uint8_t rgbBlinkRed;
 uint8_t rgbBlinkGreen;
 uint8_t rgbBlinkBlue;
 
-void set_rgb(uint8_t r, uint8_t g, uint8_t b) {
+void set_rgb_logic(uint8_t r, uint8_t g, uint8_t b) {
     if (r != 255) digitalWrite(KG_PIN_RGB_RED, r);
     if (g != 255) digitalWrite(KG_PIN_RGB_GREEN, g);
     if (b != 255) digitalWrite(KG_PIN_RGB_BLUE, b);
+}
+
+void set_rgb_mode(uint8_t r, uint8_t g, uint8_t b) {
+    rgbBlinkRed = r;
+    rgbBlinkGreen = g;
+    rgbBlinkBlue = b;
+    if (r == 0) digitalWrite(KG_PIN_RGB_RED, 0);
+    else if (r == 5) digitalWrite(KG_PIN_RGB_RED, 1);
+    if (g == 0) digitalWrite(KG_PIN_RGB_GREEN, 0);
+    else if (g == 5) digitalWrite(KG_PIN_RGB_GREEN, 1);
+    if (b == 0) digitalWrite(KG_PIN_RGB_BLUE, 0);
+    else if (b == 5) digitalWrite(KG_PIN_RGB_BLUE, 1);
 }
 
 void setup_feedback_rgb() {
     pinMode(KG_PIN_RGB_RED, OUTPUT);
     pinMode(KG_PIN_RGB_GREEN, OUTPUT);
     pinMode(KG_PIN_RGB_BLUE, OUTPUT);
-    set_rgb(1, 1, 1); // turn everything on and wait 1/10 sec
-    delay(100);
-    set_rgb(0, 0, 0); // turn everything off again
+    digitalWrite(KG_PIN_RGB_RED, LOW);
+    digitalWrite(KG_PIN_RGB_GREEN, LOW);
+    digitalWrite(KG_PIN_RGB_BLUE, LOW);
+    /*
+    // SELF-TEST
+    set_rgb_logic(1, 1, 1); // turn everything on and wait 1/20 sec
+    delay(50);
+    set_rgb_logic(0, 0, 0); // turn everything off again
+    */
 }
 
 void update_feedback_rgb() {
-    if      (rgbBlinkRed   == 1 && counter % 500 == 0) set_rgb(counter % 1000 >= 500 ? 0 : 1, 255, 255);
-    else if (rgbBlinkRed   == 2 && counter % 100 == 0) set_rgb(counter % 1000 >= 100 ? 0 : 1, 255, 255);
-    else if (rgbBlinkRed   == 3 && counter %  50 == 0) set_rgb(counter %  100 >=  50 ? 0 : 1, 255, 255);
-    else if (rgbBlinkRed   == 4 && counter %  10 == 0) set_rgb(counter %  100 >=  10 ? 0 : 1, 255, 255);
-    if      (rgbBlinkGreen == 1 && counter % 500 == 0) set_rgb(255, counter % 1000 >= 500 ? 0 : 1, 255);
-    else if (rgbBlinkGreen == 3 && counter % 100 == 0) set_rgb(255, counter % 1000 >= 100 ? 0 : 1, 255);
-    else if (rgbBlinkGreen == 2 && counter %  50 == 0) set_rgb(255, counter %  100 >=  50 ? 0 : 1, 255);
-    else if (rgbBlinkGreen == 4 && counter %  10 == 0) set_rgb(255, counter %  100 >=  10 ? 0 : 1, 255);
-    if      (rgbBlinkBlue  == 1 && counter % 500 == 0) set_rgb(255, 255, counter % 1000 >= 500 ? 0 : 1);
-    else if (rgbBlinkBlue  == 2 && counter % 100 == 0) set_rgb(255, 255, counter % 1000 >= 100 ? 0 : 1);
-    else if (rgbBlinkBlue  == 3 && counter %  50 == 0) set_rgb(255, 255, counter %  100 >=  50 ? 0 : 1);
-    else if (rgbBlinkBlue  == 4 && counter %  10 == 0) set_rgb(255, 255, counter %  100 >=  10 ? 0 : 1);
+    if      (rgbBlinkRed   == 1 && keygloveTick % 50 == 0) set_rgb_logic(keygloveTick % 100 >= 50 ? 0 : 1, 255, 255);
+    else if (rgbBlinkRed   == 2 && keygloveTick % 25 == 0) set_rgb_logic(keygloveTick % 100 >= 25 ? 0 : 1, 255, 255);
+    else if (rgbBlinkRed   == 3 && keygloveTick % 10 == 0) set_rgb_logic(keygloveTick %  20 >= 10 ? 0 : 1, 255, 255);
+    else if (rgbBlinkRed   == 4 && keygloveTick %  5 == 0) set_rgb_logic(keygloveTick %  20 >=  5 ? 0 : 1, 255, 255);
+    if      (rgbBlinkGreen == 1 && keygloveTick % 50 == 0) set_rgb_logic(255, keygloveTick % 100 >= 50 ? 0 : 1, 255);
+    else if (rgbBlinkGreen == 2 && keygloveTick % 25 == 0) set_rgb_logic(255, keygloveTick % 100 >= 25 ? 0 : 1, 255);
+    else if (rgbBlinkGreen == 3 && keygloveTick % 10 == 0) set_rgb_logic(255, keygloveTick %  20 >= 10 ? 0 : 1, 255);
+    else if (rgbBlinkGreen == 4 && keygloveTick %  5 == 0) set_rgb_logic(255, keygloveTick %  20 >=  5 ? 0 : 1, 255);
+    if      (rgbBlinkBlue  == 1 && keygloveTick % 50 == 0) set_rgb_logic(255, 255, keygloveTick % 100 >= 50 ? 0 : 1);
+    else if (rgbBlinkBlue  == 2 && keygloveTick % 25 == 0) set_rgb_logic(255, 255, keygloveTick % 100 >= 25 ? 0 : 1);
+    else if (rgbBlinkBlue  == 3 && keygloveTick % 10 == 0) set_rgb_logic(255, 255, keygloveTick %  20 >= 10 ? 0 : 1);
+    else if (rgbBlinkBlue  == 4 && keygloveTick %  5 == 0) set_rgb_logic(255, 255, keygloveTick %  20 >=  5 ? 0 : 1);
 }
 
 #endif // _SETUP_FEEDBACK_RGB_H_

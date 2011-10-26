@@ -77,6 +77,7 @@ void togglemode(uint8_t mode) {
     DEBUG_PRNL_TOUCHSET(mode);
 
     // find the mode and disable it if it's in the stack
+    uint8_t i;
     for (i = 0; i < modeStackPos && modeStack[i] != mode; i++);
     if (i < modeStackPos) {
         // enabled, so turn it off
@@ -95,12 +96,12 @@ void mouseon(uint8_t mode) {
     activeMouse = true;
     if (mode == MOUSE_ACTION_MOVE) {
         opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
-        activeAccelerometer = true;
-        activeGyroscope = true;
+        if (!activeAccelerometer) enable_motion_accelerometer();
+        if (!activeGyroscope) enable_motion_gyroscope();
     } else if (mode == MOUSE_ACTION_SCROLL) {
         opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
-        activeAccelerometer = true;
-        activeGyroscope = true;
+        if (!activeAccelerometer) enable_motion_accelerometer();
+        if (!activeGyroscope) enable_motion_gyroscope();
     }
 }
 
@@ -110,20 +111,12 @@ void mouseoff(uint8_t mode) {
     activeMouse = false;
     if (mode == MOUSE_ACTION_MOVE) {
         opt_mouse_mode = 0;
-        activeAccelerometer = false;
-        activeGyroscope = false;
-        axv = ayv = azv = 0;
-        axp = ayp = azp = 0;
-        gxv = gyv = gzv = 0;
-        gxp = gyp = gzp = 0;
+        if (activeAccelerometer) disable_motion_accelerometer();
+        if (activeGyroscope) disable_motion_gyroscope();
     } else if (mode == MOUSE_ACTION_SCROLL) {
         opt_scroll_mode = 0;
-        activeAccelerometer = false;
-        activeGyroscope = false;
-        axv = ayv = azv = 0;
-        axp = ayp = azp = 0;
-        gxv = gyv = gzv = 0;
-        gxp = gyp = gzp = 0;
+        if (activeAccelerometer) disable_motion_accelerometer();
+        if (activeGyroscope) disable_motion_gyroscope();
     }
 }
 
@@ -394,16 +387,9 @@ void redled(uint8_t mode, uint16_t duration) {
     DEBUG_PRN_TOUCHSET(mode);
     DEBUG_PRN_TOUCHSET(" ");
     DEBUG_PRNL_TOUCHSET(duration);
-    #ifdef ENABLE_TRICOLOR
-        switch (mode) {
-            case KG_RGB_OFF: tricolorBlinkRed = 0; tricolor(0, -1, -1); break;
-            case KG_RGB_LONGBLINK: tricolorBlinkRed = 1; tricolor(1, -1, -1); break;
-            case KG_RGB_LONGPULSE: tricolorBlinkRed = 2; tricolor(1, -1, -1); break;
-            case KG_RGB_SHORTBLINK: tricolorBlinkRed = 3; tricolor(1, -1, -1); break;
-            case KG_RGB_SHORTPULSE: tricolorBlinkRed = 4; tricolor(1, -1, -1); break;
-            case KG_RGB_SOLID: tricolorBlinkRed = 0; tricolor(1, -1, -1); break;
-        }
-    #endif /* ENABLE_TRICOLOR */
+    #if (KG_FEEDBACK & KG_FEEDBACK_RGB) > 0
+        if (mode <= 5) set_rgb_mode(mode, -1, -1);
+    #endif /* KG_FEEDBACK_RGB */
 }
 
 void greenled(uint8_t mode, uint16_t duration) {
@@ -411,16 +397,9 @@ void greenled(uint8_t mode, uint16_t duration) {
     DEBUG_PRN_TOUCHSET(mode);
     DEBUG_PRN_TOUCHSET(" ");
     DEBUG_PRNL_TOUCHSET(duration);
-    #ifdef ENABLE_TRICOLOR
-        switch (mode) {
-            case KG_RGB_OFF: tricolorBlinkGreen = 0; tricolor(-1, 0, -1); break;
-            case KG_RGB_LONGBLINK: tricolorBlinkGreen = 1; tricolor(-1, 1, -1); break;
-            case KG_RGB_LONGPULSE: tricolorBlinkGreen = 2; tricolor(-1, 1, -1); break;
-            case KG_RGB_SHORTBLINK: tricolorBlinkGreen = 3; tricolor(-1, 1, -1); break;
-            case KG_RGB_SHORTPULSE: tricolorBlinkGreen = 4; tricolor(-1, 1, -1); break;
-            case KG_RGB_SOLID: tricolorBlinkGreen = 0; tricolor(-1, 1, -1); break;
-        }
-    #endif /* ENABLE_TRICOLOR */
+    #if (KG_FEEDBACK & KG_FEEDBACK_RGB) > 0
+        if (mode <= 5) set_rgb_mode(-1, mode, -1);
+    #endif /* KG_FEEDBACK_RGB */
 }
 
 void blueled(uint8_t mode, uint16_t duration) {
@@ -428,16 +407,9 @@ void blueled(uint8_t mode, uint16_t duration) {
     DEBUG_PRN_TOUCHSET(mode);
     DEBUG_PRN_TOUCHSET(" ");
     DEBUG_PRNL_TOUCHSET(duration);
-    #ifdef ENABLE_TRICOLOR
-        switch (mode) {
-            case KG_RGB_OFF: tricolorBlinkBlue = 0; tricolor(-1, -1, 0); break;
-            case KG_RGB_LONGBLINK: tricolorBlinkBlue = 1; tricolor(-1, -1, 1); break;
-            case KG_RGB_LONGPULSE: tricolorBlinkBlue = 2; tricolor(-1, -1, 1); break;
-            case KG_RGB_SHORTBLINK: tricolorBlinkBlue = 3; tricolor(-1, -1, 1); break;
-            case KG_RGB_SHORTPULSE: tricolorBlinkBlue = 4; tricolor(-1, -1, 1); break;
-            case KG_RGB_SOLID: tricolorBlinkBlue = 0; tricolor(-1, -1, 1); break;
-        }
-    #endif /* ENABLE_TRICOLOR */
+    #if (KG_FEEDBACK & KG_FEEDBACK_RGB) > 0
+        if (mode <= 5) set_rgb_mode(-1, -1, mode);
+    #endif /* KG_FEEDBACK_RGB */
 }
 
 void beep(uint16_t pitch, uint8_t mode, uint16_t duration) {
@@ -447,26 +419,26 @@ void beep(uint16_t pitch, uint8_t mode, uint16_t duration) {
     DEBUG_PRN_TOUCHSET(mode);
     DEBUG_PRN_TOUCHSET(" ");
     DEBUG_PRNL_TOUCHSET(duration);
-    #ifdef ENABLE_BEEP
+    #if (KG_FEEDBACK & KG_FEEDBACK_PIEZO) > 0
         if (mode == KG_PIEZO_OFF) {
-            noTone(SOUND_PIN);
+            noTone(KG_PIN_PIEZO);
             return;
-        } 
-        
+        }
+
         uint16_t duration_ms = 1000;
         if (mode == KG_PIEZO_SHORTPULSE) {
             duration_ms = 100;
         } else if (mode == KG_PIEZO_SHORTBEEP) {
             duration_ms = 25;
         }
-        
-        for (i = 0; i < duration; i++) {
+
+        for (uint16_t i = 0; i < duration; i++) {
             if (i > 0) {
                 delay(80);
             }
-            tone(SOUND_PIN, pitch, duration_ms);
+            tone(KG_PIN_PIEZO, pitch, duration_ms);
         }
-    #endif /* ENABLE_BEEP */
+    #endif /* KG_FEEDBACK_PIEZO */
 }
 
 void vibrate(uint8_t mode, uint16_t duration) {
@@ -474,6 +446,8 @@ void vibrate(uint8_t mode, uint16_t duration) {
     DEBUG_PRN_TOUCHSET(mode);
     DEBUG_PRN_TOUCHSET(" ");
     DEBUG_PRNL_TOUCHSET(duration);
+    #if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE) > 0
+    #endif /* KG_FEEDBACK_VIBRATE */
 }
 
 #endif /* _TOUCHSET_HELPERS_H_ */

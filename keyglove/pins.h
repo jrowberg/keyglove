@@ -145,7 +145,7 @@ THE SOFTWARE.
     #define MOUSE_INT2      1
 #endif /* USE_ARDUINO */
 
-#if LUFA_ARDUINO_WRAPPER || KG_BOARD == KG_BOARD_TEENSYPP2 //USE_TEENSY
+#if KG_BOARD == KG_BOARD_TEENSYPP2 //USE_TEENSY
     #define KSP_A 4 // D4
     #define KSP_B 5 // D5
     #define KSP_C 7 // D7
@@ -180,11 +180,20 @@ THE SOFTWARE.
     #define KSP_6 38 // F0
     #define KSP_7 39 // F1
     #define KSP_8 40 // F2
+    
+    #define KG_INTERRUPT_PIN_ACCEL 1    // E4 (internal/tiny, right)
+    #define KG_INTERRUPT_NUM_ACCEL 4    // Teensy++ interrupt #4
+
+    #define KG_INTERRUPT_PIN_GYRO 1     // E5 (internal/tiny, left)
+    #define KG_INTERRUPT_NUM_GYRO 5     // Teensy++ interrupt #5
+
+    #define KG_INTERRUPT_PIN_FUSION 1   // E4 (internal/tiny, right)
+    #define KG_INTERRUPT_NUM_FUSION 4   // Teensy++ interrupt #4
 
     #define KG_PIN_BLINK 6 // Teensy++ LED pin 6
 
-    #define KG_PIN_VIBRATE 41 // F3
-    #define KG_PIN_PIEZO 42 // F4
+    #define KG_PIN_PIEZO 41 // F3
+    #define KG_PIN_VIBRATE 42 // F4
 
     #define KG_PIN_RGB_RED 43   // F5
     #define KG_PIN_RGB_GREEN 44 // F6
