@@ -275,10 +275,10 @@
 				uint8_t EPTypeMask = 0;
 				switch (Type)
 				{
-					case USB_EPTYPE_Control:
+					case EP_TYPE_CONTROL:
 						EPTypeMask = USB_EP_TYPE_CONTROL_gc;
 						break;
-					case USB_EPTYPE_Isochronous:
+					case EP_TYPE_ISOCHRONOUS:
 						EPTypeMask = USB_EP_TYPE_ISOCHRONOUS_gc;
 						break;
 					default:
@@ -288,7 +288,7 @@
 	
 				Endpoint_SelectedEndpointHandle->CTRL   = 0;
 				Endpoint_SelectedEndpointHandle->STATUS = (USB_EP_BUSNACK0_bm | USB_EP_BUSNACK1_bm);
-				Endpoint_SelectedEndpointHandle->CTRL   = (EPTypeMask | Banks | Endpoint_BytesToEPSizeMask(Size));				
+				Endpoint_SelectedEndpointHandle->CTRL   = (EPTypeMask | Banks | Endpoint_BytesToEPSizeMask(Size));
 				return true;
 			}
 
