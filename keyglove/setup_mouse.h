@@ -81,9 +81,9 @@ void update_mouse() {
         case MOUSE_MODE_MOVEMENT_POSITION:
             break;
         case MOUSE_MODE_3D:
-            mousedx = axv * opt_mouse_scale_mode4[0];
-            mousedy = azv * opt_mouse_scale_mode4[1];
-            mousedz = ayv * opt_mouse_scale_mode4[2];
+            mousedx = axa * opt_mouse_scale_mode4[0];
+            mousedy = aya * opt_mouse_scale_mode4[1];
+            mousedz = aza * opt_mouse_scale_mode4[2];
             break;
     }
     switch (opt_scroll_mode) {

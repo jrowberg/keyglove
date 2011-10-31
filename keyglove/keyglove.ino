@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 #include "config.h"
 
-//#include <Wire.h>
+#include <Wire.h>
 
 // =============================================================================
 // !!! NO EDITING SHOULD BE NECESSARY BEYOND THIS POINT !!!
@@ -86,7 +86,7 @@ ISR(TIMER1_OVF_vect) {
 void setup() {
     // call main setup function (see setup.h for details)
     keyglove_setup();
-    
+
     // setup internal 100Hz "tick" interrupt
     // thanks to http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1212098919 (and 'bens')
     // also, lots of timer info here and here:
@@ -97,11 +97,10 @@ void setup() {
     TCNT1 = 0; // clear TIMER1 counter
     TIFR1 |= (1 << TOV1); // clear the TIMER1 overflow flag
     TIMSK1 |= (1 << TOIE1); // enable TIMER1 overflow interrupts*/
+    
+    enable_motion_accelerometer();
+    enable_motion_gyroscope();
 }
-
-float g[3];
-float tx = 0, ty = 0, tz = 0, tx2, ty2, tz2;
-uint32_t testCount = 0, tb1, tb2;
 
 void loop() {
     // read all defined and active motion sensors
@@ -138,64 +137,18 @@ void loop() {
             keygloveTock++;
         }
 
-            #ifdef ENABLE_ACCELEROMETER
-                if (activeAccelerometer && activeGyroscope) {
-                    //tb1 = micros();
-                    filterUpdate(gxv * (PI/(180*14.375*4)), gyv * (PI/(180*14.375*4)), gzv * (PI/(180*14.375*4)), axa, aya, aza);
-                    //filterUpdate(gxv, gyv, gzv, axa, aya, aza);
-                    //Serial.println(micros() - tb1);
-                    if (++testCount % 20 == 0) {
-                        /*Serial.print(q0); Serial.print("\t");
-                        Serial.print(q1); Serial.print("\t");
-                        Serial.print(q2); Serial.print("\t");
-                        Serial.print(q3); Serial.print("\t");
-
-                        tx = 2 * (q1*q3 - q0*q2);
-                        ty = 2 * (q0*q1 + q2*q3);
-                        tz = q0*q0 - q1*q1 - q2*q2 + q3*q3;
-
-                        tx2 = atan2(2 * q1 * q2 - 2 * q0 * q3, 2 * q0*q0 + 2 * q1 * q1 - 1) * 180/M_PI;
-                        ty2 = atan(tx / sqrt(ty*ty + tz*tz))  * 180/M_PI;
-                        tz2 = atan(ty / sqrt(tx*tx + tz*tz))  * 180/M_PI;*/
-
-                        g[0] = 2 * (q1 * q3 - q0 * q2);
-                        g[1] = 2 * (q0 * q1 + q2 * q3);
-                        g[2] = q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3;
-                        /*Serial.print(gxv * (PI/(180*14.375*4))); Serial.print("\t");
-                        Serial.print(gyv * (PI/(180*14.375*4))); Serial.print("\t");
-                        Serial.print(gzv * (PI/(180*14.375*4))); Serial.print("\t");
-                        Serial.print(axa); Serial.print("\t");
-                        Serial.print(aya); Serial.print("\t");
-                        Serial.print(aza); Serial.print("\t");
-                        Serial.print(axa - g[0]*250); Serial.print("\t");
-                        Serial.print(aya - g[1]*250); Serial.print("\t");
-                        Serial.println(aza - g[2]*250);*/
-                        Serial.print(g[0]*250); Serial.print("\t");
-                        Serial.print(g[1]*250); Serial.print("\t");
-                        Serial.println(g[2]*250);
-                        readyAccelerometerData = true;
-                    }
-
-                    //Serial.print(degrees(axTilt)); Serial.print("\t");
-                    //Serial.print(degrees(ayTilt)); Serial.print("\t");
-                    //Serial.println(degrees(azTilt));
-        
-                    /*tx += (float)gxv / 5750;
-                    ty += (float)gyv / 5750;
-                    tz += (float)gzv / 5750;
-        
-                    Serial.print(tx); Serial.print("\t");
-                    Serial.print(ty); Serial.print("\t");
-                    Serial.println(tz);*/
-                }
-            #endif
+        #if defined(ENABLE_ACCELEROMETER) && defined(ENABLE_GYROSCOPE)
+            if (activeAccelerometer && activeGyroscope) {
+                update_motion();
+            }
+        #endif
 
         // process motion into gestures
         //if (activeGestures) update_gestures();
 
         // process touch sensor status
         /////if (activeTouch) update_touch();
-    
+
         // keyboard is almost always done in real time, this is usually not necessary
         //if (activeKeyboard) update_keyboard();
     

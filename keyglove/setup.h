@@ -425,7 +425,7 @@ THE SOFTWARE.
 #endif
 
 #if defined(ENABLE_ACCELEROMETER) && defined(ENABLE_GYROSCOPE)
-    #include "setup_motion.h"
+    #include "setup_motion_rawimu.h"
 #endif
 
 /* ===============================================

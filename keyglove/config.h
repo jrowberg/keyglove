@@ -32,6 +32,7 @@ THE SOFTWARE.
  * HARDWARE OPTIONS
 =============================================== */
 
+//#define KG_BOARD            KG_BOARD_ARDUINO_MEGA2560
 #define KG_BOARD            KG_BOARD_TEENSYPP2
 //#define KG_BOARD            KG_BOARD_KEYGLOVE
 #define KG_EEPROM           KG_EEPROM_NONE

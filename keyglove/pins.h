@@ -83,7 +83,7 @@ THE SOFTWARE.
 
 
 
-#ifdef USE_ARDUINO
+#if KG_BOARD == KG_BOARD_ARDUINO_MEGA2560
     #define KSP_A 16
     #define KSP_B 17
     #define KSP_C 22
@@ -126,6 +126,27 @@ THE SOFTWARE.
         #define KSP_8 5
     #endif /* ENABLE_RX400 */
 
+
+    #define KG_INTERRUPT_PIN_ACCEL 1    // E4 (internal/tiny, right)
+    #define KG_INTERRUPT_NUM_ACCEL 4    // Teensy++ interrupt #4
+
+    #define KG_INTERRUPT_PIN_GYRO 1     // E5 (internal/tiny, left)
+    #define KG_INTERRUPT_NUM_GYRO 5     // Teensy++ interrupt #5
+
+    #define KG_INTERRUPT_PIN_FUSION 1   // E4 (internal/tiny, right)
+    #define KG_INTERRUPT_NUM_FUSION 4   // Teensy++ interrupt #4
+
+    #define KG_PIN_BLINK 13 // Arduino Mega LED is pin 6
+
+    #define KG_PIN_PIEZO 12
+    #define KG_PIN_VIBRATE 11
+
+    #define KG_PIN_RGB_RED 10
+    #define KG_PIN_RGB_GREEN 9
+    #define KG_PIN_RGB_BLUE 8
+
+
+
     #define BLINK_LED_PIN 13 // Arduino LED pin is 13
     #define VIBRATE_PIN 10
     #define SOUND_PIN 9
@@ -138,7 +159,7 @@ THE SOFTWARE.
     #define KB_PIN_DATA     18
     #define KB_INT1         2
     #define KB_INT2         3
-    
+
     #define MOUSE_PIN_CLOCK 3
     #define MOUSE_PIN_DATA  2
     #define MOUSE_INT1      0
@@ -180,7 +201,7 @@ THE SOFTWARE.
     #define KSP_6 38 // F0
     #define KSP_7 39 // F1
     #define KSP_8 40 // F2
-    
+
     #define KG_INTERRUPT_PIN_ACCEL 1    // E4 (internal/tiny, right)
     #define KG_INTERRUPT_NUM_ACCEL 4    // Teensy++ interrupt #4
 

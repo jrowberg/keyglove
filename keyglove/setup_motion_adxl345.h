@@ -40,7 +40,7 @@ ADXL345 accelerometer;
 
 bool activeAccelerometer = false;
 volatile bool readyAccelerometerData = false;
-uint8_t accelPacket[15] = { 0xB8, 0x0A, KG_PACKET_TYPE_REPORT_ACCEL, 0,0,0, 0,0,0, 0,0,0, 0,0,0 };
+uint8_t accelPacket[9] = { 0xB8, 0x0A, KG_PACKET_TYPE_REPORT_ACCEL, 0,0, 0,0, 0,0 };
 
 int16_t opt_accel_offset[] = { 0, 0, 0 };       // amount to offset raw accelerometer readings [x,y,z]
 float opt_accel_calibrate[] = { 1, 1, 1 };      // amount to scale raw accelerometer readings [x,y,z] (post-offset)
@@ -62,8 +62,8 @@ uint8_t opt_accel_rot90 = 0;
 // 256 LSB = 9.8 m/s^2
 // 256 LSB = 9800 mm/s^2
 //   1 LSB = 38.3 mm/s^2 ~= 4 cm/s^2
-float opt_accel_lsb_scale = 4;
-float opt_accel_rate = 100;
+//float opt_accel_lsb_scale = 4;
+//float opt_accel_rate = 100;
 
 // accelerometer measurements
 uint32_t accelGroup;
@@ -73,21 +73,19 @@ float accelMagnitude;               // magnitude of velocity
 int16_t axaRaw, ayaRaw, azaRaw;     // raw accel values (no calibration, no filtering)
 int16_t axa, aya, aza;              // immediate axial accel values
 int16_t axa0, aya0, aza0;           // previous iteration accel values
-int32_t axa2, aya2, aza2;           // x/y/z squared calculations
-float axTilt, ayTilt, azTilt;       // x/y/z tilt angles for orientation estimate
-float axComp, ayComp, azComp;       // x/y/z vector components for direction w.r.t. gravity
-int16_t axv, ayv, azv;              // axial velocities
-int16_t axv0, ayv0, azv0;           // previous iteration axial velocities
-int16_t axp, ayp, azp;              // axial positions
-int16_t axaMin, ayaMin, azaMin;     // minimum values (for calibration)
-int16_t axaMax, ayaMax, azaMax;     // maximum values (for calibration)
+//int32_t axa2, aya2, aza2;           // x/y/z squared calculations
+//float axTilt, ayTilt, azTilt;       // x/y/z tilt angles for orientation estimate
+//float axComp, ayComp, azComp;       // x/y/z vector components for direction w.r.t. gravity
+//int16_t axv, ayv, azv;              // axial velocities
+//int16_t axv0, ayv0, azv0;           // previous iteration axial velocities
+//int16_t axp, ayp, azp;              // axial positions
+//int16_t axaMin, ayaMin, azaMin;     // minimum values (for calibration)
+//int16_t axaMax, ayaMax, azaMax;     // maximum values (for calibration)
 
 bool accelEnableAutoZero;
 int16_t axaAvg, ayaAvg, azaAvg;     // rolling average for auto-zero adjustment
 int16_t axaRef, ayaRef, azaRef;     // reference points for auto-zero detection
 uint8_t accelZeroTick;
-
-bool axAutoZero, ayAutoZero, azAutoZero;
 
 void adxl345_interrupt1() {
     if (!(PINE & 0b00010000)) readyAccelerometerData = true;
@@ -108,13 +106,13 @@ void setup_motion_accelerometer() {
 
 void enable_motion_accelerometer() {
     axa = aya = aza = 0;
-    axv = ayv = azv = 0;
-    axp = ayp = azp = 0;
+    //axv = ayv = azv = 0;
+    //axp = ayp = azp = 0;
     accelGroup = 0;
     accelGroupTime = 0;
     accelTick = 0;
-    axaMin = ayaMin = azaMin = 0;
-    axaMax = ayaMax = azaMax = 0;
+    //axaMin = ayaMin = azaMin = 0;
+    //axaMax = ayaMax = azaMax = 0;
     activeAccelerometer = true;
     attachInterrupt(4, adxl345_interrupt1, CHANGE);
     readyAccelerometerData = true;
@@ -182,7 +180,7 @@ void update_motion_accelerometer() {
             if (abs(axaRaw - axaRef) > 35 || abs(ayaRaw - ayaRef) > 35 || abs(azaRaw - azaRef) > 35) {
                 // too much deviation, reset zero detection
                 accelZeroTick = 0;
-            } else if (accelZeroTick == 50) {
+            } else if (accelZeroTick == 30) {
                 // no deviation for 50 iterations, so adjust auto zero offset
                 accelZeroTick = 0;  // reset zero detection to continue fine-tuning if necessary
                 axaRef = axaAvg;    // reset the reference point to the new average
@@ -192,7 +190,7 @@ void update_motion_accelerometer() {
                 opt_accel_offset[1] = -ayaAvg;
                 opt_accel_offset[2] = (250 - azaAvg);
                 accelEnableAutoZero = false;
-            } else if (accelZeroTick < 50) {
+            } else if (accelZeroTick < 30) {
                 // no deviation, but not enough data to zero
                 // update running average: avg += (current - avg) / iteration
                 accelZeroTick++;
@@ -218,14 +216,17 @@ void update_motion_accelerometer() {
     aya0 = aya;
     aza0 = aza;
 
-    // Kalman filtering
+    // simplified Kalman filtering
     axa = axa0 + (opt_accel_kalman_constant * (axaRaw - axa0));
     aya = aya0 + (opt_accel_kalman_constant * (ayaRaw - aya0));
     aza = aza0 + (opt_accel_kalman_constant * (azaRaw - aza0));
-    
-    accelPacket[3] = (uint8_t)axa >> 3; // cut range down by 8x for velocity (1 LSB = 32 mg, so 1g ~= 31 LSB)
-    accelPacket[4] = (uint8_t)aya >> 3;
-    accelPacket[5] = (uint8_t)aza >> 3;
+
+    accelPacket[3] = (uint8_t)(axa >> 8);
+    accelPacket[4] = (uint8_t)axa;
+    accelPacket[5] = (uint8_t)(aya >> 8);
+    accelPacket[6] = (uint8_t)aya;
+    accelPacket[7] = (uint8_t)(aza >> 8);
+    accelPacket[8] = (uint8_t)aza;
 
     DEBUG_PRN_ACCELEROMETER(axa); DEBUG_PRN_ACCELEROMETER("\t");
     DEBUG_PRN_ACCELEROMETER(aya); DEBUG_PRN_ACCELEROMETER("\t");
@@ -274,7 +275,7 @@ void update_motion_accelerometer() {
 
     //Serial.write(accelPacket, 6);
 
-    if (opt_enable_calibration) {
+    /*if (opt_enable_calibration) {
         axaMin = min(axaMin, axa);
         ayaMin = min(ayaMin, aya);
         azaMin = min(azaMin, aza);
@@ -289,7 +290,7 @@ void update_motion_accelerometer() {
         DEBUG_PRN_ACCELEROMETER(axaMax); DEBUG_PRN_ACCELEROMETER("\t");
         DEBUG_PRN_ACCELEROMETER(ayaMax); DEBUG_PRN_ACCELEROMETER("\t");
         DEBUG_PRNL_ACCELEROMETER(azaMax);
-    }
+    }*/
 
     /*accelGroupTime += (micros() - accelGroupTime0);
     accelTick++;

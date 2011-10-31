@@ -44,7 +44,7 @@ THE SOFTWARE.
 // -----------------------------------------------------------------------------
 // I2C interface implementation setting
 // -----------------------------------------------------------------------------
-#define I2CDEV_IMPLEMENTATION       I2CDEV_BUILTIN_NBWIRE
+#define I2CDEV_IMPLEMENTATION       I2CDEV_ARDUINO_WIRE
 
 // -----------------------------------------------------------------------------
 // I2C interface implementation options

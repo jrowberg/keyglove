@@ -38,6 +38,7 @@ char *serialBuffer;
 uint16_t serialBufferSize;
 uint16_t serialBufferPos;
 uint8_t serialByte;
+uint16_t serialError;
 
 bool inPacket = false;
 bool inData = false;
@@ -59,6 +60,10 @@ void update_hostif_serial() {
         if (!inPacket && (serialByte == '\r' || serialByte == '\n')) {
             // end of a simple text command, so terminate the string
             serialBuffer[serialBufferPos] = 0;
+            serialError = 0;
+
+            // echo command back to host
+            Serial.println(serialBuffer);
 
             char *test = (char *)serialBuffer;
             if (strncmp(test, "reset", 5) == 0) {
@@ -82,6 +87,8 @@ void update_hostif_serial() {
                         // SET ACCEL <OFF | DISABLED | 0>
                         // disable accelerometer
                         disable_motion_accelerometer();
+                    } else {
+                        serialError = 1;
                     }
                 } else if (strncmp(test, "gyro ", 5) == 0 && serialBufferPos > 9) {
                     // SET GYRO
@@ -94,7 +101,9 @@ void update_hostif_serial() {
                         // SET GYRO <OFF | DISABLED | 0>
                         // disable gyroscope
                         disable_motion_gyroscope();
-                    }
+                    } else {
+                        serialError = 1;
+                    }  
                 } else if (strncmp(test, "rgb ", 4) == 0 && serialBufferPos > 8) {
                     // SET RGB
                     test += 4;
@@ -145,7 +154,16 @@ void update_hostif_serial() {
                     } else {
                         set_vibrate_mode(mode);
                     }
+                } else {
+                    serialError = 1;
                 }
+            }
+
+            if (!serialError) {
+                Serial.println("OK");
+            } else {
+                Serial.print("ERR ");
+                Serial.println(serialError);
             }
 
             // reset buffer after processing

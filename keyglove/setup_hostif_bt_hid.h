@@ -34,7 +34,7 @@ THE SOFTWARE.
 #if !defined(ARDUINO) || KG_BOARD == KG_BOARD_TEENSYPP2
     HardwareSerial Uart = HardwareSerial();
 #endif /* USE_TEENSY */
-#ifdef USE_ARDUINO
+#if KG_BOARD == KG_BOARD_ARDUINO_MEGA2560
     HardwareSerial Uart = Serial3;
 #endif /* USE_ARDUINO */
 

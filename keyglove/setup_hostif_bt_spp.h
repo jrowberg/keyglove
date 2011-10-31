@@ -40,7 +40,7 @@ void update_bluetooth_serial() {
     while (Serial.available() > 0) {
         uint8_t bs = Serial.read();
         //Serial.print(bs, BYTE);
-        Uart.print(bs, BYTE);
+        Uart.write(bs);
     }
 }  
 
