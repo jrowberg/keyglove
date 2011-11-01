@@ -137,7 +137,7 @@ void update_motion() {
     //tb1 = micros();
 
     // update IMU filter with current readings
-    update_imu_filter(gxv * (PI/(180*PI)), gyv * (PI/(180*PI)), gzv * (PI/(180*PI)), axa, aya, aza);
+    update_imu_filter(gxv * (PI/(180*4)), gyv * (PI/(180*4)), gzv * (PI/(180*4)), axa, aya, aza);
 
     /*quatPacket[3] = (uint8_t)(round(q[0] * 256));
     quatPacket[4] = (uint8_t)(round(q[0] * 65536));
