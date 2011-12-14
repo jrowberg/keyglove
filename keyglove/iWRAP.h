@@ -29,15 +29,12 @@ THE SOFTWARE.
 #ifndef _IWRAP_H_
 #define _IWRAP_H_
 
-// minimal Arduino support wrapper if we're outside of the Arduino environment
-#ifndef ARDUINO
+#ifdef LUFA_ARDUINO_WRAPPER
     #include "ArduinoWrapper.h"
-#else
-    #if ARDUINO < 100
-        #include "WProgram.h"
-    #else
-        #include "Arduino.h"
-    #endif
+#endif
+
+#ifndef LUFA_ARDUINO_WRAPPER
+    #include "Arduino.h"
 #endif
 
 #define IWRAP_VERSION 400
@@ -45,7 +42,7 @@ THE SOFTWARE.
 //#define IWRAP_VERSION 500
 
 #define IWRAP_MODE_COMMAND          0 // iWRAP control via UART commands (also HFP, HSP, OBEX, A2DP, AVRCP, PBAP)
-#define IWRAP_MODE_DATA             1 // passthrough (SPP, HID
+#define IWRAP_MODE_DATA             1 // passthrough (SPP, HID)
 #define IWRAP_MODE_MUX              2 // simultaneous COMMAND and DATA
 
 // iWRAP4 User Guide Section 5.4, AIO
@@ -454,6 +451,12 @@ class iWRAPClass {
         uint8_t device_class[3];
 };
 
+class iWRAPPair {
+    public:
+        iWRAPAddress address;
+        char key[33];
+};
+
 class iWRAPLink {
     public:
         uint8_t link_id;
@@ -464,6 +467,7 @@ class iWRAPLink {
         uint8_t remote_msc;
         iWRAPAddress addr;
         uint8_t channel;
+        char *profile;
         uint8_t direction;
         uint8_t powermode;
         uint8_t role;
@@ -476,6 +480,15 @@ class iWRAPConfig {
     public:
         iWRAPConfig();
         void clear();
+        
+        uint8_t mode;
+        
+        // ===========================
+        // active link catalog
+        // ===========================
+        uint8_t btLinkCount;
+        uint8_t btSelectedLink;
+        iWRAPLink *btLink[7];
 
         // ===========================
         // SET BT variables
@@ -519,9 +532,8 @@ class iWRAPConfig {
         
         // SET BT PAIR (multiple entries)
         uint8_t btPairCount;
-        iWRAPAddress *btPairAddress[16];
-        char *btPairKey[16]; // 32 bytes each
-        
+        iWRAPPair *btPair[16];
+
         // SET BT POWER
         uint8_t btPowerDefault;
         uint8_t btPowerMaximum;
@@ -614,8 +626,8 @@ class iWRAPConfig {
         uint8_t micBiasCurrent;
         
         // SET CONTROL MUX
-        bool muxModeEnabled;
-        bool commandModeEnabled;
+        //bool muxModeEnabled;
+        // handled by config.mode
 
         // SET CONTROL MSC
         uint8_t mscMode;
@@ -694,9 +706,12 @@ class iWRAP {
         // get/set device mode
         uint8_t getDeviceMode();
         void setDeviceMode(uint8_t mode);
+        void exitDataMode();
 
         // send plain command/data or use MUX-mode protocol if necessary
-        void smartSend(const char *command, iWRAPLink *link=0);
+        void smartSendCommand(const char *command);
+        void smartSendData(const char *data, uint16_t length, iWRAPLink *link=0);
+        void smartSendData(const char *data, uint16_t length, uint8_t link_id=0);
 
         // events
         void onA2DPCodec(void (*function) ());         // 5.55 SET CONTROL AUDIO
@@ -719,12 +734,14 @@ class iWRAP {
         void onOBEXAuth(void (*function) ());          // 5.93 PBAP
         void onPair(void (*function) ());              // 5.6 AUTH, 5.13 CALL, 5.28 PAIR
         void onReady(void (*function) ());             // Power-on
-        void onRing(void (*function) ());              // Power-on
+        void onRing(void (*function) (iWRAPLink *link));              // Power-on
         void onSyntaxError(void (*function) ());       // 5.14 CLOCK, 5.25 L2CAP, 5.28 PAIR, 5.39 SELECT, 5.43 SET BT CLASS, 5.44 SET BT IDENT, 5.45 SET BT LAP, 5.46 SET BT MTU, 5.47 SET BT NAME, 5.48 SET BT PAIRCOUNT
         void onVolume(void (*function) ());            // 5.94 VOLUME
+
         void onBusy(void (*function) ());              // special "busy" event from iWRAP class
         void onIdle(void (*function) ());              // special "idle" event from iWRAP class
         void onTimeout(void (*function) ());           // special "timeout" event from iWRAP class
+        void onExitDataMode(void (*function) ());      // special event when exiting data mode (GPIO control)
 
         // 5.3, @
         void sendParserCommand(iWRAPLink *link, const char *command);
@@ -774,7 +791,7 @@ class iWRAP {
         void connectLinks(iWRAPLink *link1, iWRAPLink *link2);
 
         // 5.18, ECHO
-        void echo(iWRAPLink *link1, const uint8_t *string);
+        void echo(iWRAPLink *link1, const char *string);
 
         // 5.19, DEFRAG
         void defrag();
@@ -801,7 +818,7 @@ class iWRAP {
         uint8_t listConnections();
         
         // 5.27, NAME
-        bool getFriendlyName(iWRAPAddress *bd_addr, uint16_t *error=0, const uint8_t *reason=0);
+        bool getFriendlyName(iWRAPAddress *bd_addr, uint16_t *error=0, const char *reason=0);
 
         // 5.28, PAIR
         bool pair(iWRAPAddress *bd_addr);
@@ -843,20 +860,21 @@ class iWRAP {
         void scoOpen(iWRAPLink *link);
 
         // 5.37, SDP
-        void discoverServices(iWRAPAddress *bd_addr, const uint8_t *uuid, bool all=false);
+        void discoverServices(iWRAPAddress *bd_addr, const char *uuid, bool all=false);
 
         // 5.38, SDP ADD
-        void addService(const uint8_t *uuid, const uint8_t *name);
+        void addService(const char *uuid, const char *name);
         
         // 5.39, SELECT
         void selectDataMode(iWRAPLink *link);
+        void selectDataMode(uint8_t link_id);
         
         // 5.40, SET
         void getSettings();
         
         // 5.41, SET BT AUTH
         void getPinCode(uint8_t *pin_code);
-        void setPinCode(const uint8_t *pin_code, bool hidden=false);
+        void setPinCode(const char *pin_code, bool hidden=false);
         void clearPinCode();
 
         // 5.42, SET BT BDADDR
@@ -868,7 +886,7 @@ class iWRAP {
         void setDeviceClass(uint32_t class_of_device);
         
         // 5.44, SET BT IDENT
-        void setDeviceIdentity(uint8_t *descr);
+        void setDeviceIdentity(const char *descr);
 
         // 5.45, SET BT LAP
         void setDeviceLAP(uint32_t iac);
@@ -877,7 +895,7 @@ class iWRAP {
         void setDeviceMTU(uint16_t mtu);
 
         // 5.47, SET BT NAME
-        void setDeviceName(uint8_t *friendly_name);
+        void setDeviceName(const char *friendly_name);
         
         // 5.48, SET BT PAIRCOUNT
         void getDevicePairLimit();
@@ -889,7 +907,7 @@ class iWRAP {
 
         // 5.50, SET BT PAIR
         void getPairings();
-        void addPairing(iWRAPAddress *bd_addr, const uint8_t *link_key);
+        void addPairing(iWRAPAddress *bd_addr, const char *link_key);
         void clearPairings();
 
         // 5.51, SET BT POWER
@@ -913,11 +931,11 @@ class iWRAP {
         
         // 5.55, SET CONTROL AUDIO
         void getControlAudio();
-        void setControlAudio(const uint8_t *sco_routing, const uint8_t *a2dp_routing, uint8_t multisco=0, uint8_t event=0);
+        void setControlAudio(const char *sco_routing, const char *a2dp_routing, uint8_t multisco=0, uint8_t event=0);
 
         // 5.56, SET CONTROL AUTOCALL
         void getControlAutoCall();
-        void setControlAutoCall(const uint8_t *target, uint16_t timeout, const uint8_t *profile);
+        void setControlAutoCall(const char *target, uint16_t timeout, const char *profile);
         
         // 5.57, SET CONTROL BATTERY
         void getControlBattery();
@@ -928,7 +946,7 @@ class iWRAP {
         void setUARTConfig(uint32_t baud_rate, uint8_t parity, uint8_t stop_bits);
         
         // 5.59, SET CONTROL BIND
-        void bindPIOCommand(uint8_t priority, uint16_t io_mask, uint8_t direction, const uint8_t *command);
+        void bindPIOCommand(uint8_t priority, uint16_t io_mask, uint8_t direction, const char *command);
         void clearPIOCommand(uint8_t priority);
         
         // 5.60, SET CONTROL CD
@@ -1016,7 +1034,7 @@ class iWRAP {
         
         // 5.66, SET CONTROL INIT
         void getControlInit();
-        void setControlInit(const uint8_t *command);
+        void setControlInit(const char *command);
         void clearControlInit();
 
         // 5.67, SET CONTROL MICBIAS
@@ -1026,7 +1044,6 @@ class iWRAP {
         // 5.68, SET CONTROL MUX
         bool getControlMuxEnabled();
         void setControlMuxEnabled(bool enabled);
-        void forceControlMuxEnabled(bool enabled);
 
         // 5.69, SET CONTROL MSC
         void getControlMSC();
@@ -1034,7 +1051,7 @@ class iWRAP {
 
         // 5.70, SET CONTROL PCM
         void getControlPCM();
-        void setControlPCM(const uint8_t *config, uint16_t data);
+        void setControlPCM(const char *config, uint16_t data);
 
         // 5.71, SET CONTROL PREAMP
         void getControlPreamp();
@@ -1042,7 +1059,7 @@ class iWRAP {
 
         // 5.72, SET CONTROL RINGTONE
         void getControlRingtone();
-        void setControlRingtone(const uint8_t *ringtone);
+        void setControlRingtone(const char *ringtone);
 
         // 5.73, SET CONTROL READY
         void getControlReady();
@@ -1183,12 +1200,18 @@ class iWRAP {
         void (*funcOBEXAuth) ();          // 5.93 PBAP
         void (*funcPair) ();              // 5.6 AUTH, 5.13 CALL, 5.28 PAIR
         void (*funcReady) ();             // Power-on
-        void (*funcRing) ();              // Power-on
+        void (*funcRing) (iWRAPLink *link);              // Power-on
         void (*funcSyntaxError) ();       // 5.14 CLOCK, 5.25 L2CAP, 5.28 PAIR, 5.39 SELECT, 5.43 SET BT CLASS, 5.44 SET BT IDENT, 5.45 SET BT LAP, 5.46 SET BT MTU, 5.47 SET BT NAME, 5.48 SET BT PAIRCOUNT
         void (*funcVolume) ();            // 5.94 VOLUME
+
         void (*funcBusy) ();              // special "busy" event from iWRAP class
         void (*funcIdle) ();              // special "idle" event from iWRAP class
         void (*funcTimeout) ();           // special "timeout" event from iWRAP class
+        void (*funcExitDataMode) ();      // special event when exiting data mode (GPIO control)
+
+        // small string helper functions
+        int8_t iwsIntToHex(char *str, uint16_t hex, uint8_t width=0);
+        int8_t iwsLongToHex(char *str, uint32_t hex, uint8_t width=0);
 };
 
 #endif /* _IWRAP_H_ */

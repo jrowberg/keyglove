@@ -157,6 +157,16 @@ void update_hostif_serial() {
                 } else {
                     serialError = 1;
                 }
+            #ifdef ENABLE_BLUETOOTH
+            } else if (strncmp(test, "bt ", 3) == 0 && serialBufferPos > 3) {
+                // Bluetooth passthrough
+                test += 3;
+                Uart.write((const uint8_t *)test, serialBufferPos - 3);
+                Uart.print("\r\n");
+            #endif /* ENABLE_BLUETOOTH */
+            } else {
+                // unknown command
+                serialError = 1;
             }
 
             if (!serialError) {

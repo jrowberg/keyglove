@@ -30,6 +30,9 @@ THE SOFTWARE.
 #ifndef _SETUP_HOSTIF_BT_SPP_H_
 #define _SETUP_HOSTIF_BT_SPP_H_
 
+#include "iWRAP.h"
+#include "setup_hostif_bt.h"
+
 void setup_hostif_bt_spp() {
 }
 

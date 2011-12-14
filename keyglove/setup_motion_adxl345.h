@@ -69,22 +69,18 @@ uint8_t opt_accel_rot90 = 0;
 uint32_t accelGroup;
 uint32_t accelGroupTime, accelGroupTime0;
 uint8_t accelTick;                  // history position counter
-float accelMagnitude;               // magnitude of velocity
-int16_t axaRaw, ayaRaw, azaRaw;     // raw accel values (no calibration, no filtering)
-int16_t axa, aya, aza;              // immediate axial accel values
-int16_t axa0, aya0, aza0;           // previous iteration accel values
-//int32_t axa2, aya2, aza2;           // x/y/z squared calculations
-//float axTilt, ayTilt, azTilt;       // x/y/z tilt angles for orientation estimate
-//float axComp, ayComp, azComp;       // x/y/z vector components for direction w.r.t. gravity
-//int16_t axv, ayv, azv;              // axial velocities
-//int16_t axv0, ayv0, azv0;           // previous iteration axial velocities
-//int16_t axp, ayp, azp;              // axial positions
-//int16_t axaMin, ayaMin, azaMin;     // minimum values (for calibration)
-//int16_t axaMax, ayaMax, azaMax;     // maximum values (for calibration)
+VectorInt16 aaRaw;                  // raw acceleleration
+VectorInt16 aa;                     // filtered acceleration
+VectorInt16 aa0;                    // last-iteration acceleration
+//VectorInt16 av;                     // axial velocities
+//VectorInt16 av0;                    // previous iteration axial velocities
+//VectorInt16 ap;                     // axial positions
+//VectorInt16 aaMin;                  // minimum values (for calibration)
+//VectorInt16 aaMax;                  // maximum values (for calibration)
 
 bool accelEnableAutoZero;
-int16_t axaAvg, ayaAvg, azaAvg;     // rolling average for auto-zero adjustment
-int16_t axaRef, ayaRef, azaRef;     // reference points for auto-zero detection
+VectorInt16 aaAvg;                  // rolling average for auto-zero adjustment
+VectorInt16 aaRef;                  // reference points for auto-zero detection
 uint8_t accelZeroTick;
 
 void adxl345_interrupt1() {
@@ -105,14 +101,14 @@ void setup_motion_accelerometer() {
 }
 
 void enable_motion_accelerometer() {
-    axa = aya = aza = 0;
-    //axv = ayv = azv = 0;
-    //axp = ayp = azp = 0;
+    aa.x = aa.y = aa.z = 0;
+    //av.x = av.y = av.z = 0;
+    //ap.x = ap.y = ap.z = 0;
     accelGroup = 0;
     accelGroupTime = 0;
     accelTick = 0;
-    //axaMin = ayaMin = azaMin = 0;
-    //axaMax = ayaMax = azaMax = 0;
+    //aaMin.x = aaMin.y = aaMin.z = 0;
+    //aaMax.x = aaMax.y = aaMax.z = 0;
     activeAccelerometer = true;
     attachInterrupt(4, adxl345_interrupt1, CHANGE);
     readyAccelerometerData = true;
@@ -130,166 +126,166 @@ void update_motion_accelerometer() {
 
     // read accelerometer with correct rotation settings
     if      (opt_accel_rot90 == 0) { // no rotation:            x = +x, y = +y, z = +z
-        accelerometer.getAcceleration(&axaRaw, &ayaRaw, &azaRaw);
+        accelerometer.getAcceleration(&aaRaw.x, &aaRaw.y, &aaRaw.z);
     }
     else if (opt_accel_rot90 == 1) { // 90 around x axis:       x = +x, y = -z, z = +y
-        accelerometer.getAcceleration(&axaRaw, &azaRaw, &ayaRaw);
-        azaRaw = -azaRaw;
+        accelerometer.getAcceleration(&aaRaw.x, &aaRaw.z, &aaRaw.y);
+        aaRaw.z = -aaRaw.z;
     }
     else if (opt_accel_rot90 == 2) { // 90 around y axis:       x = -z, y = +y, z = +x
-        accelerometer.getAcceleration(&azaRaw, &ayaRaw, &axaRaw);
-        azaRaw = -azaRaw;
+        accelerometer.getAcceleration(&aaRaw.z, &aaRaw.y, &aaRaw.x);
+        aaRaw.z = -aaRaw.z;
     }
     else if (opt_accel_rot90 == 4) { // 90 around z axis;       x = -y, y = +x, z = +z
-        accelerometer.getAcceleration(&ayaRaw, &axaRaw, &azaRaw);
-        ayaRaw = -ayaRaw;
+        accelerometer.getAcceleration(&aaRaw.y, &aaRaw.x, &aaRaw.z);
+        aaRaw.y = -aaRaw.y;
     }
     else if (opt_accel_rot90 == 3) { // 90 around x, y axes:    x = -z, y = -x, z = +y
-        accelerometer.getAcceleration(&azaRaw, &axaRaw, &ayaRaw);
-        axaRaw = -axaRaw;
-        azaRaw = -azaRaw;
+        accelerometer.getAcceleration(&aaRaw.z, &aaRaw.x, &aaRaw.y);
+        aaRaw.x = -aaRaw.x;
+        aaRaw.z = -aaRaw.z;
     }
     else if (opt_accel_rot90 == 5) { // 90 around x, z axes:    x = -y, y = -z, z = +x
-        accelerometer.getAcceleration(&ayaRaw, &azaRaw, &axaRaw);
-        ayaRaw = -ayaRaw;
-        azaRaw = -azaRaw;
+        accelerometer.getAcceleration(&aaRaw.y, &aaRaw.z, &aaRaw.x);
+        aaRaw.y = -aaRaw.y;
+        aaRaw.z = -aaRaw.z;
     }
     else if (opt_accel_rot90 == 6) { // 90 around y, z axes:    x = -z, y = +x, z = -y
-        accelerometer.getAcceleration(&azaRaw, &axaRaw, &ayaRaw);
-        ayaRaw = -ayaRaw;
-        azaRaw = -azaRaw;
+        accelerometer.getAcceleration(&aaRaw.z, &aaRaw.x, &aaRaw.y);
+        aaRaw.y = -aaRaw.y;
+        aaRaw.z = -aaRaw.z;
     }
     else if (opt_accel_rot90 == 7) { // 90 around x, y, z axes: x = -z, y = +y, z = +x
-        accelerometer.getAcceleration(&azaRaw, &ayaRaw, &axaRaw);
-        azaRaw = -azaRaw;
+        accelerometer.getAcceleration(&aaRaw.z, &aaRaw.y, &aaRaw.x);
+        aaRaw.z = -aaRaw.z;
     }
 
     DEBUG_PRN_ACCELEROMETER("accel\t");
-    DEBUG_PRN_ACCELEROMETER(axaRaw); DEBUG_PRN_ACCELEROMETER("\t");
-    DEBUG_PRN_ACCELEROMETER(ayaRaw); DEBUG_PRN_ACCELEROMETER("\t");
-    DEBUG_PRN_ACCELEROMETER(azaRaw); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(aaRaw.x); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(aaRaw.y); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(aaRaw.z); DEBUG_PRN_ACCELEROMETER("\t");
 
     // auto zero detection (like a ThinkPad TrackPoint)
     if (accelEnableAutoZero) {
         if (accelZeroTick == 0) {
             accelZeroTick++;
-            axaRef = axaAvg = axaRaw;
-            ayaRef = ayaAvg = ayaRaw;
-            azaRef = azaAvg = azaRaw;
+            aaRef.x = aaAvg.x = aaRaw.x;
+            aaRef.y = aaAvg.y = aaRaw.y;
+            aaRef.z = aaAvg.z = aaRaw.z;
         } else {
-            if (abs(axaRaw - axaRef) > 35 || abs(ayaRaw - ayaRef) > 35 || abs(azaRaw - azaRef) > 35) {
+            if (abs(aaRaw.x - aaRef.x) > 35 || abs(aaRaw.y - aaRef.y) > 35 || abs(aaRaw.z - aaRef.z) > 35) {
                 // too much deviation, reset zero detection
                 accelZeroTick = 0;
             } else if (accelZeroTick == 30) {
                 // no deviation for 50 iterations, so adjust auto zero offset
                 accelZeroTick = 0;  // reset zero detection to continue fine-tuning if necessary
-                axaRef = axaAvg;    // reset the reference point to the new average
-                ayaRef = ayaAvg;
-                azaRef = azaAvg;
-                opt_accel_offset[0] = -axaAvg;  // update offsets
-                opt_accel_offset[1] = -ayaAvg;
-                opt_accel_offset[2] = (250 - azaAvg);
+                aaRef.x = aaAvg.x;    // reset the reference point to the new average
+                aaRef.y = aaAvg.y;
+                aaRef.z = aaAvg.z;
+                opt_accel_offset[0] = -aaAvg.x;  // update offsets
+                opt_accel_offset[1] = -aaAvg.y;
+                opt_accel_offset[2] = (250 - aaAvg.z);
                 accelEnableAutoZero = false;
             } else if (accelZeroTick < 30) {
                 // no deviation, but not enough data to zero
                 // update running average: avg += (current - avg) / iteration
                 accelZeroTick++;
-                axaAvg += (axaRaw - axaAvg) / accelZeroTick;
-                ayaAvg += (ayaRaw - ayaAvg) / accelZeroTick;
-                azaAvg += (azaRaw - azaAvg) / accelZeroTick;
+                aaAvg.x += (aaRaw.x - aaAvg.x) / accelZeroTick;
+                aaAvg.y += (aaRaw.y - aaAvg.y) / accelZeroTick;
+                aaAvg.z += (aaRaw.z - aaAvg.z) / accelZeroTick;
             }
         }
     }
 
     // offset
-    axaRaw += opt_accel_offset[0];
-    ayaRaw += opt_accel_offset[1];
-    azaRaw += opt_accel_offset[2];
+    aaRaw.x += opt_accel_offset[0];
+    aaRaw.y += opt_accel_offset[1];
+    aaRaw.z += opt_accel_offset[2];
 
     // rescale if necessary
-    if (opt_accel_calibrate[0] != 1) axaRaw = (float)axaRaw * opt_accel_calibrate[0];
-    if (opt_accel_calibrate[1] != 1) ayaRaw = (float)ayaRaw * opt_accel_calibrate[1];
-    if (opt_accel_calibrate[2] != 1) azaRaw = (float)azaRaw * opt_accel_calibrate[2];
+    if (opt_accel_calibrate[0] != 1) aaRaw.x = (float)aaRaw.x * opt_accel_calibrate[0];
+    if (opt_accel_calibrate[1] != 1) aaRaw.y = (float)aaRaw.y * opt_accel_calibrate[1];
+    if (opt_accel_calibrate[2] != 1) aaRaw.z = (float)aaRaw.z * opt_accel_calibrate[2];
 
     // store previous acceleration values
-    axa0 = axa;
-    aya0 = aya;
-    aza0 = aza;
+    aa0.x = aa.x;
+    aa0.y = aa.y;
+    aa0.z = aa.z;
 
     // simplified Kalman filtering
-    axa = axa0 + (opt_accel_kalman_constant * (axaRaw - axa0));
-    aya = aya0 + (opt_accel_kalman_constant * (ayaRaw - aya0));
-    aza = aza0 + (opt_accel_kalman_constant * (azaRaw - aza0));
+    aa.x = aa0.x + (opt_accel_kalman_constant * (aaRaw.x - aa0.x));
+    aa.y = aa0.y + (opt_accel_kalman_constant * (aaRaw.y - aa0.y));
+    aa.z = aa0.z + (opt_accel_kalman_constant * (aaRaw.z - aa0.z));
 
-    accelPacket[3] = (uint8_t)(axa >> 8);
-    accelPacket[4] = (uint8_t)axa;
-    accelPacket[5] = (uint8_t)(aya >> 8);
-    accelPacket[6] = (uint8_t)aya;
-    accelPacket[7] = (uint8_t)(aza >> 8);
-    accelPacket[8] = (uint8_t)aza;
+    accelPacket[3] = (uint8_t)(aa.x >> 8);
+    accelPacket[4] = (uint8_t)aa.x;
+    accelPacket[5] = (uint8_t)(aa.y >> 8);
+    accelPacket[6] = (uint8_t)aa.y;
+    accelPacket[7] = (uint8_t)(aa.z >> 8);
+    accelPacket[8] = (uint8_t)aa.z;
 
-    DEBUG_PRN_ACCELEROMETER(axa); DEBUG_PRN_ACCELEROMETER("\t");
-    DEBUG_PRN_ACCELEROMETER(aya); DEBUG_PRN_ACCELEROMETER("\t");
-    DEBUG_PRN_ACCELEROMETER(aza); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(aa.x); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(aa.y); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(aa.z); DEBUG_PRN_ACCELEROMETER("\t");
 
     /*
     // obtain magnitude of acceleration
     // (accelMagnitude is expressed in "g", should always be ~1 if holding still)
-    axa2 = (int32_t)axa * axa;
-    aya2 = (int32_t)aya * aya;
-    aza2 = (int32_t)aza * aza;
-    accelMagnitude = (sqrt(axa2 + aya2 + aza2) / 250);
+    aa.x2 = (int32_t)aa.x * aa.x;
+    aa.y2 = (int32_t)aa.y * aa.y;
+    aa.z2 = (int32_t)aa.z * aa.z;
+    accelMagnitude = (sqrt(aa.x2 + aa.y2 + aa.z2) / 250);
 
     // obtain tilt angle estimation relative to gravity
     // (all measurements are in radians)
-    axTilt = atan((float)axa / sqrt(aya2 + aza2)); // will be 0 on a flat surface
-    ayTilt = atan((float)aya / sqrt(axa2 + aza2)); // will be 0 on a flat surface
-    azTilt = atan((float)aza / sqrt(axa2 + aya2)); // will be PI/2 (+90 degrees) right side up on a flat surface
+    axTilt = atan((float)aa.x / sqrt(aa.y2 + aa.z2)); // will be 0 on a flat surface
+    ayTilt = atan((float)aa.y / sqrt(aa.x2 + aa.z2)); // will be 0 on a flat surface
+    azTilt = atan((float)aa.z / sqrt(aa.x2 + aa.y2)); // will be PI/2 (+90 degrees) right side up on a flat surface
 
     // approximate velocity (time interval is constant @ accel rate)
-    axv += ((axa + axa0) / 2) >> 5;
-    ayv += ((aya + aya0) / 2) >> 5;
-    azv += ((aza + aza0) / 2) >> 5;
+    av.x += ((aa.x + aa0.x) / 2) >> 5;
+    av.y += ((aa.y + aa0.y) / 2) >> 5;
+    av.z += ((aa.z + aa0.z) / 2) >> 5;
 
-    accelPacket[6] = (uint8_t)axv;
-    accelPacket[7] = (uint8_t)ayv;
-    accelPacket[8] = (uint8_t)azv;
+    accelPacket[6] = (uint8_t)av.x;
+    accelPacket[7] = (uint8_t)av.y;
+    accelPacket[8] = (uint8_t)av.z;
 
-    DEBUG_PRN_ACCELEROMETER(axv); DEBUG_PRN_ACCELEROMETER("\t");
-    DEBUG_PRN_ACCELEROMETER(ayv); DEBUG_PRN_ACCELEROMETER("\t");
-    DEBUG_PRN_ACCELEROMETER(azv); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(av.x); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(av.y); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(av.z); DEBUG_PRN_ACCELEROMETER("\t");
 
     // approximate position (time interval is constant @ accel rate)
-    axp += ((axv + axv0) / 2) >> 2;
-    ayp += ((ayv + ayv0) / 2) >> 2;
-    azp += ((azv + azv0) / 2) >> 2;
+    ap.x += ((av.x + av0.x) / 2) >> 2;
+    ap.y += ((av.y + av0.y) / 2) >> 2;
+    ap.z += ((av.z + av0.z) / 2) >> 2;
 
-    accelPacket[9] = (uint8_t)axp;
-    accelPacket[10] = (uint8_t)ayp;
-    accelPacket[11] = (uint8_t)azp;
+    accelPacket[9] = (uint8_t)ap.x;
+    accelPacket[10] = (uint8_t)ap.y;
+    accelPacket[11] = (uint8_t)ap.z;
 
-    DEBUG_PRN_ACCELEROMETER(axp); DEBUG_PRN_ACCELEROMETER("\t");
-    DEBUG_PRN_ACCELEROMETER(ayp); DEBUG_PRN_ACCELEROMETER("\t");
-    DEBUG_PRN_ACCELEROMETER(azp); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(ap.x); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(ap.y); DEBUG_PRN_ACCELEROMETER("\t");
+    DEBUG_PRN_ACCELEROMETER(ap.z); DEBUG_PRN_ACCELEROMETER("\t");
     */
 
     //Serial.write(accelPacket, 6);
 
     /*if (opt_enable_calibration) {
-        axaMin = min(axaMin, axa);
-        ayaMin = min(ayaMin, aya);
-        azaMin = min(azaMin, aza);
-        axaMax = max(axaMax, axa);
-        ayaMax = max(ayaMax, aya);
-        azaMax = max(azaMax, aza);
+        aaMin.x = min(aaMin.x, aa.x);
+        aaMin.y = min(aaMin.y, aa.y);
+        aaMin.z = min(aaMin.z, aa.z);
+        aaMax.x = max(aaMax.x, aa.x);
+        aaMax.y = max(aaMax.y, aa.y);
+        aaMax.z = max(aaMax.z, aa.z);
 
         DEBUG_PRN_ACCELEROMETER("calibrateaccel\t");
-        DEBUG_PRN_ACCELEROMETER(axaMin); DEBUG_PRN_ACCELEROMETER("\t");
-        DEBUG_PRN_ACCELEROMETER(ayaMin); DEBUG_PRN_ACCELEROMETER("\t");
-        DEBUG_PRN_ACCELEROMETER(azaMin); DEBUG_PRN_ACCELEROMETER("\t");
-        DEBUG_PRN_ACCELEROMETER(axaMax); DEBUG_PRN_ACCELEROMETER("\t");
-        DEBUG_PRN_ACCELEROMETER(ayaMax); DEBUG_PRN_ACCELEROMETER("\t");
-        DEBUG_PRNL_ACCELEROMETER(azaMax);
+        DEBUG_PRN_ACCELEROMETER(aaMin.x); DEBUG_PRN_ACCELEROMETER("\t");
+        DEBUG_PRN_ACCELEROMETER(aaMin.y); DEBUG_PRN_ACCELEROMETER("\t");
+        DEBUG_PRN_ACCELEROMETER(aaMin.z); DEBUG_PRN_ACCELEROMETER("\t");
+        DEBUG_PRN_ACCELEROMETER(aaMax.x); DEBUG_PRN_ACCELEROMETER("\t");
+        DEBUG_PRN_ACCELEROMETER(aaMax.y); DEBUG_PRN_ACCELEROMETER("\t");
+        DEBUG_PRNL_ACCELEROMETER(aaMax.z);
     }*/
 
     /*accelGroupTime += (micros() - accelGroupTime0);
@@ -313,9 +309,9 @@ void update_motion_accelerometer() {
    ===== */
 
     // store previous velocity values
-    //axv0 = axv;
-    //ayv0 = ayv;
-    //azv0 = azv;
+    //av0.x = av.x;
+    //av0.y = av.y;
+    //av0.z = av.z;
 
     /*
     // get V and P if we have at least two sets of measurements
@@ -354,14 +350,14 @@ void update_motion_accelerometer() {
         DEBUG_PRNL_ACCELEROMETER(accelFactor);
 
         // calculate linear velocity (dead reckoning, approximated integral)
-        axv += (ax0 + (ax - ax0)/2) * accelFactor;
-        ayv += (ay0 + (ay - ay0)/2) * accelFactor;
-        azv += (az0 + (az - az0)/2) * accelFactor;
+        av.x += (ax0 + (ax - ax0)/2) * accelFactor;
+        av.y += (ay0 + (ay - ay0)/2) * accelFactor;
+        av.z += (az0 + (az - az0)/2) * accelFactor;
 
         // calculate linear position (dead reckoning, approximated integral)
-        axp += (axv0 + (axv - axv0)/2) * accelFactor;
-        ayp += (ayv0 + (ayv - ayv0)/2) * accelFactor;
-        azp += (azv0 + (azv - azv0)/2) * accelFactor;
+        ap.x += (av0.x + (av.x - av0.x)/2) * accelFactor;
+        ap.y += (av0.y + (av.y - av0.y)/2) * accelFactor;
+        ap.z += (av0.z + (av.z - av0.z)/2) * accelFactor;
     }*/
 
     /*
@@ -387,14 +383,14 @@ void update_motion_accelerometer() {
     //ay = degrees(atan2(xc, zc));
     //az = degrees(atan(sqrt(xc*xc + yc*yc) / zc));
 
-    int16_t axa = abs(ax), aya = abs(ay); //, aza = abs(az);
-    if (axa > 90 || aya > 90) az += 180;
+    int16_t aa.x = abs(ax), aa.y = abs(ay); //, aa.z = abs(az);
+    if (aa.x > 90 || aa.y > 90) az += 180;
 
     // you can't really get z rotation with just an accelerometer.
     // you need a magnetometer (compass) for absolute heading,
     // or clever use of a gyroscope for relative heading.
     
     // skip angular velocity because it comes from the gyro
-    //axv -= ((ax0 - ax00) - (ax - ax0));
-    //ayv -= ((ay0 - ay00) - (ay - ay0));
-    //azv -= ((az0 - az00) - (az - az0));*/
+    //av.x -= ((ax0 - ax00) - (ax - ax0));
+    //av.y -= ((ay0 - ay00) - (ay - ay0));
+    //av.z -= ((az0 - az00) - (az - az0));*/

@@ -31,17 +31,12 @@ THE SOFTWARE.
 #define _SETUP_HOSTIF_BT_HID_H_
 
 #include "iWRAP.h"
-#if !defined(ARDUINO) || KG_BOARD == KG_BOARD_TEENSYPP2
-    HardwareSerial Uart = HardwareSerial();
-#endif /* USE_TEENSY */
-#if KG_BOARD == KG_BOARD_ARDUINO_MEGA2560
-    HardwareSerial Uart = Serial3;
-#endif /* USE_ARDUINO */
-
-iWRAP bluetooth = iWRAP(&Uart);
+#include "setup_hostif_bt.h"
 
 void setup_hostif_bt_hid() {
-    Uart.begin(38400);
+}
+
+void update_bluetooth_hid() {
 }
 
 #endif // _SETUP_HOSTIF_BT_HID_H_

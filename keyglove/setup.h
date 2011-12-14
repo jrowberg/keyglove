@@ -49,27 +49,8 @@ THE SOFTWARE.
 
 #endif
 
-#define KG_PACKET_TYPE_REPORT_ACCEL         0x17 // AVP, default
-#define KG_PACKET_TYPE_REPORT_ACCEL_R       0x18
-#define KG_PACKET_TYPE_REPORT_ACCEL_RA      0x1C
-#define KG_PACKET_TYPE_REPORT_ACCEL_RAV     0x1E
-#define KG_PACKET_TYPE_REPORT_ACCEL_RAVP    0x1F
-#define KG_PACKET_TYPE_REPORT_ACCEL_A       0x14
-#define KG_PACKET_TYPE_REPORT_ACCEL_AV      0x16
-#define KG_PACKET_TYPE_REPORT_ACCEL_AVP     0x17
-#define KG_PACKET_TYPE_REPORT_ACCEL_V       0x12
-#define KG_PACKET_TYPE_REPORT_ACCEL_VP      0x13
-
-#define KG_PACKET_TYPE_REPORT_GYRO          0x27 // AVP, default
-#define KG_PACKET_TYPE_REPORT_GYRO_R        0x28
-#define KG_PACKET_TYPE_REPORT_GYRO_RA       0x2C
-#define KG_PACKET_TYPE_REPORT_GYRO_RAV      0x2E
-#define KG_PACKET_TYPE_REPORT_GYRO_RAVP     0x2F
-#define KG_PACKET_TYPE_REPORT_GYRO_A        0x24
-#define KG_PACKET_TYPE_REPORT_GYRO_AV       0x26
-#define KG_PACKET_TYPE_REPORT_GYRO_AVP      0x27
-#define KG_PACKET_TYPE_REPORT_GYRO_V        0x22
-#define KG_PACKET_TYPE_REPORT_GYRO_VP       0x23
+#define KG_PACKET_TYPE_REPORT_ACCEL         0x11
+#define KG_PACKET_TYPE_REPORT_GYRO          0x27
 
 #ifdef DEBUG_BENCHMARK
     #define DEBUG_PRN_BENCHMARK(x)          Serial.print(x)
@@ -372,6 +353,8 @@ THE SOFTWARE.
  * MOTION SENSOR SETUP
 =============================================== */
 
+#include "helper_3dmath.h"
+
 #if (KG_MOTION & KG_MOTION_ADXL345)
     #define ENABLE_ACCELEROMETER // used in main loop()
     #include "setup_motion_adxl345.h"
@@ -510,6 +493,9 @@ void keyglove_setup() {
     #endif
     #if (KG_HOSTIF & KG_HOSTIF_USB)
         setup_hostif_usb();
+    #endif
+    #if (KG_HOSTIF & KG_HOSTIF_BT_HID) || (KG_HOSTIF & KG_HOSTIF_BT_SPP)
+        setup_hostif_bt();
     #endif
     #if (KG_HOSTIF & KG_HOSTIF_BT_HID)
         setup_hostif_bt_hid();

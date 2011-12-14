@@ -55,7 +55,7 @@ void setup_touch() {
         digitalWrite(pins[i], HIGH);
     }
 
-    mode = 0; // set to base mode, no alt/shift/mouse/prog
+    mode = 0; // set to base mode, no alt/shift/mouse/prog/etc.
     setmode(0); // default touchset mode is always 0
 
     activeTouch = true; // this is always on if touch control is enabled

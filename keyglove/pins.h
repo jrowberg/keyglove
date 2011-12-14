@@ -166,7 +166,7 @@ THE SOFTWARE.
     #define MOUSE_INT2      1
 #endif /* USE_ARDUINO */
 
-#if KG_BOARD == KG_BOARD_TEENSYPP2 //USE_TEENSY
+#if KG_BOARD == KG_BOARD_TEENSYPP2
     #define KSP_A 4 // D4
     #define KSP_B 5 // D5
     #define KSP_C 7 // D7
@@ -208,6 +208,7 @@ THE SOFTWARE.
     #define KG_INTERRUPT_PIN_GYRO 1     // E5 (internal/tiny, left)
     #define KG_INTERRUPT_NUM_GYRO 5     // Teensy++ interrupt #5
 
+    // FUSION and ACCEL are never both used at the same time
     #define KG_INTERRUPT_PIN_FUSION 1   // E4 (internal/tiny, right)
     #define KG_INTERRUPT_NUM_FUSION 4   // Teensy++ interrupt #4
 
@@ -222,6 +223,9 @@ THE SOFTWARE.
     
     #define KB_PIN_CLOCK    19
     #define KB_PIN_DATA     18
+    
+    #define KG_PIN_BT_DTR   4
+    #define KG_PIN_BT_LINK  5
 
     #define MOUSE_PIN_CLOCK 3
     #define MOUSE_PIN_DATA  2

@@ -42,7 +42,7 @@ THE SOFTWARE.
 =============================================== */
 
 uint8_t keygloveTick = 0;   // increments every ~10ms (100hz), loops at 100
-uint32_t keygloveTock = 0;  // increments ever 100 ticks, loops as 2^32 (~4 billion)
+uint32_t keygloveTock = 0;  // increments every 100 ticks, loops as 2^32 (~4 billion)
 uint32_t keygloveTickTime = 0, keygloveTickTime0 = 0;
 
 bool activeMagnetometer;
@@ -98,8 +98,11 @@ void setup() {
     TIFR1 |= (1 << TOV1); // clear the TIMER1 overflow flag
     TIMSK1 |= (1 << TOIE1); // enable TIMER1 overflow interrupts*/
     
-    enable_motion_accelerometer();
-    enable_motion_gyroscope();
+    // debug setup stuff
+    //enable_motion_accelerometer();
+    //enable_motion_gyroscope();
+    //opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
+    //activeMouse = true;
 }
 
 void loop() {
@@ -119,6 +122,9 @@ void loop() {
 
     #ifdef ENABLE_SERIAL
         update_hostif_serial();
+    #endif
+    #ifdef ENABLE_BLUETOOTH
+        update_hostif_bt();
     #endif
 
     // check for TIMER1 overflow limit and increment tick (should be every 10 ms)
@@ -147,16 +153,16 @@ void loop() {
         //if (activeGestures) update_gestures();
 
         // process touch sensor status
-        /////if (activeTouch) update_touch();
+        if (activeTouch) update_touch();
 
         // keyboard is almost always done in real time, this is usually not necessary
-        //if (activeKeyboard) update_keyboard();
+        if (activeKeyboard) update_keyboard();
     
         // send any unsent mouse control data
-        /////if (activeMouse) update_mouse();
+        if (activeMouse) update_mouse();
 
         // send any unsent joystick control data
-        /////if (activeJoystick) update_joystick();
+        if (activeJoystick) update_joystick();
 
         // check for blink condition (should be every 1/2 second)
         #if (KG_FEEDBACK & KG_FEEDBACK_BLINK) > 0
