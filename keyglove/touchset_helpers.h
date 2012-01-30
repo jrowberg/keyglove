@@ -420,24 +420,7 @@ void beep(uint16_t pitch, uint8_t mode, uint16_t duration) {
     DEBUG_PRN_TOUCHSET(" ");
     DEBUG_PRNL_TOUCHSET(duration);
     #if (KG_FEEDBACK & KG_FEEDBACK_PIEZO) > 0
-        if (mode == KG_PIEZO_OFF) {
-            noTone(KG_PIN_PIEZO);
-            return;
-        }
-
-        uint16_t duration_ms = 1000;
-        if (mode == KG_PIEZO_SHORTPULSE) {
-            duration_ms = 100;
-        } else if (mode == KG_PIEZO_SHORTBEEP) {
-            duration_ms = 25;
-        }
-
-        for (uint16_t i = 0; i < duration; i++) {
-            if (i > 0) {
-                delay(80);
-            }
-            tone(KG_PIN_PIEZO, pitch, duration_ms);
-        }
+        set_piezo_mode(mode, duration, pitch);
     #endif /* KG_FEEDBACK_PIEZO */
 }
 
@@ -447,6 +430,7 @@ void vibrate(uint8_t mode, uint16_t duration) {
     DEBUG_PRN_TOUCHSET(" ");
     DEBUG_PRNL_TOUCHSET(duration);
     #if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE) > 0
+        set_vibrate_mode(mode, duration);
     #endif /* KG_FEEDBACK_VIBRATE */
 }
 

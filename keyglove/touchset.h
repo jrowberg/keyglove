@@ -218,18 +218,23 @@ static void deactivate_mode(uint8_t mode) {
  
 void check_sensors_touch(uint32_t sensors1, uint32_t sensors2, uint8_t pos) {
     if ((sensors1 & KS1_D8) == KS1_D8 && (sensors2 & KS2_D8) == KS2_D8 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
+        vibrate(KG_VIBRATE_SHORTPULSE, 10);
         mouseon(MOUSE_ACTION_SCROLL);
         return;
     } else if ((sensors1 & KS1_A8) == KS1_A8 && (sensors2 & KS2_A8) == KS2_A8 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
+        vibrate(KG_VIBRATE_SHORTPULSE, 10);
         mouseon(MOUSE_ACTION_MOVE);
         return;
     } else if ((sensors1 & KS1_J3) == KS1_J3 && (sensors2 & KS2_J3) == KS2_J3 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
+        vibrate(KG_VIBRATE_SHORTPULSE, 10);
         mousedown(MOUSE_RIGHT);
         return;
     } else if ((sensors1 & KS1_J2) == KS1_J2 && (sensors2 & KS2_J2) == KS2_J2 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
+        vibrate(KG_VIBRATE_SHORTPULSE, 10);
         mousedown(MOUSE_MIDDLE);
         return;
     } else if ((sensors1 & KS1_J1) == KS1_J1 && (sensors2 & KS2_J1) == KS2_J1 && (modeCheck(KMODE_DEFAULT, pos) || modeCheck(KMODE_NUMBERS, pos) || modeCheck(KMODE_SYMBOLS, pos) || modeCheck(KMODE_FUNCTIONS, pos))) {
+        vibrate(KG_VIBRATE_SHORTPULSE, 10);
         mousedown(MOUSE_LEFT);
         return;
     }
@@ -240,7 +245,7 @@ void check_sensors_touch(uint32_t sensors1, uint32_t sensors2, uint8_t pos) {
         return;
     }
 }
- 
+
 void check_sensors_release(uint32_t sensors1, uint32_t sensors2, uint8_t pos) {
     if ((sensors1 & KS1_Y7) == KS1_Y7 && (sensors2 & KS2_Y7) == KS2_Y7) {
         if (modeCheck(KMODE_DEFAULT, pos)) {
