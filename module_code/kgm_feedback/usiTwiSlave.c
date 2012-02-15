@@ -28,6 +28,8 @@ Change Activity:
   16 Mar 2007  Created.
   27 Mar 2007  Added support for ATtiny261, 461 and 861.
   26 Apr 2007  Fixed ACK of slave address on a read.
+  04 Jul 2007  Fixed USISIF in ATtiny45 def
+  31 Jul 2009  Added support for ATtiny24, 44, 84
 
 ********************************************************************************/
 
@@ -64,6 +66,21 @@ Change Activity:
 #  define USI_OVERFLOW_VECTOR USI_OVERFLOW_vect
 #endif
 
+#if defined( __AVR_ATtiny24__ ) | \
+     defined( __AVR_ATtiny44__ ) | \
+     defined( __AVR_ATtiny84__ )
+#  define DDR_USI             DDRA
+#  define PORT_USI            PORTA
+#  define PIN_USI             PINA
+#  define PORT_USI_SDA        PA6
+#  define PORT_USI_SCL        PA4
+#  define PIN_USI_SDA         PINA6
+#  define PIN_USI_SCL         PINA4
+#  define USI_START_COND_INT  USISIF
+#  define USI_START_VECTOR    USI_START_vect
+#  define USI_OVERFLOW_VECTOR USI_OVF_vect
+#endif
+
 #if defined( __AVR_ATtiny25__ ) | \
      defined( __AVR_ATtiny45__ ) | \
      defined( __AVR_ATtiny85__ )
@@ -74,7 +91,7 @@ Change Activity:
 #  define PORT_USI_SCL        PB2
 #  define PIN_USI_SDA         PINB0
 #  define PIN_USI_SCL         PINB2
-#  define USI_START_COND_INT  USISIF //was USICIF jjg
+#  define USI_START_COND_INT  USISIF
 #  define USI_START_VECTOR    USI_START_vect
 #  define USI_OVERFLOW_VECTOR USI_OVF_vect
 #endif
@@ -296,13 +313,12 @@ flushTwiBuffers(
 
 void
 usiTwiSlaveInit(
-  uint8_t ownAddress
+  uint8_t addr
 )
 {
+  slaveAddress = addr;
 
   flushTwiBuffers( );
-
-  slaveAddress = ownAddress;
 
   // In Two Wire mode (USIWM1, USIWM0 = 1X), the slave USI will pull SCL
   // low when a start condition is detected or a counter overflow (only
