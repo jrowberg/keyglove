@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 #include <stdlib.h> // for abs()
 
 #define ENABLE_I2C_SLAVE
@@ -71,8 +72,8 @@ THE SOFTWARE.
 #define set_output(portdir, pin) portdir |= (1 << pin)
 
 // timing counters (100 usec, 10 msec)
-uint16_t counter1 = 0;
-uint8_t counter2 = 0;
+volatile uint16_t counter1 = 0;
+volatile uint8_t counter2 = 0;
 
 // I2C I/O vars
 uint8_t waiting, address, in, count;
@@ -105,11 +106,14 @@ uint8_t spkPeriod;
 uint8_t spkSquare;
 uint16_t spkFreq1, spkFreq2;
 
-uint8_t registers[] = {
+#define NUM_REGISTERS 23
+
+// power-on register default values
+uint8_t defaultRegisters[NUM_REGISTERS] PROGMEM = {
     /* 0x00 RED_MODE   [3 - inv][2:0 - mode]  */ 0x00, // off, no inversion
     /* 0x01 RED_BRIGHT [7:4 - max][3:0 - min] */ 0xA0, // 100% max, 0% min
     /* 0x02 RED_PERIOD [7:0 - 10ms units]     */ 0x64, // 1sec period (10ms min, 2550ms max)
-    /* 0x03 RED_SQUARE [7:0 - high time %]    */ 0x32, // 50% split high/low
+    /* 0x03 RED_SQUARE [6:0 - high time %]    */ 0x32, // 50% split high/low
 
     /* 0x04 GRN_MODE   [3 - inv][2:0 - mode]  */ 0x00, // off, no inversion
     /* 0x05 GRN_BRIGHT [7:4 - max][3:0 - min] */ 0xA0, // 100% max, 0% min
@@ -141,41 +145,70 @@ VIB mode: 0 = off, 1 = solid, 2 = periodic
 SPK mode: 0 = off, 1 = solid, 2 = periodic, 3 = alternate, 4 = slide up, 5 = slide down, 6 = slide bounce
 */
 
-void applyRegisterConfig() {
-    redMode         =  registers[0x00] & 0x07;
-    redInvert       =  registers[0x00] & 0x08;
-    redBrightMin    =  registers[0x01] & 0x0F;
-    redBrightMax    = (registers[0x01] & 0xF0) >> 4;
-    redPeriod       =  registers[0x02];
-    redSquare       =  registers[0x03] & 0x7F;
+void applyRegisterByte(uint8_t reg, uint8_t b) {
+    if (reg == 0x00) {          /* 0x00 RED_MODE   [3 - inv][2:0 - mode]  */
+        redMode = b & 0x07;
+        redInvert = b & 0x08;
+    } else if (reg == 0x01) {   /* 0x01 RED_BRIGHT [7:4 - max][3:0 - min] */
+        redBrightMin = b & 0x0F;
+        redBrightMax = (b & 0xF0) >> 4;
+    } else if (reg == 0x02) {   /* 0x02 RED_PERIOD [7:0 - 10ms units]     */
+        redPeriod = b;
+    } else if (reg == 0x03) {   /* 0x03 RED_SQUARE [6:0 - high time %]    */
+        redSquare = b & 0x7F;
+    } else if (reg == 0x04) {   /* 0x04 GRN_MODE   [3 - inv][2:0 - mode]  */
+        grnMode = b & 0x07;
+        grnInvert = b & 0x08;
+    } else if (reg == 0x05) {   /* 0x05 GRN_BRIGHT [7:4 - max][3:0 - min] */
+        grnBrightMin = b & 0x0F;
+        grnBrightMax = (b & 0xF0) >> 4;
+    } else if (reg == 0x06) {   /* 0x06 GRN_PERIOD [7:0 - 10ms units]     */
+        grnPeriod = b;
+    } else if (reg == 0x07) {   /* 0x07 GRN_SQUARE [6:0 - high time %]    */
+        grnSquare = b & 0x7F;
+    } else if (reg == 0x08) {   /* 0x08 BLU_MODE   [3 - inv][2:0 - mode]  */
+        bluMode = b & 0x07;
+        bluInvert = b & 0x08;
+    } else if (reg == 0x09) {   /* 0x09 BLU_BRIGHT [7:4 - max][3:0 - min] */
+        bluBrightMin = b & 0x0F;
+        bluBrightMax = (b & 0xF0) >> 4;
+    } else if (reg == 0x0A) {   /* 0x0A BLU_PERIOD [7:0 - 10ms units]     */
+        bluPeriod = b;
+    } else if (reg == 0x0B) {   /* 0x0B BLU_SQUARE [6:0 - high time %]    */
+        bluSquare = b & 0x7F;
+    } else if (reg == 0x0C) {   /* 0x0C VIB_MODE   [3 - inv][2:0 - mode]  */
+        vibMode = b & 0x07;
+        vibInvert =  b & 0x08;
+    } else if (reg == 0x0D) {   /* 0x0D VIB_SPEED  [7:4 - max][3:0 - min] */
+        vibSpeedMin = b & 0x0F;
+        vibSpeedMax = (b & 0xF0) >> 4;
+    } else if (reg == 0x0E) {   /* 0x0E VIB_PERIOD [7:0 - 10ms units]     */
+        vibPeriod = b;
+    } else if (reg == 0x0F) {   /* 0x0F VIB_SQUARE [6:0 - high time %]    */
+        vibSquare = b & 0x7F;
+    } else if (reg == 0x10) {   /* 0x10 SPK_MODE   [3 - inv][2:0 - mode]  */
+        spkMode = b & 0x07;
+        spkInvert = b & 0x08;
+    } else if (reg == 0x11) {   /* 0x11 SPK_PERIOD [7:0 - 10ms units]     */
+        spkPeriod = b;
+    } else if (reg == 0x12) {   /* 0x12 SPK_SQUARE [6:0 - high time %]    */
+        spkSquare = b & 0x7F;
+    } else if (reg == 0x13) {   /* 0x13 SPK_FRQ1_H [7:0 - freq1 Hz MSB]   */
+        spkFreq1 = (spkFreq1 & 0x00FF) | (b << 8);
+    } else if (reg == 0x14) {   /* 0x14 SPK_FRQ1_L [7:0 - freq1 Hz LSB]   */
+        spkFreq1 = (spkFreq1 & 0xFF00) | b;
+    } else if (reg == 0x15) {   /* 0x15 SPK_FRQ2_H [7:0 - freq2 Hz MSB]   */
+        spkFreq2 = (spkFreq2 & 0x00FF) | (b << 8);
+    } else if (reg == 0x16) {   /* 0x16 SPK_FRQ2_L [7:0 - freq2 Hz LSB]   */
+        spkFreq2 = (spkFreq2 & 0xFF00) | b;
+    }
+}
 
-    grnMode         =  registers[0x04] & 0x07;
-    grnInvert       =  registers[0x04] & 0x08;
-    grnBrightMin    =  registers[0x05] & 0x0F;
-    grnBrightMax    = (registers[0x05] & 0xF0) >> 4;
-    grnPeriod       =  registers[0x06];
-    grnSquare       =  registers[0x07] & 0x7F;
-
-    bluMode         =  registers[0x08] & 0x07;
-    bluInvert       =  registers[0x08] & 0x08;
-    bluBrightMin    =  registers[0x09] & 0x0F;
-    bluBrightMax    = (registers[0x09] & 0xF0) >> 4;
-    bluPeriod       =  registers[0x0A];
-    bluSquare       =  registers[0x0B] & 0x7F;
-
-    vibMode         =  registers[0x0C] & 0x07;
-    vibInvert       =  registers[0x0C] & 0x08;
-    vibSpeedMin     =  registers[0x0D] & 0x0F;
-    vibSpeedMax     = (registers[0x0D] & 0xF0) >> 4;
-    vibPeriod       =  registers[0x0E];
-    vibSquare       =  registers[0x0F] & 0x7F;
-
-    spkMode         =  registers[0x10] & 0x07;
-    spkInvert       =  registers[0x10] & 0x08;
-    spkPeriod       =  registers[0x11];
-    spkSquare       =  registers[0x12] & 0x7F;
-    spkFreq1        = (registers[0x13] << 8 | registers[0x14]);
-    spkFreq2        = (registers[0x15] << 8 | registers[0x16]);
+void loadDefaultRegisters() {
+    uint8_t i;
+    for (i = 0; i < 0x17; i++) {
+        applyRegisterByte(i, pgm_read_byte(&(defaultRegisters[i])));
+    }
 }
 
 // main entry point
@@ -207,10 +240,11 @@ int main(void) {
         usiTwiSlaveInit(I2C_SLAVE_ADDRESS);
     #endif
 
-    //registers[0x00] = 0x04;
-
-    // read initial register values into control variables
-    applyRegisterConfig();
+    // read default register values into control variables
+    loadDefaultRegisters();
+    
+    // test to manually set red LED in fading pulse mode
+    applyRegisterByte(0x00, 0x03);
 
     // main loop
     while (1) {
@@ -284,10 +318,8 @@ int main(void) {
                 for (count = 0; count < waiting; count++) {
                     in = usiTwiReceiveByte();
                     if (count == 0) address = in;
-                    else if (address < sizeof(registers)) registers[address + count] = in;
+                    else if (address < NUM_REGISTERS) applyRegisterByte(address + count, in);
                 }
-                // read new register values into control variables
-                applyRegisterConfig();
             }
         #endif
     }
