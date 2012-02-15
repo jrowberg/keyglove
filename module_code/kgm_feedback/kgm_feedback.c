@@ -180,7 +180,6 @@ void applyRegisterConfig() {
 
 // main entry point
 int main(void) {
-
     // set feedback pins to output mode
     set_output(VIBD, VIBN);
     set_output(SPKD, SPKN);
@@ -223,7 +222,7 @@ int main(void) {
             if (redMode == 0) {
                 redLevel = 0;
             } else if (redMode == 1) {
-                redLevel = 1;
+                redLevel = 100;
             } else if (redMode == 2) {
                 if (counter1 > (1000 * 5)) redLevel = 0;
                 else redLevel = 100;
@@ -239,7 +238,7 @@ int main(void) {
             if (grnMode == 0) {
                 grnLevel = 0;
             } else if (grnMode == 1) {
-                grnLevel = 1;
+                grnLevel = 100;
             } else if (grnMode == 2) {
                 if (counter1 > (1000 * 5)) grnLevel = 0;
                 else grnLevel = 100;
@@ -255,7 +254,7 @@ int main(void) {
             if (bluMode == 0) {
                 bluLevel = 0;
             } else if (bluMode == 1) {
-                bluLevel = 1;
+                bluLevel = 100;
             } else if (bluMode == 2) {
                 if (counter1 > (1000 * 5)) bluLevel = 0;
                 else bluLevel = 100;
