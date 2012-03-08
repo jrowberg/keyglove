@@ -29,7 +29,7 @@ Change Activity:
   27 Mar 2007  Added support for ATtiny261, 461 and 861.
   26 Apr 2007  Fixed ACK of slave address on a read.
   04 Jul 2007  Fixed USISIF in ATtiny45 def
-  31 Jul 2009  Added support for ATtiny24, 44, 84
+  05 Mar 2012  Added support for ATtiny24, 44, and 84.
 
 ********************************************************************************/
 
@@ -313,12 +313,13 @@ flushTwiBuffers(
 
 void
 usiTwiSlaveInit(
-  uint8_t addr
+  uint8_t ownAddress
 )
 {
-  slaveAddress = addr;
 
   flushTwiBuffers( );
+
+  slaveAddress = ownAddress;
 
   // In Two Wire mode (USIWM1, USIWM0 = 1X), the slave USI will pull SCL
   // low when a start condition is detected or a counter overflow (only
