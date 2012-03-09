@@ -30,6 +30,7 @@ Change Activity:
   26 Apr 2007  Fixed ACK of slave address on a read.
   04 Jul 2007  Fixed USISIF in ATtiny45 def
   05 Mar 2012  Added support for ATtiny24, 44, and 84.
+  08 Mar 2012  Added support for START and STOP bit callbacks
 
 ********************************************************************************/
 
@@ -275,6 +276,9 @@ static uint8_t          txBuf[ TWI_TX_BUFFER_SIZE ];
 static volatile uint8_t txHead;
 static volatile uint8_t txTail;
 
+static void (*usiTwiOnStartFunction) ();
+static void (*usiTwiOnStopFunction) ();
+
 
 
 /********************************************************************************
@@ -421,6 +425,28 @@ usiTwiDataInReceiveBuffer(
 
 
 
+// assign callback function to START signal
+void
+usiTwiOnStart(
+  void (*function) ()
+)
+{
+  usiTwiOnStartFunction = function;
+}
+
+
+
+// assign callback function to STOP signal
+void
+usiTwiOnStop(
+  void (*function) ()
+)
+{
+  usiTwiOnStopFunction = function;
+}
+
+
+
 /********************************************************************************
 
                             USI Start Condition ISR
@@ -448,11 +474,11 @@ ISR( USI_START_VECTOR )
        !( ( PIN_USI & ( 1 << PIN_USI_SDA ) ) )
   );
 
-
   if ( !( PIN_USI & ( 1 << PIN_USI_SDA ) ) )
   {
 
     // a Stop Condition did not occur
+    if (usiTwiOnStartFunction != 0) usiTwiOnStartFunction();
 
     USICR =
          // keep Start Condition Interrupt enabled to detect RESTART
@@ -472,6 +498,8 @@ ISR( USI_START_VECTOR )
   {
 
     // a Stop Condition did occur
+    if (usiTwiOnStopFunction != 0) usiTwiOnStopFunction();
+
     USICR =
          // enable Start Condition Interrupt
          ( 1 << USISIE ) |
