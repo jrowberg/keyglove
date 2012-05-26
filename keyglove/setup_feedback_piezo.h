@@ -49,9 +49,9 @@ uint16_t piezoFrequency;
 void set_piezo_mode(uint8_t mode, uint8_t duration, uint16_t frequency) {
     piezoMode = mode;
     piezoFrequency = frequency;
-    if (mode == KG_PIEZO_OFF) noTone(KG_PIN_PIEZO);
-    else if (mode == KG_PIEZO_SOLID) tone(KG_PIN_PIEZO, frequency);
-    piezoTick = 0;
+    if (mode == KG_PIEZO_OFF) set_piezo_tone(0);
+    else if (mode == KG_PIEZO_SOLID) set_piezo_tone(frequency);
+    piezoTick = 0xFFFF;
     piezoTickLimit = duration;
 }
 
@@ -64,22 +64,20 @@ void set_piezo_mode(uint8_t mode) {
 }
 
 void setup_feedback_piezo() {
-    pinMode(KG_PIN_PIEZO, OUTPUT);
-    digitalWrite(KG_PIN_PIEZO, LOW);
     // SELF-TEST
     //set_piezo_mode(KG_PIEZO_TINYPULSE, 20);
 }
 
 void update_feedback_piezo() {
-    if (piezoMode > 0) {
-        if      (piezoMode == 1 && piezoTick % 50 == 0) { if (piezoTick % 100 >= 50) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
-        else if (piezoMode == 2 && piezoTick % 25 == 0) { if (piezoTick % 100 >= 25) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
-        else if (piezoMode == 3 && piezoTick % 10 == 0) { if (piezoTick %  20 >= 10) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
-        else if (piezoMode == 4 && piezoTick %  5 == 0) { if (piezoTick %  20 >=  5) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
-        else if (piezoMode == 5 && piezoTick %  5 == 0) { if (piezoTick %  10 >=  5) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
-        else if (piezoMode == 6 && piezoTick %  2 == 0) { if (piezoTick %  10 >=  2) noTone(KG_PIN_PIEZO); else tone(KG_PIN_PIEZO, piezoFrequency); }
-        if (++piezoTick >= piezoTickLimit && piezoTickLimit > 0) set_piezo_mode(KG_PIEZO_OFF);
-    }
+     if (piezoMode > 0) {
+         if      (piezoMode == 1 && piezoTick % 50 == 0) { set_piezo_tone(piezoTick % 100 >= 50 ? 0 : piezoFrequency); }
+         else if (piezoMode == 2 && piezoTick % 25 == 0) { set_piezo_tone(piezoTick % 100 >= 25 ? 0 : piezoFrequency); }
+         else if (piezoMode == 3 && piezoTick % 10 == 0) { set_piezo_tone(piezoTick %  20 >= 10 ? 0 : piezoFrequency); }
+         else if (piezoMode == 4 && piezoTick %  5 == 0) { set_piezo_tone(piezoTick %  20 >=  5 ? 0 : piezoFrequency); }
+         else if (piezoMode == 5 && piezoTick %  5 == 0) { set_piezo_tone(piezoTick %  10 >=  5 ? 0 : piezoFrequency); }
+         else if (piezoMode == 6 && piezoTick %  2 == 0) { set_piezo_tone(piezoTick %  10 >=  2 ? 0 : piezoFrequency); }
+         if (++piezoTick >= piezoTickLimit && piezoTickLimit > 0) set_piezo_mode(KG_PIEZO_OFF);
+     }
 }
 
 #endif // _SETUP_FEEDBACK_PIEZO_H_

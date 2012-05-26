@@ -36,6 +36,7 @@ THE SOFTWARE.
 
 #if (defined DEBUG_BENCHMARK) || (defined DEBUG_ACCELEROMETER) || \
     (defined DEBUG_GYROSCOPE) || (defined DEBUG_MAGNETOMETER) || \
+    (defined DEBUG_ACCELGYRO) || \
     (defined DEBUG_MOTIONFUSION) || (defined DEBUG_GESTURE) || \
     (defined DEBUG_TOUCH) || (defined DEBUG_TOUCHSET) || \
     (defined DEBUG_PS2) || (defined DEBUG_USB) || \
@@ -51,6 +52,7 @@ THE SOFTWARE.
 
 #define KG_PACKET_TYPE_REPORT_ACCEL         0x11
 #define KG_PACKET_TYPE_REPORT_GYRO          0x27
+#define KG_PACKET_TYPE_REPORT_ACCELGYRO     0x28
 
 #ifdef DEBUG_BENCHMARK
     #define DEBUG_PRN_BENCHMARK(x)          Serial.print(x)
@@ -86,6 +88,18 @@ THE SOFTWARE.
     #define DEBUG_PRNF_GYROSCOPE(x, y)
     #define DEBUG_PRNL_GYROSCOPE(x)
     #define DEBUG_PRNLF_GYROSCOPE(x, y)
+#endif
+
+#ifdef DEBUG_ACCELGYRO
+    #define DEBUG_PRN_ACCELGYRO(x)          Serial.print(x)
+    #define DEBUG_PRNF_ACCELGYRO(x, y)      Serial.print(x, y)
+    #define DEBUG_PRNL_ACCELGYRO(x)         Serial.println(x)
+    #define DEBUG_PRNLF_ACCELGYRO(x, y)     Serial.println(x, y)
+#else
+    #define DEBUG_PRN_ACCELGYRO(x)
+    #define DEBUG_PRNF_ACCELGYRO(x, y)
+    #define DEBUG_PRNL_ACCELGYRO(x)
+    #define DEBUG_PRNLF_ACCELGYRO(x, y)
 #endif
 
 #ifdef DEBUG_MAGNETOMETER
@@ -385,7 +399,7 @@ THE SOFTWARE.
     #if (KG_MOTION & KG_MOTION_ITG3200)
         #error Cannot use both ITG3200 and MPU-6050 (competing gyroscopes)
     #endif
-    #define ENABLE_FUSION // used in main loop()
+    #define ENABLE_ACCELGYRO // used in main loop()
     #include "setup_motion_mpu6050.h"
 #endif
 
@@ -400,15 +414,67 @@ THE SOFTWARE.
         #error Cannot use both HMC5843 and InvenSense MotionFusion (HMC5843 should be connected to aux SDA/SCL of MPU-6050)
     #endif
     #if (KG_MOTION & KG_MOTION_HMC5883L)
-        #error Cannot use both HMC5843 and InvenSense MotionFusion (HMC5883L should be connected to aux SDA/SCL of MPU-6050)
+        #error Cannot use both HMC5883l and InvenSense MotionFusion (HMC5883L should be connected to aux SDA/SCL of MPU-6050)
     #endif
-    #define ENABLE_FUSION // used in main loop()
-    #define MOTIONFUSION_9DOF_HMC5883
+    #define ENABLE_ACCELGYRO // used in main loop()
     #include "setup_motion_mpu6050.h"
 #endif
 
-#if defined(ENABLE_ACCELEROMETER) && defined(ENABLE_GYROSCOPE)
-    #include "setup_motion_rawimu.h"
+#if (KG_MOTION & KG_MOTION_MPU6050_AK8975)
+    #if (KG_MOTION & KG_MOTION_ADXL345)
+        #error Cannot use both ADXL345 and MPU-6050 (competing accelerometers)
+    #endif
+    #if (KG_MOTION & KG_MOTION_ITG3200)
+        #error Cannot use both ITG3200 and MPU-6050 (competing gyroscopes)
+    #endif
+    #if (KG_MOTION & KG_MOTION_HMC5843)
+        #error Cannot use both HMC5843 and InvenSense MotionFusion (HMC5843 should be connected to aux SDA/SCL of MPU-6050)
+    #endif
+    #if (KG_MOTION & KG_MOTION_HMC5883L)
+        #error Cannot use both HMC5843 and InvenSense MotionFusion (HMC5883L should be connected to aux SDA/SCL of MPU-6050)
+    #endif
+    #if (KG_MOTION & KG_MOTION_MPU9150)
+        #error Cannot use both MPU-6050 and MPU-9150 (competing accelerometers and gyroscopes)
+    #endif
+    #define ENABLE_ACCELGYRO // used in main loop()
+    #include "setup_motion_mpu6050.h"
+#endif
+
+#if (KG_MOTION & KG_MOTION_MPU9150)
+    #if (KG_MOTION & KG_MOTION_ADXL345)
+        #error Cannot use both ADXL345 and MPU-6050 (competing accelerometers)
+    #endif
+    #if (KG_MOTION & KG_MOTION_ITG3200)
+        #error Cannot use both ITG3200 and MPU-6050 (competing gyroscopes)
+    #endif
+    #if (KG_MOTION & KG_MOTION_MPU6050)
+        #error Cannot use both MPU-6050 and MPU-9150 (competing accelerometers and gyroscopes)
+    #endif
+    #if (KG_MOTION & KG_MOTION_HMC5843)
+        #error Cannot use both HMC5843 and InvenSense MotionFusion (HMC5843 should be connected to aux SDA/SCL of MPU-6050)
+    #endif
+    #if (KG_MOTION & KG_MOTION_HMC5883L)
+        #error Cannot use both HMC5843 and InvenSense MotionFusion (HMC5883L should be connected to aux SDA/SCL of MPU-6050)
+    #endif
+    #define ENABLE_ACCELGYRO // used in main loop()
+    #include "setup_motion_mpu9150.h"
+#endif
+
+#if (KG_FUSION == KG_FUSION_RAWIMU_6DOF)
+    #include "setup_motion_rawimu_6dof.h"
+#elif (KG_FUSION == KG_FUSION_RAWMARG_9DOF)
+    #include "setup_motion_rawmarg_9dof.h"
+#endif
+
+/* ===============================================
+ * FEEDBACK CONNECTION
+=============================================== */
+#if (KG_FEEDBACKCONN == KG_FEEDBACKCONN_DIRECT)
+    #include "setup_feedbackconn_direct.h"
+#endif
+
+#if (KG_FEEDBACKCONN == KG_FEEDBACKCONN_I2C)
+    #include "setup_feedbackconn_i2c.h"
 #endif
 
 /* ===============================================
@@ -467,6 +533,8 @@ void keyglove_setup() {
     #ifdef ENABLE_SERIAL
         Serial.begin(38400);
         Serial.println("info Keyglove device activated");
+        DDRD |= 0b01000000;
+        PORTD |= 0b01000000;
     #endif
 
     // single-option external EEPROM
@@ -514,6 +582,9 @@ void keyglove_setup() {
     #ifdef ENABLE_GYROSCOPE
         setup_motion_gyroscope();
     #endif
+    #ifdef ENABLE_ACCELGYRO
+        setup_motion_accelgyro();
+    #endif
     #ifdef ENABLE_MAGNETOMETER
         setup_motion_magnetometer();
     #endif
@@ -525,6 +596,9 @@ void keyglove_setup() {
     #endif
 
     // multi-option feedback
+    #if (KG_FEEDBACKCONN > 0)
+        setup_feedbackconn();
+    #endif
     #if (KG_FEEDBACK & KG_FEEDBACK_BLINK)
         setup_feedback_blink();
     #endif

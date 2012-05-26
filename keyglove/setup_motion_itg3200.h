@@ -88,6 +88,7 @@ void setup_motion_gyroscope() {
     PORTE |= 0b00100000; // E5 = pullup
     gyroscope.setInterruptMode(1); // active low
     gyroscope.setInterruptDrive(1); // open drain
+    gyroscope.setInterruptLatch(1); // latch until read
     gyroscope.setInterruptLatchClear(1); // clear on any read
     gyroscope.setIntDataReadyEnabled(1); // trigger interrupt on data ready
     activeGyroscope = false;

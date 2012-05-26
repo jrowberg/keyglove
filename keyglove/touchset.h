@@ -40,35 +40,40 @@ THE SOFTWARE.
 static void activate_mode(uint8_t mode) {
     switch (mode) {
         case KMODE_DEFAULT:
-            beep(2000, KG_PIEZO_SHORTBEEP, 1);
+            beep(2000, KG_PIEZO_TINYBEEP, 10);
+            vibrate(KG_VIBRATE_TINYBUZZ, 10);
             redled(KG_RGB_OFF, 0);
             greenled(KG_RGB_SOLID, 0);
             blueled(KG_RGB_OFF, 0);
             return;
             break;
         case KMODE_NUMBERS:
-            beep(2000, KG_PIEZO_SHORTBEEP, 2);
+            beep(2000, KG_PIEZO_TINYBEEP, 20);
+            vibrate(KG_VIBRATE_TINYBUZZ, 20);
             redled(KG_RGB_OFF, 0);
             greenled(KG_RGB_OFF, 0);
             blueled(KG_RGB_SOLID, 0);
             return;
             break;
         case KMODE_SYMBOLS:
-            beep(2000, KG_PIEZO_SHORTBEEP, 3);
+            beep(2000, KG_PIEZO_TINYBEEP, 30);
+            vibrate(KG_VIBRATE_TINYBUZZ, 30);
             redled(KG_RGB_OFF, 0);
             greenled(KG_RGB_SOLID, 0);
             blueled(KG_RGB_SOLID, 0);
             return;
             break;
         case KMODE_FUNCTIONS:
-            beep(2000, KG_PIEZO_SHORTBEEP, 4);
+            beep(2000, KG_PIEZO_TINYBEEP, 40);
+            vibrate(KG_VIBRATE_TINYBUZZ, 40);
             redled(KG_RGB_SOLID, 0);
             greenled(KG_RGB_OFF, 0);
             blueled(KG_RGB_OFF, 0);
             return;
             break;
         case KMODE_GUI:
-            beep(1600, KG_PIEZO_SHORTPULSE, 1);
+            beep(1200, KG_PIEZO_TINYBEEP, 50);
+            vibrate(KG_VIBRATE_TINYBUZZ, 50);
             greenled(KG_RGB_SHORTBLINK, 0);
             modifierdown(MODIFIERKEY_GUI);
             return;

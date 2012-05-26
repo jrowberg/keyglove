@@ -45,7 +45,6 @@ uint8_t keygloveTick = 0;   // increments every ~10ms (100hz), loops at 100
 uint32_t keygloveTock = 0;  // increments every 100 ticks, loops as 2^32 (~4 billion)
 uint32_t keygloveTickTime = 0, keygloveTickTime0 = 0;
 
-bool activeMagnetometer;
 bool activeGestures;
 bool activeTouch;
 bool activeKeyboard;
@@ -97,7 +96,7 @@ void setup() {
     TCNT1 = 0; // clear TIMER1 counter
     TIFR1 |= (1 << TOV1); // clear the TIMER1 overflow flag
     TIMSK1 |= (1 << TOIE1); // enable TIMER1 overflow interrupts*/
-    
+
     // debug setup stuff
     //enable_motion_accelerometer();
     //enable_motion_gyroscope();
@@ -112,6 +111,9 @@ void loop() {
     #endif
     #ifdef ENABLE_GYROSCOPE
         if (activeGyroscope && readyGyroscopeData) update_motion_gyroscope();
+    #endif
+    #ifdef ENABLE_ACCELGYRO
+        if (activeAccelGyro && readyAccelGyroData) update_motion_accelgyro();
     #endif
     #ifdef ENABLE_MAGNETOMETER
         if (activeMagnetometer && readyMagnetometerData) update_motion_magnetometer();
@@ -137,6 +139,7 @@ void loop() {
 
         // check for 100 ticks and reset counter (should be every 1 second)
         if (keygloveTick == 100) {
+            //Serial.println("Tick!");
             //Serial.println(keygloveTickTime / 100);
             //keygloveTickTime = 0;
             keygloveTick = 0;

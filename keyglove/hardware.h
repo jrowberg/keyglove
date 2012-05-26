@@ -93,6 +93,20 @@ THE SOFTWARE.
 #define KG_MOTION_HMC5883L              8           /* 3-axis I2C digital magnetometer (updated) */
 #define KG_MOTION_MPU6050               16          /* 6-axis I2C digital accel/gyro */
 #define KG_MOTION_MPU6050_HMC5883L      32          /* 6-axis I2C digital accel/gyro + 3-axis magnetometer (9-DOF) */
+#define KG_MOTION_MPU6050_AK8975        64          /* 6-axis I2C digital accel/gyro + 3-axis magnetometer (9-DOF) */
+#define KG_MOTION_MPU9150               128         /* 9-axis I2C digital accel/gyro/magnetometer (9-DOF) */
+
+
+
+/** Sensor fusion options. Only one choice may be selected at a time (defined in KG_FUSION) */
+
+#define KG_FUSION_NONE                  0           /* No fusion algorithms, only raw sensor measurements */
+#define KG_FUSION_RAWIMU_6DOF           1           /* Seb Madgwick's 6-DOF IMU filter, all software */
+#define KG_FUSION_RAWMARG_9DOF          2           /* Seb Madgwick's 9-DOF MARG filter, all software */
+#define KG_FUSION_MPU6050_6DOF          3           /* DMP-based 6-DOF filter, all hardware */
+#define KG_FUSION_MPU6050_AK8975_9ODF   4           /* DMP-based 9-DOF filter, all hardware (?) */
+#define KG_FUSION_MPU6050_HMC5883L_9DOF 5           /* DMP-based 9-DOF filter, all hardware (?) */
+#define KG_FUSION_MPU9150               6           /* DMP-based 9-DOF filter, all hardware */
 
 
 
@@ -102,6 +116,12 @@ THE SOFTWARE.
 #define KG_FEEDBACK_PIEZO               2           /* Piezo buzzer for sound */
 #define KG_FEEDBACK_VIBRATE             4           /* Vibration motor for haptic feedback */
 #define KG_FEEDBACK_RGB                 8           /* Combined RGB LED for visual feedback */
+
+/** Sensory feedback connection. Only one choice may be selected at a time. (defined in KG_FEEDBACKCONN) */
+
+#define KG_FEEDBACKCONN_NONE            0           /* Don't do anything with feedback */
+#define KG_FEEDBACKCONN_DIRECT          1           /* Direct connection to I/O pins */
+#define KG_FEEDBACKCONN_I2C             2           /* Custom I2C-based RGB/vibe/piezo module */
 
 #endif // _HARDWARE_H_
 

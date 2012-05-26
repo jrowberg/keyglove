@@ -96,13 +96,18 @@ void mouseon(uint8_t mode) {
     activeMouse = true;
     if (mode == MOUSE_ACTION_MOVE) {
         opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
-        if (!activeAccelerometer) enable_motion_accelerometer();
-        if (!activeGyroscope) enable_motion_gyroscope();
     } else if (mode == MOUSE_ACTION_SCROLL) {
         opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
-        if (!activeAccelerometer) enable_motion_accelerometer();
-        if (!activeGyroscope) enable_motion_gyroscope();
     }
+    #ifdef ENABLE_ACCELEROMETER
+        if (!activeAccelerometer) enable_motion_accelerometer();
+    #endif
+    #ifdef ENABLE_GYROSCOPE
+        if (!activeGyroscope) enable_motion_gyroscope();
+    #endif
+    #ifdef ENABLE_ACCELGYRO
+        if (!activeAccelGyro) enable_motion_accelgyro();
+    #endif
 }
 
 void mouseoff(uint8_t mode) {
@@ -111,13 +116,18 @@ void mouseoff(uint8_t mode) {
     activeMouse = false;
     if (mode == MOUSE_ACTION_MOVE) {
         opt_mouse_mode = 0;
-        if (activeAccelerometer) disable_motion_accelerometer();
-        if (activeGyroscope) disable_motion_gyroscope();
     } else if (mode == MOUSE_ACTION_SCROLL) {
         opt_scroll_mode = 0;
-        if (activeAccelerometer) disable_motion_accelerometer();
-        if (activeGyroscope) disable_motion_gyroscope();
     }
+    #ifdef ENABLE_ACCELEROMETER
+        if (activeAccelerometer) disable_motion_accelerometer();
+    #endif
+    #ifdef ENABLE_GYROSCOPE
+        if (activeGyroscope) disable_motion_gyroscope();
+    #endif
+    #ifdef ENABLE_ACCELGYRO
+        if (activeAccelGyro) disable_motion_accelgyro();
+    #endif
 }
 
 void mousedown(uint8_t button) {

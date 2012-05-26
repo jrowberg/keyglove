@@ -44,9 +44,9 @@ uint16_t vibrateTickLimit;
 
 void set_vibrate_mode(uint8_t mode, uint8_t duration) {
     vibrateMode = mode;
-    if (mode == KG_VIBRATE_OFF) digitalWrite(KG_PIN_VIBRATE, HIGH);
-    else if (mode == KG_VIBRATE_SOLID) digitalWrite(KG_PIN_VIBRATE, LOW);
-    vibrateTick = 0;
+    if (mode == KG_VIBRATE_OFF) set_vibrate_logic(0);
+    else if (mode == KG_VIBRATE_SOLID) set_vibrate_logic(1);
+    vibrateTick = 0xFFFF;
     vibrateTickLimit = duration;
 }
 
@@ -55,21 +55,19 @@ void set_vibrate_mode(uint8_t mode) {
 }
 
 void setup_feedback_vibrate() {
-    pinMode(KG_PIN_VIBRATE, OUTPUT);
-    digitalWrite(KG_PIN_VIBRATE, HIGH); // transistor switch makes it active-low
     // SELF-TEST
     //set_vibrate_mode(KG_VIBRATE_TINYBUZZ, 20);
 }
 
 void update_feedback_vibrate() {
-    if (vibrateMode > 0) {
-        if      (vibrateMode == 1 && vibrateTick % 50 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick % 100 >= 50 ? HIGH : LOW);
-        else if (vibrateMode == 2 && vibrateTick % 25 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick % 100 >= 25 ? HIGH : LOW);
-        else if (vibrateMode == 3 && vibrateTick % 10 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick %  20 >= 10 ? HIGH : LOW);
-        else if (vibrateMode == 4 && vibrateTick %  5 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick %  20 >=  5 ? HIGH : LOW);
-        else if (vibrateMode == 5 && vibrateTick %  5 == 0) digitalWrite(KG_PIN_VIBRATE, vibrateTick %  10 >=  5 ? HIGH : LOW);
-        if (++vibrateTick >= vibrateTickLimit && vibrateTickLimit > 0) set_vibrate_mode(KG_VIBRATE_OFF);
-    }
+     if (vibrateMode > 0) {
+         if      (vibrateMode == 1 && vibrateTick % 50 == 0) set_vibrate_logic(vibrateTick % 100 >= 50 ? 0 : 1);
+         else if (vibrateMode == 2 && vibrateTick % 25 == 0) set_vibrate_logic(vibrateTick % 100 >= 25 ? 0 : 1);
+         else if (vibrateMode == 3 && vibrateTick % 10 == 0) set_vibrate_logic(vibrateTick %  20 >= 10 ? 0 : 1);
+         else if (vibrateMode == 4 && vibrateTick %  5 == 0) set_vibrate_logic(vibrateTick %  20 >=  5 ? 0 : 1);
+         else if (vibrateMode == 5 && vibrateTick %  5 == 0) set_vibrate_logic(vibrateTick %  10 >=  5 ? 0 : 1);
+         if (++vibrateTick >= vibrateTickLimit && vibrateTickLimit > 0) set_vibrate_mode(KG_VIBRATE_OFF);
+     }
 }
 
 #endif // _SETUP_FEEDBACK_VIBRATE_H_

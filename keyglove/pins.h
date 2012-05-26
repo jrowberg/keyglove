@@ -167,71 +167,127 @@ THE SOFTWARE.
 #endif /* USE_ARDUINO */
 
 #if KG_BOARD == KG_BOARD_TEENSYPP2
-    #define KSP_A 4 // D4
-    #define KSP_B 5 // D5
-    #define KSP_C 7 // D7
-    #define KSP_D 8 // E0
-    #define KSP_E 9 // E1
-    #define KSP_F 10 // C0
-    #define KSP_G 11 // C1
-    #define KSP_H 12 // C2
-    #define KSP_I 13 // C3
-    #define KSP_J 14 // C4
-    #define KSP_K 15 // C5
-    #define KSP_L 16 // C6
-    #define KSP_M 17 // C7
-    #define KSP_N 18 // E6
-    #define KSP_O 19 // E7
-    #define KSP_P 20 // B0
-    #define KSP_Q 21 // B1
-    #define KSP_R 22 // B2
-    #define KSP_S 23 // B3
-    #define KSP_T 24 // B4
-    #define KSP_U 25 // B5
-    #define KSP_V 26 // B6
-    #define KSP_W 27 // B7 (top left)
-    #define KSP_X 28 // PA0 (internal, top right)
-    #define KSP_Y 29 // PA1
-    #define KSP_Z 30 // PA2
-    #define KSP_1 31 // PA3
-    #define KSP_2 32 // PA4
-    #define KSP_3 33 // PA5
-    #define KSP_4 34 // PA6
-    #define KSP_5 35 // PA7 (internal, bottom left)
-    #define KSP_6 38 // F0
-    #define KSP_7 39 // F1
-    #define KSP_8 40 // F2
+    /*
+    Teensy++ 2.0 Pin arrangement:
 
-    #define KG_INTERRUPT_PIN_ACCEL 1    // E4 (internal/tiny, right)
-    #define KG_INTERRUPT_NUM_ACCEL 4    // Teensy++ interrupt #4
+                         __|||||__
+                    GND |   USB   | VCC
+            3        27 |         | 26        Y
+                  SCL 0 |         | 25        Z
+                  SDA 1 |         | 24        a*
+                  RXD 2 |         | 23        8
+                  TXD 3 |         | 22        9
+            2         4 |  37.36  | 21        0
+            1         5 |         | 20        A
+                  LED 6 |         | 19 INT7
+            7         7 |         | 18 INT6
+            X         8 |         | GND
+            W         9 |         | AREF
+            V        10 |         | 38        B
+            L    5   11 | 32 . 28 | 39  R     C
+            K    G   12 | 33 . 29 | 40  Q     M
+            J    H   13 | 34 . 30 | 41  P     N
+            6    I   14 | 35 . 31 | 42  F     O
+            U        15 |         | 43        4
+            T        16 |         | 44        D
+            S        17 |_________| 45        E
+                     
+                      36=INT4, 37=INT5
 
-    #define KG_INTERRUPT_PIN_GYRO 1     // E5 (internal/tiny, left)
-    #define KG_INTERRUPT_NUM_GYRO 5     // Teensy++ interrupt #5
+    This is a grand total of 46 usable I/O pins.
+    We use SCL (0) and SDA (1) for I2C communication, leaving 44 usable pins.
+    We use RXD (2) and TXD (2) for Bluetooth UART communication, leaving 42 usable pins.
+    We use INT4 (36) and INT5 (37) for accel and gyro interrupts, leaving 40 usable pins.
+    We use INT7 (19) for Bluetooth Link interrupts, leaving 39 usable pins.
+    We use INT6 (18) for DTR control, leaving 38 usable pins.
+    We use LED for BLINK feedback, leaving 37 usable pins.
+    ...and we have a total of 37 sensors. Yay!
+    
+    For the sake of the Keyglove Kit board, the sensor pin connections should be arranged
+    in a clockwise manner as Thumb, Index, Middle, Ring, Little, with each individual
+    finger's sensors in increasing alphabetical order: (Y,Z,a*,8,9,0), (A,B,C,M,N,O,4),
+    and so on. Start with pin 26 (B6)
+    */
+
+    #define KSP_Y   26  // PB6
+    #define KSP_Z   25  // PB5
+    #define KSP_AA  24  // PB4
+    #define KSP_8   23  // PB3
+    #define KSP_9   22  // PB2
+    #define KSP_0   21  // PB1
+
+    #define KSP_A   20  // PB0
+    #define KSP_B   38  // PF0
+    #define KSP_C   39  // PF1
+    #define KSP_M   40  // PF2
+    #define KSP_N   41  // PF3
+    #define KSP_O   42  // PF4
+    #define KSP_4   43  // PF5
+
+    #define KSP_D   44  // PF6
+    #define KSP_E   45  // PF7
+    #define KSP_F   31  // PA3
+    #define KSP_P   30  // PA2
+    #define KSP_Q   29  // PA1
+    #define KSP_R   28  // PA0
+    #define KSP_5   32  // PA4
+
+    #define KSP_G   33  // PA5
+    #define KSP_H   34  // PA6
+    #define KSP_I   35  // PA7
+    #define KSP_S   17  // PC7
+    #define KSP_T   16  // PC6
+    #define KSP_U   15  // PC5
+    #define KSP_6   14  // PC4
+
+    #define KSP_J   13  // PC3
+    #define KSP_K   12  // PC2
+    #define KSP_L   11  // PC1
+    #define KSP_V   10  // PC0
+    #define KSP_W   9   // PE1
+    #define KSP_X   8   // PE0
+    #define KSP_7   7   // PD7
+
+    #define KSP_1   5   // PD5
+    #define KSP_2   4   // PD4
+    #define KSP_3   27  // PB7
+
+    #define KG_INTERRUPT_PIN_ACCEL  36  // PE4 (internal/tiny, right)
+    #define KG_INTERRUPT_NUM_ACCEL  4   // Teensy++ interrupt #4
+    // KKYX-9CL3X2-ZXZ2
+
+    #define KG_INTERRUPT_PIN_GYRO   37  // PE5 (internal/tiny, left)
+    #define KG_INTERRUPT_NUM_GYRO   5   // Teensy++ interrupt #5
 
     // FUSION and ACCEL are never both used at the same time
-    #define KG_INTERRUPT_PIN_FUSION 1   // E4 (internal/tiny, right)
+    #define KG_INTERRUPT_PIN_FUSION 36  // PE4 (internal/tiny, right)
     #define KG_INTERRUPT_NUM_FUSION 4   // Teensy++ interrupt #4
 
-    #define KG_PIN_BLINK 6 // Teensy++ LED pin 6
+    #define KG_PIN_BLINK            6   // PD6
 
-    #define KG_PIN_PIEZO 41 // F3
-    #define KG_PIN_VIBRATE 42 // F4
+    #define KG_PIN_BT_LINK              19  // PE7
+    #define KG_INTERRUPT_NUM_BT_LINK    7   // Teensy++ interrupt #7
+    #define KG_PIN_BT_DTR               18  // PE6
 
-    #define KG_PIN_RGB_RED 43   // F5
-    #define KG_PIN_RGB_GREEN 44 // F6
-    #define KG_PIN_RGB_BLUE 45  // F7
-    
-    #define KB_PIN_CLOCK    19
-    #define KB_PIN_DATA     18
-    
-    #define KG_PIN_BT_DTR   4
-    #define KG_PIN_BT_LINK  5
+    // ITEMS BELOW THIS CANNOT BE USED SIMULTANEOUSLY WITH ALL ABOVE FEATURES
 
-    #define MOUSE_PIN_CLOCK 3
-    #define MOUSE_PIN_DATA  2
-#endif /* USE_TEENSY */
+    // direct I/O feedback pins (kills 3 thumb sensors and Bluetooth mode control)
+    #define KG_PIN_PIEZO        19  // PE7
+    #define KG_PIN_VIBRATE      18  // PE6
+    #define KG_PIN_RGB_RED      21  // PB1
+    #define KG_PIN_RGB_GREEN    22  // PB2
+    #define KG_PIN_RGB_BLUE     24  // PB4
 
-#define KG_TOTAL_SENSORS 34
+    // PS/2 clock/data pins for keyboard (kills Bluetooth mode control, direct I/O piezo/vibe)
+    #define KG_PIN_KB_CLOCK     19  // PE7
+    #define KG_PIN_KB_DATA      18  // PE6
+
+    // PS/2 clock/data pins for mouse (kills Bluetooth UART connection)
+    #define KG_PIN_MOUSE_CLOCK  3   // PD3
+    #define KG_PIN_MOUSE_DATA   2   // PD2
+#endif /* KG_BOARD == KG_BOARD_TEENSYPP2 */
+
+#define KG_TOTAL_SENSORS 37
 #define KG_BASE_COMBINATIONS 60
 
 uint8_t pins[KG_TOTAL_SENSORS] = {
@@ -241,7 +297,8 @@ uint8_t pins[KG_TOTAL_SENSORS] = {
     KSP_P, KSP_Q, KSP_R, KSP_S, KSP_T,
     KSP_U, KSP_V, KSP_W, KSP_X, KSP_Y,
     KSP_Z, KSP_1, KSP_2, KSP_3, KSP_4,
-    KSP_5, KSP_6, KSP_7, KSP_8 };
+    KSP_5, KSP_6, KSP_7, KSP_8, KSP_9,
+    KSP_0, KSP_AA };
     
 uint8_t combinations[KG_BASE_COMBINATIONS][2] = {
     { KSP_Z, KSP_7 /* Z7 */ },
@@ -305,5 +362,3 @@ uint8_t combinations[KG_BASE_COMBINATIONS][2] = {
     { KSP_J, KSP_1 /* J1 */ },
     { KSP_Y, KSP_1 /* Y1 */ }
 };
-
-

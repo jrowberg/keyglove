@@ -51,10 +51,10 @@ THE SOFTWARE.
 
 // mouse measurements
 int16_t mousedx, mousedy, mousedz, scrolldy;    // relative movement
-// (note z is for 3D movement, scrolly is for scrolling)
+// (note z is for 3D movement, scrolldy is for scrolling)
 
-uint8_t opt_mouse_invert_x = 1;                 // invert mouse x movements
-uint8_t opt_mouse_invert_y = 0;                 // invert mouse y movements
+uint8_t opt_mouse_invert_x = 0;                 // invert mouse x movements
+uint8_t opt_mouse_invert_y = 1;                 // invert mouse y movements
 uint8_t opt_mouse_invert_z = 0;                 // invert mouse z movements
 
 uint8_t opt_mouse_mode = 0;                     // which mouse move mode (0=disable, 1/2/3/4 as defined)
@@ -73,21 +73,32 @@ void setup_mouse() {
 void update_mouse() {
     switch (opt_mouse_mode) {
         case MOUSE_MODE_TILT_VELOCITY:
-            mousedx += ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) + ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
+            mousedx += ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) - ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
             mousedy += (gv.x < 0) ? -pow(-(float)gv.x/30, 1.3)*3 : pow((float)gv.x/30, 1.3)*3;
             break;
         case MOUSE_MODE_TILT_POSITION:
-            mousedx = ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) + ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
+            mousedx = ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) - ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
             mousedy = (gv.x < 0) ? -pow(-(float)gv.x/30, 1.3)*3 : pow((float)gv.x/30, 1.3)*3;
             break;
         case MOUSE_MODE_MOVEMENT_POSITION:
-            mousedx = apFrame.x * opt_mouse_scale_mode4[0];
-            mousedy = apFrame.y * opt_mouse_scale_mode4[1];
+            #if (KG_FUSION > 0)
+                mousedx = apFrame.x * opt_mouse_scale_mode4[0];
+                mousedy = apFrame.y * opt_mouse_scale_mode4[1];
+            #else
+                mousedx = aa.x * opt_mouse_scale_mode4[0];
+                mousedy = aa.y * opt_mouse_scale_mode4[1];
+            #endif
             break;
         case MOUSE_MODE_3D:
-            mousedx = apFrame.x * opt_mouse_scale_mode4[0];
-            mousedy = apFrame.y * opt_mouse_scale_mode4[1];
-            mousedz = apFrame.z * opt_mouse_scale_mode4[2];
+            #if (KG_FUSION > 0)
+                mousedx = apFrame.x * opt_mouse_scale_mode4[0];
+                mousedy = apFrame.y * opt_mouse_scale_mode4[1];
+                mousedz = apFrame.z * opt_mouse_scale_mode4[2];
+            #else
+                mousedx = aa.x * opt_mouse_scale_mode4[0];
+                mousedy = aa.y * opt_mouse_scale_mode4[1];
+                mousedz = aa.z * opt_mouse_scale_mode4[2];
+            #endif
             break;
     }
     switch (opt_scroll_mode) {

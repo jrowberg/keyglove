@@ -41,37 +41,23 @@ uint8_t rgbBlinkRed;
 uint8_t rgbBlinkGreen;
 uint8_t rgbBlinkBlue;
 
-void set_rgb_logic(uint8_t r, uint8_t g, uint8_t b) {
-    if (r != 255) digitalWrite(KG_PIN_RGB_RED, r);
-    if (g != 255) digitalWrite(KG_PIN_RGB_GREEN, g);
-    if (b != 255) digitalWrite(KG_PIN_RGB_BLUE, b);
-}
-
 void set_rgb_mode(uint8_t r, uint8_t g, uint8_t b) {
     rgbBlinkRed = r;
     rgbBlinkGreen = g;
     rgbBlinkBlue = b;
-    if (r == 0) digitalWrite(KG_PIN_RGB_RED, 0);
-    else if (r == 5) digitalWrite(KG_PIN_RGB_RED, 1);
-    if (g == 0) digitalWrite(KG_PIN_RGB_GREEN, 0);
-    else if (g == 5) digitalWrite(KG_PIN_RGB_GREEN, 1);
-    if (b == 0) digitalWrite(KG_PIN_RGB_BLUE, 0);
-    else if (b == 5) digitalWrite(KG_PIN_RGB_BLUE, 1);
+    // logic: r=0 -> off, r=5 -> on, else no immediate change
+    set_rgb_logic(
+        r == 0 ? 0 : (r == 5 ? 1 : 255),
+        g == 0 ? 0 : (g == 5 ? 1 : 255),
+        b == 0 ? 0 : (b == 5 ? 1 : 255)
+    );
 }
 
 void setup_feedback_rgb() {
-    pinMode(KG_PIN_RGB_RED, OUTPUT);
-    pinMode(KG_PIN_RGB_GREEN, OUTPUT);
-    pinMode(KG_PIN_RGB_BLUE, OUTPUT);
-    digitalWrite(KG_PIN_RGB_RED, LOW);
-    digitalWrite(KG_PIN_RGB_GREEN, LOW);
-    digitalWrite(KG_PIN_RGB_BLUE, LOW);
-    /*
     // SELF-TEST
-    set_rgb_logic(1, 1, 1); // turn everything on and wait 1/20 sec
-    delay(50);
-    set_rgb_logic(0, 0, 0); // turn everything off again
-    */
+    //set_rgb_logic(1, 1, 1); // turn everything on and wait 1/20 sec
+    //delay(50);
+    //set_rgb_logic(0, 0, 0); // turn everything off again
 }
 
 void update_feedback_rgb() {
