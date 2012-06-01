@@ -167,15 +167,10 @@ void loop() {
         // send any unsent joystick control data
         if (activeJoystick) update_joystick();
 
-        // check for blink condition (should be every 1/2 second)
+        // update feedback (should be every 10ms, sliced according to particular design)
         #if (KG_FEEDBACK & KG_FEEDBACK_BLINK) > 0
-            if (keygloveTick % 50 == 0) {
-                // update simple blinking LED
-                update_feedback_blink();
-            }
+            update_feedback_blink();
         #endif /* KG_FEEDBACK_BLINK */
-
-        // update other feedback (should be every 10ms, sliced according to particular design)
         #if (KG_FEEDBACK & KG_FEEDBACK_RGB) > 0
             update_feedback_rgb();
         #endif /* KG_FEEDBACK_RGB */

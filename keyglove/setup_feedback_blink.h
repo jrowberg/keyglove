@@ -30,19 +30,39 @@ THE SOFTWARE.
 #ifndef _SETUP_FEEDBACK_BLINK_H_
 #define _SETUP_FEEDBACK_BLINK_H_
 
-uint8_t blink_led; // state of blink LED (0 = off, 1 = on)
+#define KG_BLINK_OFF 0
+#define KG_BLINK_LONGBLINK 1
+#define KG_BLINK_LONGPULSE 2
+#define KG_BLINK_SHORTBLINK 3
+#define KG_BLINK_SHORTPULSE 4
+#define KG_BLINK_SOLID 5
+
+uint8_t blinkMode; // blink LED mode
+
+void set_blink_logic(uint8_t logic) {
+    // simple wrapper for consistency
+    digitalWrite(KG_PIN_BLINK, logic);
+}
+
+void set_blink_mode(uint8_t mode) {
+    blinkMode = mode;
+    // logic: mode=0 -> off, mode=5 -> on, else no immediate change
+    if (blinkMode == 0) set_blink_logic(0);
+    else if (blinkMode == 5) set_blink_logic(1);
+}
 
 void setup_feedback_blink() {
     pinMode(KG_PIN_BLINK, OUTPUT);
     digitalWrite(KG_PIN_BLINK, LOW);
-    blink_led = false;
+    blinkMode = KG_BLINK_LONGBLINK;
 }
 
 void update_feedback_blink() {
-    blink_led = !blink_led;
-    if (blink_led) digitalWrite(KG_PIN_BLINK, HIGH);
-    else digitalWrite(KG_PIN_BLINK, LOW);
-}  
+    if      (blinkMode == 1 && keygloveTick % 50 == 0) set_blink_logic(keygloveTick % 100 >= 50 ? 0 : 1);
+    else if (blinkMode == 2 && keygloveTick % 25 == 0) set_blink_logic(keygloveTick % 100 >= 25 ? 0 : 1);
+    else if (blinkMode == 3 && keygloveTick % 10 == 0) set_blink_logic(keygloveTick %  20 >= 10 ? 0 : 1);
+    else if (blinkMode == 4 && keygloveTick %  5 == 0) set_blink_logic(keygloveTick %  20 >=  5 ? 0 : 1);
+}
 
 #endif // _SETUP_FEEDBACK_BLINK_H_
 

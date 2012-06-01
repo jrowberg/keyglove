@@ -174,9 +174,9 @@ void update_motion_accelgyro() {
     }
 
     // convert to degrees/sec
-    gvRaw.x /= 16.4;
-    gvRaw.y /= 16.4;
-    gvRaw.z /= 16.4;
+    //gvRaw.x /= 16.4;
+    //gvRaw.y /= 16.4;
+    //gvRaw.z /= 16.4;
 
     DEBUG_PRN_ACCELGYRO("accelgyro\t");
     DEBUG_PRN_ACCELGYRO(aaRaw.x); DEBUG_PRN_ACCELGYRO("\t");
@@ -262,7 +262,7 @@ void update_motion_accelgyro() {
     gv.y = gv0.y + (opt_accelgyro_kalman_constant * (gvRaw.y - gv0.y));
     gv.z = gv0.z + (opt_accelgyro_kalman_constant * (gvRaw.z - gv0.z));
 
-    accelGyroPacket[3] = (uint8_t)(aa.x >> 8);
+    /*accelGyroPacket[3] = (uint8_t)(aa.x >> 8);
     accelGyroPacket[4] = (uint8_t)aa.x;
     accelGyroPacket[5] = (uint8_t)(aa.y >> 8);
     accelGyroPacket[6] = (uint8_t)aa.y;
@@ -274,7 +274,7 @@ void update_motion_accelgyro() {
     accelGyroPacket[11] = (uint8_t)(gv.y >> 8);
     accelGyroPacket[12] = (uint8_t)gv.y;
     accelGyroPacket[13] = (uint8_t)(gv.z >> 8);
-    accelGyroPacket[14] = (uint8_t)gv.z;
+    accelGyroPacket[14] = (uint8_t)gv.z;*/
 
     DEBUG_PRN_ACCELGYRO(aa.x); DEBUG_PRN_ACCELGYRO("\t");
     DEBUG_PRN_ACCELGYRO(aa.y); DEBUG_PRN_ACCELGYRO("\t");

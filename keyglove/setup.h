@@ -30,6 +30,8 @@ THE SOFTWARE.
 #ifndef _SETUP_H_
 #define _SETUP_H_
 
+#include "version.h"
+
 /* ===============================================
  * DEBUG SETTINGS
 =============================================== */
@@ -314,11 +316,12 @@ THE SOFTWARE.
  * TOUCH SENSOR CONNECTION
 =============================================== */
 #if (KG_TOUCHCONN == KG_TOUCHCONN_DIRECT)
+    #define ENABLE_TOUCH
     #include "setup_touchconn_direct.h"
 #endif
 
 #if (KG_TOUCHCONN == KG_TOUCHCONN_TCA6424A)
-    #define ENABLE_TOUCHCONN
+    #define ENABLE_TOUCH
     #include "setup_touchconn_tca6424a.h"
 #endif
 
@@ -497,6 +500,17 @@ THE SOFTWARE.
     #include "setup_feedback_rgb.h"
 #endif
 
+
+
+/* ===============================================
+ * TOUCH DETECTION SETUP
+=============================================== */
+#if (KG_TOUCHCONN > 0)
+    #include "setup_touch.h"
+#endif
+
+
+
 /* ===============================================
  * HOST INTERFACE SETUP PART 2, SERIAL (INCLUDE ORDER MATTERS)
 =============================================== */
@@ -513,7 +527,8 @@ THE SOFTWARE.
 #include "setup_keyboard.h"
 #include "setup_mouse.h"
 #include "setup_joystick.h"
-#include "setup_touch.h"
+#include "touchset_helpers.h"
+#include "touchset.h"
 
 
 

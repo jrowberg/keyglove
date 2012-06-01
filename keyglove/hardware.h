@@ -65,6 +65,24 @@ THE SOFTWARE.
 
 
 
+/** Flex sensor options. Only one choice may be selected at the same time. (defined in KG_FLEX) */
+
+#define KG_FLEX_NONE                    0           /* No flex sensors used */
+
+
+
+/** Pressure sensor options. Only one choice may be selected at the same time. (defined in KG_PRESSURE) */
+
+#define KG_PRESSURE_NONE                0           /* No pressure sensors used */
+
+
+
+/** Dual glove communication options. Only one choice may be selected at the same time. (defined in KG_DUALGLOVE) */
+
+#define KG_DUALGLOVE_NONE               0           /* No dual-glove support */
+
+
+
 /** Touch sensor connection. Only one interface may be selected at a time. (defined in KG_TOUCHCONN) */
 
 #define KG_TOUCHCONN_NONE               0           /* Don't read sensors (weird, maybe you have a reason) */
@@ -116,6 +134,8 @@ THE SOFTWARE.
 #define KG_FEEDBACK_PIEZO               2           /* Piezo buzzer for sound */
 #define KG_FEEDBACK_VIBRATE             4           /* Vibration motor for haptic feedback */
 #define KG_FEEDBACK_RGB                 8           /* Combined RGB LED for visual feedback */
+
+
 
 /** Sensory feedback connection. Only one choice may be selected at a time. (defined in KG_FEEDBACKCONN) */
 

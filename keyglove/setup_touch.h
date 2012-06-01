@@ -30,8 +30,9 @@ THE SOFTWARE.
 #ifndef _SETUP_TOUCH_H_
 #define _SETUP_TOUCH_H_
 
-#include "touchset_helpers.h"
-#include "touchset.h"
+void setmode(uint8_t mode);
+void check_sensors_touch(uint32_t sensors1, uint32_t sensors2, uint8_t pos);
+void check_sensors_release(uint32_t sensors1, uint32_t sensors2, uint8_t pos);
 
 uint32_t touchBench0, touchBench;
 uint8_t touchTick;
@@ -59,6 +60,14 @@ void setup_touch() {
     setmode(0); // default touchset mode is always 0
 
     activeTouch = true; // this is always on if touch control is enabled
+}
+
+void enable_touch() {
+    activeTouch = true;
+}
+
+void disable_touch() {
+    activeTouch = false;
 }
 
 void update_touch() {
