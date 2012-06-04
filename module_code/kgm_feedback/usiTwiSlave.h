@@ -56,7 +56,7 @@ Change Activity:
 void    usiTwiSlaveInit( uint8_t );
 void    usiTwiTransmitByte( uint8_t );
 uint8_t usiTwiReceiveByte( void );
-bool usiTwiDataInReceiveBuffer( void );
+bool    usiTwiDataInReceiveBuffer( void );
 void    usiTwiOnStart( void (*function) () );
 void    usiTwiOnStop( void (*function) () );
 

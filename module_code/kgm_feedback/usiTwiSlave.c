@@ -78,7 +78,7 @@ Change Activity:
 #  define PIN_USI_SDA         PINA6
 #  define PIN_USI_SCL         PINA4
 #  define USI_START_COND_INT  USISIF
-#  define USI_START_VECTOR    USI_START_vect
+#  define USI_START_VECTOR    USI_STR_vect
 #  define USI_OVERFLOW_VECTOR USI_OVF_vect
 #endif
 
@@ -266,6 +266,7 @@ typedef enum
 
 static uint8_t                  slaveAddress;
 static volatile overflowState_t overflowState;
+static volatile uint8_t inPacket;
 
 
 static uint8_t          rxBuf[ TWI_RX_BUFFER_SIZE ];
@@ -324,6 +325,7 @@ usiTwiSlaveInit(
   flushTwiBuffers( );
 
   slaveAddress = ownAddress;
+  inPacket = 0;
 
   // In Two Wire mode (USIWM1, USIWM0 = 1X), the slave USI will pull SCL
   // low when a start condition is detected or a counter overflow (only
@@ -478,7 +480,6 @@ ISR( USI_START_VECTOR )
   {
 
     // a Stop Condition did not occur
-    if (usiTwiOnStartFunction != 0) usiTwiOnStartFunction();
 
     USICR =
          // keep Start Condition Interrupt enabled to detect RESTART
@@ -498,8 +499,6 @@ ISR( USI_START_VECTOR )
   {
 
     // a Stop Condition did occur
-    if (usiTwiOnStopFunction != 0) usiTwiOnStopFunction();
-
     USICR =
          // enable Start Condition Interrupt
          ( 1 << USISIE ) |
@@ -548,7 +547,9 @@ ISR( USI_OVERFLOW_VECTOR )
     case USI_SLAVE_CHECK_ADDRESS:
       if ( ( USIDR == 0 ) || ( ( USIDR >> 1 ) == slaveAddress) )
       {
-          if ( USIDR & 0x01 )
+        if (usiTwiOnStartFunction != 0) usiTwiOnStartFunction();
+
+        if ( USIDR & 0x01 )
         {
           overflowState = USI_SLAVE_SEND_DATA;
         }

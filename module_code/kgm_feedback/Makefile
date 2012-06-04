@@ -32,4 +32,13 @@ fuses:
 #	avrdude -p $(MMCU) -c $(PROGRAMMER) -U lfuse:w:0x42:m -U hfuse:w:0xdf:m -U efuse:w:0xff:m
 
 # run at 8 MHz
-	avrdude -p $(MMCU) -c $(PROGRAMMER) -U lfuse:w:0xc2:m -U hfuse:w:0xdf:m -U efuse:w:0xff:m
+#	avrdude -p $(MMCU) -c $(PROGRAMMER) -U lfuse:w:0xc2:m -U hfuse:w:0xdf:m -U efuse:w:0xff:m
+
+# run at 8 MHz, 2.3v BOD, 6ck/14ck+64ms start-up
+#	avrdude -p $(MMCU) -c $(PROGRAMMER) -U lfuse:w:0xe2:m -U hfuse:w:0xdb:m -U efuse:w:0xff:m
+
+# run at 8 MHz, 2.7v BOD, 6ck/14ck+64ms start-up
+	avrdude -p $(MMCU) -c $(PROGRAMMER) -U lfuse:w:0xe2:m -U hfuse:w:0xdd:m -U efuse:w:0xff:m
+
+# run at 8 MHz, BOD disabled, 6ck/14ck+64ms start-up
+#	avrdude -p $(MMCU) -c $(PROGRAMMER) -U lfuse:w:0xe2:m -U hfuse:w:0xdf:m -U efuse:w:0xff:m

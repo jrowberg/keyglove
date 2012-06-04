@@ -83,7 +83,7 @@ uint8_t rgbLevel[3];
 uint16_t spkFreq;
 
 // power-on register default values
-uint8_t registers[NUM_REGISTERS] = {
+volatile uint8_t registers[NUM_REGISTERS] = {
     /* 0x00 RED_LEVEL */ 0x00, // off
     /* 0x01 GRN_LEVEL */ 0x00, // off
     /* 0x02 BLU_LEVEL */ 0x00, // off
@@ -124,7 +124,7 @@ void loadDefaultRegisters() {
     }
 }
 
-void resetI2CRXCounter() {
+void onTwiStart() {
     count = 0;
 }
 
@@ -153,26 +153,16 @@ int main(void) {
         //    7       6     5     4       3      2      1      0
         // [ICNC1] [ICES1] [-] [WGM13] [WGM12] [CS12] [CS11] [CS10]
         // -> WGM13=1, WGM12=1: waveform generation mode is 16-bit fast PWM (ICR1 is TOP)
-        // -> CS11=1: clock source is CLK (CPU running at 1MHz for low power)
+        // -> CS11=1: clock source is CLK (CPU running at 8MHz)
         TCCR1B = 0b00110010;
-
-        // (no interrupts required for Timer 1
-
-        // Timer/Counter 1 Input Capture Register (used as TOP for Fast PWM)
-        //ICR1 = (500000L / 1760) - 1;
-        // ^^^ this gets set by applyRegisterByte()
-
-        // Output Compare B Register for Timer 1 (16-bit)
-        //OCR1B = ICR1 / 2;
-        // ^^^ this also gets set by applyRegisterByte()
     #endif
-
-    // enable interrupts
-    sei();
 
     // start the USI/I2C process
     usiTwiSlaveInit(I2C_SLAVE_ADDRESS);
-    usiTwiOnStart(resetI2CRXCounter);
+    usiTwiOnStart(onTwiStart);
+
+    // enable interrupts
+    sei();
 
     // read default register values into control variables
     loadDefaultRegisters();
