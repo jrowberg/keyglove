@@ -40,7 +40,6 @@ MPU6050 accelgyro = MPU6050();
 
 bool activeAccelGyro;
 volatile bool readyAccelGyroData;
-uint8_t accelGyroPacket[15] = { 0xB8, 0x07, KG_PACKET_TYPE_REPORT_ACCELGYRO, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 };
 
 int16_t opt_accelgyro_offset[] = { 0, 0, 0, 0, 0, 0 };        // amount to offset raw gyroscope readings [x,y,z]
 float opt_accelgyro_calibrate[] = { 1, 1, 1, 1, 1, 1 };       // amount to scale raw gyroscope readings [x,y,z] (post-offset)
@@ -85,7 +84,7 @@ void setup_motion_accelgyro() {
     accelgyro.initialize();
     delay(30);
     accelgyro.setFullScaleGyroRange(MPU6050_GYRO_FS_2000);
-    accelgyro.setDLPFBandwidth(MPU6050_DLPF_BW_42); // 42 Hz DLPF, 1kHz internal sampling
+    accelgyro.setDLPFMode(MPU6050_DLPF_BW_42); // 42 Hz DLPF, 1kHz internal sampling
     accelgyro.setRate(9); // 1kHz/(9+1) = 100Hz
     accelgyro.setInterruptMode(1); // active low
     accelgyro.setInterruptDrive(1); // open drain
@@ -174,9 +173,9 @@ void update_motion_accelgyro() {
     }
 
     // convert to degrees/sec
-    //gvRaw.x /= 16.4;
-    //gvRaw.y /= 16.4;
-    //gvRaw.z /= 16.4;
+    gvRaw.x /= 16.4;
+    gvRaw.y /= 16.4;
+    gvRaw.z /= 16.4;
 
     DEBUG_PRN_ACCELGYRO("accelgyro\t");
     DEBUG_PRN_ACCELGYRO(aaRaw.x); DEBUG_PRN_ACCELGYRO("\t");

@@ -2,6 +2,9 @@
 // Based on Analog Devices ADXL345 datasheet rev. C, 5/2011
 // 7/31/2011 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
+//
+// Changelog:
+//     2011-07-31 - initial release
 
 /* ============================================
 I2Cdev device library code is placed under the MIT license
@@ -382,9 +385,9 @@ void ADXL345::setActivityAC(bool enabled) {
  * or z-axis participation in detecting activity or inactivity. A setting of 0
  * excludes the selected axis from participation. If all axes are excluded, the
  * function is disabled. For activity detection, all participating axes are
- * logically ORÃ¯Â¿Â½ed, causing the activity function to trigger when any of the
+ * logically OR�ed, causing the activity function to trigger when any of the
  * participating axes exceeds the threshold. For inactivity detection, all
- * participating axes are logically ANDÃ¯Â¿Â½ed, causing the inactivity function to
+ * participating axes are logically AND�ed, causing the inactivity function to
  * trigger only if all participating axes are below the threshold for the
  * specified time.
  * @return X axis activity monitoring enabled value
@@ -1653,7 +1656,7 @@ bool ADXL345::getFIFOTriggerOccurred() {
  * level is cleared after any read (single- or multiple-byte) of FIFO. FIFO
  * stores a maximum of 32 entries, which equates to a maximum of 33 entries
  * available at any given time because an additional entry is available at the
- * output filter of the device.
+ * output filter of the I2Cdev::
  * @return Current FIFO length
  * @see ADXL345_RA_FIFO_CTL
  * @see ADXL345_FIFOSTAT_LENGTH_BIT
@@ -1663,5 +1666,3 @@ uint8_t ADXL345::getFIFOLength() {
     I2Cdev::readBits(devAddr, ADXL345_RA_FIFO_CTL, ADXL345_FIFOSTAT_LENGTH_BIT, ADXL345_FIFOSTAT_LENGTH_LENGTH, buffer);
     return buffer[0];
 }
-
-

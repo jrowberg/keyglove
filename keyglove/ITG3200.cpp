@@ -2,6 +2,9 @@
 // Based on InvenSense ITG-3200 datasheet rev. 1.4, 3/30/2010 (PS-ITG-3200A-00-01.4)
 // 7/31/2011 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/i2cdevlib
+//
+// Changelog:
+//     2011-07-31 - initial release
 
 /* ============================================
 I2Cdev device library code is placed under the MIT license
@@ -516,5 +519,3 @@ uint8_t ITG3200::getClockSource() {
 void ITG3200::setClockSource(uint8_t source) {
     I2Cdev::writeBits(devAddr, ITG3200_RA_PWR_MGM, ITG3200_PWR_CLK_SEL_BIT, ITG3200_PWR_CLK_SEL_LENGTH, source);
 }
-
-

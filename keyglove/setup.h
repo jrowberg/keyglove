@@ -52,10 +52,6 @@ THE SOFTWARE.
 
 #endif
 
-#define KG_PACKET_TYPE_REPORT_ACCEL         0x11
-#define KG_PACKET_TYPE_REPORT_GYRO          0x27
-#define KG_PACKET_TYPE_REPORT_ACCELGYRO     0x28
-
 #ifdef DEBUG_BENCHMARK
     #define DEBUG_PRN_BENCHMARK(x)          Serial.print(x)
     #define DEBUG_PRNF_BENCHMARK(x, y)      Serial.print(x, y)
@@ -366,6 +362,7 @@ THE SOFTWARE.
 #endif
 
 
+
 /* ===============================================
  * MOTION SENSOR SETUP
 =============================================== */
@@ -469,6 +466,8 @@ THE SOFTWARE.
     #include "setup_motion_rawmarg_9dof.h"
 #endif
 
+
+
 /* ===============================================
  * FEEDBACK CONNECTION
 =============================================== */
@@ -479,6 +478,8 @@ THE SOFTWARE.
 #if (KG_FEEDBACKCONN == KG_FEEDBACKCONN_I2C)
     #include "setup_feedbackconn_i2c.h"
 #endif
+
+
 
 /* ===============================================
  * FEEDBACK SETUP
@@ -505,6 +506,7 @@ THE SOFTWARE.
 /* ===============================================
  * TOUCH DETECTION SETUP
 =============================================== */
+
 #if (KG_TOUCHCONN > 0)
     #include "setup_touch.h"
 #endif
@@ -515,6 +517,11 @@ THE SOFTWARE.
  * HOST INTERFACE SETUP PART 2, SERIAL (INCLUDE ORDER MATTERS)
 =============================================== */
 
+#if (KG_HOSTIF > 0)
+    // every major host interface must support this protocol
+    #include "setup_hostif_protocol.h"
+#endif
+
 #if (KG_HOSTIF & KG_HOSTIF_SERIAL)
     #include "setup_hostif_serial.h"
 #endif
@@ -524,6 +531,7 @@ THE SOFTWARE.
 /* ===============================================
  * CONSTANT INCLUDES
 =============================================== */
+
 #include "setup_keyboard.h"
 #include "setup_mouse.h"
 #include "setup_joystick.h"
@@ -550,6 +558,12 @@ void keyglove_setup() {
         Serial.println("info Keyglove device activated");
         DDRD |= 0b01000000;
         PORTD |= 0b01000000;
+    #endif
+    
+    // initialize I2C transceiver and timing
+    #ifndef NO_I2C_SUPPORT
+        Wire.begin();
+        TWBR = 12; // set 400kHz mode
     #endif
 
     // single-option external EEPROM
