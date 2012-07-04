@@ -1,3 +1,5 @@
+// use the following line if using Teensy or Teensy++
+// if using the Arduino Leonardo or Mega, comment it out
 HardwareSerial Serial1 = HardwareSerial();
 
 void setup() {
