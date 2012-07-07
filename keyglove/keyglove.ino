@@ -31,11 +31,26 @@ THE SOFTWARE.
 
 #include "config.h"
 
-#include <Wire.h>
-
 // =============================================================================
 // !!! NO EDITING SHOULD BE NECESSARY BEYOND THIS POINT !!!
 // =============================================================================
+
+
+
+/* ===============================================
+ * LIBRARY INCLUDES FOR PROPER BUILD PROCESS
+=============================================== */
+
+#include <Wire.h>
+#include <I2Cdev.h>
+#include <ADXL345.h>
+#include <ITG3200.h>
+#include <MPU6050.h>
+#include <HMC5883L.h>
+#include <TCA6424A.h>
+#include <iWRAP.h>
+
+
 
 /* ===============================================
  * UNIVERSAL CONTROLLER DECLARATIONS
@@ -45,36 +60,13 @@ uint8_t keygloveTick = 0;   // increments every ~10ms (100hz), loops at 100
 uint32_t keygloveTock = 0;  // increments every 100 ticks, loops as 2^32 (~4 billion)
 uint32_t keygloveTickTime = 0, keygloveTickTime0 = 0;
 
-bool activeGestures;
-bool activeTouch;
-bool activeKeyboard;
-bool activeMouse;
-bool activeJoystick;
-bool activeSerial;
-
-uint16_t opt_touch_detect_threshold = 20;   // number of milliseconds required for a touch to register as real
-uint8_t  opt_motion_sampling_div = 12;      // how many ticks in between each accel/gyro reading
-uint8_t  opt_enable_calibration = 0;        // whether calibration should be enabled
-
-// debug constant definitions
-#include "debug.h"
-
-// hardware constant option definitions
-#include "hardware.h"
-
-// minimal Arduino support wrapper if we're outside of the Arduino environment
-#ifndef ARDUINO
-    #include "ArduinoWrapper.h"
-#endif
-
-// pin assigment constants
-#include "pins.h"
-
-// pre-processor controlled global variable initializations and setup() calls
+// pre-processor controlled global initializations and setup() calls
 #include "setup.h"
 
+
+
 /* ===============================================
- * MAIN SETUP/LOOP ROUTINES
+ * 100 HZ INTERRUPT VECTOR
 =============================================== */
 
 volatile uint8_t timer1Overflow = 0;
@@ -82,7 +74,18 @@ ISR(TIMER1_OVF_vect) {
     timer1Overflow++;
 }
 
+
+
+/* ===============================================
+ * MAIN SETUP ROUTINE
+=============================================== */
+
 void setup() {
+    // default packet output format: TRUE for binary, FALSE for human-readable
+    // - human readable is much better for behavior debugging
+    // - binary is much better (required, even) for data efficiency
+    packetFormatBinary = false;
+
     // call main setup function (see setup.h for details)
     keyglove_setup();
 
@@ -95,14 +98,14 @@ void setup() {
     TCCR1B = 1; // no prescaler
     TCNT1 = 0; // clear TIMER1 counter
     TIFR1 |= (1 << TOV1); // clear the TIMER1 overflow flag
-    TIMSK1 |= (1 << TOIE1); // enable TIMER1 overflow interrupts*/
-
-    // debug setup stuff
-    //enable_motion_accelerometer();
-    //enable_motion_gyroscope();
-    //opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
-    //activeMouse = true;
+    TIMSK1 |= (1 << TOIE1); // enable TIMER1 overflow interrupts
 }
+
+
+
+/* ===============================================
+ * MAIN LOOP ROUTINE
+=============================================== */
 
 void loop() {
     // read all defined and active motion sensors
@@ -122,12 +125,13 @@ void loop() {
         if (activeFusion && readyFusionData) update_motion_fusion();
     #endif
 
-    #ifdef ENABLE_SERIAL
-        update_hostif_serial();
-    #endif
-    #ifdef ENABLE_BLUETOOTH
-        update_hostif_bt();
-    #endif
+    #if (KG_HOSTIF & KG_HOSTIF_USB_SERIAL)
+        //update_hostif_usb_serial();
+    #endif // KG_HOSTIF_USB_SERIAL
+
+    #if (KG_HOSTIF & KG_HOSTIF_BT2_SERIAL)
+        //update_hostif_bt2_serial();
+    #endif // KG_HOSTIF_BT2_SERIAL
 
     // check for TIMER1 overflow limit and increment tick (should be every 10 ms)
     // 156 results in 9.937 ms, 157 results in 10.001 ms
@@ -139,46 +143,37 @@ void loop() {
 
         // check for 100 ticks and reset counter (should be every 1 second)
         if (keygloveTick == 100) {
-            //Serial.println("Tick!");
-            //Serial.println(keygloveTickTime / 100);
             //keygloveTickTime = 0;
             keygloveTick = 0;
             keygloveTock++;
+            #if (KG_HOSTIF > 0)
+                txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_TICK);
+                send_keyglove_packet(txPacket, txPacketLength, true);
+            #endif
         }
 
-        #if defined(ENABLE_ACCELEROMETER) && defined(ENABLE_GYROSCOPE)
-            if (activeAccelerometer && activeGyroscope) {
-                update_motion();
-            }
+        #if (defined(ENABLE_ACCELEROMETER) && defined(ENABLE_GYROSCOPE))
+            if (activeAccelerometer && activeGyroscope) update_motion();
         #endif
 
-        // process motion into gestures
-        //if (activeGestures) update_gestures();
+        //if (activeGestures) update_gestures();      // process motion into gestures
+        if (activeTouch) update_touch();            // process touch sensor status
+        if (activeKeyboard) update_keyboard();      // send any queued keyboard control data
+        if (activeMouse) update_mouse();            // send any queued mouse control data
+        if (activeJoystick) update_joystick();      // send any queued joystick control data
 
-        // process touch sensor status
-        if (activeTouch) update_touch();
-
-        // keyboard is almost always done in real time, this is usually not necessary
-        if (activeKeyboard) update_keyboard();
-    
-        // send any unsent mouse control data
-        if (activeMouse) update_mouse();
-
-        // send any unsent joystick control data
-        if (activeJoystick) update_joystick();
-
-        // update feedback (should be every 10ms, sliced according to particular design)
-        #if (KG_FEEDBACK & KG_FEEDBACK_BLINK) > 0
+        // update feedback (should be every 10ms, sliced according to particular mode)
+        #if (KG_FEEDBACK & KG_FEEDBACK_BLINK)
             update_feedback_blink();
-        #endif /* KG_FEEDBACK_BLINK */
-        #if (KG_FEEDBACK & KG_FEEDBACK_RGB) > 0
+        #endif // KG_FEEDBACK_BLINK
+        #if (KG_FEEDBACK & KG_FEEDBACK_RGB)
             update_feedback_rgb();
-        #endif /* KG_FEEDBACK_RGB */
-        #if (KG_FEEDBACK & KG_FEEDBACK_PIEZO) > 0
+        #endif // KG_FEEDBACK_RGB
+        #if (KG_FEEDBACK & KG_FEEDBACK_PIEZO)
             update_feedback_piezo();
-        #endif /* KG_FEEDBACK_PIEZO */
-        #if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE) > 0
+        #endif // KG_FEEDBACK_PIEZO
+        #if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE)
             update_feedback_vibrate();
-        #endif /* KG_FEEDBACK_PIEZO */
+        #endif // KG_FEEDBACK_VIBRATE
     }
 }

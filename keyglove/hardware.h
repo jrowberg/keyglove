@@ -94,12 +94,12 @@ THE SOFTWARE.
 /** Host interface options. Multiple interfaces may be enabled at the same time. (defined in KG_HOSTIF) */
 
 #define KG_HOSTIF_NONE                  0           /* Don't communicate (weird, maybe you have a reason) */
-#define KG_HOSTIF_SERIAL                1           /* Hardware UART (Arduino's "Serial" object) */
-#define KG_HOSTIF_PS2                   2           /* PS/2 "bit-bang" interface */
-#define KG_HOSTIF_USB                   4           /* Hardware USB (requires AT90USB* or ATMega32U* MCU) */
-#define KG_HOSTIF_BT_HID                8           /* Bluetooth HID interface (requires Bluegiga WT12 w/iWRAP) */
-#define KG_HOSTIF_BT_SPP                16          /* Bluetooth SPP interface (requires Bluegiga WT12 w/iWRAP) */
-#define KG_HOSTIF_R400                  32          /* R400 wireless (requires Logitech R400) */
+#define KG_HOSTIF_PS2                   1           /* PS/2 "bit-bang" interface */
+#define KG_HOSTIF_USB_SERIAL            2           /* Hardware USB serial (requires AT90USB* or ATMega32U* MCU) */
+#define KG_HOSTIF_USB_HID               4           /* Hardware USB HID (requires AT90USB* or ATMega32U* MCU) */
+#define KG_HOSTIF_BT2_SERIAL            8           /* Bluetooth v2 serial (requires Bluegiga WT12 w/iWRAP) */
+#define KG_HOSTIF_BT2_HID               16          /* Bluetooth v2 HID (requires Bluegiga WT12 w/iWRAP) */
+#define KG_HOSTIF_R400_HID              32          /* R400 wireless HID (requires Logitech R400) */
 
 
 
@@ -142,6 +142,86 @@ THE SOFTWARE.
 #define KG_FEEDBACKCONN_NONE            0           /* Don't do anything with feedback */
 #define KG_FEEDBACKCONN_DIRECT          1           /* Direct connection to I/O pins */
 #define KG_FEEDBACKCONN_I2C             2           /* Custom I2C-based RGB/vibe/piezo module */
+
+
+
+/** Debug settings. Multiple options may be enabled. (defined in KG_DEBUG) */
+
+#define KG_DEBUG_NONE                   0
+#define KG_DEBUG_BENCHMARK              1
+#define KG_DEBUG_ACCELEROMETER          2
+#define KG_DEBUG_GYROSCOPE              4
+#define KG_DEBUG_ACCELGYRO              8
+#define KG_DEBUG_MAGNETOMETER           16
+#define KG_DEBUG_MOTIONFUSION           32
+#define KG_DEBUG_GESTURE                64
+#define KG_DEBUG_TOUCH                  128
+#define KG_DEBUG_TOUCHSET               256
+#define KG_DEBUG_PS2                    512
+#define KG_DEBUG_USB                    1024
+#define KG_DEBUG_R400                   2048
+#define KG_DEBUG_IWRAP                  4096
+#define KG_DEBUG_KEYBOARD               8192
+#define KG_DEBUG_MOUSE                  16384
+#define KG_DEBUG_JOYSTICK               32768
+
+
+
+/* ===============================================
+ * ARCHITECTURE PIN ALIASES
+=============================================== */
+
+#if (defined(__AVR_ATmega168__) || defined(__AVR_ATmega328__))
+     // 32-pin ATMegaxxx MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+#if (defined(__AVR_AT90USB162__))
+     // 32-pin AT90USB MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+#if (defined(__AVR_ATmega16U4__) || defined(__AVR_ATmega32U4__))
+     // 44-pin ATMEGAxxUx MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+#if (defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__))
+     // 100-pin ATMegaxxx0 MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
+
+#if (defined(__AVR_AT90USB1287__) || defined(__AVR_AT90USB647__) || \
+     defined(__AVR_AT90USB1286__) || defined(__AVR_AT90USB646__) || \
+     defined(__AVR_ATmega32U6__))
+     // 64-pin AT90USB MCUs
+     #define SS   PB0
+     #define SCLK PB1
+     #define MOSI PB2
+     #define MISO PB3
+     #define SCL  PD0
+     #define SDA  PD1
+#endif
 
 #endif // _HARDWARE_H_
 
