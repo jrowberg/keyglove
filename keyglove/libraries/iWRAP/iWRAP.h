@@ -4,7 +4,7 @@
 
 /* ============================================
 iWRAP library code is placed under the MIT license
-Copyright (c) 2011 Jeff Rowberg
+Copyright (c) 2012 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,6 +67,25 @@ THE SOFTWARE.
 // iWRAP4 User Guide Section 5.24, KILL (see Chapter 9)
 #define IWRAP_KILL_REASON_POWEROFF  0x115
 #define IWRAP_INFO_BOOTMODE         2
+
+// iWRAP4 User Guide Section 5.26, LIST
+#define IWRAP_LINK_MODE_RFCOMM          0
+#define IWRAP_LINK_MODE_L2CAP           1
+#define IWRAP_LINK_MODE_SCO             2
+
+#define IWRAP_LINK_DIRECTION_OUTGOING   0
+#define IWRAP_LINK_DIRECTION_INCOMING   1
+
+#define IWRAP_LINK_POWERMODE_ACTIVE     0
+#define IWRAP_LINK_POWERMODE_SNIFF      1
+#define IWRAP_LINK_POWERMODE_HOLD       2
+#define IWRAP_LINK_POWERMODE_PARK       3
+
+#define IWRAP_LINK_ROLE_MASTER          0
+#define IWRAP_LINK_ROLE_SLAVE           1
+
+#define IWRAP_LINK_CRYPT_PLAIN          0
+#define IWRAP_LINK_CRYPT_ENCRYPTED      1
 
 // iWRAP4 User Guide Section 5.43, SET BT CLASS
 // see also http://bluetooth-pentest.narod.ru/software/bluetooth_class_of_device-service_generator.html
@@ -461,8 +480,8 @@ class iWRAPLink {
     public:
         uint8_t link_id;
         uint8_t mode;
-        uint8_t blocksize;
-        uint32_t elapse_time;
+        uint16_t blocksize;
+        uint32_t elapsed_time;
         uint8_t local_msc;
         uint8_t remote_msc;
         iWRAPAddress addr;
@@ -709,7 +728,7 @@ class iWRAP {
         void exitDataMode();
 
         // send plain command/data or use MUX-mode protocol if necessary
-        void smartSendCommand(const char *command);
+        void smartSendCommand(const char *command, uint8_t command_id=0);
         void smartSendData(const char *data, uint16_t length, iWRAPLink *link=0);
         void smartSendData(const char *data, uint16_t length, uint8_t link_id=0);
 
@@ -730,7 +749,7 @@ class iWRAP {
         void onInquiryExtended(void (*function) ());   // 5.20 INQUIRY
         void onName(void (*function) ());              // 5.20 INQUIRY
         void onNameError(void (*function) ());         // 5.20 INQUIRY
-        void onNoCarrier(void (*function) ());         // 5.13 CALL, 5.24 KILL, 5.36 SCO OPEN
+        void onNoCarrier(void (*function) (iWRAPLink *link, uint8_t error_code));         // 5.13 CALL, 5.24 KILL, 5.36 SCO OPEN
         void onOBEXAuth(void (*function) ());          // 5.93 PBAP
         void onPair(void (*function) ());              // 5.6 AUTH, 5.13 CALL, 5.28 PAIR
         void onReady(void (*function) ());             // Power-on
@@ -742,6 +761,7 @@ class iWRAP {
         void onIdle(void (*function) ());              // special "idle" event from iWRAP class
         void onTimeout(void (*function) ());           // special "timeout" event from iWRAP class
         void onExitDataMode(void (*function) ());      // special event when exiting data mode (GPIO control)
+        void onSelectLink(void (*function) (iWRAPLink *link));
 
         // 5.3, @
         void sendParserCommand(iWRAPLink *link, const char *command);
@@ -1158,6 +1178,7 @@ class iWRAP {
 
         bool busy;
         uint8_t lines;
+        uint8_t expectedRows;
         uint8_t lastCommand;
         uint32_t timeoutStart;
         bool lastError;
@@ -1196,7 +1217,7 @@ class iWRAP {
         void (*funcInquiryExtended) ();   // 5.20 INQUIRY
         void (*funcName) ();              // 5.20 INQUIRY
         void (*funcNameError) ();         // 5.20 INQUIRY
-        void (*funcNoCarrier) ();         // 5.13 CALL, 5.24 KILL, 5.36 SCO OPEN
+        void (*funcNoCarrier) (iWRAPLink *link, uint8_t error_code);   // 5.13 CALL, 5.24 KILL, 5.36 SCO OPEN
         void (*funcOBEXAuth) ();          // 5.93 PBAP
         void (*funcPair) ();              // 5.6 AUTH, 5.13 CALL, 5.28 PAIR
         void (*funcReady) ();             // Power-on
@@ -1208,6 +1229,7 @@ class iWRAP {
         void (*funcIdle) ();              // special "idle" event from iWRAP class
         void (*funcTimeout) ();           // special "timeout" event from iWRAP class
         void (*funcExitDataMode) ();      // special event when exiting data mode (GPIO control)
+        void (*funcSelectLink) (iWRAPLink *link);      // special event when exiting data mode (GPIO control)
 
         // small string helper functions
         int8_t iwsIntToHex(char *str, uint16_t hex, uint8_t width=0);

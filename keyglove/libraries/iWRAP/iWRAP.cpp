@@ -4,7 +4,7 @@
 
 /* ============================================
 iWRAP library code is placed under the MIT license
-Copyright (c) 2011 Jeff Rowberg
+Copyright (c) 2012 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -335,6 +335,7 @@ void iWRAP::setEchoModuleOutput(bool enabled) {
 void iWRAP::parse(uint8_t ch) {
     // echo to output UART if enabled
     if (echoModuleOutput && uOutput) uOutput -> write(ch);
+    //uOutput -> print(ch, HEX);
 
     // automatically detect MUX mode if we need to
     if (!firstDataRead && config.mode != IWRAP_MODE_MUX && bufferPos > 1 && (buffer[bufferPos - 2] & 0xFF) == 0xBF && (ch & 0xFC) == 0x00) {
@@ -374,9 +375,10 @@ void iWRAP::parse(uint8_t ch) {
             uOutput -> println("]");*/
         }
     } else if (config.mode == IWRAP_MODE_COMMAND) {
-        if ((ch == '\r' || ch == '\n')) {
+        if (ch == '\n') {
             // command mode lines from iWRAP end in \r\n (0x0D 0x0A)
             responseEnded = true;
+            bufferPos--; // trim last \r off (\n will not be added here anyway)
             buffer[bufferPos] = 0; // null terminate
             responseLength = bufferPos;
             /*uOutput -> print("END OF SIMPLE DATA, LENGTH=");
@@ -854,7 +856,145 @@ void iWRAP::parse(uint8_t ch) {
                     } else if (strncmp(test, "SET", 3) == 0) {
                         //uOutput -> print(" <-- SET FINISHED");
                         setBusy(false);
-        
+
+                    // ======== DELAYED BUT EXPECTED RESULTS FROM COMMANDS ========
+                    } else if (strncmp(test, "LIST ", 5) == 0) {
+                        //uOutput -> print(" <-- LIST result found!");
+                        if (expectedRows == 0) {
+                            // result count, this is the first line returned
+                            expectedRows = test[5] - 0x30;
+                            config.btLinkCount = expectedRows;
+                        } else {
+                            // list entry, one per line
+                            // LIST {link_id} CONNECTED {mode} {blocksize} 0 0 {elapsed_time} {local_msc} {remote_msc} {addr} {channel} {direction} {powermode} {role} {crypt} {buffer} [ERETX]
+                            expectedRows--;
+                            uint8_t link_id = test[5] - 0x30;
+                            iWRAPLink *link;
+                            if (config.btLink[link_id] != 0) {
+                                // reuse existing pair object and overwrite
+                                link = config.btLink[link_id];
+                                if (link -> profile != 0) free(link -> profile);
+                                link -> profile = 0;
+                            } else {
+                                // create new pair object
+                                link = (iWRAPLink *)malloc(sizeof(iWRAPLink));
+                                link -> link_id = link_id;
+                                config.btLink[link_id] = link;
+                            }
+
+                            char *p, *p2;
+                            p = test + 17; // *p is now at beginning of {mode} (or {profile}?)
+
+                            // DOCS SAY {mode} BUT OBSERVED ITEM IS {profile} ???
+
+                            p2 = strchr(p, ' ');
+                            link -> profile = (char *)malloc((p2 - p) + 1);
+                            strncpy(link -> profile, p, p2 - p);
+                            link -> profile[p2 - p] = 0;
+                            p = p2 + 1;
+
+                            /*
+                            // {mode} = RFCOMM | L2CAP | SCO
+                            if (p[0] == 'R') {
+                                link -> mode = IWRAP_LINK_MODE_RFCOMM;
+                                p += 7;
+                            } else if (p[0] == 'L') {
+                                link -> mode = IWRAP_LINK_MODE_L2CAP;
+                                p += 6;
+                            } else {
+                                link -> mode = IWRAP_LINK_MODE_SCO;
+                                p += 4;
+                            }
+                            */
+
+                            // {blocksize} = RFCOMM, L2CAP or SCO data packet size, that is, how many bytes of data can be sent in one packet
+                            link -> blocksize = strtol(p, &p, 10);
+                            p += 5;
+
+                            // {elapsed_time} = Link life time in seconds
+                            link -> elapsed_time = strtol(p, &p, 10);
+                            p++;
+
+                            // {local_msc} = Local serial port modem status control (MSC) bits
+                            link -> local_msc = strtol(p, &p, 10);
+                            p++;
+
+                            // {remote_msc} = Remote serial port modem status control (MSC) bits
+                            link -> remote_msc = strtol(p, &p, 10);
+                            p++;
+
+                            // {addr} = Bluetooth device address of the remote device
+                            link -> addr.parseHexAddress(p);
+                            p+= 18;
+
+                            // {channel} = RFCOMM channel or L2CAP psm number at remote device
+                            link -> channel = strtol(p, &p, 10);
+                            p++;
+
+                            // {direction} = Direction of the link. The possible values are:
+                            //   OUTGOING - The connection has been initiated by the local device.
+                            //   INCOMING - The connection has been initiated by the remote device
+                            if (p[0] == 'O') {
+                                link -> direction = IWRAP_LINK_DIRECTION_OUTGOING;
+                            } else {
+                                link -> direction = IWRAP_LINK_DIRECTION_INCOMING;
+                            }
+                            p += 9;
+
+                            // {powermode} = mode for the link. The possible values are:
+                            //   ACTIVE - Connection is in active mode, no power saving in use
+                            //   SNIFF - Connection is in sniff mode
+                            //   HOLD - Connection is in hold mode
+                            //   PARK - Connection is in park mode
+                            if (p[0] == 'A') {
+                                link -> powermode = IWRAP_LINK_POWERMODE_ACTIVE;
+                                p += 7;
+                            } else if (p[0] == 'S') {
+                                link -> powermode = IWRAP_LINK_POWERMODE_SNIFF;
+                                p += 6;
+                            } else if (p[0] == 'H') {
+                                link -> powermode = IWRAP_LINK_POWERMODE_HOLD;
+                                p += 5;
+                            } else if (p[0] == 'P') {
+                                link -> powermode = IWRAP_LINK_POWERMODE_PARK;
+                                p += 5;
+                            }
+
+                            // {role} = Role of the link. The possible values are:
+                            //   MASTER - iWRAP is the master device of this connection
+                            //   SLAVE - iWRAP is the slave device of this connection
+                            if (p[0] == 'M') {
+                                link -> role = IWRAP_LINK_ROLE_MASTER;
+                                p += 7;
+                            } else {
+                                link -> role = IWRAP_LINK_ROLE_SLAVE;
+                                p += 6;
+                            }
+
+                            // {crypt} = Encryption state of the connection. The possible values are:
+                            //   PLAIN - Connection is not encrypted
+                            //   ENCRYPTED - Connection is encrypted
+                            if (p[0] == 'P') {
+                                link -> role = IWRAP_LINK_CRYPT_PLAIN;
+                                p += 6;
+                            } else {
+                                link -> role = IWRAP_LINK_CRYPT_ENCRYPTED;
+                                p += 10;
+                            }
+
+                            // {buffer} = Tells the amount of data (in bytes) that is stored in the incoming data buffer.
+                            link -> buffer = strtol(p, &p, 10);
+                            p++;
+
+                            // [ERETX] = This flag is visible is enhanced retransmission mode is in use. At the moment only used with HDP connections.
+                            if (p - buffer < bufferPos) Serial.println(p);
+                            link -> eretx = (p - buffer) < bufferPos;
+                        }
+                        if (expectedRows == 0) {
+                            // this happens when all lines are finished
+                            setBusy(false);
+                        }
+
                     // ======== EVENTS ========
                     } else if (strncmp(test, "AUTH ", 5) == 0) {
                         //uOutput -> print(" <-- AUTH event found!");
@@ -888,7 +1028,11 @@ void iWRAP::parse(uint8_t ch) {
                         if (funcInquiryPartial != 0) funcInquiryPartial();
                     } else if (strncmp(test, "NO CARRIER ", 11) == 0) {
                         //uOutput -> print(" <-- NO CARRIER event found!");
-                        if (funcNoCarrier != 0) funcNoCarrier();
+                        uint8_t link_id = test[11] - 0x30;
+                        iWRAPLink *link;
+                        link = config.btLink[link_id];
+                        uint8_t error_code = 0;
+                        if (funcNoCarrier != 0) funcNoCarrier(link, error_code);
                     } else if (strncmp(test, "NAME ERROR ", 11) == 0) {
                         //uOutput -> print(" <-- NAME ERROR event found!");
                         if (funcNameError != 0) funcNameError();
@@ -904,6 +1048,7 @@ void iWRAP::parse(uint8_t ch) {
                     } else if (strncmp(test, "READY", 5) == 0) {
                         //uOutput -> print(" <-- READY event found!");
                         setBusy(false);
+                        setDeviceMode(IWRAP_MODE_COMMAND);
                         if (funcReady != 0) funcReady();
                     } else if (strncmp(test, "RING ", 5) == 0) {
                         //uOutput -> print(" <-- RING event found!");
@@ -926,9 +1071,9 @@ void iWRAP::parse(uint8_t ch) {
                         link -> profile = (char *)malloc(strlen(p + 1) + 1);
                         strcpy(link -> profile, p + 1);
                         link -> profile[strlen(p + 1)] = 0;
-                        if (funcRing != 0) {
-                            funcRing(link);
-                        }
+                        if (config.mode != IWRAP_MODE_MUX) setDeviceMode(IWRAP_MODE_DATA);
+                        if (funcRing != 0) funcRing(link);
+                        if (funcSelectLink != 0) funcSelectLink(link);
                     } else if (strncmp(test, "SYNTAX ", 7) == 0) {
                         //uOutput -> print(" <-- SYNTAX ERROR event found!");
                         setBusy(false);
@@ -942,6 +1087,7 @@ void iWRAP::parse(uint8_t ch) {
                     switch (lastCommand) {
                         case IWRAP_COMMAND_SET:
                         case IWRAP_COMMAND_RESET:
+                        case IWRAP_COMMAND_LIST:
                             break; // these commands generate a response parsed above
     
                         case IWRAP_COMMAND_SET_CONTROL_MUX_EN:
@@ -952,7 +1098,7 @@ void iWRAP::parse(uint8_t ch) {
                             config.mode = IWRAP_MODE_COMMAND;
                             setBusy(false);
                             break;
-    
+
                         default:
                             setBusy(false); // all other commands, stop paying attention
                     }
@@ -973,8 +1119,7 @@ void iWRAP::parse(uint8_t ch) {
 void iWRAP::readDeviceConfig() {
     // this is the only time we need to issue a pure "SET" command
     config.clear();
-    lastCommand = IWRAP_COMMAND_SET;
-    smartSendCommand("SET");
+    smartSendCommand("SET", IWRAP_COMMAND_SET);
 }
 
 void iWRAP::readLinkConfig() {
@@ -1007,7 +1152,7 @@ void iWRAP::exitDataMode() {
 }
 
 // send plain command or MUX-mode protocol if necessary
-void iWRAP::smartSendCommand(const char *command) {
+void iWRAP::smartSendCommand(const char *command, uint8_t command_id) {
     if (config.mode == IWRAP_MODE_MUX) {
         // MUX mode
         // [8:SOF] [8:LINK] [6:FLAGS] [10:LENGTH] [...DATA...] [8:nLINK]
@@ -1016,6 +1161,7 @@ void iWRAP::smartSendCommand(const char *command) {
         // FLAGS = 0x00
         // DATA = 0-1023 bytes
         // nLINK = LINK XOR 0xFF
+        lastCommand = command_id;
         uint16_t length = strlen(command);
         char *output = (char *)malloc(length + 6);
         if (output == 0) return; // out of memory, uh oh
@@ -1038,6 +1184,7 @@ void iWRAP::smartSendCommand(const char *command) {
             // currently in data mode, so exit first
             exitDataMode();
         }
+        lastCommand = command_id;
         setBusy(true);
         lines = 0;
         uModule -> print(command);
@@ -1086,9 +1233,9 @@ void iWRAP::smartSendData(const char *data, uint16_t length, uint8_t link_id) {
         } else if (config.btSelectedLink != link_id) {
             // currently selected on a different link, so switch
             exitDataMode();
-            while (checkActivity());
+            while (checkActivity(1000));
             selectDataMode(link_id);
-            while (checkActivity());
+            while (checkActivity(1000));
         }
         uModule -> write((const uint8_t *)data, length);
     }
@@ -1111,7 +1258,7 @@ void iWRAP::onInquiryPartial(void (*function) ()) { funcInquiryPartial = functio
 void iWRAP::onInquiryExtended(void (*function) ()) { funcInquiryExtended = function; }  // 5.20 INQUIRY
 void iWRAP::onName(void (*function) ()) { funcName = function; }                        // 5.20 INQUIRY
 void iWRAP::onNameError(void (*function) ()) { funcNameError = function; }              // 5.20 INQUIRY
-void iWRAP::onNoCarrier(void (*function) ()) { funcNoCarrier = function; }              // 5.13 CALL, 5.24 KILL, 5.36 SCO OPEN
+void iWRAP::onNoCarrier(void (*function) (iWRAPLink *link, uint8_t error_code)) { funcNoCarrier = function; }              // 5.13 CALL, 5.24 KILL, 5.36 SCO OPEN
 void iWRAP::onOBEXAuth(void (*function) ()) { funcOBEXAuth = function; }                // 5.93 PBAP
 void iWRAP::onPair(void (*function) ()) { funcPair = function; }                        // 5.6 AUTH, 5.13 CALL, 5.28 PAIR
 void iWRAP::onReady(void (*function) ()) { funcReady = function; }                      // Power-on
@@ -1123,6 +1270,7 @@ void iWRAP::onBusy(void (*function) ()) { funcBusy = function; }                
 void iWRAP::onIdle(void (*function) ()) { funcIdle = function; }                        // special "idle" event from iWRAP class
 void iWRAP::onTimeout(void (*function) ()) { funcTimeout = function; }                  // special "timeout" event from iWRAP class
 void iWRAP::onExitDataMode(void (*function) ()) { funcExitDataMode = function; }        // special event when exiting data mode (GPIO control)
+void iWRAP::onSelectLink(void (*function) (iWRAPLink *link)) { funcSelectLink = function; }        // special event when exiting data mode (GPIO control)
 
 // 5.3, @
 void iWRAP::sendParserCommand(iWRAPLink *link, const char *command) {}
@@ -1197,8 +1345,7 @@ void iWRAP::createL2CAP(uint8_t psm) {}
 
 // 5.26, LIST
 uint8_t iWRAP::listConnections() {
-    lastCommand = IWRAP_COMMAND_LIST;
-    smartSendCommand("LIST");
+    smartSendCommand("LIST", IWRAP_COMMAND_LIST);
 }
 
 // 5.27, NAME
@@ -1233,8 +1380,7 @@ uint8_t iWRAP::createRFComm() {}
 
 // 5.33, RESET
 void iWRAP::resetDevice() {
-    lastCommand = IWRAP_COMMAND_RESET;
-    smartSendCommand("RESET");
+    smartSendCommand("RESET", IWRAP_COMMAND_RESET);
 }
 
 // 5.34, RSSI
@@ -1261,9 +1407,10 @@ void iWRAP::selectDataMode(uint8_t link_id) {
     command = (char *)malloc(10);
     strncpy(command, "SELECT ", 7);
     config.btSelectedLink = link_id;
-    command[8] = link_id + 0x30;
-    command[9] = 0; // null terminate
+    command[7] = link_id + 0x30;
+    command[8] = 0; // null terminate
     smartSendCommand(command);
+    if (funcSelectLink != 0) funcSelectLink(config.btLink[link_id]);
     free(command);
 }
 
@@ -1505,10 +1652,9 @@ bool iWRAP::getControlMuxEnabled() {
     return config.mode == IWRAP_MODE_MUX;
 }
 void iWRAP::setControlMuxEnabled(bool enabled) {
-    lastCommand = enabled ? IWRAP_COMMAND_SET_CONTROL_MUX_EN : IWRAP_COMMAND_SET_CONTROL_MUX_DIS;
     char command[] = "SET CONTROL MUX 0\0";
     if (enabled) command[16] = '1';
-    smartSendCommand(command);
+    smartSendCommand(command, enabled ? IWRAP_COMMAND_SET_CONTROL_MUX_EN : IWRAP_COMMAND_SET_CONTROL_MUX_DIS);
 }
 
 // 5.69, SET CONTROL MSC
@@ -1559,7 +1705,6 @@ void iWRAP::setLinkSelect(iWRAPLink *link) {}
 
 // 5.82, SET PROFILE
 void iWRAP::setProfile(const char *profile, const char *sdp_name) {
-    lastCommand = IWRAP_COMMAND_SET_PROFILE;
     char *command;
     uint8_t hidFeaturesWidth = 0;
     uint8_t commandLen = strlen(profile) + strlen(sdp_name) + 14;
@@ -1587,7 +1732,7 @@ void iWRAP::setProfile(const char *profile, const char *sdp_name) {
             strncpy(command + 13 + strlen(profile) + hidFeaturesWidth, sdp_name, strlen(sdp_name));
             command[13 + strlen(profile) + strlen(sdp_name) + hidFeaturesWidth] = 0;
         }
-        smartSendCommand(command);
+        smartSendCommand(command, IWRAP_COMMAND_SET_PROFILE);
         free(command);
     }
 }
@@ -1597,8 +1742,7 @@ void iWRAP::disableProfile(const char *profile) {
 
 // 5.83, SET RESET
 void iWRAP::resetSettings() {
-    lastCommand = IWRAP_COMMAND_SET_RESET;
-    smartSendCommand("SET RESET");
+    smartSendCommand("SET RESET", IWRAP_COMMAND_SET_RESET);
 }
 
 // 5.84, SLEEP
