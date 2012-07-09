@@ -390,6 +390,13 @@ THE SOFTWARE.
     #include "support_hostif_usb_serial.h"
 #endif
 
+#if (KG_HOSTIF & KG_HOSTIF_USB_RAWHID)
+    #ifdef NO_USB_SUPPORT
+        #error Selected board has no USB support. Hardware USB cannot be enabled with this board.
+    #endif
+    #include "support_hostif_usb_rawhid.h"
+#endif
+
 #if (KG_HOSTIF & KG_HOSTIF_USB_HID)
     #ifdef NO_USB_SUPPORT
         #error Selected board has no USB support. Hardware USB cannot be enabled with this board.
@@ -399,6 +406,10 @@ THE SOFTWARE.
 
 #if (KG_HOSTIF & KG_HOSTIF_BT2_SERIAL)
     #include "support_hostif_bt2_serial.h"
+#endif
+
+#if (KG_HOSTIF & KG_HOSTIF_BT2_RAWHID)
+    #include "support_hostif_bt2_rawhid.h"
 #endif
 
 #if (KG_HOSTIF & KG_HOSTIF_BT2_HID)
@@ -499,20 +510,26 @@ void keyglove_setup() {
     #if (KG_HOSTIF & KG_HOSTIF_PS2)
         setup_hostif_ps2();
     #endif
-    #if (KG_HOSTIF & KG_HOSTIF_USB_SERIAL) || (KG_HOSTIF & KG_HOSTIF_USB_HID)
+    #if (KG_HOSTIF & KG_HOSTIF_USB_SERIAL) || (KG_HOSTIF & KG_HOSTIF_USB_RAWHID) || (KG_HOSTIF & KG_HOSTIF_USB_HID)
         setup_hostif_usb();
     #endif
     #if (KG_HOSTIF & KG_HOSTIF_USB_SERIAL)
         setup_hostif_usb_serial();
     #endif
+    #if (KG_HOSTIF & KG_HOSTIF_USB_RAWHID)
+        setup_hostif_usb_rawhid();
+    #endif
     #if (KG_HOSTIF & KG_HOSTIF_USB_HID)
         setup_hostif_usb_hid();
     #endif
-    #if (KG_HOSTIF & KG_HOSTIF_BT2_SERIAL) || (KG_HOSTIF & KG_HOSTIF_BT2_HID)
+    #if (KG_HOSTIF & KG_HOSTIF_BT2_SERIAL) || (KG_HOSTIF & KG_HOSTIF_BT2_RAWHID) || (KG_HOSTIF & KG_HOSTIF_BT2_HID)
         setup_hostif_bt2();
     #endif
     #if (KG_HOSTIF & KG_HOSTIF_BT2_SERIAL)
         setup_hostif_bt2_serial();
+    #endif
+    #if (KG_HOSTIF & KG_HOSTIF_BT2_RAWHID)
+        setup_hostif_bt2_rawhid();
     #endif
     #if (KG_HOSTIF & KG_HOSTIF_BT2_HID)
         setup_hostif_bt2_hid();
@@ -520,7 +537,7 @@ void keyglove_setup() {
     #if (KG_HOSTIF & KG_HOSTIF_R400)
         setup_hostif_r400();
     #endif
-    
+
     // multi-option motion sensors
     #ifdef ENABLE_ACCELEROMETER
         setup_motion_accelerometer();

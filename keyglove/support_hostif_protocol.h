@@ -484,6 +484,97 @@ uint16_t create_packet(char *buffer, bool binary, uint8_t type, uint8_t *paramSt
                 }
                 break;
         #endif
+
+        #if (KG_FEEDBACK & KG_FEEDBACK_BLINK)
+            case KG_PACKET_BLINK:
+                if (binary) {
+                    if ((txPacket = (char *)malloc(4 + 1)) != NULL) {
+                        bufLen = 4 + 1;
+                        txPacket[4] = blinkMode;
+                    }
+                } else {
+                    if ((txPacket = (char *)malloc(10)) != NULL) {
+                        bufLen = sprintf(txPacket, "blink\t%d\r\n", blinkMode);
+                    }
+                }
+                break;
+        #endif
+
+        #if (KG_FEEDBACK & KG_FEEDBACK_RGB)
+            case KG_PACKET_RGB:
+                if (binary) {
+                    if ((txPacket = (char *)malloc(4 + 3)) != NULL) {
+                        bufLen = 4 + 3;
+                        txPacket[4] = rgbBlinkRed;
+                        txPacket[5] = rgbBlinkGreen;
+                        txPacket[6] = rgbBlinkBlue;
+                    }
+                } else {
+                    if ((txPacket = (char *)malloc(14)) != NULL) {
+                        bufLen = sprintf(txPacket, "rgb\t%d\t%d\t%d\r\n", rgbBlinkRed, rgbBlinkGreen, rgbBlinkBlue);
+                    }
+                }
+                break;
+        #endif
+
+        #if (KG_FEEDBACK & KG_FEEDBACK_PIEZO)
+            case KG_PACKET_PIEZO:
+                if (binary) {
+                    if ((txPacket = (char *)malloc(4 + 5)) != NULL) {
+                        bufLen = 4 + 5;
+                        txPacket[4] = piezoMode;
+                        txPacket[5] = (uint8_t)(piezoTickLimit >> 8);
+                        txPacket[6] = (uint8_t)piezoTickLimit;
+                        txPacket[7] = (uint8_t)(piezoFrequency >> 8);
+                        txPacket[8] = (uint8_t)piezoFrequency;
+                    }
+                } else {
+                    if ((txPacket = (char *)malloc(20)) != NULL) {
+                        bufLen = sprintf(txPacket, "piezo\t%d\t%ld\t%ld\r\n", piezoMode, piezoTickLimit, piezoFrequency);
+                    }
+                }
+                break;
+        #endif
+
+        #if (KG_FEEDBACK & KG_FEEDBACK_VIBE)
+            case KG_PACKET_VIBE:
+                if (binary) {
+                    if ((txPacket = (char *)malloc(4 + 3)) != NULL) {
+                        bufLen = 4 + 3;
+                        txPacket[4] = vibrateMode;
+                        txPacket[5] = (uint8_t)(vibrateTickLimit >> 8);
+                        txPacket[6] = (uint8_t)vibrateTickLimit;
+                    }
+                } else {
+                    if ((txPacket = (char *)malloc(14)) != NULL) {
+                        bufLen = sprintf(txPacket, "vibe\t%d\t%ld\r\n", vibrateMode, vibrateTickLimit);
+                    }
+                }
+                break;
+        #endif
+
+        #if (KG_TOUCHCONN > 0)
+            case KG_PACKET_TOUCH_STATUS:
+                if (binary) {
+                    uint8_t touchBytes = KG_BASE_COMBINATIONS / 8 + 1;
+                    if ((txPacket = (char *)malloc(4 + touchBytes)) != NULL) {
+                        bufLen = 4 + touchBytes;
+                        txPacket[4] = (uint8_t)(sensors2 >> 24);
+                        txPacket[5] = (uint8_t)(sensors2 >> 16);
+                        txPacket[6] = (uint8_t)(sensors2 >> 8);
+                        txPacket[7] = (uint8_t)sensors2;
+                        txPacket[8] = (uint8_t)(sensors1 >> 24);
+                        txPacket[9] = (uint8_t)(sensors1 >> 16);
+                        txPacket[10] = (uint8_t)(sensors1 >> 8);
+                        txPacket[11] = (uint8_t)sensors1;
+                    }
+                } else {
+                    if ((txPacket = (char *)malloc(25)) != NULL) {
+                        bufLen = sprintf(txPacket, "touch\t%08lX%08lX\r\n", sensors2, sensors1);
+                    }
+                }
+                break;
+        #endif
     }
 
     // finish up binary packet creation
@@ -1518,7 +1609,7 @@ void hostif_protocol_parse(uint8_t inputByte) {
                     txPacketLength = create_packet(txPacket, inBinPacket, KG_PACKET_TOUCHSET_INFO);
                 }
             } else if (strncasecmp2("LIST", test, 4) == 0) {
-                // 0x40: TOUCHSET LIST 
+                // 0x40: TOUCHSET LIST
                 // List all programmed touchsets.
                 test += 5;
                 protoError = 0; // valid command, no error (assumed)
@@ -2676,6 +2767,23 @@ uint8_t send_keyglove_packet(char *buffer, uint8_t length, bool autoFree) {
         }
     #endif
 
+    #if KG_HOSTIF & KG_HOSTIF_USB_RAWHID
+        // send packet out over wired custom HID interface (USB raw HID)
+        // 64-byte packets, formatted where byte 0 is [0-64] and bytes 1-63 are data
+        if (interfaceUSBRawHIDReady) {
+            int8_t bytes;
+            for (uint8_t i = 0; i < length; i += (RAWHID_TX_SIZE - 1)) {
+                memset(txRawHIDPacket, 0, RAWHID_TX_SIZE);
+                txRawHIDPacket[0] = min(RAWHID_TX_SIZE - 1, length - i);
+                for (uint8_t j = 0; j < (RAWHID_TX_SIZE - 1); j++) {
+                    if (i + j >= length) break;
+                    txRawHIDPacket[j + 1] = buffer[i + j];
+                }
+                bytes = RawHID.send(txRawHIDPacket, 2);
+            }
+        }
+    #endif
+
     #if KG_HOSTIF & KG_HOSTIF_BT2_SERIAL
         // send packet out over wireless serial (Bluetooth v2 SPP)
         if (interfaceBT2SerialReady) {
@@ -2684,20 +2792,16 @@ uint8_t send_keyglove_packet(char *buffer, uint8_t length, bool autoFree) {
         }
     #endif
 
-    #if KG_HOSTIF & KG_HOSTIF_USB_HID
-        // send packet out over wired custom HID interface (USB HID)
-        if (interfaceUSBHIDReady) {
-            // TODO: not yet supported
-        }
-    #endif
-
-    #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-        // send packet out over wireless custom HID interface (Bluetooth v2 HID)
-        if (interfaceBT2SerialReady) {
+    #if KG_HOSTIF & KG_HOSTIF_BT2_RAWHID
+        // send packet out over wireless custom HID interface (Bluetooth v2 raw HID)
+        if (interfaceBT2RawHIDReady) {
             // TODO: not yet supported
         }
     #endif
     
+    // KG_HOSTIF_USB_HID and KG_HOSTIF_BT2_HID are handled elsewhere
+    // (mouse/keyboard/joystick) and deal with other kinds of data
+
     if (autoFree) {
         free(buffer);
         buffer = NULL;

@@ -49,6 +49,10 @@ void set_blink_mode(uint8_t mode) {
     // logic: mode=0 -> off, mode=5 -> on, else no immediate change
     if (blinkMode == 0) set_blink_logic(0);
     else if (blinkMode == 5) set_blink_logic(1);
+    #if (KG_HOSTIF > 0)
+        txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_BLINK);
+        send_keyglove_packet(txPacket, txPacketLength, true);
+    #endif
 }
 
 void setup_feedback_blink() {

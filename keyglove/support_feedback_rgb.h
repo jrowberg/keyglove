@@ -51,6 +51,10 @@ void set_rgb_mode(uint8_t r, uint8_t g, uint8_t b) {
         g == 0 ? 0 : (g == 5 ? 1 : 255),
         b == 0 ? 0 : (b == 5 ? 1 : 255)
     );
+    #if (KG_HOSTIF > 0)
+        txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_RGB);
+        send_keyglove_packet(txPacket, txPacketLength, true);
+    #endif
 }
 
 void setup_feedback_rgb() {

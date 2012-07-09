@@ -84,7 +84,7 @@ void setup() {
     // default packet output format: TRUE for binary, FALSE for human-readable
     // - human readable is much better for behavior debugging
     // - binary is much better (required, even) for data efficiency
-    packetFormatBinary = false;
+    packetFormatBinary = true;
 
     // call main setup function (see setup.h for details)
     keyglove_setup();

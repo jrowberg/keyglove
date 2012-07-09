@@ -135,6 +135,11 @@ void update_touch() {
         // set official sensor readings to current readings
         sensors1 = verify1;
         sensors2 = verify2;
+
+        #if (KG_HOSTIF > 0)
+            txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_TOUCH_STATUS);
+            send_keyglove_packet(txPacket, txPacketLength, true);
+        #endif
     }
     
     verify1 = detect1;

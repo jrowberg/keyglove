@@ -53,6 +53,10 @@ void set_piezo_mode(uint8_t mode, uint8_t duration, uint16_t frequency) {
     else if (mode == KG_PIEZO_SOLID) set_piezo_tone(frequency);
     piezoTick = 0xFFFF;
     piezoTickLimit = duration;
+    #if (KG_HOSTIF > 0)
+        txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_PIEZO);
+        send_keyglove_packet(txPacket, txPacketLength, true);
+    #endif
 }
 
 void set_piezo_mode(uint8_t mode, uint8_t duration) {

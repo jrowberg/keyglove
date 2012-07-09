@@ -99,22 +99,22 @@ THE SOFTWARE.
 #define KG_PACKET_SRAM_STATUS               0x00
 
 // TOUCH PACKETS
-#define KG_PACKET_TOUCH_MODE                0x00
-#define KG_PACKET_TOUCH_LOGIC               0x00
-#define KG_PACKET_TOUCH_STATUS              0x00
+#define KG_PACKET_TOUCH_MODE                0xC0
+#define KG_PACKET_TOUCH_LOGIC               0xC1
+#define KG_PACKET_TOUCH_STATUS              0xC2
 
 // TOUCHSET PACKETS
-#define KG_PACKET_TOUCHSET_EXPORT           0x00
-#define KG_PACKET_TOUCHSET_INFO             0x00
-#define KG_PACKET_TOUCHSET_LIST             0x00
-#define KG_PACKET_TOUCHSET_SELECT           0x00
-#define KG_PACKET_TOUCHSET_IMPORT           0x00
-#define KG_PACKET_TOUCHSET_DELETE           0x00
+#define KG_PACKET_TOUCHSET_EXPORT           0xC8
+#define KG_PACKET_TOUCHSET_INFO             0xC9
+#define KG_PACKET_TOUCHSET_LIST             0xCA
+#define KG_PACKET_TOUCHSET_SELECT           0xCB
+#define KG_PACKET_TOUCHSET_IMPORT           0xCC
+#define KG_PACKET_TOUCHSET_DELETE           0xCD
 
-#define KG_PACKET_BLINK                     0x00
-#define KG_PACKET_RGB                       0x00
-#define KG_PACKET_PIEZO                     0x00
-#define KG_PACKET_VIBE                      0x00
+#define KG_PACKET_BLINK                     0x80
+#define KG_PACKET_RGB                       0x81
+#define KG_PACKET_PIEZO                     0x82
+#define KG_PACKET_VIBE                      0x83
 
 #define KG_PACKET_OPTION                    0xF0
 #define KG_PACKET_TICK                      0xF8

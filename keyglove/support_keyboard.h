@@ -142,6 +142,8 @@ THE SOFTWARE.
     #define KEY_APP        101
     #define KEY_POWER      102
     #define KEYPAD_EQUAL   103
+/*
+    // added to Teensyduino v1.07
     #define KEY_F13        104
     #define KEY_F14        105
     #define KEY_F15        106
@@ -154,6 +156,7 @@ THE SOFTWARE.
     #define KEY_F22        113
     #define KEY_F23        114
     #define KEY_F24        115
+*/
     #define KEY_EXECUTE    116
     #define KEY_HELP       117
     #define KEY_MENU       118

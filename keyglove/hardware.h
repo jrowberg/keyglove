@@ -94,12 +94,14 @@ THE SOFTWARE.
 /** Host interface options. Multiple interfaces may be enabled at the same time. (defined in KG_HOSTIF) */
 
 #define KG_HOSTIF_NONE                  0           /* Don't communicate (weird, maybe you have a reason) */
-#define KG_HOSTIF_PS2                   1           /* PS/2 "bit-bang" interface */
-#define KG_HOSTIF_USB_SERIAL            2           /* Hardware USB serial (requires AT90USB* or ATMega32U* MCU) */
+#define KG_HOSTIF_USB_SERIAL            1           /* Hardware USB serial (requires AT90USB* or ATMega32U* MCU) */
+#define KG_HOSTIF_USB_RAWHID            2           /* Hardware USB raw HID (requires AT90USB* or ATMega32U* MCU) */
 #define KG_HOSTIF_USB_HID               4           /* Hardware USB HID (requires AT90USB* or ATMega32U* MCU) */
 #define KG_HOSTIF_BT2_SERIAL            8           /* Bluetooth v2 serial (requires Bluegiga WT12 w/iWRAP) */
-#define KG_HOSTIF_BT2_HID               16          /* Bluetooth v2 HID (requires Bluegiga WT12 w/iWRAP) */
-#define KG_HOSTIF_R400_HID              32          /* R400 wireless HID (requires Logitech R400) */
+#define KG_HOSTIF_BT2_RAWHID            16          /* Bluetooth v2 raw HID (requires Bluegiga WT12 w/iWRAP v5) */
+#define KG_HOSTIF_BT2_HID               32          /* Bluetooth v2 HID (requires Bluegiga WT12 w/iWRAP) */
+#define KG_HOSTIF_PS2                   1024        /* PS/2 "bit-bang" interface */
+#define KG_HOSTIF_R400_HID              2048        /* R400 wireless HID (requires Logitech R400) */
 
 
 

@@ -48,6 +48,10 @@ void set_vibrate_mode(uint8_t mode, uint8_t duration) {
     else if (mode == KG_VIBRATE_SOLID) set_vibrate_logic(1);
     vibrateTick = 0xFFFF;
     vibrateTickLimit = duration;
+    #if (KG_HOSTIF > 0)
+        txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_VIBE);
+        send_keyglove_packet(txPacket, txPacketLength, true);
+    #endif
 }
 
 void set_vibrate_mode(uint8_t mode) {
