@@ -32,9 +32,18 @@ THE SOFTWARE.
 
 #include "support_hostif_bt2.h"
 
-bool interfaceBT2RawHIDReady = false;
+#define BLUETOOTH_RAWHID_TX_SIZE          16    // transmit packet size
+#define BLUETOOTH_RAWHID_RX_SIZE          16    // receive packet size
+
+uint8_t bluetoothTXRawHIDPacket[BLUETOOTH_RAWHID_TX_SIZE + 5];
+uint8_t bluetoothRXRawHIDPacket[BLUETOOTH_RAWHID_RX_SIZE + 5];
 
 void setup_hostif_bt2_rawhid() {
+    // pre-build raw HID report
+    bluetoothTXRawHIDPacket[0] = 0x9F;
+    bluetoothTXRawHIDPacket[1] = 0x12;
+    bluetoothTXRawHIDPacket[2] = 0xA1;
+    bluetoothTXRawHIDPacket[3] = 0x04;
 }
 
 void update_hostif_bt2_rawhid() {

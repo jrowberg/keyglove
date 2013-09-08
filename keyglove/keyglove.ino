@@ -3,7 +3,7 @@
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2011 Jeff Rowberg
+Copyright (c) 2013 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ THE SOFTWARE.
 =============================================== */
 
 uint8_t keygloveTick = 0;   // increments every ~10ms (100hz), loops at 100
-uint32_t keygloveTock = 0;  // increments every 100 ticks, loops as 2^32 (~4 billion)
+uint32_t keygloveTock = 0;  // increments every 100 ticks, loops at 2^32 (~4 billion)
 uint32_t keygloveTickTime = 0, keygloveTickTime0 = 0;
 
 // pre-processor controlled global initializations and setup() calls
@@ -66,39 +66,12 @@ uint32_t keygloveTickTime = 0, keygloveTickTime0 = 0;
 
 
 /* ===============================================
- * 100 HZ INTERRUPT VECTOR
-=============================================== */
-
-volatile uint8_t timer1Overflow = 0;
-ISR(TIMER1_OVF_vect) {
-    timer1Overflow++;
-}
-
-
-
-/* ===============================================
  * MAIN SETUP ROUTINE
 =============================================== */
 
 void setup() {
-    // default packet output format: TRUE for binary, FALSE for human-readable
-    // - human readable is much better for behavior debugging
-    // - binary is much better (required, even) for data efficiency
-    packetFormatBinary = true;
-
     // call main setup function (see setup.h for details)
     keyglove_setup();
-
-    // setup internal 100Hz "tick" interrupt
-    // thanks to http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1212098919 (and 'bens')
-    // also, lots of timer info here and here:
-    //    http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&t=50106
-    //    http://www.avrbeginners.net/architecture/timers/timers.html
-    TCCR1A = 1; // set TIMER1 overflow at 8-bit max (0xFF)
-    TCCR1B = 1; // no prescaler
-    TCNT1 = 0; // clear TIMER1 counter
-    TIFR1 |= (1 << TOV1); // clear the TIMER1 overflow flag
-    TIMSK1 |= (1 << TOIE1); // enable TIMER1 overflow interrupts
 }
 
 
@@ -107,6 +80,7 @@ void setup() {
  * MAIN LOOP ROUTINE
 =============================================== */
 
+uint16_t testA = 0;
 void loop() {
     // read all defined and active motion sensors
     #ifdef ENABLE_ACCELEROMETER
@@ -124,18 +98,30 @@ void loop() {
     #ifdef ENABLE_FUSION
         if (activeFusion && readyFusionData) update_motion_fusion();
     #endif
-
+    
+    #ifdef ENABLE_USB
+        update_hostif_usb();
+    #endif
     #if (KG_HOSTIF & KG_HOSTIF_USB_SERIAL)
-        //update_hostif_usb_serial();
+        update_hostif_usb_serial();
     #endif // KG_HOSTIF_USB_SERIAL
 
+    #ifdef ENABLE_BT2
+        update_hostif_bt2();
+    #endif
     #if (KG_HOSTIF & KG_HOSTIF_BT2_SERIAL)
-        //update_hostif_bt2_serial();
+        update_hostif_bt2_serial();
     #endif // KG_HOSTIF_BT2_SERIAL
 
     // check for TIMER1 overflow limit and increment tick (should be every 10 ms)
     // 156 results in 9.937 ms, 157 results in 10.001 ms
-    if (timer1Overflow >= 157) {
+    testA++;
+    if (testA > 10000) {
+        testA = 0;
+        //txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_SYSTEM, KG_PACKET_SYSTEM_TICK);
+        //send_keyglove_packet(txPacket, txPacketLength, true);
+    //}
+    //if (timer1Overflow >= 157) {
         timer1Overflow = 0;
         keygloveTick++;
         //keygloveTickTime += micros() - keygloveTickTime0;
@@ -147,7 +133,7 @@ void loop() {
             keygloveTick = 0;
             keygloveTock++;
             #if (KG_HOSTIF > 0)
-                txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_TICK);
+                txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_SYSTEM, KG_PACKET_SYSTEM_TICK);
                 send_keyglove_packet(txPacket, txPacketLength, true);
             #endif
         }

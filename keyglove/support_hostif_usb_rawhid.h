@@ -41,21 +41,25 @@ THE SOFTWARE.
 #define RAWHID_TX_SIZE          64      // transmit packet size
 #define RAWHID_TX_INTERVAL      2       // max # of ms between transmit packets
 #define RAWHID_RX_SIZE          64      // receive packet size
-#define RAWHID_RX_INTERVAL      10       // max # of ms between receive packets
+#define RAWHID_RX_INTERVAL      10      // max # of ms between receive packets
 
 #include "support_hostif_usb.h"
 
 bool interfaceUSBRawHIDReady = false;
-uint8_t rxRawHIDPacket[RAWHID_RX_SIZE];
+uint8_t interfaceUSBRawHIDMode = KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET;
+
 uint8_t txRawHIDPacket[RAWHID_TX_SIZE];
+uint8_t rxRawHIDPacket[RAWHID_RX_SIZE];
 
 void setup_hostif_usb_rawhid() {
-    interfaceUSBRawHIDReady = true;
 }
 
 void update_hostif_usb_rawhid() {
-    int8_t bytes = RawHID.recv(rxRawHIDPacket, 0);
-    for (int8_t i = 0; i < bytes; i++) hostif_protocol_parse(rxRawHIDPacket[i]);
+    interfaceUSBRawHIDReady = interfaceUSBReady;
+    if ((interfaceUSBRawHIDMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0) {
+        int8_t bytes = RawHID.recv(rxRawHIDPacket, 0);
+        for (int8_t i = 0; i < bytes; i++) hostif_protocol_parse(rxRawHIDPacket[i]);
+    }    
 }
 
 #endif // _SUPPORT_HOSTIF_USB_RAWHID_H_

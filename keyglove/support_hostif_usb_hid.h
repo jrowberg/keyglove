@@ -33,12 +33,13 @@ THE SOFTWARE.
 #include "support_hostif_usb.h"
 
 bool interfaceUSBHIDReady = false;
+uint8_t interfaceUSBHIDMode = KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET;
 
 void setup_hostif_usb_hid() {
-    interfaceUSBHIDReady = true;
 }
 
 void update_hostif_usb_hid() {
+    interfaceUSBHIDReady = interfaceUSBReady;
 }
 
 #endif // _SUPPORT_HOSTIF_USB_HID_H_

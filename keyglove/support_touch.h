@@ -31,8 +31,8 @@ THE SOFTWARE.
 #define _SUPPORT_TOUCH_H_
 
 void setmode(uint8_t mode);
-void check_sensors_touch(uint32_t sensors1, uint32_t sensors2, uint8_t pos);
-void check_sensors_release(uint32_t sensors1, uint32_t sensors2, uint8_t pos);
+void check_sensors_touch(uint8_t *touches, uint8_t pos);
+void check_sensors_release(uint8_t *touches, uint8_t pos);
 
 uint32_t touchBench0, touchBench;
 uint8_t touchTick;
@@ -42,28 +42,22 @@ uint16_t opt_touch_detect_threshold = 20;   // number of milliseconds required f
 uint32_t touchTime; // detection timestamp
 uint8_t adding = false;
 uint8_t removing = false;
-uint32_t detect1, detect2;
-uint32_t verify1, verify2;
-uint32_t sensors1, sensors2;
 uint8_t mode;
+
+uint8_t touches_now[KG_BASE_COMBINATION_BYTES];
+uint8_t touches_verify[KG_BASE_COMBINATION_BYTES];
+uint8_t touches_active[KG_BASE_COMBINATION_BYTES];
 
 bool activeTouch;
 
 void setup_touch() {
-    detect1 = detect2 = 0;
-    verify1 = verify2 = 0;
-    sensors1 = sensors2 = 0;
-
-    // make sure we enable internal pullup resistors
-    for (uint8_t i = 0; i < KG_TOTAL_SENSORS; i++) {
-        pinMode(pins[i], INPUT);
-        digitalWrite(pins[i], HIGH);
-    }
-
     mode = 0; // set to base mode, no alt/shift/mouse/prog/etc.
     setmode(0); // default touchset mode is always 0
 
     activeTouch = true; // this is always on if touch control is enabled
+    
+    // hardware-specific setup
+    setup_board_touch();
 }
 
 void enable_touch() {
@@ -77,74 +71,56 @@ void disable_touch() {
 void update_touch() {
     //touchBench0 = micros();
 
-    detect1 = 0;
-    detect2 = 0;
-    removing = false;
-    
-    uint8_t p1, p2;
     uint8_t i;
+    removing = false;
+    memset(touches_now, 0x00, KG_BASE_COMBINATION_BYTES);
 
-    // loop through every possible 1-to-1 sensor combination and record levels
-    for (i = 0; i < KG_BASE_COMBINATIONS; i++) {
-        p1 = combinations[i][0];
-        p2 = combinations[i][1];
-
-        pinMode(p1, OUTPUT);    // change to OUTPUT mode
-        digitalWrite(p1, LOW);  // bring LOW (default input level is HIGH)
-        if (i < 32) {
-            // write value to sensors1
-            if (digitalRead(p2) == LOW) bitSet(detect1, i);
-        } else {
-            // write value to sensors2
-            if (digitalRead(p2) == LOW) bitSet(detect2, i - 32);
-        }
-        pinMode(p1, INPUT);     // reset to INPUT mode
-        digitalWrite(p1, HIGH); // enable pullup
-    }
+    // loop through every registered 1-to-1 sensor combination and record levels
+    // (moved to hardware-specific code for efficiency, improved iteration time from 2ms to 40us SERIOUSLY OMG)
+    update_board_touch(touches_now);
 
     // check to see if we need to reset detection threshold
-    if (verify1 != detect1 || verify2 != detect2) {
+    if (memcmp(touches_now, touches_verify, KG_BASE_COMBINATION_BYTES) != 0) {
         // current sensors different from last detection, so reset threshold
         touchTime = millis();
-    } else if ((verify1 != sensors1 || verify2 != sensors2) && millis() - touchTime >= opt_touch_detect_threshold) {
+    } else if (memcmp(touches_verify, touches_active, KG_BASE_COMBINATION_BYTES) != 0 && millis() - touchTime >= opt_touch_detect_threshold) {
         // detection is over threshold and current readings are different from previous readings
 
         #ifdef DEBUG_TOUCH
             DEBUG_TOUCH(Serial.print("touch "));
-            for (i = 0; i < KG_BASE_COMBINATIONS; i++) {
-                if (i < 32) DEBUG_TOUCH(Serial.print(bitRead(detect1, i)));
-                else DEBUG_TOUCH(Serial.print(bitRead(detect2, i - 32)));
+            for (i = 0; i < KG_BASE_COMBINATION_BYTES; i++) {
+                if (touches_verify[i] < 16) DEBUG_TOUCH(Serial.write('0'));
+                DEBUG_TOUCH(Serial.print(touches_verify[i], HEX));
             }
             DEBUG_TOUCH(Serial.print("\n"));
         #endif /* DEBUG_TOUCH */
 
         // check to see if they've just initiated or removed any touches
-        if (verify1 > sensors1 || verify2 > sensors2) {
+        if (memcmp(touches_verify, touches_active, KG_BASE_COMBINATION_BYTES) > 0) {
             adding = true;
 
             // touch initiation, check for actions
-            check_sensors_touch(verify1, verify2, 1);
-        } else if (adding && (verify1 < sensors1 || verify2 < sensors2)) {
+            check_sensors_touch(touches_verify, 1);
+        } else if (adding && memcmp(touches_verify, touches_active, KG_BASE_COMBINATION_BYTES) < 0) {
             adding = false;
             removing = true;
 
             // touch release, check for actions
-            check_sensors_release(sensors1, sensors2, 1);
+            check_sensors_release(touches_active, 1);
         }
         
         // set official sensor readings to current readings
-        sensors1 = verify1;
-        sensors2 = verify2;
+        memcpy(touches_active, touches_verify, KG_BASE_COMBINATION_BYTES);
 
         #if (KG_HOSTIF > 0)
-            txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_TOUCH_STATUS);
+            txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_TOUCH, KG_PACKET_TOUCH_STATUS);
             send_keyglove_packet(txPacket, txPacketLength, true);
         #endif
     }
-    
-    verify1 = detect1;
-    verify2 = detect2;
-    
+
+    // set "verify" readings to match "now" readings (debouncing)
+    memcpy(touches_verify, touches_now, KG_BASE_COMBINATION_BYTES);
+
     /*touchBench += (micros() - touchBench0);
     touchTick++;
     if (touchTick % 100 == 0) {
@@ -264,7 +240,9 @@ void mousedown(uint8_t button) {
     DEBUG_TOUCHSET(Serial.println(button));
     mouseDown = mouseDown | button;
     #if KG_HOSTIF & KG_HOSTIF_USB_HID
-        Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+        if (interfaceUSBHIDReady && (interfaceUSBHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
+            Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+        }    
     #endif /* ENABLE_USB */
     #if KG_HOSTIF & KG_HOSTIF_R400_HID
         RX400.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
@@ -277,7 +255,9 @@ void mouseup(uint8_t button) {
     if ((mouseDown & button) > 0) {
         mouseDown -= button;
         #if KG_HOSTIF & KG_HOSTIF_USB_HID
-            Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+            if (interfaceUSBHIDReady && (interfaceUSBHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
+                Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
+            }
         #endif /* ENABLE_USB */
         #if KG_HOSTIF & KG_HOSTIF_R400_HID
             RX400.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
@@ -306,7 +286,7 @@ void keydown(uint8_t code) {
                 Keyboard.set_key1(code);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key1(code);
+                BTKeyboard.set_key1(code);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key1(code);
@@ -317,7 +297,7 @@ void keydown(uint8_t code) {
                 Keyboard.set_key2(code);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key2(code);
+                BTKeyboard.set_key2(code);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key2(code);
@@ -328,7 +308,7 @@ void keydown(uint8_t code) {
                 Keyboard.set_key3(code);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key3(code);
+                BTKeyboard.set_key3(code);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key3(code);
@@ -339,7 +319,7 @@ void keydown(uint8_t code) {
                 Keyboard.set_key4(code);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key4(code);
+                BTKeyboard.set_key4(code);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key4(code);
@@ -350,7 +330,7 @@ void keydown(uint8_t code) {
                 Keyboard.set_key5(code);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key5(code);
+                BTKeyboard.set_key5(code);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key5(code);
@@ -361,7 +341,7 @@ void keydown(uint8_t code) {
                 Keyboard.set_key6(code);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key6(code);
+                BTKeyboard.set_key6(code);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key6(code);
@@ -369,10 +349,12 @@ void keydown(uint8_t code) {
             break;
     }
     #if KG_HOSTIF & KG_HOSTIF_USB_HID
-        Keyboard.send_now();
+        if (interfaceUSBHIDReady && (interfaceUSBHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
+            Keyboard.send_now();
+        }
     #endif /* ENABLE_USB */
     #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-        bluetooth.send_now();
+        BTKeyboard.send_now();
     #endif /* ENABLE_BLUETOOTH */
     #if KG_HOSTIF & KG_HOSTIF_R400_HID
         RX400.send_now();
@@ -392,7 +374,7 @@ void keyup(uint8_t code) {
                 Keyboard.set_key1(0);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key1(0);
+                BTKeyboard.set_key1(0);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key1(0);
@@ -403,7 +385,7 @@ void keyup(uint8_t code) {
                 Keyboard.set_key2(0);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key2(0);
+                BTKeyboard.set_key2(0);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key2(0);
@@ -414,7 +396,7 @@ void keyup(uint8_t code) {
                 Keyboard.set_key3(0);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key3(0);
+                BTKeyboard.set_key3(0);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key3(0);
@@ -425,7 +407,7 @@ void keyup(uint8_t code) {
                 Keyboard.set_key4(0);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key4(0);
+                BTKeyboard.set_key4(0);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key4(0);
@@ -436,7 +418,7 @@ void keyup(uint8_t code) {
                 Keyboard.set_key5(0);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key5(0);
+                BTKeyboard.set_key5(0);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key5(0);
@@ -447,7 +429,7 @@ void keyup(uint8_t code) {
                 Keyboard.set_key6(0);
             #endif /* ENABLE_USB */
             #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                bluetooth.set_key6(0);
+                BTKeyboard.set_key6(0);
             #endif /* ENABLE_BLUETOOTH */
             #if KG_HOSTIF & KG_HOSTIF_R400_HID
                 RX400.set_key6(0);
@@ -455,10 +437,12 @@ void keyup(uint8_t code) {
             break;
     }
     #if KG_HOSTIF & KG_HOSTIF_USB_HID
-        Keyboard.send_now();
+        if (interfaceUSBHIDReady && (interfaceUSBHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
+            Keyboard.send_now();
+        }
     #endif /* ENABLE_USB */
     #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-        bluetooth.send_now();
+        BTKeyboard.send_now();
     #endif /* ENABLE_BLUETOOTH */
     #if KG_HOSTIF & KG_HOSTIF_R400_HID
         RX400.send_now();
@@ -478,8 +462,12 @@ void modifierdown(uint8_t code) {
     DEBUG_TOUCHSET(Serial.println(code));
     modifiersDown = modifiersDown | code;
     #if KG_HOSTIF & KG_HOSTIF_USB_HID
-        Keyboard.set_modifier(modifiersDown);
-        Keyboard.send_now();
+        //Keyboard.set_modifier(modifiersDown);
+        //Keyboard.send_now();
+    #endif /* ENABLE_USB */
+    #if KG_HOSTIF & KG_HOSTIF_BT2_HID
+        //BTKeyboard.set_modifier(modifiersDown);
+        //BTKeyboard.send_now();
     #endif /* ENABLE_USB */
     #if KG_HOSTIF & KG_HOSTIF_R400_HID
         RX400.set_modifier(modifiersDown);
@@ -493,8 +481,12 @@ void modifierup(uint8_t code) {
     if ((modifiersDown & code) > 0) {
         modifiersDown -= code;
         #if KG_HOSTIF & KG_HOSTIF_USB_HID
-            Keyboard.set_modifier(modifiersDown);
-            Keyboard.send_now();
+            //Keyboard.set_modifier(modifiersDown);
+            //Keyboard.send_now();
+        #endif /* ENABLE_USB */
+        #if KG_HOSTIF & KG_HOSTIF_USB_HID
+            //BTKeyboard.set_modifier(modifiersDown);
+            //BTKeyboard.send_now();
         #endif /* ENABLE_USB */
         #if KG_HOSTIF & KG_HOSTIF_R400_HID
             RX400.set_modifier(modifiersDown);

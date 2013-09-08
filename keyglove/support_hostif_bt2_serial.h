@@ -32,8 +32,6 @@ THE SOFTWARE.
 
 #include "support_hostif_bt2.h"
 
-bool interfaceBT2SerialReady = false;
-
 void setup_hostif_bt2_serial() {
 }
 

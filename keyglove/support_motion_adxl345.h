@@ -229,7 +229,7 @@ void update_motion_accelerometer() {
     DEBUG_ACCELEROMETER(Serial.print(aa.z)); DEBUG_ACCELEROMETER(Serial.print("\t"));
 
     #if (KG_HOSTIF > 0)
-        txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_ACCEL_FILTERED16);
+        txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_MOTION, KG_PACKET_MOTION_ACCEL_FILTERED);
         if (txPacket != NULL) send_keyglove_packet(txPacket, txPacketLength, true);
     #endif
 

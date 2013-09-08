@@ -230,7 +230,7 @@ void update_motion_gyroscope() {
     DEBUG_GYROSCOPE(Serial.println(gv.z));
 
     #if (KG_HOSTIF > 0)
-        txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_GYRO_FILTERED16);
+        txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_MOTION, KG_PACKET_MOTION_GYRO_FILTERED);
         if (txPacket != NULL) send_keyglove_packet(txPacket, txPacketLength, true);
     #endif
 

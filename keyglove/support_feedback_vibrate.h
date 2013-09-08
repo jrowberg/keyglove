@@ -49,7 +49,7 @@ void set_vibrate_mode(uint8_t mode, uint8_t duration) {
     vibrateTick = 0xFFFF;
     vibrateTickLimit = duration;
     #if (KG_HOSTIF > 0)
-        txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_VIBE);
+        txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_FEEDBACK_VIBE);
         send_keyglove_packet(txPacket, txPacketLength, true);
     #endif
 }

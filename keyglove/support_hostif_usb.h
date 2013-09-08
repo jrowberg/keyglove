@@ -30,15 +30,19 @@ THE SOFTWARE.
 #ifndef _SUPPORT_HOSTIF_USB_H_
 #define _SUPPORT_HOSTIF_USB_H_
 
+#define UDINT 0xD8
+
 #define ENABLE_USB
 
 bool interfaceUSBReady = false;
 
 void setup_hostif_usb() {
     interfaceUSBReady = true;
+    //USBCON |= 0x10; // enable the VBUS status bit
 }
 
 void update_hostif_usb() {
+    //interfaceUSBReady = (UDINT & 0x01);
 }
 
 #endif // _SUPPORT_HOSTIF_USB_H_

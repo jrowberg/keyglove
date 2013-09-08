@@ -38,6 +38,7 @@ THE SOFTWARE.
 #define KG_BOARD_ARDUINO_UNO            120         /* ATMega328 + ATmega8U2, 20 I/O */
 #define KG_BOARD_ARDUINO_MEGA1280       130         /* ATMega1280 + FTDI, 54 I/O */
 #define KG_BOARD_ARDUINO_MEGA2560       135         /* ATMega2560 + ATmega8U2, 54 I/O */
+#define KG_BOARD_ARDUINO_DUE            150         /* SAM3X8E */
 
 #define KG_BOARD_TEENSY                 200         /* AT90USB162, 22 I/O, no I2C!, 512B EEPROM, 512B SRAM */
 #define KG_BOARD_TEENSY2                205         /* ATMega32U4, 25 I/O, 1kB EEPROM, 3.3kB SRAM */
@@ -46,34 +47,29 @@ THE SOFTWARE.
 
 #define KG_BOARD_KEYGLOVE01             301         /* AT90USB1287, 48 I/O */
 #define KG_BOARD_KEYGLOVE02             302         /* AT90USB1287, 48 I/O */
-#define KG_BOARD_KEYGLOVE03             303         /* AT90USB1287, 48 I/O + 2x I2C expanders w/48 more */
-#define KG_BOARD_KEYGLOVE   KG_BOARD_KEYGLOVE02     /* easy alias for current version */
-
-
-
-/** External EEPROM options. Only one choice may be selected at the same time. (defined in KG_EEPROM) */
-
-#define KG_EEPROM_NONE                  0           /* Use AVR's internal EEPROM only */
-#define KG_EEPROM_25LC512               1           /* Microchip 25LC512 512kbit */
-
-
-
-/** External SRAM options. Only one choice may be selected at the same time. (defined in KG_SRAM) */
-
-#define KG_SRAM_NONE                    0           /* Use AVR's internal SRAM only */
-#define KG_SRAM_23K256                  1           /* Microchip 23K256 256kbit */
+#define KG_BOARD_KEYGLOVE03             303         /* AT91SAM3X8E, bzillion I/O */
+#define KG_BOARD_KEYGLOVE   KG_BOARD_KEYGLOVE03     /* easy alias for current version */
 
 
 
 /** Flex sensor options. Only one choice may be selected at the same time. (defined in KG_FLEX) */
 
 #define KG_FLEX_NONE                    0           /* No flex sensors used */
+#define KG_FLEX_FULL                    1           /* Full 5-finger complement */
 
 
 
 /** Pressure sensor options. Only one choice may be selected at the same time. (defined in KG_PRESSURE) */
 
 #define KG_PRESSURE_NONE                0           /* No pressure sensors used */
+#define KG_PRESSURE_FULL                1           /* Full 5-fingertip complement */
+
+
+
+/** Hand selection options. Only one choice may be selected at the same time. (defined in KG_HAND) */
+
+#define KG_HAND_RIGHT                   1           /* Right-hand sensor connection orientation (default) */
+#define KG_HAND_LEFT                    2           /* Left-hand sensor connection orientation (relevant for kit, others automatic) */
 
 
 
@@ -88,15 +84,16 @@ THE SOFTWARE.
 #define KG_TOUCHCONN_NONE               0           /* Don't read sensors (weird, maybe you have a reason) */
 #define KG_TOUCHCONN_DIRECT             1           /* Connect sensors directly to MCU I/O pins */
 #define KG_TOUCHCONN_TCA6424A           2           /* Connect sensors to 2x TI TCA6424A I2C I/O expanders */
+#define KG_TOUCHCONN_PCA9505            3           /* Connect sensors to 1x NXP PCA9505 I2C I/O expander */
 
 
 
 /** Host interface options. Multiple interfaces may be enabled at the same time. (defined in KG_HOSTIF) */
 
 #define KG_HOSTIF_NONE                  0           /* Don't communicate (weird, maybe you have a reason) */
-#define KG_HOSTIF_USB_SERIAL            1           /* Hardware USB serial (requires AT90USB* or ATMega32U* MCU) */
-#define KG_HOSTIF_USB_RAWHID            2           /* Hardware USB raw HID (requires AT90USB* or ATMega32U* MCU) */
-#define KG_HOSTIF_USB_HID               4           /* Hardware USB HID (requires AT90USB* or ATMega32U* MCU) */
+#define KG_HOSTIF_USB_SERIAL            1           /* Hardware USB serial (requires ARM, AT90USB* or ATMega32U* MCU) */
+#define KG_HOSTIF_USB_RAWHID            2           /* Hardware USB raw HID (requires ARM, AT90USB* or ATMega32U* MCU) */
+#define KG_HOSTIF_USB_HID               4           /* Hardware USB HID (requires ARM, AT90USB* or ATMega32U* MCU) */
 #define KG_HOSTIF_BT2_SERIAL            8           /* Bluetooth v2 serial (requires Bluegiga WT12 w/iWRAP) */
 #define KG_HOSTIF_BT2_RAWHID            16          /* Bluetooth v2 raw HID (requires Bluegiga WT12 w/iWRAP v5) */
 #define KG_HOSTIF_BT2_HID               32          /* Bluetooth v2 HID (requires Bluegiga WT12 w/iWRAP) */
@@ -124,9 +121,9 @@ THE SOFTWARE.
 #define KG_FUSION_RAWIMU_6DOF           1           /* Seb Madgwick's 6-DOF IMU filter, all software */
 #define KG_FUSION_RAWMARG_9DOF          2           /* Seb Madgwick's 9-DOF MARG filter, all software */
 #define KG_FUSION_MPU6050_6DOF          3           /* DMP-based 6-DOF filter, all hardware */
-#define KG_FUSION_MPU6050_AK8975_9ODF   4           /* DMP-based 9-DOF filter, all hardware (?) */
-#define KG_FUSION_MPU6050_HMC5883L_9DOF 5           /* DMP-based 9-DOF filter, all hardware (?) */
-#define KG_FUSION_MPU9150               6           /* DMP-based 9-DOF filter, all hardware */
+#define KG_FUSION_MPU6050_AK8975_9ODF   4           /* DMP-based 9-DOF filter, some software */
+#define KG_FUSION_MPU6050_HMC5883L_9DOF 5           /* DMP-based 9-DOF filter, some software */
+#define KG_FUSION_MPU9150               6           /* DMP-based 9-DOF filter, some software */
 
 
 
@@ -173,6 +170,7 @@ THE SOFTWARE.
  * ARCHITECTURE PIN ALIASES
 =============================================== */
 
+/*
 #if (defined(__AVR_ATmega168__) || defined(__AVR_ATmega328__))
      // 32-pin ATMegaxxx MCUs
      #define SS   PB0
@@ -224,6 +222,7 @@ THE SOFTWARE.
      #define SCL  PD0
      #define SDA  PD1
 #endif
+*/
 
 #endif // _HARDWARE_H_
 

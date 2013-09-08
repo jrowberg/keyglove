@@ -1,9 +1,9 @@
 // Keyglove controller source code - Global variables and initialization functions
-// 7/17/2011 by Jeff Rowberg <jeff@rowberg.net>
+// 8/27/2013 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2011 Jeff Rowberg
+Copyright (c) 2013 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -162,6 +162,11 @@ THE SOFTWARE.
     #define NO_USB_SUPPORT // could be a problem
 #endif
 
+#if (KG_BOARD == KG_BOARD_ARDUINO_DUE)
+    #include "support_board_arduino_due.h"
+    #define MAX_ONBOARD_IO_PINS 54
+#endif
+
 #if (KG_BOARD == KG_BOARD_TEENSY)
     #include "support_board_teensy.h"
     #define MAX_ONBOARD_IO_PINS 22
@@ -192,28 +197,6 @@ THE SOFTWARE.
 #if (KG_HOSTIF > 0)
     // every major host interface must support this protocol
     #include "support_hostif_protocol_declarations.h"
-#endif
-
-
-
-/* ===============================================
- * EXTERNAL EEPROM
-=============================================== */
-
-#if (KG_EEPROM == KG_EEPROM_25LC512)
-    #define ENABLE_EEPROM
-    #include "support_eeprom_25lc512.h"
-#endif
-
-
-
-/* ===============================================
- * EXTERNAL SRAM
-=============================================== */
-
-#if (KG_SRAM == KG_SRAM_23K256)
-    #define ENABLE_SRAM
-    #include "support_sram_23k256.h"
 #endif
 
 
@@ -465,30 +448,15 @@ void keyglove_setup() {
         setup_board();
     #endif
 
-    // initialize host interfaces
-    #if ((KG_HOSTIF & KG_HOSTIF_USB_SERIAL) || (KG_HOSTIF & KG_HOSTIF_USB_HID))
-        setup_hostif_usb();
-        #if (KG_HOSTIF & KG_HOSTIF_USB_SERIAL)
-            setup_hostif_usb_serial();
-        #endif
-        #if (KG_HOSTIF & KG_HOSTIF_USB_HID)
-            setup_hostif_usb_hid();
-        #endif
-    #endif
-    #if ((KG_HOSTIF & KG_HOSTIF_BT2_SERIAL) || (KG_HOSTIF & KG_HOSTIF_BT2_HID))
-        setup_hostif_bt2();
-        #if (KG_HOSTIF & KG_HOSTIF_BT2_SERIAL)
-            setup_hostif_bt2_serial();
-        #endif
-        #if (KG_HOSTIF & KG_HOSTIF_BT2_HID)
-            setup_hostif_bt2_hid();
-        #endif
-    #endif
-
     // initialize I2C transceiver and timing
     #ifndef NO_I2C_SUPPORT
         Wire.begin();
-        TWBR = 32; // set 100kHz mode
+        #if F_CPU == 16000000L || F_CPU == 8000000L
+            // TWBR = ((F_CPU / I2C_CLOCK) - 16) / 2
+            TWBR = 12; // set 400kHz mode @ 16MHz CPU or 200kHz mode @ 8MHz CPU
+        #else
+            // default I2C clock speed
+        #endif
     #endif
 
     // single-option external EEPROM
@@ -577,7 +545,7 @@ void keyglove_setup() {
     setup_mouse();
     setup_joystick();
 
-    send_keyglove_info(KG_INFO_LEVEL_NORMAL, F("Keyglove ready!"));
+    send_keyglove_info(KG_LOG_LEVEL_NORMAL, F("Keyglove ready!"));
 }
 
 #endif // _SUPPORT_H_

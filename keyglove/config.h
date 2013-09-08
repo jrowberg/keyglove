@@ -33,18 +33,21 @@ THE SOFTWARE.
 =============================================== */
 
 //#define KG_BOARD            KG_BOARD_ARDUINO_MEGA2560
-#define KG_BOARD            KG_BOARD_TEENSYPP2
+//#define KG_BOARD            KG_BOARD_TEENSYPP2
+#define KG_BOARD            KG_BOARD_ARDUINO_DUE
 //#define KG_BOARD            KG_BOARD_KEYGLOVE
 
+#define KG_HAND             KG_HAND_RIGHT
 #define KG_DUALGLOVE        KG_DUALGLOVE_NONE
 #define KG_FLEX             KG_FLEX_NONE
 #define KG_PRESSURE         KG_PRESSURE_NONE
-#define KG_EEPROM           KG_EEPROM_NONE
-#define KG_SRAM             KG_SRAM_NONE
+//#define KG_EEPROM           KG_EEPROM_NONE
+//#define KG_SRAM             KG_SRAM_NONE
 #define KG_TOUCHCONN        KG_TOUCHCONN_DIRECT
 
-//#define KG_HOSTIF           (KG_HOSTIF_USB_SERIAL | KG_HOSTIF_USB_HID | KG_HOSTIF_BT2_SERIAL | KG_HOSTIF_BT2_HID)
-#define KG_HOSTIF           (KG_HOSTIF_USB_RAWHID | KG_HOSTIF_BT2_SERIAL | KG_HOSTIF_BT2_HID)
+#define KG_HOSTIF           (KG_HOSTIF_USB_SERIAL | KG_HOSTIF_BT2_HID | KG_HOSTIF_BT2_RAWHID)
+//#define KG_HOSTIF           (KG_HOSTIF_USB_RAWHID | KG_HOSTIF_BT2_SERIAL | KG_HOSTIF_BT2_HID)
+//#define KG_HOSTIF           (KG_HOSTIF_USB_HID)
 
 //#define KG_MOTION           (KG_MOTION_ADXL345 | KG_MOTION_ITG3200)
 //#define KG_MOTION           (KG_MOTION_ADXL345 | KG_MOTION_ITG3200 | KG_MOTION_HMC5883L)
@@ -62,7 +65,7 @@ THE SOFTWARE.
  * DEBUG SETTINGS
 =============================================== */
 
-#define KG_DEBUG            KG_DEBUG_NONE
+#define KG_DEBUG            KG_DEBUG_NONE //KG_DEBUG_TOUCH | KG_DEBUG_TOUCHSET
 
 /*
 Debug options:

@@ -123,8 +123,8 @@ void update_mouse() {
             else Mouse.move(mousedx, mousedy);
         #endif /* KG_HOSTIF_USB_HID */
         #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-            if (mousedz > 0) bluetooth.move(mousedx, mousedy, mousedz);
-            else bluetooth.move(mousedx, mousedy);
+            if (mousedz > 0) BTMouse.move(mousedx, mousedy, mousedz, 0);
+            else BTMouse.move(mousedx, mousedy);
         #endif /* KG_HOSTIF_BT2_HID */
         #if KG_HOSTIF & KG_HOSTIF_R400_HID
             if (mousedz > 0) RX400.move(mousedx, mousedy, mousedz);
@@ -141,7 +141,7 @@ void update_mouse() {
             Mouse.scroll(scrolldy);
         #endif /* KG_HOSTIF_USB_HID */
         #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-            bluetooth.scroll(scrolldy);
+            BTMouse.scroll(scrolldy, 0);
         #endif /* KG_HOSTIF_BT2_HID */
         #if KG_HOSTIF & KG_HOSTIF_R400_HID
             RX400.scroll(scrolldy);

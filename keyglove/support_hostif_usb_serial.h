@@ -32,19 +32,16 @@ THE SOFTWARE.
 
 #include "support_hostif_usb.h"
 
-// 8MHz operation without an external TOSC2 crystal requires 38400 at most
-// (error at 115200 using 8MHz clock speed is too far out of spec)
-#define KG_HOSTIF_SERIAL_BAUD 38400
-
 bool interfaceUSBSerialReady = false;
+uint8_t interfaceUSBSerialMode = KG_INTERFACE_MODE_INCOMING_PACKET | KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_OUTGOING_INFO;
 
 void setup_hostif_usb_serial() {
     Serial.begin(KG_HOSTIF_SERIAL_BAUD);
-    interfaceUSBSerialReady = true;
 }
 
 void update_hostif_usb_serial() {
-    if (Serial.available()) hostif_protocol_parse(Serial.read());
+    interfaceUSBSerialReady = interfaceUSBReady;
+    if ((interfaceUSBSerialMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0 && Serial.available()) hostif_protocol_parse(Serial.read());
 }
 
 #endif // _SUPPORT_HOSTIF_USB_SERIAL_H_

@@ -77,7 +77,7 @@ uint8_t accelGyroZeroTick;
 //bool gxAutoZero, gyAutoZero, gzAutoZero;
 
 void mpu6050_interrupt() {
-    if (!(PINE & 0b00010000)) readyAccelGyroData = true;
+    //if (!(PINE & 0b00010000)) readyAccelGyroData = true;
 }
 
 void setup_motion_accelgyro() {
@@ -91,11 +91,11 @@ void setup_motion_accelgyro() {
     accelgyro.setInterruptLatch(1); // latch until read
     accelgyro.setInterruptLatchClear(1); // clear on any read
     accelgyro.setIntDataReadyEnabled(1); // trigger interrupt on data ready
-    activeAccelGyro = false;
+    activeAccelGyro = true; //false;
     readyAccelGyroData = false;
     accelGyroEnableAutoZero = true;
-    DDRE  &= 0b11101111; // E4 = input
-    PORTE |= 0b00010000; // E4 = pullup
+    //DDRE  &= 0b11101111; // E4 = input
+    //PORTE |= 0b00010000; // E4 = pullup
 }
 
 void enable_motion_accelgyro() {
@@ -283,8 +283,8 @@ void update_motion_accelgyro() {
     DEBUG_ACCELGYRO(Serial.println(gv.z));
 
     #if (KG_HOSTIF > 0)
-        txPacketLength = create_packet(txPacket, packetFormatBinary, KG_PACKET_ACCELGYRO_FILTERED16);
-        if (txPacket != NULL) send_keyglove_packet(txPacket, txPacketLength, true);
+        //txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_MOTION, KG_PACKET_MOTION_ACCELGYRO_FILTERED);
+        //if (txPacket != NULL) send_keyglove_packet(txPacket, txPacketLength, true);
     #endif
 
     /*
