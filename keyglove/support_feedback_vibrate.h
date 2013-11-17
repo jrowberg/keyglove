@@ -42,6 +42,10 @@ uint8_t vibrateMode;
 uint16_t vibrateTick;
 uint16_t vibrateTickLimit;
 
+void set_vibrate_logic(uint8_t vibe) {
+    digitalWrite(KG_PIN_VIBRATE, vibe == 0 ? HIGH : LOW); // active low
+}
+
 void set_vibrate_mode(uint8_t mode, uint8_t duration) {
     vibrateMode = mode;
     if (mode == KG_VIBRATE_OFF) set_vibrate_logic(0);
@@ -59,6 +63,9 @@ void set_vibrate_mode(uint8_t mode) {
 }
 
 void setup_feedback_vibrate() {
+    pinMode(KG_PIN_VIBRATE, OUTPUT);
+    digitalWrite(KG_PIN_VIBRATE, HIGH); // transistor switch makes it active-low
+
     // SELF-TEST
     //set_vibrate_mode(KG_VIBRATE_TINYBUZZ, 20);
 }
@@ -75,5 +82,3 @@ void update_feedback_vibrate() {
 }
 
 #endif // _SUPPORT_FEEDBACK_VIBRATE_H_
-
-

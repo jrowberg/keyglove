@@ -30,6 +30,9 @@ THE SOFTWARE.
 #ifndef _SUPPORT_FEEDBACK_RGB_H_
 #define _SUPPORT_FEEDBACK_RGB_H_
 
+// FEEDBACK_RGB PACKETS
+#define KG_PACKET_ID_EVT_FEEDBACK_RGB              0x02
+
 #define KG_RGB_OFF 0
 #define KG_RGB_LONGBLINK 1
 #define KG_RGB_LONGPULSE 2
@@ -40,6 +43,12 @@ THE SOFTWARE.
 uint8_t rgbBlinkRed;
 uint8_t rgbBlinkGreen;
 uint8_t rgbBlinkBlue;
+
+void set_rgb_logic(uint8_t r, uint8_t g, uint8_t b) {
+    if (r != 255) digitalWrite(KG_PIN_RGB_RED, r);
+    if (g != 255) digitalWrite(KG_PIN_RGB_GREEN, g);
+    if (b != 255) digitalWrite(KG_PIN_RGB_BLUE, b);
+}
 
 void set_rgb_mode(uint8_t r, uint8_t g, uint8_t b) {
     rgbBlinkRed = r;
@@ -58,6 +67,13 @@ void set_rgb_mode(uint8_t r, uint8_t g, uint8_t b) {
 }
 
 void setup_feedback_rgb() {
+    pinMode(KG_PIN_RGB_RED, OUTPUT);
+    pinMode(KG_PIN_RGB_GREEN, OUTPUT);
+    pinMode(KG_PIN_RGB_BLUE, OUTPUT);
+    digitalWrite(KG_PIN_RGB_RED, LOW);
+    digitalWrite(KG_PIN_RGB_GREEN, LOW);
+    digitalWrite(KG_PIN_RGB_BLUE, LOW);
+
     // SELF-TEST
     //set_rgb_logic(1, 1, 1); // turn everything on and wait 1/20 sec
     //delay(50);
@@ -80,5 +96,3 @@ void update_feedback_rgb() {
 }
 
 #endif // _SUPPORT_FEEDBACK_RGB_H_
-
-

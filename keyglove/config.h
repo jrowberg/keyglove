@@ -1,9 +1,9 @@
 // Keyglove controller source code - Overall architecture/hardware option definitions
-// 7/17/2011 by Jeff Rowberg <jeff@rowberg.net>
+// 9/10/2013 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2011 Jeff Rowberg
+Copyright (c) 2013 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,32 +32,65 @@ THE SOFTWARE.
  * HARDWARE OPTIONS
 =============================================== */
 
-//#define KG_BOARD            KG_BOARD_ARDUINO_MEGA2560
-//#define KG_BOARD            KG_BOARD_TEENSYPP2
-#define KG_BOARD            KG_BOARD_ARDUINO_DUE
-//#define KG_BOARD            KG_BOARD_KEYGLOVE
+// attempt auto-detection of base hardware and interfaces
 
-#define KG_HAND             KG_HAND_RIGHT
+// Teensy++ 2.0
+#if defined(CORE_TEENSY)
+    #if defined(__AVR_AT90USB1286__) || defined(__AVR_AT90USB1287__)
+        #define KG_BOARD                        KG_BOARD_TEENSYPP2
+        #ifdef CORE_TEENSY_SERIAL
+            #define AUTO_KG_HOSTIF_USB_SERIAL   KG_HOSTIF_USB_SERIAL
+        #endif
+        #ifdef CORE_TEENSY_RAWHID
+            #define AUTO_KG_HOSTIF_USB_RAWHID   KG_HOSTIF_USB_RAWHID
+        #endif
+        #ifdef CORE_TEENSY_HID
+            #define AUTO_KG_HOSTIF_USB_HID      KG_HOSTIF_USB_HID
+        #endif
+    #else
+        #error Only the Teensy++ 2.0 variant of the Teensy line is supported.
+    #endif
+
+// Arduino Due
+#elif defined(_VARIANT_ARDUINO_DUE_X_)
+    #define KG_BOARD            KG_BOARD_ARDUINO_DUE
+
+// Keyglove
+#elif defined(CORE_KEYGLOVE)
+    #define KG_BOARD            KG_BOARD_KEYGLOVE
+
+#else
+    // ...if you're adding support for something else here, make sure you define it by this point!
+    #warning No compatible board defined. This could be a problem.
+#endif
+
+
+
+// make sure these definitions exist even if they are "0"
+#ifndef AUTO_KG_HOSTIF_USB_SERIAL
+    #define AUTO_KG_HOSTIF_USB_SERIAL 0
+#endif
+#ifndef AUTO_KG_HOSTIF_USB_RAWHID
+    #define AUTO_KG_HOSTIF_USB_RAWHID 0
+#endif
+#ifndef AUTO_KG_HOSTIF_USB_HID
+    #define AUTO_KG_HOSTIF_USB_HID 0
+#endif
+
+
+
+#define KG_HOSTIF           (AUTO_KG_HOSTIF_USB_SERIAL | AUTO_KG_HOSTIF_USB_RAWHID | AUTO_KG_HOSTIF_USB_HID /*| KG_HOSTIF_BT2_HID | KG_HOSTIF_BT2_RAWHID */)
+
+//#define KG_MOTION           KG_MOTION_NONE
+#define KG_MOTION           KG_MOTION_MPU6050_HAND
+
+#define KG_FEEDBACK         KG_FEEDBACK_BLINK
+//NOT RE-IMPLEMENTED YET: #define KG_FEEDBACK         (KG_FEEDBACK_BLINK | KG_FEEDBACK_PIEZO | KG_FEEDBACK_VIBRATE | KG_FEEDBACK_RGB)
+
+// DUALGLOVE / FLEX / PRESSURE (NOT IMPLEMENTED YET)
 #define KG_DUALGLOVE        KG_DUALGLOVE_NONE
 #define KG_FLEX             KG_FLEX_NONE
 #define KG_PRESSURE         KG_PRESSURE_NONE
-//#define KG_EEPROM           KG_EEPROM_NONE
-//#define KG_SRAM             KG_SRAM_NONE
-#define KG_TOUCHCONN        KG_TOUCHCONN_DIRECT
-
-#define KG_HOSTIF           (KG_HOSTIF_USB_SERIAL | KG_HOSTIF_BT2_HID | KG_HOSTIF_BT2_RAWHID)
-//#define KG_HOSTIF           (KG_HOSTIF_USB_RAWHID | KG_HOSTIF_BT2_SERIAL | KG_HOSTIF_BT2_HID)
-//#define KG_HOSTIF           (KG_HOSTIF_USB_HID)
-
-//#define KG_MOTION           (KG_MOTION_ADXL345 | KG_MOTION_ITG3200)
-//#define KG_MOTION           (KG_MOTION_ADXL345 | KG_MOTION_ITG3200 | KG_MOTION_HMC5883L)
-#define KG_MOTION           KG_MOTION_MPU6050
-#define KG_FUSION           KG_FUSION_NONE
-//#define KG_FUSION           KG_FUSION_6DOF_MPU6050
-#define KG_FEEDBACK         (KG_FEEDBACK_BLINK | KG_FEEDBACK_PIEZO | KG_FEEDBACK_VIBRATE | KG_FEEDBACK_RGB)
-
-//#define KG_FEEDBACKCONN     KG_FEEDBACKCONN_DIRECT
-#define KG_FEEDBACKCONN     KG_FEEDBACKCONN_I2C
 
 
 
@@ -65,29 +98,80 @@ THE SOFTWARE.
  * DEBUG SETTINGS
 =============================================== */
 
-#define KG_DEBUG            KG_DEBUG_NONE //KG_DEBUG_TOUCH | KG_DEBUG_TOUCHSET
+#define KG_DEBUG            KG_DEBUG_NONE
 
 /*
 Debug options:
   KG_DEBUG_NONE
   KG_DEBUG_BENCHMARK
-  KG_DEBUG_ACCELEROMETER
-  KG_DEBUG_GYROSCOPE
-  KG_DEBUG_ACCELGYRO
-  KG_DEBUG_MAGNETOMETER
-  KG_DEBUG_MOTIONFUSION
-  KG_DEBUG_GESTURE
+  KG_DEBUG_FEEDBACK
   KG_DEBUG_TOUCH
   KG_DEBUG_TOUCHSET
-  KG_DEBUG_PS2
-  KG_DEBUG_USB
-  KG_DEBUG_R400
-  KG_DEBUG_IWRAP
-  KG_DEBUG_KEYBOARD
-  KG_DEBUG_MOUSE
-  KG_DEBUG_JOYSTICK
+  KG_DEBUG_MOTION
+  KG_DEBUG_HOSTIF_USB
+  KG_DEBUG_HOSTIF_BT2
+  KG_DEBUG_HID_KEYBOARD
+  KG_DEBUG_HID_MOUSE
 */
 
+
+
+/* ===============================================
+ * DEBUG COMPILER MACROS
+=============================================== */
+
+#if (KG_DEBUG & KG_DEBUG_BENCHMARK)
+    #define DEBUG_BENCHMARK(x)          x
+#else
+    #define DEBUG_BENCHMARK(x)
+#endif
+
+#if (KG_DEBUG & KG_DEBUG_TOUCH)
+    #define DEBUG_TOUCH(x)              x
+#else
+    #define DEBUG_TOUCH(x)
+#endif
+
+#if (KG_DEBUG & KG_DEBUG_TOUCHSET)
+    #define DEBUG_TOUCHSET(x)           x
+#else
+    #define DEBUG_TOUCHSET(x)
+#endif
+
+#if (KG_DEBUG & KG_DEBUG_MOTION)
+    #define DEBUG_MOTION(x)             x
+#else
+    #define DEBUG_MOTION(x)
+#endif
+
+#if (KG_DEBUG & KG_DEBUG_FEEDBACK)
+    #define DEBUG_FEEDBACK(x)           x
+#else
+    #define DEBUG_FEEDBACK(x)
+#endif
+
+#if (KG_DEBUG & KG_DEBUG_HOSTIF_USB)
+    #define DEBUG_HOSTIF_USB(x)         x
+#else
+    #define DEBUG_HOSTIF_USB(x)
+#endif
+
+#if (KG_DEBUG & KG_DEBUG_HOSTIF_BT2)
+    #define DEBUG_HOSTIF_BT2(x)         x
+#else
+    #define DEBUG_HOSTIF_BT2(x)
+#endif
+
+#if (KG_DEBUG & KG_DEBUG_HID_KEYBOARD)
+    #define DEBUG_HID_KEYBOARD(x)       x
+#else
+    #define DEBUG_HID_KEYBOARD(x)
+#endif
+
+#if (KG_DEBUG & KG_DEBUG_HID_MOUSE)
+    #define DEBUG_HID_MOUSE(x)          x
+#else
+    #define DEBUG_HID_MOUSE(x)
+#endif
+
 #endif // _CONFIG_H_
-
-

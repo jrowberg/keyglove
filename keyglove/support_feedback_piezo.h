@@ -46,6 +46,14 @@ uint16_t piezoTick;
 uint16_t piezoTickLimit;
 uint16_t piezoFrequency;
 
+void set_piezo_tone(uint16_t frequency) {
+    if (frequency == 0) {
+        noTone(KG_PIN_PIEZO);
+    } else {
+        tone(KG_PIN_PIEZO, frequency);
+    }
+}
+
 void set_piezo_mode(uint8_t mode, uint8_t duration, uint16_t frequency) {
     piezoMode = mode;
     piezoFrequency = frequency;
@@ -68,6 +76,9 @@ void set_piezo_mode(uint8_t mode) {
 }
 
 void setup_feedback_piezo() {
+    pinMode(KG_PIN_PIEZO, OUTPUT);
+    digitalWrite(KG_PIN_PIEZO, LOW);
+
     // SELF-TEST
     //set_piezo_mode(KG_PIEZO_TINYPULSE, 20);
 }
@@ -85,5 +96,3 @@ void update_feedback_piezo() {
 }
 
 #endif // _SUPPORT_FEEDBACK_PIEZO_H_
-
-

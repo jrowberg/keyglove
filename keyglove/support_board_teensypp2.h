@@ -66,20 +66,22 @@ We use INT6 (18) for DTR control, leaving 38 usable pins.
 We use LED for BLINK feedback, leaving 37 usable pins.
 ...and we have a total of 37 sensors. Yay!
 
+Pin Change interrupts:
+- Y, 26, PB6
+- Z, 25, PB5
+- a*, 24, PB4
+- 8, 23, PB3
+- 9, 22, PB2
+- 0, 21, PB1
+- 1, 5, PD5
+- 2, 4, PD4
+- 3, 27, PB7
+
 For the sake of the Keyglove Kit board, the sensor pin connections should be arranged
 in a clockwise manner as Thumb, Index, Middle, Ring, Little, with each individual
 finger's sensors in increasing alphabetical order: (Y,Z,a*,8,9,0), (A,B,C,M,N,O,4),
 and so on. Start with pin 26 (B6)
 */
-
-/* ===============================================
- * 100 HZ INTERRUPT VECTOR
-=============================================== */
-
-volatile uint8_t timer1Overflow = 0;
-ISR(TIMER1_OVF_vect) {
-    timer1Overflow++;
-}
 
 
 
@@ -125,12 +127,12 @@ ISR(TIMER1_OVF_vect) {
         #define KSP_Q   29  // PA1
         #define KSP_R   28  // PA0
         #define KSP_5   32  // PA4
-        
+
         #define KSP_G   33  // PA5
         #define KSP_H   34  // PA6
         #define KSP_I   35  // PA7
     #endif
-    
+
     #define KSP_S   17  // PC7
     #define KSP_T   16  // PC6
     #define KSP_U   15  // PC5
@@ -287,11 +289,20 @@ ISR(TIMER1_OVF_vect) {
 #define KBC_J0 75
 */
 
-#define BTSerial Serial1
 
-// 8MHz operation without an external TOSC2 crystal requires 38400 at most
-// (error at 115200 using 8MHz clock speed is too far out of spec)
-#define KG_HOSTIF_SERIAL_BAUD 38400
+
+#define USBSerial Serial
+#define BT2Serial Serial1
+
+#define KG_HOSTIF_USB_SERIAL_BAUD 115200
+#define KG_HOSTIF_USB_SERIAL_BAUD 125000
+
+#define KG_INTERFACE_MODE_NONE                  0x00
+#define KG_INTERFACE_MODE_OUTGOING_PACKET       0x01
+#define KG_INTERFACE_MODE_INCOMING_PACKET       0x02
+//#define KG_INTERFACE_MODE_OUTGOING_INFO         0x04
+
+
 
 #define KG_INTERRUPT_PIN_ACCEL  36  // PE4 (internal/tiny, right)
 #define KG_INTERRUPT_NUM_ACCEL  4   // Teensy++ interrupt #4
@@ -407,24 +418,42 @@ ISR(TIMER1_OVF_vect) {
 #define _BV(bit) (1 << (bit))
 uint8_t _pina, _pinb, _pinc, _pind, _pine, _pinf;
 
-void setup_board() {
+bool interfaceUSBSerialReady = false;
+uint8_t interfaceUSBSerialMode = 0;
+bool interfaceUSBRawHIDReady = false;
+uint8_t interfaceUSBRawHIDMode = 0;
+bool interfaceUSBHIDReady = false;
+uint8_t interfaceUSBHIDMode = 0;
+
+ISR(TIMER1_COMPA_vect) {
+    keyglove100Hz = 1;
+}
+
+void setup_board_teensypp2() {
     // setup internal 100Hz "tick" interrupt
     // thanks to http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1212098919 (and 'bens')
     // also, lots of timer info here and here:
     //    http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&t=50106
     //    http://www.avrbeginners.net/architecture/timers/timers.html
-    TCCR1A = 1; // set TIMER1 overflow at 8-bit max (0xFF)
-    TCCR1B = 1; // no prescaler
-    TCNT1 = 0; // clear TIMER1 counter
-    TIFR1 |= (1 << TOV1); // clear the TIMER1 overflow flag
-    TIMSK1 |= (1 << TOIE1); // enable TIMER1 overflow interrupts
-}
+    // also, section 15.10 of the AT90USB128x datasheet:
+    //    http://www.atmel.com/Images/doc7593.pdf
+    
+    // set up Timer1
+    //   WGM13 = 0  \
+    //   WGM12 = 1   | --> CTC mode, TOP=OCR1A
+    //   WGM11 = 0   |
+    //   WGM10 = 0  /
+    //   CS12 = 1   \
+    //   CS11 = 0    | --> clk/256 prescaler
+    //   CS10 = 0   /
 
-void update_board() {
-}
+    TCCR1A = 0x00;  // TCCR1A: COM1A1=0, COM1A0=0, COM1B1=0, COM1B0=0, COM1C1=0, COM1C0=0, WGM11=0, WGM10=0
+    TCCR1B = 0x0A;  // TCCR1B: ICNC1=0, ICES1=0, -, WGM13=1, WGM12=1, CS12=1, CS11=0, CS10=0
+    OCR1A = 0x2710; // 10ms interval @ 8MHz
+    //OCR1A = 0x0500; // speed up ALL THE THINGS!!
+    TIMSK1 |= (1 << OCIE1A); // enable TIMER1 output compare match interrupt
 
-void setup_board_touch() {
-    // make sure we enable internal pullup resistors
+    // setup touch sensors and make sure we enable internal pullup resistors
     DDRA  &= 0x00;
     PORTA |= 0xFF; // 0,1,2,3,4,5,6,7
     DDRB  &= 0x00;
@@ -437,6 +466,36 @@ void setup_board_touch() {
     PORTE |= 0x03; // 0,1
     DDRF  &= 0x00;
     PORTF |= 0xFF; // 0,1,2,3,4,5,6,7
+
+    /*
+    Pin Change interrupts for thumb points:
+    - Y, 26, PB6
+    - Z, 25, PB5
+    - a*, 24, PB4
+    - 8, 23, PB3
+    - 9, 22, PB2
+    - 0, 21, PB1
+    */
+
+    //PCICR = 0x01; // PCIE0=1, pin change interrupt 0 enabled
+    //PCMSK0 = 0x7E; // enable pin change interupts on PB1 - PB6
+
+    #if KG_HOSTIF & KG_HOSTIF_USB_SERIAL
+        // start USB serial interface
+        USBSerial.begin(KG_HOSTIF_USB_SERIAL_BAUD);
+        interfaceUSBSerialReady = true;
+        interfaceUSBSerialMode = KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET;
+    #endif
+
+    #if KG_HOSTIF & KG_HOSTIF_USB_RAWHID
+        interfaceUSBRawHIDReady = true;
+        interfaceUSBRawHIDMode = KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET;
+    #endif
+
+    #if KG_HOSTIF & (KG_HOSTIF_BT2_SERIAL | KG_HOSTIF_BT2_RAWHID | KG_HOSTIF_BT2_HID | KG_HOSTIF_BT2_IAP)
+        // start BT2 serial interface if any BT2 interfaces are used
+        BT2Serial.begin(KG_HOSTIF_BT2_SERIAL_BAUD);
+    #endif
 }
 
 void update_board_touch(uint8_t *touches) {

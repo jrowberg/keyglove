@@ -1,5 +1,5 @@
 // Keyglove Controller source code - Main setup/loop controller
-// 10/1/2010 by Jeff Rowberg <jeff@rowberg.net>
+// 9/9/2013 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -25,16 +25,6 @@ THE SOFTWARE.
 ===============================================
 */
 
-// =============================================================================
-// specific build hardware/debug options (EDIT THIS FILE FOR YOUR HARDWARE)
-// =============================================================================
-
-#include "config.h"
-
-// =============================================================================
-// !!! NO EDITING SHOULD BE NECESSARY BEYOND THIS POINT !!!
-// =============================================================================
-
 
 
 /* ===============================================
@@ -43,11 +33,7 @@ THE SOFTWARE.
 
 #include <Wire.h>
 #include <I2Cdev.h>
-#include <ADXL345.h>
-#include <ITG3200.h>
 #include <MPU6050.h>
-#include <HMC5883L.h>
-#include <TCA6424A.h>
 #include <iWRAP.h>
 
 
@@ -56,22 +42,146 @@ THE SOFTWARE.
  * UNIVERSAL CONTROLLER DECLARATIONS
 =============================================== */
 
+volatile uint8_t keyglove100Hz = 0;
 uint8_t keygloveTick = 0;   // increments every ~10ms (100hz), loops at 100
 uint32_t keygloveTock = 0;  // increments every 100 ticks, loops at 2^32 (~4 billion)
 uint32_t keygloveTickTime = 0, keygloveTickTime0 = 0;
 
-// pre-processor controlled global initializations and setup() calls
-#include "setup.h"
 
 
+/* ===============================================
+ * SUPPORT INCLUDES
+ =============================================== */
+
+#include "version.h"
+#include "hardware.h"
+#include "config.h"
+
+// BOARD
+#if KG_BOARD == KG_BOARD_TEENSYPP2
+    #include "support_board_teensypp2.h"
+#elif #KG_BOARD == KG_BOARD_ARDUINO_DUE
+    #include "support_board_arduino_due.h"
+#else
+    #error Unsupported platform selected in KG_BOARD
+#endif
+
+// COMMUNICATION PROTOCOL
+#include "support_protocol.h"
+
+// CORE TOUCH SENSOR LOGIC
+#include "support_touch.h"
+
+// FEEDBACK
+#if (KG_FEEDBACK & KG_FEEDBACK_BLINK)
+    #include "support_feedback_blink.h"
+#endif
+#if (KG_FEEDBACK & KG_FEEDBACK_PIEZO)
+    #include "support_feedback_piezo.h"
+#endif
+#if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE_HAND)
+    #include "support_feedback_vibrate_hand.h"
+#endif
+#if (KG_FEEDBACK & KG_FEEDBACK_RGB)
+    #include "support_feedback_rgb.h"
+#endif
+
+// MOTION
+#include "support_helper_3dmath.h"
+#if (KG_MOTION & KG_MOTION_MPU6050_HAND)
+    #include "support_motion_mpu6050_hand.h"
+#endif
+
+// HOST INTERFACE
+#if (KG_HOSTIF & KG_HOSTIF_USB)
+    #include "support_hostif_usb.h"
+#endif
+#if (KG_HOSTIF & KG_HOSTIF_BT2)
+    #include "support_hostif_bt2.h"
+#endif
+
+// HUMAN INPUT DEVICE
+#if (KG_HID & KG_HID_KEYBOARD)
+    #include "support_hid_keyboard.h"
+#endif
+#if (KG_HID & KG_HID_MOUSE)
+    #include "support_hid_mouse.h"
+#endif
+
+// PROTOCOL DEFINITIONS (DECLARATIONS IN "support_protocol.h")
+#include "support_protocol_system.h"
+#include "support_protocol_touch.h"
+#include "support_protocol_feedback.h"
+#include "support_protocol_motion.h"
+//#include "support_protocol_flex.h"
+//#include "support_protocol_pressure.h"
+//#include "support_protocol_touchset.h"
+
+// USE THIS FILE TO MODIFY/CANCEL BUILT-IN PROTOCOL PACKETS AND ADD YOUR OWN FOR SPECIAL FUNCTIONALITY
+#include "custom_protocol.h"
 
 /* ===============================================
  * MAIN SETUP ROUTINE
 =============================================== */
 
 void setup() {
-    // call main setup function (see setup.h for details)
-    keyglove_setup();
+    // reset runtime counters
+    keygloveTick = 0;
+    keygloveTock = 0;
+
+    // BOARD
+    #if KG_BOARD == KG_BOARD_TEENSYPP2
+        setup_board_teensypp2();
+    #elif #KG_BOARD == KG_BOARD_ARDUINO_DUE
+        setup_board_arduino_due();
+    #endif
+
+    // COMMUNICATION PROTOCOL
+    setup_protocol();
+
+    // send system_boot event
+    send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BOOT, 0);
+
+    // CORE TOUCH SENSOR LOGIC
+    //setup_touch();
+
+    // FEEDBACK
+    #if (KG_FEEDBACK & KG_FEEDBACK_BLINK)
+        setup_feedback_blink();
+    #endif
+    #if (KG_FEEDBACK & KG_FEEDBACK_PIEZO)
+        setup_feedback_piezo();
+    #endif
+    #if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE_HAND)
+        setup_feedback_vibrate_hand();
+    #endif
+    #if (KG_FEEDBACK & KG_FEEDBACK_RGB)
+        setup_feedback_rgb();
+    #endif
+
+    // MOTION
+    #if (KG_MOTION & KG_MOTION_MPU6050_HAND)
+        setup_motion_mpu6050_hand();
+    #endif
+
+    // HOST INTERFACE
+    #if (KG_HOSTIF & KG_HOSTIF_USB)
+        setup_hostif_usb();
+    #endif
+    #if (KG_HOSTIF & KG_HOSTIF_BT2)
+        setup_hostif_bt2();
+    #endif
+
+    // HUMAN INPUT DEVICE
+    #if (KG_HID & KG_HID_KEYBOARD)
+        setup_hid_keyboard();
+    #endif
+    #if (KG_HID & KG_HID_MOUSE)
+        setup_hid_mouse();
+    #endif
+
+    // send system_boot event
+    send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_READY, 0);
 }
 
 
@@ -80,75 +190,20 @@ void setup() {
  * MAIN LOOP ROUTINE
 =============================================== */
 
-uint16_t testA = 0;
 void loop() {
-    // read all defined and active motion sensors
-    #ifdef ENABLE_ACCELEROMETER
-        if (activeAccelerometer && readyAccelerometerData) update_motion_accelerometer();
-    #endif
-    #ifdef ENABLE_GYROSCOPE
-        if (activeGyroscope && readyGyroscopeData) update_motion_gyroscope();
-    #endif
-    #ifdef ENABLE_ACCELGYRO
-        if (activeAccelGyro && readyAccelGyroData) update_motion_accelgyro();
-    #endif
-    #ifdef ENABLE_MAGNETOMETER
-        if (activeMagnetometer && readyMagnetometerData) update_motion_magnetometer();
-    #endif
-    #ifdef ENABLE_FUSION
-        if (activeFusion && readyFusionData) update_motion_fusion();
-    #endif
-    
-    #ifdef ENABLE_USB
-        update_hostif_usb();
-    #endif
-    #if (KG_HOSTIF & KG_HOSTIF_USB_SERIAL)
-        update_hostif_usb_serial();
-    #endif // KG_HOSTIF_USB_SERIAL
+    // check for incoming protocol data
+    check_incoming_protocol_data();
 
-    #ifdef ENABLE_BT2
-        update_hostif_bt2();
-    #endif
-    #if (KG_HOSTIF & KG_HOSTIF_BT2_SERIAL)
-        update_hostif_bt2_serial();
-    #endif // KG_HOSTIF_BT2_SERIAL
-
-    // check for TIMER1 overflow limit and increment tick (should be every 10 ms)
-    // 156 results in 9.937 ms, 157 results in 10.001 ms
-    testA++;
-    if (testA > 10000) {
-        testA = 0;
-        //txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_SYSTEM, KG_PACKET_SYSTEM_TICK);
-        //send_keyglove_packet(txPacket, txPacketLength, true);
-    //}
-    //if (timer1Overflow >= 157) {
-        timer1Overflow = 0;
-        keygloveTick++;
+    // check for 100Hz tick (i.e. every 10ms)
+    if (keyglove100Hz) {
+        keyglove100Hz = 0;
         //keygloveTickTime += micros() - keygloveTickTime0;
         //keygloveTickTime0 = micros();
+        
+        // update touch status
+        update_touch();
 
-        // check for 100 ticks and reset counter (should be every 1 second)
-        if (keygloveTick == 100) {
-            //keygloveTickTime = 0;
-            keygloveTick = 0;
-            keygloveTock++;
-            #if (KG_HOSTIF > 0)
-                txPacketLength = create_packet(txPacket, KG_PACKET_CLASS_SYSTEM, KG_PACKET_SYSTEM_TICK);
-                send_keyglove_packet(txPacket, txPacketLength, true);
-            #endif
-        }
-
-        #if (defined(ENABLE_ACCELEROMETER) && defined(ENABLE_GYROSCOPE))
-            if (activeAccelerometer && activeGyroscope) update_motion();
-        #endif
-
-        //if (activeGestures) update_gestures();      // process motion into gestures
-        if (activeTouch) update_touch();            // process touch sensor status
-        if (activeKeyboard) update_keyboard();      // send any queued keyboard control data
-        if (activeMouse) update_mouse();            // send any queued mouse control data
-        if (activeJoystick) update_joystick();      // send any queued joystick control data
-
-        // update feedback (should be every 10ms, sliced according to particular mode)
+        // update feedback settings
         #if (KG_FEEDBACK & KG_FEEDBACK_BLINK)
             update_feedback_blink();
         #endif // KG_FEEDBACK_BLINK
@@ -161,5 +216,20 @@ void loop() {
         #if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE)
             update_feedback_vibrate();
         #endif // KG_FEEDBACK_VIBRATE
+
+        // check for 100 ticks and reset counter (should be every 1 second)
+        keygloveTick++;
+        if (keygloveTick == 100) {
+            //keygloveTickTime = 0;
+            keygloveTick = 0;
+            keygloveTock++;
+        }
     }
+    
+    #if (KG_MOTION & KG_MOTION_MPU6050_HAND)
+        // check for available motion data from MPU-6050 on back of hand
+        if (mpuHandInterrupt) {
+            update_motion_mpu6050_hand();
+        }
+    #endif
 }

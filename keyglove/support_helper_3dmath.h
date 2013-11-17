@@ -29,8 +29,8 @@ THE SOFTWARE.
 ===============================================
 */
 
-#ifndef _HELPER_3DMATH_H_
-#define _HELPER_3DMATH_H_
+#ifndef _SUPPORT_HELPER_3DMATH_H_
+#define _SUPPORT_HELPER_3DMATH_H_
 
 class Quaternion {
     public:
@@ -213,4 +213,4 @@ class VectorFloat {
         }
 };
 
-#endif /* _HELPER_3DMATH_H_ */
+#endif /* _SUPPORT_HELPER_3DMATH_H_ */

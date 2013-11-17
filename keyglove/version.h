@@ -1,9 +1,9 @@
 // Keyglove controller source code - Firmware version info
-// 5/27/2012 by Jeff Rowberg <jeff@rowberg.net>
+// 9/10/2013 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2012 Jeff Rowberg
+Copyright (c) 2013 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #define KG_FIRMWARE_NAME "Keyglove Official"
 #define KG_FIRMWARE_AUTHOR "Jeff Rowberg"
-#define KG_FIRMWARE_VERSION "20120527.001"
+#define KG_FIRMWARE_VERSION "20130910.001"
 
 /* ===============================================
  * HARDWARE OPTIONS
