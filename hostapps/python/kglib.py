@@ -3,11 +3,13 @@
 """ Keyglove protocol parser/generator library
 
 Changelog:
+    2013-11-20 - Bundled clean serial + HID transport into KGLib code
+               - Added send_and_return() method for easier response handling
     2013-11-16 - Initial release
 
 ============================================
 Keyglove Protocol Python interface library
-2013-11-16 by Jeff Rowberg <jeff@rowberg.net>
+2013-11-20 by Jeff Rowberg <jeff@rowberg.net>
 Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
 ============================================
@@ -37,10 +39,10 @@ THE SOFTWARE.
 
 __author__ = "Jeff Rowberg"
 __license__ = "MIT"
-__version__ = "2013-11-16"
+__version__ = "2013-11-20"
 __email__ = "jeff@rowberg.net"
 
-import struct
+import struct, time
 
 
 
@@ -197,30 +199,78 @@ class KGLib(object):
     busy = False
     debug = False
 
-    def send_command(self, ser, packet):
+    last_response = None
+    last_event = None
+
+    def send_command(self, out_obj, packet):
         if self.debug: print('=>[ ' + ' '.join(['%02X' % ord(b) for b in packet ]) + ' ]')
         self.on_before_tx_command()
         self.busy = True
         self.on_busy()
-        ser.write(packet)
+        if out_obj.__class__.__name__ == "Serial":
+            # send packet using PySerial interface
+            out_obj.write(packet)
+        elif out_obj.__class__.__name__ == "HidReport":
+            # send packet via raw HID report (multiple reports if necessary)
+            report_size = len(out_obj.values()[0])
+            report_i = 1
+            out_obj.values()[0][0] = min(len(packet), report_size - 1)
+            for i in xrange(len(packet)):
+                if report_i >= report_size:
+                    # send report and start over with new packet
+                    out_obj.send()
+                    report_i = 1
+                    out_obj.values()[0][0] = min(len(packet) - i, report_size - 1)
+                out_obj.values()[0][report_i] = ord(packet[i])
+                report_i = report_i + 1
+
+            # finish sending the last (or only) output report
+            out_obj.send()
+        else:
+            print('UNSUPPORTED OUTPUT OBJECT: %s' % out_obj.__class__.__name__)
         self.on_tx_command_complete()
 
-    def check_activity(self, inobj, timeout=0):
-        # inobj should be PySerial "serial" object
-        if timeout > 0:
-            inobj.timeout = timeout
-            while 1:
-                x = inobj.read()
-                if len(x) > 0:
-                    self.parse(ord(x))
-                else: # timeout
+    def send_and_return(self, rxtx_obj, packet, timeout=0):
+        self.send_command(rxtx_obj, packet)
+        self.check_activity(rxtx_obj, timeout)
+        return self.get_last_response()
+
+    def get_last_response(self):
+        return self.last_response
+
+    def get_last_event(self):
+        return self.last_event
+
+    def check_activity(self, in_obj, timeout=0):
+        if in_obj.__class__.__name__ == "Serial":
+            # read input data using PySerial interface
+            if timeout > 0:
+                in_obj.timeout = timeout
+                while 1:
+                    x = in_obj.read()
+                    if len(x) > 0:
+                        self.parse(ord(x))
+                    else: # timeout
+                        self.busy = False
+                        self.on_idle()
+                        self.on_timeout()
+                    if not self.busy: # finished
+                        break
+            else:
+                while in_obj.inWaiting(): self.parse(ord(in_obj.read()))
+        elif in_obj.__class__.__name__ == "HidReport":
+            # read input using HID interface (already handled via threading so we only need to check for timeouts)
+            if timeout > 0:
+                t0 = time.time()
+                while time.time() - t0 < timeout:
+                    if not self.busy: # finished
+                        break;
+                if self.busy: # timeout
                     self.busy = False
                     self.on_idle()
                     self.on_timeout()
-                if not self.busy: # finished
-                    break
         else:
-            while inobj.inWaiting(): self.parse(ord(inobj.read()))
+            print('UNSUPPORTED INPUT OBJECT: %s' % in_obj.__class__.__name__)
         return self.busy
 
     def parse(self, b):
@@ -233,8 +283,8 @@ class KGLib(object):
             self.kgapi_rx_buffer.append(b)
 
         """
-        Keyglove packet structure (as of 2012-11-07):
-            Byte 0:     8 bits, Message Type             0xC0 = command/response, 0x80 = event
+        Keyglove packet structure (as of 2013-11-16):
+            Byte 0:     8 bits, Packet Type             0xC0 = command/response, 0x80 = event
             Byte 1:     8 bits, Length                   Payload length
             Byte 2:     8 bits, Class ID (CID)           Packet class
             Byte 3:     8 bits, Command ID (CMD)         Packet ID
@@ -252,49 +302,63 @@ class KGLib(object):
                 if packet_class == 1: # SYSTEM
                     if packet_command == 1: # kg_rsp_system_ping
                         runtime, = struct.unpack('<L', self.kgapi_rx_payload[:4])
-                        self.kg_rsp_system_ping({ 'runtime': runtime })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'runtime': runtime } }
+                        self.kg_rsp_system_ping(self.last_response['payload'])
                     elif packet_command == 2: # kg_rsp_system_reset
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_rsp_system_reset({ 'result': result })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result } }
+                        self.kg_rsp_system_reset(self.last_response['payload'])
                 elif packet_class == 2: # TOUCH
                     if packet_command == 1: # kg_rsp_touch_get_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
-                        self.kg_rsp_touch_get_mode({ 'mode': mode })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': mode } }
+                        self.kg_rsp_touch_get_mode(self.last_response['payload'])
                     elif packet_command == 2: # kg_rsp_touch_set_mode
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_rsp_touch_set_mode({ 'result': result })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result } }
+                        self.kg_rsp_touch_set_mode(self.last_response['payload'])
                 elif packet_class == 3: # FEEDBACK
                     if packet_command == 1: # kg_rsp_feedback_get_blink_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
-                        self.kg_rsp_feedback_get_blink_mode({ 'mode': mode })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': mode } }
+                        self.kg_rsp_feedback_get_blink_mode(self.last_response['payload'])
                     elif packet_command == 2: # kg_rsp_feedback_set_blink_mode
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_rsp_feedback_set_blink_mode({ 'result': result })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result } }
+                        self.kg_rsp_feedback_set_blink_mode(self.last_response['payload'])
                     elif packet_command == 3: # kg_rsp_feedback_get_piezo_mode
                         mode, duration, frequency, = struct.unpack('<BBH', self.kgapi_rx_payload[:4])
-                        self.kg_rsp_feedback_get_piezo_mode({ 'mode': mode, 'duration': duration, 'frequency': frequency })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': mode, 'duration': duration, 'frequency': frequency } }
+                        self.kg_rsp_feedback_get_piezo_mode(self.last_response['payload'])
                     elif packet_command == 4: # kg_rsp_feedback_set_piezo_mode
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_rsp_feedback_set_piezo_mode({ 'result': result })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result } }
+                        self.kg_rsp_feedback_set_piezo_mode(self.last_response['payload'])
                     elif packet_command == 5: # kg_rsp_feedback_get_vibe_mode
                         mode, duration, = struct.unpack('<BB', self.kgapi_rx_payload[:2])
-                        self.kg_rsp_feedback_get_vibe_mode({ 'mode': mode, 'duration': duration })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': mode, 'duration': duration } }
+                        self.kg_rsp_feedback_get_vibe_mode(self.last_response['payload'])
                     elif packet_command == 6: # kg_rsp_feedback_set_vibe_mode
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_rsp_feedback_set_vibe_mode({ 'result': result })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result } }
+                        self.kg_rsp_feedback_set_vibe_mode(self.last_response['payload'])
                     elif packet_command == 7: # kg_rsp_feedback_get_rgb_mode
                         mode_red, mode_green, mode_blue, = struct.unpack('<BBB', self.kgapi_rx_payload[:3])
-                        self.kg_rsp_feedback_get_rgb_mode({ 'mode_red': mode_red, 'mode_green': mode_green, 'mode_blue': mode_blue })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode_red': mode_red, 'mode_green': mode_green, 'mode_blue': mode_blue } }
+                        self.kg_rsp_feedback_get_rgb_mode(self.last_response['payload'])
                     elif packet_command == 8: # kg_rsp_feedback_set_rgb_mode
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_rsp_feedback_set_rgb_mode({ 'result': result })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result } }
+                        self.kg_rsp_feedback_set_rgb_mode(self.last_response['payload'])
                 elif packet_class == 4: # MOTION
                     if packet_command == 1: # kg_rsp_motion_get_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
-                        self.kg_rsp_motion_get_mode({ 'mode': mode })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': mode } }
+                        self.kg_rsp_motion_get_mode(self.last_response['payload'])
                     elif packet_command == 2: # kg_rsp_motion_set_mode
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_rsp_motion_set_mode({ 'result': result })
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result } }
+                        self.kg_rsp_motion_set_mode(self.last_response['payload'])
                 self.busy = False
                 self.on_idle()
             elif packet_type & 0xC0 == 0x80:
@@ -302,43 +366,55 @@ class KGLib(object):
                 if packet_class == 0: # PROTOCOL
                     if packet_command == 1: # kg_evt_protocol_error
                         code, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_evt_protocol_error({ 'code': code })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'code': code } }
+                        self.kg_evt_protocol_error(self.last_event['payload'])
                 elif packet_class == 1: # SYSTEM
                     if packet_command == 1: # kg_evt_system_boot
-                        self.kg_evt_system_boot({  })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': {  } }
+                        self.kg_evt_system_boot(self.last_event['payload'])
                     elif packet_command == 2: # kg_evt_system_ready
-                        self.kg_evt_system_ready({  })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': {  } }
+                        self.kg_evt_system_ready(self.last_event['payload'])
                     elif packet_command == 3: # kg_evt_system_error
                         code, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.kg_evt_system_error({ 'code': code })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'code': code } }
+                        self.kg_evt_system_error(self.last_event['payload'])
                 elif packet_class == 2: # TOUCH
                     if packet_command == 1: # kg_evt_touch_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
-                        self.kg_evt_touch_mode({ 'mode': mode })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'mode': mode } }
+                        self.kg_evt_touch_mode(self.last_event['payload'])
                     elif packet_command == 2: # kg_evt_touch_status
                         status_len, = struct.unpack('<B', self.kgapi_rx_payload[:1])
                         status_data = [ord(b) for b in self.kgapi_rx_payload[1:]]
-                        self.kg_evt_touch_status({ 'status': status_data })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'status': status_data } }
+                        self.kg_evt_touch_status(self.last_event['payload'])
                 elif packet_class == 3: # FEEDBACK
                     if packet_command == 1: # kg_evt_feedback_blink_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
-                        self.kg_evt_feedback_blink_mode({ 'mode': mode })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'mode': mode } }
+                        self.kg_evt_feedback_blink_mode(self.last_event['payload'])
                     elif packet_command == 2: # kg_evt_feedback_piezo_mode
                         index, mode, duration, frequency, = struct.unpack('<BBBH', self.kgapi_rx_payload[:5])
-                        self.kg_evt_feedback_piezo_mode({ 'index': index, 'mode': mode, 'duration': duration, 'frequency': frequency })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'index': index, 'mode': mode, 'duration': duration, 'frequency': frequency } }
+                        self.kg_evt_feedback_piezo_mode(self.last_event['payload'])
                     elif packet_command == 3: # kg_evt_feedback_vibe_mode
                         index, mode, duration, = struct.unpack('<BBB', self.kgapi_rx_payload[:3])
-                        self.kg_evt_feedback_vibe_mode({ 'index': index, 'mode': mode, 'duration': duration })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'index': index, 'mode': mode, 'duration': duration } }
+                        self.kg_evt_feedback_vibe_mode(self.last_event['payload'])
                     elif packet_command == 4: # kg_evt_feedback_rgb_mode
                         index, mode_red, mode_green, mode_blue, = struct.unpack('<BBBB', self.kgapi_rx_payload[:4])
-                        self.kg_evt_feedback_rgb_mode({ 'index': index, 'mode_red': mode_red, 'mode_green': mode_green, 'mode_blue': mode_blue })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'index': index, 'mode_red': mode_red, 'mode_green': mode_green, 'mode_blue': mode_blue } }
+                        self.kg_evt_feedback_rgb_mode(self.last_event['payload'])
                 elif packet_class == 4: # MOTION
                     if packet_command == 1: # kg_evt_motion_mode
                         index, mode, = struct.unpack('<BB', self.kgapi_rx_payload[:2])
-                        self.kg_evt_motion_mode({ 'index': index, 'mode': mode })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'index': index, 'mode': mode } }
+                        self.kg_evt_motion_mode(self.last_event['payload'])
                     elif packet_command == 2: # kg_evt_motion_data
                         index, flags, data_len, = struct.unpack('<BBB', self.kgapi_rx_payload[:3])
                         data_data = [ord(b) for b in self.kgapi_rx_payload[3:]]
-                        self.kg_evt_motion_data({ 'index': index, 'flags': flags, 'data': data_data })
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'index': index, 'flags': flags, 'data': data_data } }
+                        self.kg_evt_motion_data(self.last_event['payload'])
 
 # ============================ EOF ===============================

@@ -3,11 +3,13 @@
 """ Keyglove API test/demo script for serial interface
 
 Changelog:
+    2013-11-20 - Bundled clean serial + HID transport into KGLib code
+               - Added send_and_return() method for easier response handling
     2013-11-16 - Initial release
 
 ============================================
 Keyglove Protocol Python interface library
-2013-11-16 by Jeff Rowberg <jeff@rowberg.net>
+2013-11-20 by Jeff Rowberg <jeff@rowberg.net>
 Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
 ============================================
@@ -37,7 +39,7 @@ THE SOFTWARE.
 
 __author__ = "Jeff Rowberg"
 __license__ = "MIT"
-__version__ = "2013-11-16"
+__version__ = "2013-11-20"
 __email__ = "jeff@rowberg.net"
 
 import kglib, serial, time, datetime, optparse, signal
@@ -200,8 +202,7 @@ def main():
 
     # reboot Keyglove
     print "Resetting Keyglove..."
-    keyglove.send_command(ser, keyglove.kg_cmd_system_reset())
-    keyglove.check_activity(ser, 1)
+    response = keyglove.send_and_return(ser, keyglove.kg_cmd_system_reset(), 1)
     print "Done!"
 
     while (1):
