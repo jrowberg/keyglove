@@ -64,6 +64,11 @@ void set_motion_mpu6050_hand_mode(uint8_t mode) {
 }
 
 void setup_motion_mpu6050_hand() {
+    // set INT4 pin (Arduino Pin 36) to INPUT/HIGH so MPU can drive interrupt pin as active-low
+    pinMode(36, INPUT);
+    digitalWrite(36, HIGH);
+
+    // setup MPU-6050
     mpuHandInterrupt = false;
     mpuHand.initialize();
     delay(30);
@@ -72,7 +77,7 @@ void setup_motion_mpu6050_hand() {
     mpuHand.setRate(9); // 1kHz/(9+1) = 100Hz
     mpuHand.setInterruptMode(1); // active low
     mpuHand.setInterruptDrive(1); // open drain
-    mpuHand.setInterruptLatch(1); // latch until read
+    mpuHand.setInterruptLatch(0); // latch until read
     mpuHand.setInterruptLatchClear(1); // clear on any read
     mpuHand.setIntDataReadyEnabled(1); // trigger interrupt on data ready
     set_motion_mpu6050_hand_mode(1); // enable motion detection

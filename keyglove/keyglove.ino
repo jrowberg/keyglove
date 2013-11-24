@@ -229,6 +229,7 @@ void loop() {
     #if (KG_MOTION & KG_MOTION_MPU6050_HAND)
         // check for available motion data from MPU-6050 on back of hand
         if (mpuHandInterrupt) {
+            mpuHandInterrupt = false; // clear the flag so we don't read again until the next interrupt
             update_motion_mpu6050_hand();
         }
     #endif
