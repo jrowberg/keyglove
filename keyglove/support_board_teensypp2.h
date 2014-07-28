@@ -1,9 +1,9 @@
-// Keyglove controller source code - Special hardware setup file
-// 7/17/2011 by Jeff Rowberg <jeff@rowberg.net>
+// Keyglove controller source code - Host MCU definitions specific to Teensy++ v2.0
+// 7/4/2014 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2011 Jeff Rowberg
+Copyright (c) 2014 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,20 @@ THE SOFTWARE.
 ===============================================
 */
 
+/**
+ * @file support_board_teensypp2.h
+ * @brief Host MCU definitions specific to Teensy++ v2.0
+ * @author Jeff Rowberg
+ * @date 2014-07-04
+ *
+ * This file defines all of the hardware-specific parts of the firmware that are
+ * unique to the Teensy++ v2.0 platform. Any other hardware-specific code should
+ * be added here and abstracted in such a way that other files can use those new
+ * features without knowing what is actually happening behind the scenes (here).
+ *
+ * Normally it is not necessary to edit this file.
+ *
 
-
-#ifndef _SUPPORT_BOARD_TEENSYPP2_H_
-#define _SUPPORT_BOARD_TEENSYPP2_H_
-
-/*
 Teensy++ 2.0 Pin arrangement:
 
                      __|||||__
@@ -54,19 +62,21 @@ Teensy++ 2.0 Pin arrangement:
         U        15 |         | 43        4
         T        16 |         | 44        D
         S        17 |_________| 45        E
-                 
+
                   36=INT4, 37=INT5
 
 This is a grand total of 46 usable I/O pins.
-We use SCL (0) and SDA (1) for I2C communication, leaving 44 usable pins.
-We use RXD (2) and TXD (2) for Bluetooth UART communication, leaving 42 usable pins.
-We use INT4 (36) and INT5 (37) for accel and gyro interrupts, leaving 40 usable pins.
-We use INT7 (19) for Bluetooth Link interrupts, leaving 39 usable pins.
-We use INT6 (18) for DTR control, leaving 38 usable pins.
-We use LED for BLINK feedback, leaving 37 usable pins.
-...and we have a total of 37 sensors. Yay!
 
-Pin Change interrupts:
+- We use SCL (0) and SDA (1) for I2C communication, leaving 44 usable pins.
+- We use RXD (2) and TXD (2) for Bluetooth UART communication, leaving 42 usable pins.
+- We use INT4 (36) and INT5 (37) for accel and gyro interrupts, leaving 40 usable pins.
+- We use INT7 (19) for Bluetooth Link interrupts, leaving 39 usable pins.
+- We use INT6 (18) for DTR control, leaving 38 usable pins.
+- We use LED for BLINK feedback, leaving 37 usable pins.
+- ...and we have a total of 37 sensors. Yay!
+
+Pin Change interrupts (not currently used, could help with sleep modes):
+
 - Y, 26, PB6
 - Z, 25, PB5
 - a*, 24, PB4
@@ -81,354 +91,164 @@ For the sake of the Keyglove Kit board, the sensor pin connections should be arr
 in a clockwise manner as Thumb, Index, Middle, Ring, Little, with each individual
 finger's sensors in increasing alphabetical order: (Y,Z,a*,8,9,0), (A,B,C,M,N,O,4),
 and so on. Start with pin 26 (B6)
-*/
 
+ */
 
+#ifndef _SUPPORT_BOARD_TEENSYPP2_H_
+#define _SUPPORT_BOARD_TEENSYPP2_H_
 
 // ======================== BEGIN PIN DEFINITIONS ========================
 
-#define KEYGLOVE_KIT_BUG_PORTA_REVERSED
+#define KEYGLOVE_KIT_BUG_PORTA_REVERSED     ///< Software fix for internal Port A pin position bug in Eagle package
 
-/*
-#if (KG_HAND == KG_HAND_RIGHT)
-    #define KSP_Y   26  // PB6
-    #define KSP_Z   25  // PB5
-    #define KSP_AA  24  // PB4
-    #define KSP_8   23  // PB3
-    #define KSP_9   22  // PB2
-    #define KSP_0   21  // PB1
+#define USBSerial Serial                    ///< USB serial interface name
+#define BT2Serial Serial1                   ///< Bluetooth module UART interface name
 
-    #define KSP_A   20  // PB0
-    #define KSP_B   38  // PF0
-    #define KSP_C   39  // PF1
-    #define KSP_M   40  // PF2
-    #define KSP_N   41  // PF3
-    #define KSP_O   42  // PF4
-    #define KSP_4   43  // PF5
+#define KG_HOSTIF_USB_SERIAL_BAUD 115200    ///< USB serial interface baud rate
+#define KG_HOSTIF_BT2_SERIAL_BAUD 125000    ///< Bluetooth module UART interface baud rate
 
-    #define KSP_D   44  // PF6
-    #define KSP_E   45  // PF7
+#define KG_INTERRUPT_PIN_ACCEL  36  ///< PE4 (internal/tiny, right)
+#define KG_INTERRUPT_NUM_ACCEL  4   ///< Teensy++ interrupt #4
 
-    #ifdef KEYGLOVE_KIT_BUG_PORTA_REVERSED
-        // d'oh! Teensy++ part in Eagle PA0-7 pins were backwards
-        // PA0 = PA4, PA1 = PA5, PA2 = PA6, PA3 = PA7, PA4 = PA0, PA5 = PA1, PA6 = PA2, PA7 = PA3
-        #define KSP_F   35  // PA3
-        #define KSP_P   34  // PA2
-        #define KSP_Q   33  // PA1
-        #define KSP_R   32  // PA0
-        #define KSP_5   28  // PA4
-    
-        #define KSP_G   29  // PA5
-        #define KSP_H   30  // PA6
-        #define KSP_I   31  // PA7
-    #else
-        #define KSP_F   31  // PA3
-        #define KSP_P   30  // PA2
-        #define KSP_Q   29  // PA1
-        #define KSP_R   28  // PA0
-        #define KSP_5   32  // PA4
-
-        #define KSP_G   33  // PA5
-        #define KSP_H   34  // PA6
-        #define KSP_I   35  // PA7
-    #endif
-
-    #define KSP_S   17  // PC7
-    #define KSP_T   16  // PC6
-    #define KSP_U   15  // PC5
-    #define KSP_6   14  // PC4
-    
-    #define KSP_J   13  // PC3
-    #define KSP_K   12  // PC2
-    #define KSP_L   11  // PC1
-    #define KSP_V   10  // PC0
-    #define KSP_W   9   // PE1
-    #define KSP_X   8   // PE0
-    #define KSP_7   7   // PD7
-
-    #define KSP_1   5   // PD5
-    #define KSP_2   4   // PD4
-    #define KSP_3   27  // PB7
-#else  /* !KG_HAND_RIGHT (KG_HAND_LEFT) */
-/*    #define KSP_X   26  // PB6
-    #define KSP_W   25  // PB5
-    #define KSP_V   24  // PB4
-    #define KSP_L   23  // PB3
-    #define KSP_K   22  // PB2
-    #define KSP_J   21  // PB1
-
-    #define KSP_6   20  // PB0
-    #define KSP_U   38  // PF0
-    #define KSP_T   39  // PF1
-    #define KSP_S   40  // PF2
-    #define KSP_I   41  // PF3
-    #define KSP_H   42  // PF4
-    #define KSP_G   43  // PF5
-
-    #define KSP_5   44  // PF6
-    #define KSP_R   45  // PF7
-
-    #define KEYGLOVE_KIT_BUG_PORTA_REVERSED
-    #ifdef KEYGLOVE_KIT_BUG_PORTA_REVERSED
-        // d'oh! Teensy++ part in Eagle PA0-7 pins were backwards
-        // PA0 = PA4, PA1 = PA5, PA2 = PA6, PA3 = PA7, PA4 = PA0, PA5 = PA1, PA6 = PA2, PA7 = PA3
-        #define KSP_Q   35  // PA3
-        #define KSP_P   34  // PA2
-        #define KSP_F   33  // PA1
-        #define KSP_E   32  // PA0
-        #define KSP_D   28  // PA4
-
-        #define KSP_4   29  // PA5
-        #define KSP_O   30  // PA6
-        #define KSP_N   31  // PA7
-    #else
-        #define KSP_Q   31  // PA3
-        #define KSP_P   30  // PA2
-        #define KSP_F   29  // PA1
-        #define KSP_E   28  // PA0
-        #define KSP_D   32  // PA4
-
-        #define KSP_4   33  // PA5
-        #define KSP_O   34  // PA6
-        #define KSP_N   35  // PA7
-    #endif
-
-    #define KSP_M   17  // PC7
-    #define KSP_C   16  // PC6
-    #define KSP_B   15  // PC5
-    #define KSP_A   14  // PC4
-
-    #define KSP_0   13  // PC3
-    #define KSP_9   12  // PC2
-    #define KSP_8   11  // PC1
-    #define KSP_AA  10  // PC0
-    #define KSP_Z   9   // PE1
-    #define KSP_Y   8   // PE0
-    #define KSP_7   7   // PD7
-
-    #define KSP_1   5   // PD5
-    #define KSP_2   4   // PD4
-    #define KSP_3   27  // PB7
-#endif /* KG_HAND_LEFT */
-/*
-#define KBC_Z7 0
-#define KBC_Y7 1
-#define KBC_J8 2
-#define KBC_JY 3
-#define KBC_KY 4
-#define KBC_LY 5
-#define KBC_HY 6
-#define KBC_VY 7
-#define KBC_WY 8
-#define KBC_XY 9
-#define KBC_Z6 10
-#define KBC_Y6 11
-#define KBC_G8 12
-#define KBC_GY 13
-#define KBC_IY 14
-#define KBC_SY 15
-#define KBC_TY 16
-#define KBC_UY 17
-#define KBC_G7 18
-#define KBC_Z5 19
-#define KBC_Y5 20
-#define KBC_D8 21
-#define KBC_DY 22
-#define KBC_EY 23
-#define KBC_FY 24
-#define KBC_PZ 25
-#define KBC_PY 26
-#define KBC_QZ 27
-#define KBC_QY 28
-#define KBC_RZ 29
-#define KBC_RY 30
-#define KBC_D4 31
-#define KBC_D6 32
-#define KBC_D7 33
-#define KBC_DM 34
-#define KBC_Z4 35
-#define KBC_Y4 36
-#define KBC_A8 37
-#define KBC_MY 38
-#define KBC_AY 39
-#define KBC_BY 40
-#define KBC_CY 41
-#define KBC_MZ 42
-#define KBC_NZ 43
-#define KBC_NY 44
-#define KBC_OZ 45
-#define KBC_OY 46
-#define KBC_A3 47
-#define KBC_A2 48
-#define KBC_A1 49
-#define KBC_D3 50
-#define KBC_D2 51
-#define KBC_D1 52
-#define KBC_G3 53
-#define KBC_G2 54
-#define KBC_G1 55
-#define KBC_J3 56
-#define KBC_J2 57
-#define KBC_J1 58
-#define KBC_Y1 59
-#define KBC_AAA 60
-#define KBC_DAA 61
-#define KBC_GAA 62
-#define KBC_JAA 63
-#define KBC_AA4 64
-#define KBC_AA5 65
-#define KBC_AA6 66
-#define KBC_AA7 67
-#define KBC_A9 68
-#define KBC_D9 69
-#define KBC_G9 70
-#define KBC_J9 71
-#define KBC_A0 72
-#define KBC_D0 73
-#define KBC_G0 74
-#define KBC_J0 75
-*/
-
-
-
-#define USBSerial Serial
-#define BT2Serial Serial1
-
-#define KG_HOSTIF_USB_SERIAL_BAUD 115200
-#define KG_HOSTIF_USB_SERIAL_BAUD 125000
-
-#define KG_INTERFACE_MODE_NONE                  0x00
-#define KG_INTERFACE_MODE_OUTGOING_PACKET       0x01
-#define KG_INTERFACE_MODE_INCOMING_PACKET       0x02
-//#define KG_INTERFACE_MODE_OUTGOING_INFO         0x04
-
-
-
-#define KG_INTERRUPT_PIN_ACCEL  36  // PE4 (internal/tiny, right)
-#define KG_INTERRUPT_NUM_ACCEL  4   // Teensy++ interrupt #4
-
-#define KG_INTERRUPT_PIN_GYRO   37  // PE5 (internal/tiny, left)
-#define KG_INTERRUPT_NUM_GYRO   5   // Teensy++ interrupt #5
+#define KG_INTERRUPT_PIN_GYRO   37  ///< PE5 (internal/tiny, left)
+#define KG_INTERRUPT_NUM_GYRO   5   ///< Teensy++ interrupt #5
 
 // FUSION and ACCEL are never both used at the same time
-#define KG_INTERRUPT_PIN_FUSION 36  // PE4 (internal/tiny, right)
-#define KG_INTERRUPT_NUM_FUSION 4   // Teensy++ interrupt #4
+#define KG_INTERRUPT_PIN_FUSION 36  ///< PE4 (internal/tiny, right)
+#define KG_INTERRUPT_NUM_FUSION 4   ///< Teensy++ interrupt #4
 
-#define KG_PIN_BLINK            6   // PD6
+#define KG_PIN_BLINK            6   ///< PD6
 
-#define KG_PIN_BT_RTS           19  // PE7
-#define KG_INTERRUPT_NUM_BT_RTS 7   // Teensy++ interrupt #7
-#define KG_PIN_BT_CTS           18  // PE6
+#define KG_PIN_BT_RTS           19  ///< PE7
+#define KG_INTERRUPT_NUM_BT_RTS 7   ///< Teensy++ interrupt #7
+#define KG_PIN_BT_CTS           18  ///< PE6
 
 // ITEMS BELOW THIS CANNOT BE USED SIMULTANEOUSLY WITH ALL ABOVE FEATURES
 
 // direct I/O feedback pins (kills 3 thumb sensors and Bluetooth flow control)
-#define KG_PIN_PIEZO        19  // PE7
-#define KG_PIN_VIBRATE      18  // PE6
-#define KG_PIN_RGB_RED      21  // PB1
-#define KG_PIN_RGB_GREEN    22  // PB2
-#define KG_PIN_RGB_BLUE     24  // PB4
+#define KG_PIN_PIEZO        19  ///< PE7
+#define KG_PIN_VIBRATE      18  ///< PE6
+#define KG_PIN_RGB_RED      21  ///< PB1
+#define KG_PIN_RGB_GREEN    22  ///< PB2
+#define KG_PIN_RGB_BLUE     24  ///< PB4
 
 // PS/2 clock/data pins for keyboard (kills direct I/O piezo/vibe or Bluetooth flow control)
-#define KG_PIN_KB_CLOCK     19  // PE7
-#define KG_PIN_KB_DATA      18  // PE6
+#define KG_PIN_KB_CLOCK     19  ///< PE7
+#define KG_PIN_KB_DATA      18  ///< PE6
 
 // PS/2 clock/data pins for mouse (kills Bluetooth UART connection)
-#define KG_PIN_MOUSE_CLOCK  3   // PD3
-#define KG_PIN_MOUSE_DATA   2   // PD2
+#define KG_PIN_MOUSE_CLOCK  3   ///< PD3
+#define KG_PIN_MOUSE_DATA   2   ///< PD2
 
 // ======================== END PIN DEFINITIONS ========================
 
 // sensor count and base combination count
-#define KG_TOTAL_SENSORS 37
-#define KG_BASE_COMBINATIONS 60
-#define KG_BASE_COMBINATION_BYTES 8
+#define KG_TOTAL_SENSORS 37             ///< Total sensor count with most efficient pin configuration
+#define KG_BASE_COMBINATIONS 60         ///< Number of physically reasonable 1-to-1 touch combinations
+#define KG_BASE_COMBINATION_BYTES 8     ///< Number of bytes required to store all touch status bits
 
 // NOTE: KG_BASE_COMBINATIONS seems like it would be very high, but there are
 // physical and practical limitations that make this number much smaller
 
-#define KS_DM   ((touches[0] & 0x01) != 0)
-#define KS_AY   ((touches[0] & 0x02) != 0)
-#define KS_BY   ((touches[0] & 0x04) != 0)
-#define KS_CY   ((touches[0] & 0x08) != 0)
-#define KS_DY   ((touches[0] & 0x10) != 0)
-#define KS_EY   ((touches[0] & 0x20) != 0)
-#define KS_FY   ((touches[0] & 0x40) != 0)
-#define KS_GY   ((touches[0] & 0x80) != 0)
-#define KS_HY   ((touches[1] & 0x01) != 0)
-#define KS_IY   ((touches[1] & 0x02) != 0)
-#define KS_JY   ((touches[1] & 0x04) != 0)
-#define KS_KY   ((touches[1] & 0x08) != 0)
-#define KS_LY   ((touches[1] & 0x10) != 0)
-#define KS_MY   ((touches[1] & 0x20) != 0)
-#define KS_NY   ((touches[1] & 0x40) != 0)
-#define KS_OY   ((touches[1] & 0x80) != 0)
-#define KS_PY   ((touches[2] & 0x01) != 0)
-#define KS_QY   ((touches[2] & 0x02) != 0)
-#define KS_RY   ((touches[2] & 0x04) != 0)
-#define KS_SY   ((touches[2] & 0x08) != 0)
-#define KS_TY   ((touches[2] & 0x10) != 0)
-#define KS_UY   ((touches[2] & 0x20) != 0)
-#define KS_VY   ((touches[2] & 0x40) != 0)
-#define KS_WY   ((touches[2] & 0x80) != 0)
-#define KS_XY   ((touches[3] & 0x01) != 0)
-#define KS_MZ   ((touches[3] & 0x02) != 0)
-#define KS_NZ   ((touches[3] & 0x04) != 0)
-#define KS_OZ   ((touches[3] & 0x08) != 0)
-#define KS_PZ   ((touches[3] & 0x10) != 0)
-#define KS_QZ   ((touches[3] & 0x20) != 0)
-#define KS_RZ   ((touches[3] & 0x40) != 0)
-#define KS_A1   ((touches[3] & 0x80) != 0)
-#define KS_D1   ((touches[4] & 0x01) != 0)
-#define KS_G1   ((touches[4] & 0x02) != 0)
-#define KS_J1   ((touches[4] & 0x04) != 0)
-#define KS_Y1   ((touches[4] & 0x08) != 0)
-#define KS_A2   ((touches[4] & 0x10) != 0)
-#define KS_D2   ((touches[4] & 0x20) != 0)
-#define KS_G2   ((touches[4] & 0x40) != 0)
-#define KS_J2   ((touches[4] & 0x80) != 0)
-#define KS_A3   ((touches[5] & 0x01) != 0)
-#define KS_D3   ((touches[5] & 0x02) != 0)
-#define KS_G3   ((touches[5] & 0x04) != 0)
-#define KS_J3   ((touches[5] & 0x08) != 0)
-#define KS_D4   ((touches[5] & 0x10) != 0)
-#define KS_Y4   ((touches[5] & 0x20) != 0)
-#define KS_Z4   ((touches[5] & 0x40) != 0)
-#define KS_Y5   ((touches[5] & 0x80) != 0)
-#define KS_Z5   ((touches[6] & 0x01) != 0)
-#define KS_D6   ((touches[6] & 0x02) != 0)
-#define KS_Y6   ((touches[6] & 0x04) != 0)
-#define KS_Z6   ((touches[6] & 0x08) != 0)
-#define KS_D7   ((touches[6] & 0x10) != 0)
-#define KS_G7   ((touches[6] & 0x20) != 0)
-#define KS_Y7   ((touches[6] & 0x40) != 0)
-#define KS_Z7   ((touches[6] & 0x80) != 0)
-#define KS_A8   ((touches[7] & 0x01) != 0)
-#define KS_D8   ((touches[7] & 0x02) != 0)
-#define KS_G8   ((touches[7] & 0x04) != 0)
-#define KS_J8   ((touches[7] & 0x08) != 0)
+#define KGT_DM(test) (test[0] & 0x01)
+#define KGT_AY(test) (test[0] & 0x02)
+#define KGT_BY(test) (test[0] & 0x04)
+#define KGT_CY(test) (test[0] & 0x08)
+#define KGT_DY(test) (test[0] & 0x10)
+#define KGT_EY(test) (test[0] & 0x20)
+#define KGT_FY(test) (test[0] & 0x40)
+#define KGT_GY(test) (test[0] & 0x80)
+#define KGT_HY(test) (test[1] & 0x01)
+#define KGT_IY(test) (test[1] & 0x02)
+#define KGT_JY(test) (test[1] & 0x04)
+#define KGT_KY(test) (test[1] & 0x08)
+#define KGT_LY(test) (test[1] & 0x10)
+#define KGT_MY(test) (test[1] & 0x20)
+#define KGT_NY(test) (test[1] & 0x40)
+#define KGT_OY(test) (test[1] & 0x80)
+#define KGT_PY(test) (test[2] & 0x01)
+#define KGT_QY(test) (test[2] & 0x02)
+#define KGT_RY(test) (test[2] & 0x04)
+#define KGT_SY(test) (test[2] & 0x08)
+#define KGT_TY(test) (test[2] & 0x10)
+#define KGT_UY(test) (test[2] & 0x20)
+#define KGT_VY(test) (test[2] & 0x40)
+#define KGT_WY(test) (test[2] & 0x80)
+#define KGT_XY(test) (test[3] & 0x01)
+#define KGT_MZ(test) (test[3] & 0x02)
+#define KGT_NZ(test) (test[3] & 0x04)
+#define KGT_OZ(test) (test[3] & 0x08)
+#define KGT_PZ(test) (test[3] & 0x10)
+#define KGT_QZ(test) (test[3] & 0x20)
+#define KGT_RZ(test) (test[3] & 0x40)
+#define KGT_A1(test) (test[3] & 0x80)
+#define KGT_D1(test) (test[4] & 0x01)
+#define KGT_G1(test) (test[4] & 0x02)
+#define KGT_J1(test) (test[4] & 0x04)
+#define KGT_Y1(test) (test[4] & 0x08)
+#define KGT_A2(test) (test[4] & 0x10)
+#define KGT_D2(test) (test[4] & 0x20)
+#define KGT_G2(test) (test[4] & 0x40)
+#define KGT_J2(test) (test[4] & 0x80)
+#define KGT_A3(test) (test[5] & 0x01)
+#define KGT_D3(test) (test[5] & 0x02)
+#define KGT_G3(test) (test[5] & 0x04)
+#define KGT_J3(test) (test[5] & 0x08)
+#define KGT_D4(test) (test[5] & 0x10)
+#define KGT_Y4(test) (test[5] & 0x20)
+#define KGT_Z4(test) (test[5] & 0x40)
+#define KGT_Y5(test) (test[5] & 0x80)
+#define KGT_Z5(test) (test[6] & 0x01)
+#define KGT_D6(test) (test[6] & 0x02)
+#define KGT_Y6(test) (test[6] & 0x04)
+#define KGT_Z6(test) (test[6] & 0x08)
+#define KGT_D7(test) (test[6] & 0x10)
+#define KGT_G7(test) (test[6] & 0x20)
+#define KGT_Y7(test) (test[6] & 0x40)
+#define KGT_Z7(test) (test[6] & 0x80)
+#define KGT_A8(test) (test[7] & 0x01)
+#define KGT_D8(test) (test[7] & 0x02)
+#define KGT_G8(test) (test[7] & 0x04)
+#define KGT_J8(test) (test[7] & 0x08)
 
-#define KS_ADY  (KS_AY && KS_DY)
-#define KS_AJY  (KS_AY && KS_JY)
-#define KS_DGY  (KS_DY && KS_GY)
-#define KS_GJY  (KS_GY && KS_JY)
+#define KGT_ADY (KGT_AY && KGT_DY)
+#define KGT_AJY (KGT_AY && KGT_JY)
+#define KGT_DGY (KGT_DY && KGT_GY)
+#define KGT_GJY (KGT_GY && KGT_JY)
 
-#define CLR(x, y) (x &= (~(1 << y)))
-#define SET(x, y) (x |= (1 << y))
-#define _BV(bit) (1 << (bit))
-uint8_t _pina, _pinb, _pinc, _pind, _pine, _pinf;
+#define CLR(x, y) (x &= (~(1 << y)))    ///< Bit-clearing macro for port/pin combination
+#define SET(x, y) (x |= (1 << y))       ///< Bit-setting macro for port/pin combination
+#define _BV(bit) (1 << (bit))           ///< Bit-value calculation macro for lazy people
 
-bool interfaceUSBSerialReady = false;
-uint8_t interfaceUSBSerialMode = 0;
-bool interfaceUSBRawHIDReady = false;
-uint8_t interfaceUSBRawHIDMode = 0;
-bool interfaceUSBHIDReady = false;
-uint8_t interfaceUSBHIDMode = 0;
+uint8_t _pina;                          ///< Container for reading Port A logic state
+uint8_t _pinb;                          ///< Container for reading Port B logic state
+uint8_t _pinc;                          ///< Container for reading Port C logic state
+uint8_t _pind;                          ///< Container for reading Port D logic state
+uint8_t _pine;                          ///< Container for reading Port E logic state
+uint8_t _pinf;                          ///< Container for reading Port F logic state
 
+bool interfaceUSBSerialReady = false;   ///< Status indicator for USB serial interface
+uint8_t interfaceUSBSerialMode = 0;     ///< USB serial communication mode setting @see KG_INTERFACE_MODE_NONE, @see KG_INTERFACE_MODE_OUTGOING_PACKET, @see KG_INTERFACE_MODE_INCOMING_PACKET
+bool interfaceUSBRawHIDReady = false;   ///< Status indicator for USB raw HID interface
+uint8_t interfaceUSBRawHIDMode = 0;     ///< USB raw HID communication mode setting @see KG_INTERFACE_MODE_NONE, @see KG_INTERFACE_MODE_OUTGOING_PACKET, @see KG_INTERFACE_MODE_INCOMING_PACKET
+bool interfaceUSBHIDReady = false;      ///< Status indicator for USB HID interface
+
+/**
+ * @brief Hardware timer comparator interrupt for tracking 100Hz ticks
+ */
 ISR(TIMER1_COMPA_vect) {
     keyglove100Hz = 1;
 }
 
+/**
+ * @brief Initialize Teensy++ v2.0 board hardware/registers
+ *
+ * This function sets the required hardware timer for a 100Hz tick interrupt,
+ * initializes touch sensor pins to be pulled high, and starts the necessary
+ * USB serial and/or hardware UART interfaces for host and Bluetooth control.
+ *
+ * @see setup()
+ */
 void setup_board_teensypp2() {
     // setup internal 100Hz "tick" interrupt
     // thanks to http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1212098919 (and 'bens')
@@ -437,7 +257,7 @@ void setup_board_teensypp2() {
     //    http://www.avrbeginners.net/architecture/timers/timers.html
     // also, section 15.10 of the AT90USB128x datasheet:
     //    http://www.atmel.com/Images/doc7593.pdf
-    
+
     // set up Timer1
     //   WGM13 = 0  \
     //   WGM12 = 1   | --> CTC mode, TOP=OCR1A
@@ -484,12 +304,12 @@ void setup_board_teensypp2() {
         // start USB serial interface
         USBSerial.begin(KG_HOSTIF_USB_SERIAL_BAUD);
         interfaceUSBSerialReady = true;
-        interfaceUSBSerialMode = KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET;
+        interfaceUSBSerialMode = KG_API_USB_SERIAL;
     #endif
 
     #if KG_HOSTIF & KG_HOSTIF_USB_RAWHID
         interfaceUSBRawHIDReady = true;
-        interfaceUSBRawHIDMode = KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET;
+        interfaceUSBRawHIDMode = KG_API_USB_RAWHID;
     #endif
 
     #if KG_HOSTIF & (KG_HOSTIF_BT2_SERIAL | KG_HOSTIF_BT2_RAWHID | KG_HOSTIF_BT2_HID | KG_HOSTIF_BT2_IAP)
@@ -498,6 +318,17 @@ void setup_board_teensypp2() {
     #endif
 }
 
+/**
+ * @brief Get status of all touch sensors via direct port read/write operations
+ *
+ * This is a very fast AT90USB128x-specific pin polling routine. It's so fast
+ * that I actually had to add manual delays after setting each pin low in order
+ * for the logic to take effect when reading the connected pin states on the
+ * following line of code.
+ *
+ * @see loop()
+ * @see update_touch()
+ */
 void update_board_touch(uint8_t *touches) {
     // check on M combinations (PF2)
     SET(DDRF, 2);       // set to OUTPUT

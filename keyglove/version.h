@@ -1,9 +1,9 @@
 // Keyglove controller source code - Firmware version info
-// 9/10/2013 by Jeff Rowberg <jeff@rowberg.net>
+// 7/4/2014 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2013 Jeff Rowberg
+Copyright (c) 2014 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,30 @@ THE SOFTWARE.
 ===============================================
 */
 
+/**
+ * @file version.h
+ * @brief **USER-DEFINED:** Firmware version info
+ * @author Jeff Rowberg
+ * @date 2014-07-04
+ *
+ * This short file holds firmware version data in both string format and numeric
+ * format. This is reported in the `system_boot` KGAPI event, and in the
+ * response sent when the `system_get_info` KGAPI command is received.
+ */
+
 #ifndef _VERSION_H_
 #define _VERSION_H_
 
-#define KG_FIRMWARE_NAME "Keyglove Official"
-#define KG_FIRMWARE_AUTHOR "Jeff Rowberg"
-#define KG_FIRMWARE_VERSION "20130910.001"
+// info included in system_boot() event
+#define KG_FIRMWARE_VERSION_MAJOR 0                         ///< Firmware major version number
+#define KG_FIRMWARE_VERSION_MINOR 9                         ///< Firmware minor version number
+#define KG_FIRMWARE_VERSION_PATCH 0                         ///< Firmware patch version number
+#define KG_FIRMWARE_BUILD_TIMESTAMP 1405189045				///< Firmware build UNIX timestamp
 
-/* ===============================================
- * HARDWARE OPTIONS
-=============================================== */
+// info available for reference, not in system_boot() event
+#define KG_FIRMWARE_NAME_STRING "Keyglove Official"         ///< Firmware name string
+#define KG_FIRMWARE_AUTHOR_STRING "Jeff Rowberg"            ///< Firmware author string
+#define KG_FIRMWARE_DATE_STRING "2014-07-04"                ///< Firmware date string
 
 #endif // _VERSION_H_
 

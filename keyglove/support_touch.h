@@ -1,9 +1,9 @@
-// Keyglove controller source code - Special hardware setup file
-// 9/9/2013 by Jeff Rowberg <jeff@rowberg.net>
+// Keyglove controller source code - Protocol declarations and generic support for touch
+// 7/4/2014 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2011 Jeff Rowberg
+Copyright (c) 2014 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,41 +25,76 @@ THE SOFTWARE.
 ===============================================
 */
 
-
+/**
+ * @file support_touch.h
+ * @brief Protocol declarations and generic support for touch
+ * @author Jeff Rowberg
+ * @date 2014-07-04
+ *
+ * This file provides the structural framework for touch implementations in the
+ * overall Keyglove architecture.
+ *
+ * Normally it is not necessary to edit this file.
+ */
 
 #ifndef _SUPPORT_TOUCH_H_
 #define _SUPPORT_TOUCH_H_
 
-void setmode(uint8_t mode);
-void check_sensors_touch(uint8_t *touches, uint8_t pos);
-void check_sensors_release(uint8_t *touches, uint8_t pos);
+/* =========================== */
+/* KGAPI CONSTANT DECLARATIONS */
+/* =========================== */
 
-uint8_t touchMode;
-uint32_t touchBench0, touchBench;
-uint8_t touchTick;
+#define KG_PACKET_ID_CMD_TOUCH_GET_MODE                     0x01
+#define KG_PACKET_ID_CMD_TOUCH_SET_MODE                     0x02
+// -- command/event split --
+#define KG_PACKET_ID_EVT_TOUCH_MODE                         0x01
+#define KG_PACKET_ID_EVT_TOUCH_STATUS                       0x02
 
-uint16_t opt_touch_detect_threshold = 20;   // number of milliseconds required for a touch to register as real
+/* ================================ */
+/* KGAPI COMMAND/EVENT DECLARATIONS */
+/* ================================ */
 
-uint32_t touchTime; // detection timestamp
-uint8_t adding = false;
-uint8_t removing = false;
+/* 0x01 */ uint16_t kg_cmd_touch_get_mode(uint8_t *mode);
+/* 0x02 */ uint16_t kg_cmd_touch_set_mode(uint8_t mode);
+// -- command/event split --
+/* 0x01 */ uint8_t (*kg_evt_touch_mode)(uint8_t mode);
+/* 0x02 */ uint8_t (*kg_evt_touch_status)(uint8_t status_len, uint8_t *status_data);
 
-uint8_t touches_now[KG_BASE_COMBINATION_BYTES];
-uint8_t touches_verify[KG_BASE_COMBINATION_BYTES];
-uint8_t touches_active[KG_BASE_COMBINATION_BYTES];
+void touch_set_mode(uint8_t mode);
+//void check_sensors_touch(uint8_t *touches, uint8_t pos);
+//void check_sensors_release(uint8_t *touches, uint8_t pos);
 
-bool activeTouch;
+uint8_t touchMode;          ///< Touch mode
+//uint32_t touchBench;        ///< Touch benchmark reference end
+//uint32_t touchBench0;       ///< Touch benchmark reference start
+uint8_t touchTick;          ///< Touch
 
+uint16_t opt_touch_detect_threshold = 20;   ///< OPTION: Milliseconds required for a touch to register as legitimate
+
+uint32_t touchTime;                         ///< Touch detection reference timestamp
+
+uint8_t touches_now[KG_BASE_COMBINATION_BYTES];     ///< Immediate status of all touch combinations
+uint8_t touches_verify[KG_BASE_COMBINATION_BYTES];  ///< Previous status of all touch combinations (debouncing in progress)
+uint8_t touches_active[KG_BASE_COMBINATION_BYTES];  ///< Registered (debounced) status of all touch combinations
+
+uint8_t touchModeStack[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };    ///< Stackable touch mode tracking info
+uint8_t touchModeStackPos = 0;                                  ///< Current position in mode stack
+
+/**
+ * @brief Initialize touch detection system
+ */
 void setup_touch() {
     touchMode = 0; // set to base mode, no alternates
-    setmode(0); // default touchset mode is always 0
+    touch_set_mode(0); // default touchset mode is always 0
 }
 
+/**
+ * @brief Update status of touch system, called at 100Hz from loop()
+ */
 void update_touch() {
     //touchBench0 = micros();
 
     uint8_t i;
-    removing = false;
     memset(touches_now, 0x00, KG_BASE_COMBINATION_BYTES);
 
     // loop through every registered 1-to-1 sensor combination and record levels
@@ -82,20 +117,6 @@ void update_touch() {
             DEBUG_TOUCH(Serial.print("\n"));
         #endif /* DEBUG_TOUCH */
 
-        // check to see if they've just initiated or removed any touches
-        if (memcmp(touches_verify, touches_active, KG_BASE_COMBINATION_BYTES) > 0) {
-            adding = true;
-
-            // touch initiation, check for actions
-            //check_sensors_touch(touches_verify, 1);
-        } else if (adding && memcmp(touches_verify, touches_active, KG_BASE_COMBINATION_BYTES) < 0) {
-            adding = false;
-            removing = true;
-
-            // touch release, check for actions
-            //check_sensors_release(touches_active, 1);
-        }
-
         // set official sensor readings to current readings
         memcpy(touches_active, touches_verify, KG_BASE_COMBINATION_BYTES);
 
@@ -105,7 +126,9 @@ void update_touch() {
         memcpy(payload + 1, touches_active, KG_BASE_COMBINATION_BYTES);
 
         // send event
-        send_keyglove_packet(KG_PACKET_TYPE_EVENT, sizeof(payload), KG_PACKET_CLASS_TOUCH, KG_PACKET_ID_EVT_TOUCH_STATUS, payload);
+        skipPacket = 0;
+        if (kg_evt_touch_status) skipPacket = kg_evt_touch_status(payload[0], payload + 1);
+        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, sizeof(payload), KG_PACKET_CLASS_TOUCH, KG_PACKET_ID_EVT_TOUCH_STATUS, payload);
     }
 
     // set "verify" readings to match "now" readings (debouncing)
@@ -123,404 +146,103 @@ void update_touch() {
     }*/
 }
 
-// touchset key/mouse status and mode stack
-uint8_t modifiersDown = 0;
-uint8_t keysDown[] = { 0, 0, 0, 0, 0, 0 };
-uint8_t mouseDown = 0;
-uint8_t modeStack[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-uint8_t modeStackPos = 0;
+// declare these here so touch_set_mode() etc. have some context
+//void activate_mode(uint8_t mode) { }
+//void deactivate_mode(uint8_t mode) { }
 
-// declare these here so setmode() etc. have some context
-void activate_mode(uint8_t mode) { }
-void deactivate_mode(uint8_t mode) { }
-
-uint8_t modeCheck(uint8_t mode, uint8_t pos) {
-    if (modeStackPos < pos) {
+/**
+ * @brief Check whether a certain mode is active in a certain position
+ * @param mode Mode to check
+ * @param pos Stack position to check
+ */
+uint8_t touch_check_mode(uint8_t mode, uint8_t pos) {
+    if (touchModeStackPos < pos) {
         return false;
     }
-    return modeStack[modeStackPos - pos] == mode;
+    return touchModeStack[touchModeStackPos - pos] == mode;
 }
 
-void setmode(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset setmode "));
+/**
+ * @brief Set new active touch mode (replaces everything in mode stack)
+ * @param[in] mode New mode to set
+ */
+void touch_set_mode(uint8_t mode) {
+    DEBUG_TOUCHSET(Serial.print("touchset touch_set_mode "));
     DEBUG_TOUCHSET(Serial.println(mode));
-    for (; modeStackPos > 0; modeStackPos--) deactivate_mode(modeStack[modeStackPos - 1]);
-    modeStackPos = 1;
-    modeStack[0] = mode;
-    activate_mode(mode);
+    //for (; touchModeStackPos > 0; touchModeStackPos--) deactivate_mode(touchModeStack[touchModeStackPos - 1]);
+    touchModeStackPos = 1;
+    touchModeStack[0] = mode;
+    //activate_mode(mode);
 }
 
-void pushmode(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset pushmode "));
+/**
+ * @brief Apply new touch mode to top of mode stack
+ * @param[in] mode New mode to push
+ */
+void touch_push_mode(uint8_t mode) {
+    DEBUG_TOUCHSET(Serial.print("touchset touch_push_mode "));
     DEBUG_TOUCHSET(Serial.println(mode));
-    if (modeStackPos < 10) {
-        modeStack[modeStackPos] = mode;
-        modeStackPos++;
-        activate_mode(mode);
+    if (touchModeStackPos < 10) {
+        touchModeStack[touchModeStackPos] = mode;
+        touchModeStackPos++;
+        //activate_mode(mode);
     }
 }
 
-void popmode() {
-    DEBUG_TOUCHSET(Serial.println("touchset popmode"));
-    if (modeStackPos > 0) deactivate_mode(modeStack[--modeStackPos]);
-    if (modeStackPos == 0) modeStack[modeStackPos++] = 0;
-    activate_mode(modeStack[modeStackPos - 1]);
+/**
+ * @brief Remove last touch mode from top of mode stack
+ */
+void touch_pop_mode() {
+    DEBUG_TOUCHSET(Serial.println("touchset touch_pop_mode"));
+    if (touchModeStackPos > 0) touchModeStackPos--; //deactivate_mode(touchModeStack[--touchModeStackPos]);
+    if (touchModeStackPos == 0) touchModeStack[touchModeStackPos++] = 0;
+    //activate_mode(touchModeStack[touchModeStackPos - 1]);
 }
 
-void togglemode(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset togglemode "));
+/**
+ * @brief Toggle touch mode in mode stack (push if missing, remove/pop if present)
+ * @param[in] mode Mode to toggle
+ */
+void touch_toggle_mode(uint8_t mode) {
+    DEBUG_TOUCHSET(Serial.print("touchset touch_toggle_mode "));
     DEBUG_TOUCHSET(Serial.println(mode));
 
     // find the mode and disable it if it's in the stack
     uint8_t i;
-    for (i = 0; i < modeStackPos && modeStack[i] != mode; i++);
-    if (i < modeStackPos) {
+    for (i = 0; i < touchModeStackPos && touchModeStack[i] != mode; i++);
+    if (i < touchModeStackPos) {
         // enabled, so turn it off
-        deactivate_mode(mode);
-        for (i++; i < modeStackPos; i++) modeStack[i - 1] = modeStack[i];
-        modeStackPos--;
+        //deactivate_mode(mode);
+        for (i++; i < touchModeStackPos; i++) touchModeStack[i - 1] = touchModeStack[i];
+        touchModeStackPos--;
     } else {
         // not enabled, so turn it on
-        pushmode(mode);
+        touch_push_mode(mode);
     }
 }
 
-void mouseon(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset mouseon "));
-    DEBUG_TOUCHSET(Serial.println(mode));
-    #if KG_HID & KG_HID_MOUSE
-        activeMouse = true;
-        if (mode == MOUSE_ACTION_MOVE) {
-            opt_mouse_mode = MOUSE_MODE_TILT_POSITION;
-        } else if (mode == MOUSE_ACTION_SCROLL) {
-            opt_scroll_mode = SCROLL_MODE_TILT_POSITION;
-        }
-        #ifdef ENABLE_ACCELEROMETER
-            if (!activeAccelerometer) enable_motion_accelerometer();
-        #endif
-        #ifdef ENABLE_GYROSCOPE
-            if (!activeGyroscope) enable_motion_gyroscope();
-        #endif
-        #ifdef ENABLE_ACCELGYRO
-            if (!activeAccelGyro) enable_motion_accelgyro();
-        #endif
-    #endif
+/* ============================= */
+/* KGAPI COMMAND IMPLEMENTATIONS */
+/* ============================= */
+
+/**
+ * @brief Get the current touch mode
+ * @param[out] mode Current touch mode setting
+ * @return Result code (0=success)
+ */
+uint16_t kg_cmd_touch_get_mode(uint8_t *mode) {
+    *mode = touchMode;
+    return 0; // success
 }
 
-void mouseoff(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset mouseoff "));
-    DEBUG_TOUCHSET(Serial.println(mode));
-    #if KG_HID & KG_HID_MOUSE
-        activeMouse = false;
-        if (mode == MOUSE_ACTION_MOVE) {
-            opt_mouse_mode = 0;
-        } else if (mode == MOUSE_ACTION_SCROLL) {
-            opt_scroll_mode = 0;
-        }
-        #ifdef ENABLE_ACCELEROMETER
-            if (activeAccelerometer) disable_motion_accelerometer();
-        #endif
-        #ifdef ENABLE_GYROSCOPE
-            if (activeGyroscope) disable_motion_gyroscope();
-        #endif
-        #ifdef ENABLE_ACCELGYRO
-            if (activeAccelGyro) disable_motion_accelgyro();
-        #endif
-    #endif
-}
-
-void mousedown(uint8_t button) {
-    DEBUG_TOUCHSET(Serial.print("touchset mousedown "));
-    DEBUG_TOUCHSET(Serial.println(button));
-    #if KG_HID & KG_HID_MOUSE
-        mouseDown = mouseDown | button;
-        #if KG_HOSTIF & KG_HOSTIF_USB_HID
-            if (interfaceUSBHIDReady && (interfaceUSBHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
-                Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
-            }    
-        #endif /* ENABLE_USB */
-    #endif
-}
-
-void mouseup(uint8_t button) {
-    DEBUG_TOUCHSET(Serial.print("touchset mouseup "));
-    DEBUG_TOUCHSET(Serial.println(button));
-    #if KG_HID & KG_HID_MOUSE
-        if ((mouseDown & button) > 0) {
-            mouseDown -= button;
-            #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                if (interfaceUSBHIDReady && (interfaceUSBHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
-                    Mouse.set_buttons((mouseDown & 1) > 0 ? 1 : 0, (mouseDown & 2) > 0 ? 1 : 0, (mouseDown & 4) > 0 ? 1 : 0);
-                }
-            #endif /* ENABLE_USB */
-        }
-    #endif
-}
-
-void mouseclick(uint8_t button) {
-    DEBUG_TOUCHSET(Serial.print("touchset mouseclick "));
-    DEBUG_TOUCHSET(Serial.println(button));
-    mousedown(button);
-    delay(5);
-    mouseup(button);
-}
-
-void keydown(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset keydown "));
-    DEBUG_TOUCHSET(Serial.println(code));
-    #if KG_HID & KG_HID_KEYBOARD
-        uint8_t usePos = 0;
-        for (usePos = 0; usePos < 6 && keysDown[usePos] != 0; usePos++);
-        if (usePos == 6) return; // out of HID keyboard buffer space, REALLY weird for the Keyglove!
-        keysDown[usePos] = code;
-        switch (usePos) {
-            case 0:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key1(code);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key1(code);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 1:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key2(code);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key2(code);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 2:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key3(code);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key3(code);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 3:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key4(code);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key4(code);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 4:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key5(code);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key5(code);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 5:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key6(code);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key6(code);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-        }
-        #if KG_HOSTIF & KG_HOSTIF_USB_HID
-            if (interfaceUSBHIDReady && (interfaceUSBHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
-                Keyboard.send_now();
-            }
-        #endif /* ENABLE_USB */
-        #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-            BTKeyboard.send_now();
-        #endif /* ENABLE_BLUETOOTH */
-    #endif
-}
-
-void keyup(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset keyup "));
-    DEBUG_TOUCHSET(Serial.println(code));
-    #if KG_HID & KG_HID_KEYBOARD
-        uint8_t usePos = 0;
-        for (usePos = 0; usePos < 6 && keysDown[usePos] != code; usePos++);
-        if (usePos == 6) return; // key not currently down...oops.
-        keysDown[usePos] = 0;
-        switch (usePos) {
-            case 0:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key1(0);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key1(0);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 1:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key2(0);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key2(0);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 2:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key3(0);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key3(0);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 3:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key4(0);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key4(0);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 4:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key5(0);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key5(0);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-            case 5:
-                #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                    Keyboard.set_key6(0);
-                #endif /* ENABLE_USB */
-                #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-                    BTKeyboard.set_key6(0);
-                #endif /* ENABLE_BLUETOOTH */
-                break;
-        }
-        #if KG_HOSTIF & KG_HOSTIF_USB_HID
-            if (interfaceUSBHIDReady && (interfaceUSBHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
-                Keyboard.send_now();
-            }
-        #endif /* ENABLE_USB */
-        #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-            BTKeyboard.send_now();
-        #endif /* ENABLE_BLUETOOTH */
-    #endif
-}
-
-void keypress(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset keypress "));
-    DEBUG_TOUCHSET(Serial.println(code));
-    keydown(code);
-    delay(5);
-    keyup(code);
-}
-
-void modifierdown(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset modifierdown "));
-    DEBUG_TOUCHSET(Serial.println(code));
-    #if KG_HID & KG_HID_KEYBOARD
-        modifiersDown = modifiersDown | code;
-        #if KG_HOSTIF & KG_HOSTIF_USB_HID
-            //Keyboard.set_modifier(modifiersDown);
-            //Keyboard.send_now();
-        #endif /* ENABLE_USB */
-        #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-            //BTKeyboard.set_modifier(modifiersDown);
-            //BTKeyboard.send_now();
-        #endif /* ENABLE_USB */
-        #if KG_HOSTIF & KG_HOSTIF_R400_HID
-            RX400.set_modifier(modifiersDown);
-            RX400.send_now();
-        #endif /* ENABLE_RX400 */
-    #endif
-}
-
-void modifierup(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset modifierup "));
-    DEBUG_TOUCHSET(Serial.println(code));
-    #if KG_HID & KG_HID_KEYBOARD
-        if ((modifiersDown & code) > 0) {
-            modifiersDown -= code;
-            #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                //Keyboard.set_modifier(modifiersDown);
-                //Keyboard.send_now();
-            #endif /* ENABLE_USB */
-            #if KG_HOSTIF & KG_HOSTIF_USB_HID
-                //BTKeyboard.set_modifier(modifiersDown);
-                //BTKeyboard.send_now();
-            #endif /* ENABLE_USB */
-            #if KG_HOSTIF & KG_HOSTIF_R400_HID
-                RX400.set_modifier(modifiersDown);
-                RX400.send_now();
-            #endif /* ENABLE_RX400 */
-        }
-    #endif
-}
-
-void togglemodifier(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset modifiertoggle "));
-    DEBUG_TOUCHSET(Serial.println(code));
-    if ((modifiersDown & code) > 0) {
-        modifierup(code);
-    } else {
-        modifierdown(code);
-    }
-}
-
-void modifierpress(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset modifierpress "));
-    DEBUG_TOUCHSET(Serial.println(code));
-    modifierdown(code);
-    delay(5);
-    modifierup(code);
-}
-
-void redled(uint8_t mode, uint16_t duration) {
-    DEBUG_TOUCHSET(Serial.print("touchset redled "));
-    DEBUG_TOUCHSET(Serial.print(mode));
-    DEBUG_TOUCHSET(Serial.print(" "));
-    DEBUG_TOUCHSET(Serial.println(duration));
-    #if (KG_FEEDBACK & KG_FEEDBACK_RGB) > 0
-        if (mode <= 5) set_rgb_mode(mode, -1, -1);
-    #endif /* KG_FEEDBACK_RGB */
-}
-
-void greenled(uint8_t mode, uint16_t duration) {
-    DEBUG_TOUCHSET(Serial.print("touchset greenled "));
-    DEBUG_TOUCHSET(Serial.print(mode));
-    DEBUG_TOUCHSET(Serial.print(" "));
-    DEBUG_TOUCHSET(Serial.println(duration));
-    #if (KG_FEEDBACK & KG_FEEDBACK_RGB) > 0
-        if (mode <= 5) set_rgb_mode(-1, mode, -1);
-    #endif /* KG_FEEDBACK_RGB */
-}
-
-void blueled(uint8_t mode, uint16_t duration) {
-    DEBUG_TOUCHSET(Serial.print("touchset blueled "));
-    DEBUG_TOUCHSET(Serial.print(mode));
-    DEBUG_TOUCHSET(Serial.print(" "));
-    DEBUG_TOUCHSET(Serial.println(duration));
-    #if (KG_FEEDBACK & KG_FEEDBACK_RGB) > 0
-        if (mode <= 5) set_rgb_mode(-1, -1, mode);
-    #endif /* KG_FEEDBACK_RGB */
-}
-
-void beep(uint16_t pitch, uint8_t mode, uint16_t duration) {
-    DEBUG_TOUCHSET(Serial.print("touchset beep "));
-    DEBUG_TOUCHSET(Serial.print(pitch));
-    DEBUG_TOUCHSET(Serial.print(" "));
-    DEBUG_TOUCHSET(Serial.print(mode));
-    DEBUG_TOUCHSET(Serial.print(" "));
-    DEBUG_TOUCHSET(Serial.println(duration));
-    #if (KG_FEEDBACK & KG_FEEDBACK_PIEZO) > 0
-        set_piezo_mode(mode, duration, pitch);
-    #endif /* KG_FEEDBACK_PIEZO */
-}
-
-void vibrate(uint8_t mode, uint16_t duration) {
-    DEBUG_TOUCHSET(Serial.print("touchset vibrate "));
-    DEBUG_TOUCHSET(Serial.print(mode));
-    DEBUG_TOUCHSET(Serial.print(" "));
-    DEBUG_TOUCHSET(Serial.println(duration));
-    #if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE) > 0
-        set_vibrate_mode(mode, duration);
-    #endif /* KG_FEEDBACK_VIBRATE */
+/**
+ * @brief Set a new touch mode
+ * @param[in] mode New touch mode to set
+ * @return Result code (0=success)
+ */
+uint16_t kg_cmd_touch_set_mode(uint8_t mode) {
+    touch_set_mode(mode);
+    return 0; // success
 }
 
 #endif // _SUPPORT_TOUCH_H_
