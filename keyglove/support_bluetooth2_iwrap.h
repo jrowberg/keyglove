@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_bluetooth2_iwrap.h
  * @brief Support for Bluetooth using Bluegiga's WT12 module and iWRAP
  * @author Jeff Rowberg
- * @date 2014-07-04
+ * @date 2014-08-02
  *
  * This file provides an interface between KGAPI and the full-featured iWRAP
  * firmware that runs on Bluegiga's WT12 class 2 Bluetooth module. This code
