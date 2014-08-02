@@ -1,5 +1,5 @@
 // Keyglove controller source code - Special hardware setup file
-// 7/4/2014 by Jeff Rowberg <jeff@rowberg.net>
+// 8/2/2014 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -1541,9 +1541,9 @@ uint16_t kg_cmd_bluetooth_set_mode(uint8_t mode) {
     if (mode > KG_BLUETOOTH_MODE_MAX) {
         return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
     } else {
-        // update mode if interface is ready and mode is actually different
-        if (mode != bluetoothMode) {
-            if (interfaceBT2Ready) {
+        if (interfaceBT2Ready) {
+            // update mode if interface is ready and mode is actually different
+            if (mode != bluetoothMode) {
                 // handle appropriate reconfiguration due to mode switch if interface is ready
                 // (if it isn't ready, this will happen automatically based on current mode setting when it becomes ready)
                 iwrap_autocall_target = 0;
@@ -1601,16 +1601,18 @@ uint16_t kg_cmd_bluetooth_set_mode(uint8_t mode) {
                         }
                         break;
                 }
+                bluetoothMode = (bluetooth_mode_t)mode;
             }
-            bluetoothMode = (bluetooth_mode_t)mode;
-        }
 
-        // send kg_evt_bluetooth_mode packet (if we aren't setting it from an API command)
-        if (!inBinPacket) {
-            uint8_t payload[1] = { bluetoothMode };
-            skipPacket = 0;
-            if (kg_evt_bluetooth_mode) skipPacket = kg_evt_bluetooth_mode(payload[0]);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 1, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_MODE, payload);
+            // send kg_evt_bluetooth_mode packet (if we aren't setting it from an API command)
+            if (!inBinPacket) {
+                uint8_t payload[1] = { bluetoothMode };
+                skipPacket = 0;
+                if (kg_evt_bluetooth_mode) skipPacket = kg_evt_bluetooth_mode(payload[0]);
+                if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 1, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_MODE, payload);
+            }
+        } else {
+            return KG_BLUETOOTH_ERROR_INTERFACE_NOT_READY;
         }
     }
 
