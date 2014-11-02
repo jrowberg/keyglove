@@ -57,11 +57,21 @@ THE SOFTWARE.
  * UNIVERSAL CONTROLLER DECLARATIONS
 =============================================== */
 
-volatile uint8_t keyglove100Hz = 0;         ///< Counter inside 100Hz hardware timer interrupt
+volatile uint8_t keyglove100Hz = 0;         ///< Flag for 100Hz hardware timer interrupt
 uint8_t keygloveTick = 0;                   ///< Fast 100Hz counter, increments every ~10ms and loops at 100
 uint32_t keygloveTock = 0;                  ///< Slow 1Hz counter (a.k.a. "uptime"), increments every 100 ticks and loops at 2^32 (~4 billion)
 //uint32_t keygloveTickTime = 0;              ///< Benchmark testing "end" reference timestamp
 //uint32_t keygloveTickTime0 = 0;             ///< Benchmark testing "start" reference timestamp
+
+uint8_t keygloveSoftTimers = 0;
+uint8_t keygloveSoftTimersRepeat = 0;
+uint16_t keygloveSoftTimerInterval[8];
+uint32_t keygloveSoftTimerSec[8];
+uint8_t keygloveSoftTimer10ms[8];
+
+volatile uint8_t keygloveBatteryInterrupt;  ///< Flag for battery status change interrupt
+volatile uint8_t keygloveBatteryStatus;     ///< Battery status signal container for post-interrupt processing
+uint8_t keygloveBatteryLevel;               ///< Battery charge level (0-100)
 
 
 
@@ -76,9 +86,11 @@ uint32_t keygloveTock = 0;                  ///< Slow 1Hz counter (a.k.a. "uptim
 
 
 // BOARD
-#if KG_BOARD == KG_BOARD_TEENSYPP2
-    #include "support_board_teensypp2.h"
-//#elif #KG_BOARD == KG_BOARD_ARDUINO_DUE
+#if KG_BOARD == KG_BOARD_TEENSYPP2_T37
+    #include "support_board_teensypp2_t37.h"
+#elif KG_BOARD == KG_BOARD_TEENSYPP2_T19
+    #include "support_board_teensypp2_t19.h"
+//#elif KG_BOARD == KG_BOARD_ARDUINO_DUE
     //#include "support_board_arduino_due.h"
     // TODO: Arduino Due ARM chip support
 #else
@@ -173,8 +185,10 @@ void setup() {
     keygloveTock = 0;
 
     // BOARD
-    #if KG_BOARD == KG_BOARD_TEENSYPP2
-        setup_board_teensypp2();
+    #if KG_BOARD == KG_BOARD_TEENSYPP2_T37
+        setup_board_teensypp2_t37();
+    #elif KG_BOARD == KG_BOARD_TEENSYPP2_T19
+        setup_board_teensypp2_t19();
     //#elif KG_BOARD == KG_BOARD_ARDUINO_DUE
         //setup_board_arduino_due();
     #endif
@@ -237,7 +251,7 @@ void setup() {
     // send system_ready event
     skipPacket = 0;
     if (kg_evt_system_ready) skipPacket = kg_evt_system_ready();
-    send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_READY, 0);
+    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_READY, 0);
 }
 
 
@@ -291,8 +305,89 @@ void loop() {
             //keygloveTickTime = 0;
             keygloveTick = 0;
             keygloveTock++;
+
+            /*
+            // read battery voltage once per second
+            // need to scale [700, 880] to [0, 100]
+            int16_t rawBat = analogRead(0);
+            uint8_t newBat = min(100, max(0, (rawBat - 700) * 9 / 5));
+
+            if (newBat != keygloveBatteryLevel) {
+                keygloveBatteryLevel = newBat;
+
+                // update battery presence bit
+                if (rawBat > 100) keygloveBatteryStatus |= 0x80;    // battery present
+                else keygloveBatteryStatus &= 0x7F;                 // battery not present
+
+                // send system_battery_status event
+                uint8_t payload[2] = {
+                    keygloveBatteryStatus,
+                    keygloveBatteryLevel
+                };
+                skipPacket = 0;
+                if (kg_evt_system_battery_status) skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel);
+                if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload);
+            }
+            */
+        }
+
+        // check for soft timer ticks
+        for (uint8_t handle = 0; keygloveSoftTimers >> handle; handle++) {
+            if ((keygloveSoftTimers >> handle) & 1) {
+                if (keygloveSoftTimerSec[handle] == keygloveTock && keygloveSoftTimer10ms[handle] == keygloveTick) {
+                    if ((keygloveSoftTimersRepeat >> handle) & 1) {
+                        // reschedule on the same interval, since it's a repeating timer
+                        keygloveSoftTimerSec[handle] = keygloveTock + (keygloveSoftTimerInterval[handle] / 100);
+                        keygloveSoftTimer10ms[handle] = keygloveTick + (keygloveSoftTimerInterval[handle] % 100);
+                        if (keygloveSoftTimer10ms[handle] > 99) {
+                            keygloveSoftTimer10ms[handle] -= 100;
+                            keygloveSoftTimerSec[handle]++;
+                        }
+                    } else {
+                        // stop this timer
+                        keygloveSoftTimers &= ~(1 << handle);
+                    }
+                    // send system_battery_timer_tick event
+                    uint8_t payload[6] = {
+                        handle,
+                        keygloveTock & 0xFF,
+                        (keygloveTock >> 8) & 0xFF,
+                        (keygloveTock >> 16) & 0xFF,
+                        (keygloveTock >> 24) & 0xFF,
+                        keygloveTick
+                    };
+                    skipPacket = 0;
+                    if (kg_evt_system_timer_tick) skipPacket = kg_evt_system_timer_tick(handle, keygloveTock, keygloveTick);
+                    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 6, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_TIMER_TICK, payload);
+                }
+            }
         }
     }
+
+    /*
+    // check for battery interrupt (status changed)
+    if (keygloveBatteryInterrupt) {
+        keygloveBatteryInterrupt = 0;
+
+        // read battery voltage and update status
+        // need to scale [700, 880] to [0, 100]
+        int16_t rawBat = analogRead(0);
+        keygloveBatteryLevel = min(100, max(0, (rawBat - 700) * 9 / 5));
+
+        // update battery presence bit
+        if (rawBat > 100) keygloveBatteryStatus |= 0x80;    // battery present
+        else keygloveBatteryStatus &= 0x7F;                 // battery not present
+
+        // send system_battery_status event
+        uint8_t payload[2] = {
+            keygloveBatteryStatus,
+            keygloveBatteryLevel
+        };
+        skipPacket = 0;
+        if (kg_evt_system_battery_status) skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel);
+        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload);
+    }
+    */
     
     // MOTION
     #if (KG_MOTION & KG_MOTION_MPU6050_HAND)

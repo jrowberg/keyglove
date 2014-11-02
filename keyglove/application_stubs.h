@@ -1,5 +1,5 @@
 // Keyglove controller source code - Custom application behavior definition
-// 2014-07-27 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-08-25 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file application_stubs.h
  * @brief **USER-DEFINED:** Custom application behavior stub/reference
  * @author Jeff Rowberg
- * @date 2014-07-27
+ * @date 2014-08-25
  *
  * This file contains empty "stub" implementations of all existing API events.
  * It is also not included in the compile process. It is intended only that you
@@ -91,6 +91,33 @@ uint8_t my_kg_evt_system_ready() {
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
 uint8_t my_kg_evt_system_error(uint16_t code) {
+    // TODO: special event handler code here
+    // ...
+
+    return 0; // 0=send event API packet, otherwise skip sending
+}
+
+/**
+ * @brief Indicates that a previously scheduled software timer has elapsed
+ * @param[in] handle Timer handle which triggered this event
+ * @param[in] seconds Seconds elapsed since boot
+ * @param[in] subticks 10ms subticks above whole second
+ * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
+ */
+uint8_t my_kg_evt_system_timer_tick(uint8_t handle, uint32_t seconds, uint8_t subticks) {
+    // TODO: special event handler code here
+    // ...
+
+    return 0; // 0=send event API packet, otherwise skip sending
+}
+
+/**
+ * @brief Indicates that battery status has changed
+ * @param[in] status Battery status
+ * @param[in] level Charge level (0-100)
+ * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
+ */
+uint8_t my_kg_evt_system_battery_status(uint8_t status, uint8_t level) {
     // TODO: special event handler code here
     // ...
 
