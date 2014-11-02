@@ -51,6 +51,7 @@ SET BT NAME Keyglove
 SET BT CLASS 00540
 SET BT IDENT USB:1d50 6025 1.0.0 Keyglove Input Device
 SET BT SSP 3 0
+SET BT SNIFF 20 10 2 8 10
 SET CONTROL CD 80 2 20
 SET CONTROL ESCAPE - 40 1
 SET PROFILE HID 1f 40 100 0 en 0409 Keyglove Input Device
@@ -177,11 +178,11 @@ typedef enum {
 // Bluetooth link/interface readiness
 bool interfaceBT2Ready = false;         ///< General Bluetooth ready indicator
 bool interfaceBT2SerialReady = false;   ///< Bluetooth SPP connection active indicator
-uint8_t interfaceBT2SerialMode = KG_API_BT2_SERIAL; ///< Bluetooth SPP connection KGAPI mode
+uint8_t interfaceBT2SerialMode = KG_APIMODE_BT2_SERIAL; ///< Bluetooth SPP connection KGAPI mode
 bool interfaceBT2IAPReady = false;      ///< Bluetooth iAP connection active indicator
-uint8_t interfaceBT2IAPMode = KG_API_BT2_IAP;       ///< Bluetooth IAP connection KGAPI mode
+uint8_t interfaceBT2IAPMode = KG_APIMODE_BT2_IAP;       ///< Bluetooth IAP connection KGAPI mode
 bool interfaceBT2RawHIDReady = false;   ///< Bluetooth raw HID connection active indicator
-uint8_t interfaceBT2RawHIDMode = KG_API_BT2_RAWHID; ///< Bluetooth raw HID connection KGAPI mode
+uint8_t interfaceBT2RawHIDMode = KG_APIMODE_BT2_RAWHID; ///< Bluetooth raw HID connection KGAPI mode
 bool interfaceBT2HIDReady = false;      ///< Bluetooth HID connection active indicator
 bool interfaceBT2HFPReady = false;      ///< Bluetooth HFP connection active indicator
 bool interfaceBT2AVRCPReady = false;    ///< Bluetooth AVRCP connection active indicator
@@ -740,13 +741,14 @@ void my_iwrap_callback_rxoutput(uint16_t length, const uint8_t *data) {
  * if MUX mode is enabled.
  */
 void my_iwrap_callback_rxdata(uint8_t channel, uint16_t length, const uint8_t *data) {
-    ///< TODO: implement incoming data over Bluetooth
-
     /*
     char s[length + 18];
     sprintf(s, "<= BT2 (%02X, %d): %s", channel, length, data);
     send_keyglove_log(KG_LOG_LEVEL_VERBOSE, strlen(s), s);
     */
+
+    lastCommandInterfaceNum = KG_INTERFACENUM_BT2_SERIAL;
+    for (uint16_t i = 0; i < length; i++) protocol_parse((uint8_t)data[i]);
 }
 
 /**
@@ -1026,16 +1028,16 @@ void my_iwrap_evt_connect(uint8_t link_id, const char *type, uint16_t target, co
  */
 void my_iwrap_evt_inquiry_extended(const iwrap_address_t *mac, uint8_t length, const uint8_t *data) {
     uint8_t payload[13];
-    uint32_t bt_class = 0; // filler
+    uint32_t class_of_device = 0; // filler
     payload[0] = mac -> address[5];
     payload[1] = mac -> address[4];
     payload[2] = mac -> address[3];
     payload[3] = mac -> address[2];
     payload[4] = mac -> address[1];
     payload[5] = mac -> address[0];
-    payload[6] = bt_class & 0xFF;
-    payload[7] = (bt_class >> 8) & 0xFF;
-    payload[8] = (bt_class >> 16) & 0xFF;
+    payload[6] = class_of_device & 0xFF;
+    payload[7] = (class_of_device >> 8) & 0xFF;
+    payload[8] = (class_of_device >> 16) & 0xFF;
     payload[9] = 0; // RSSI
     payload[10] = 2; // inquiry status
     payload[11] = find_pairing_from_mac(mac);
@@ -1084,6 +1086,7 @@ void my_iwrap_evt_inquiry_partial(const iwrap_address_t *mac, uint32_t class_of_
 void my_iwrap_evt_name(const iwrap_address_t *mac, const char *friendly_name) {
     uint8_t name_len = 0;
     if (friendly_name) name_len = strlen(friendly_name);
+
     uint8_t payload[13 + name_len];
     payload[0] = mac -> address[5];
     payload[1] = mac -> address[4];
@@ -1097,7 +1100,6 @@ void my_iwrap_evt_name(const iwrap_address_t *mac, const char *friendly_name) {
     payload[9] = 0; // RSSI
     payload[10] = 4; // inquiry status
     payload[11] = find_pairing_from_mac(mac);
-    payload[12] = name_len;
     if (name_len) memcpy(payload + 13, friendly_name, name_len);
 
     // send kg_evt_bluetooth_inquiry_response(...) event
@@ -1780,7 +1782,7 @@ uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t index) {
             // this should NEVER happen, but if it does, I want to know
             return KG_PROTOCOL_ERROR_NULL_POINTER;
         }
-        char cmd[] = "SET BT PAXR 00:00:00:00:00:00";
+        char cmd[] = "SET BT PAIR 00:00:00:00:00:00";
         char *cptr = cmd + 12;
         iwrap_bintohexstr((uint8_t *)(iwrap_connection_map[index] -> mac.address), 6, &cptr, ':', 0);
         iwrap_send_command(cmd, iwrap_mode);
