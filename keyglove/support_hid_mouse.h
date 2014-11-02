@@ -105,45 +105,47 @@ void setup_hid_mouse() {
  * @brief Update mouse movements if necessary, called at 100Hz from loop()
  */
 void update_hid_mouse() {
-    switch (opt_hid_mouse_mode) {
-        case MOUSE_MODE_TILT_VELOCITY:
-            hidMouseDX += ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) - ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
-            hidMouseDY += (gv.x < 0) ? -pow(-(float)gv.x/30, 1.3)*3 : pow((float)gv.x/30, 1.3)*3;
-            break;
-        case MOUSE_MODE_TILT_POSITION:
-            hidMouseDX = ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) - ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
-            hidMouseDY = (gv.x < 0) ? -pow(-(float)gv.x/30, 1.3)*3 : pow((float)gv.x/30, 1.3)*3;
-            break;
-        case MOUSE_MODE_MOVEMENT_POSITION:
-            #if (KG_FUSION > 0)
-                hidMouseDX = apFrame.x * opt_hid_mouse_scale_mode4[0];
-                hidMouseDY = apFrame.y * opt_hid_mouse_scale_mode4[1];
-            #else
-                hidMouseDX = aa.x * opt_hid_mouse_scale_mode4[0];
-                hidMouseDY = aa.y * opt_hid_mouse_scale_mode4[1];
-            #endif
-            break;
-        case MOUSE_MODE_3D:
-            #if (KG_FUSION > 0)
-                hidMouseDX = apFrame.x * opt_hid_mouse_scale_mode4[0];
-                hidMouseDY = apFrame.y * opt_hid_mouse_scale_mode4[1];
-                hidMouseDZ = apFrame.z * opt_hid_mouse_scale_mode4[2];
-            #else
-                hidMouseDX = aa.x * opt_hid_mouse_scale_mode4[0];
-                hidMouseDY = aa.y * opt_hid_mouse_scale_mode4[1];
-                hidMouseDZ = aa.z * opt_hid_mouse_scale_mode4[2];
-            #endif
-            break;
-    }
-    switch (opt_hid_scroll_mode) {
-        case SCROLL_MODE_TILT_VELOCITY: // gyro
-            break;
-        case SCROLL_MODE_TILT_POSITION: // gyro
-            hidScrollDY -= ((float)gv.y < 0) ? -sqrt(-(float)gv.y / 30) : sqrt((float)gv.y / 30);
-            break;
-        case SCROLL_MODE_MOVEMENT_POSITION: // accel
-            break;
-    }
+    #if KG_MOTION > 0
+        switch (opt_hid_mouse_mode) {
+            case MOUSE_MODE_TILT_VELOCITY:
+                hidMouseDX += ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) - ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
+                hidMouseDY += (gv.x < 0) ? -pow(-(float)gv.x/30, 1.3)*3 : pow((float)gv.x/30, 1.3)*3;
+                break;
+            case MOUSE_MODE_TILT_POSITION:
+                hidMouseDX = ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) - ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
+                hidMouseDY = (gv.x < 0) ? -pow(-(float)gv.x/30, 1.3)*3 : pow((float)gv.x/30, 1.3)*3;
+                break;
+            case MOUSE_MODE_MOVEMENT_POSITION:
+                #if (KG_FUSION > 0)
+                    hidMouseDX = apFrame.x * opt_hid_mouse_scale_mode4[0];
+                    hidMouseDY = apFrame.y * opt_hid_mouse_scale_mode4[1];
+                #else
+                    hidMouseDX = aa.x * opt_hid_mouse_scale_mode4[0];
+                    hidMouseDY = aa.y * opt_hid_mouse_scale_mode4[1];
+                #endif
+                break;
+            case MOUSE_MODE_3D:
+                #if (KG_FUSION > 0)
+                    hidMouseDX = apFrame.x * opt_hid_mouse_scale_mode4[0];
+                    hidMouseDY = apFrame.y * opt_hid_mouse_scale_mode4[1];
+                    hidMouseDZ = apFrame.z * opt_hid_mouse_scale_mode4[2];
+                #else
+                    hidMouseDX = aa.x * opt_hid_mouse_scale_mode4[0];
+                    hidMouseDY = aa.y * opt_hid_mouse_scale_mode4[1];
+                    hidMouseDZ = aa.z * opt_hid_mouse_scale_mode4[2];
+                #endif
+                break;
+        }
+        switch (opt_hid_scroll_mode) {
+            case SCROLL_MODE_TILT_VELOCITY: // gyro
+                break;
+            case SCROLL_MODE_TILT_POSITION: // gyro
+                hidScrollDY -= ((float)gv.y < 0) ? -sqrt(-(float)gv.y / 30) : sqrt((float)gv.y / 30);
+                break;
+            case SCROLL_MODE_MOVEMENT_POSITION: // accel
+                break;
+        }
+    #endif
 
     if (opt_hid_mouse_mode > 0 && (hidMouseDX != 0 || hidMouseDY != 0 || hidMouseDZ != 0)) {
         if (opt_hid_mouse_invert_x == 1) hidMouseDX = -hidMouseDX;

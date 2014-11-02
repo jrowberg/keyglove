@@ -341,7 +341,9 @@ void keyboard_key_up(uint8_t code) {
             }
         #endif /* ENABLE_USB */
         #if KG_HOSTIF & KG_HOSTIF_BT2_HID
-            BTKeyboard.send_now();
+            if (interfaceBT2HIDReady) {
+                BTKeyboard.send_now();
+            }
         #endif /* ENABLE_BLUETOOTH */
     #endif
 }
