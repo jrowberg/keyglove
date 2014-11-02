@@ -1,5 +1,5 @@
 // Keyglove controller source code - Feedback implementation for RGB LED
-// 7/4/2014 by Jeff Rowberg <jeff@rowberg.net>
+// 8/9/2014 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_feedback_rgb.h
  * @brief Feedback implementation for RGB LED
  * @author Jeff Rowberg
- * @date 2014-07-04
+ * @date 2014-08-09
  *
  * This file defines the feeback functionality for the RGB LED that may be
  * included as an optional module in a Keyglove modular hardware design. This
@@ -47,32 +47,81 @@ THE SOFTWARE.
  * @brief List of possible values for RGB mode
  */
 typedef enum {
-    KG_RGB_MODE_OFF = 0,    ///< (0) LED solid off
-    KG_RGB_MODE_SOLID,      ///< (1) LED solid on
-    KG_RGB_MODE_LONGBLINK,  ///< (2) LED blinking with 1sec period, 500ms pulse
-    KG_RGB_MODE_LONGPULSE,  ///< (3) LED blinking with 1sec period, 250ms pulse
-    KG_RGB_MODE_SHORTBLINK, ///< (4) LED blinking with 200ms period, 100ms pulse
-    KG_RGB_MODE_SHORTPULSE, ///< (5) LED blinking with 200ms period, 50ms pulse
+    KG_RGB_MODE_OFF = 0,      ///< (0) LED solid off
+    KG_RGB_MODE_SOLID,        ///< (1) LED solid on
+    KG_RGB_MODE_B200_100,     ///< (2) LED blinking with 200ms period, 100ms pulse
+    KG_RGB_MODE_B200_50,      ///< (3) LED blinking with 200ms period, 50ms pulse
+    KG_RGB_MODE_B1000_500,    ///< (4) LED blinking with 1sec period, 500ms pulse
+    KG_RGB_MODE_B1000_100,    ///< (5) LED blinking with 1sec period, 100ms pulse
+    KG_RGB_MODE_B1000_100_2X, ///< (6) LED blinking with 1sec period, 100ms pulse 2x
+    KG_RGB_MODE_B1000_100_3X, ///< (7) LED blinking with 1sec period, 100ms pulse 3x
+    KG_RGB_MODE_B3000_1000,   ///< (8) LED blinking with 3sec period, 1sec pulse
+    KG_RGB_MODE_B3000_100,    ///< (9) LED blinking with 3sec period, 100ms pulse
+    KG_RGB_MODE_B3000_100_2X, ///< (10) LED blinking with 3sec period, 100ms pulse 2x
+    KG_RGB_MODE_B3000_100_3X, ///< (11) LED blinking with 3sec period, 100ms pulse 3x
+    KG_RGB_MODE_F200_100,     ///< (12) LED fading with 200ms period, 100ms pulse
+    KG_RGB_MODE_F200_50,      ///< (13) LED fading with 200ms period, 50ms pulse
+    KG_RGB_MODE_F1000_1000,   ///< (14) LED fading with 1sec period, 500ms pulse
+    KG_RGB_MODE_F1000_500,    ///< (15) LED fading with 1sec period, 500ms pulse
+    KG_RGB_MODE_F1000_100,    ///< (16) LED fading with 1sec period, 100ms pulse
+    KG_RGB_MODE_F1000_100_2X, ///< (17) LED fading with 1sec period, 100ms pulse 2x
+    KG_RGB_MODE_F1000_100_3X, ///< (18) LED fading with 1sec period, 100ms pulse 3x
+    KG_RGB_MODE_F3000_3000,   ///< (19) LED fading with 3sec period, 3sec pulse
+    KG_RGB_MODE_F3000_1000,   ///< (20) LED fading with 3sec period, 1sec pulse
+    KG_RGB_MODE_F3000_100,    ///< (21) LED fading with 3sec period, 100ms pulse
+    KG_RGB_MODE_F3000_100_2X, ///< (22) LED fading with 3sec period, 100ms pulse 2x
+    KG_RGB_MODE_F3000_100_3X, ///< (23) LED fading with 3sec period, 100ms pulse 3x
     KG_RGB_MODE_MAX
 } feedback_rgb_mode_t;
 
-feedback_rgb_mode_t feedbackRGBModeRed;     ///< RGB feedback red component mode
-feedback_rgb_mode_t feedbackRGBModeGreen;   ///< RGB feedback green component mode
-feedback_rgb_mode_t feedbackRGBModeBlue;    ///< RGB feedback blue component mode
+feedback_rgb_mode_t feedbackRGBMode[3];     ///< RGB feedback red component mode
+int16_t feedbackRGBTick[3];                 ///< RGB fade tick reference (signed because of abs equations)
+uint16_t feedbackRGBLoop[3];                ///< Tick loop length for RGB fade timing
 
 /**
- * @brief Sets RGB feedpack pin logic states (red/green/blue)
+ * @brief Sets RGB feedpack pin digital logic states (red/green/blue)
  * @param[in] r Red: zero for low (off), non-zero for high (on), 255 for no change
  * @param[in] g Green: zero for low (off), non-zero for high (on), 255 for no change
  * @param[in] b Blue: zero for low (off), non-zero for high (on), 255 for no change
- * @see KG_PIN_RGB_RED
- * @see KG_PIN_RGB_GREEN
- * @see KG_PIN_RGB_BLUE
  */
-void feedback_set_rgb_logic(uint8_t r, uint8_t g, uint8_t b) {
+void feedback_set_rgb_digital(uint8_t r, uint8_t g, uint8_t b) {
     if (r != 255) digitalWrite(KG_PIN_RGB_RED, r);
     if (g != 255) digitalWrite(KG_PIN_RGB_GREEN, g);
     if (b != 255) digitalWrite(KG_PIN_RGB_BLUE, b);
+}
+
+/**
+ * @brief Sets RGB feedpack pin digital logic state on one channel (red/green/blue)
+ * @param[in] channel Channel number (0=RED, 1=GREEN, 2=BLUE)
+ * @param[in] value Logic state (zero for low/off, non-zero for high/on)
+ */
+void feedback_set_rgb_digital_channel(uint8_t channel, uint8_t value) {
+    if (channel == 0) digitalWrite(KG_PIN_RGB_RED, value);
+    else if (channel == 1) digitalWrite(KG_PIN_RGB_GREEN, value);
+    else if (channel == 2) digitalWrite(KG_PIN_RGB_BLUE, value);
+}
+
+/**
+ * @brief Sets RGB feedpack pin analog PWM states (red/green/blue)
+ * @param[in] r Red: zero for off, non-zero for PWM (on), 255 for no change
+ * @param[in] g Green: zero for off, non-zero for PWM (on), 255 for no change
+ * @param[in] b Blue: zero for off, non-zero for PWM (on), 255 for no change
+ */
+void feedback_set_rgb_analog(uint8_t r, uint8_t g, uint8_t b) {
+    if (r != 255) analogWrite(KG_PIN_RGB_RED, r);
+    if (g != 255) analogWrite(KG_PIN_RGB_GREEN, g);
+    if (b != 255) analogWrite(KG_PIN_RGB_BLUE, b);
+}
+
+/**
+ * @brief Sets RGB feedpack pin analog PWM state on one channel (red/green/blue)
+ * @param[in] channel Channel number (0=RED, 1=GREEN, 2=BLUE)
+ * @param[in] value PWM duty cycle (zero for off, non-zero for PWM/on)
+ */
+void feedback_set_rgb_analog_channel(uint8_t channel, uint8_t value) {
+    if (channel == 0) analogWrite(KG_PIN_RGB_RED, value);
+    else if (channel == 1) analogWrite(KG_PIN_RGB_GREEN, value);
+    else if (channel == 2) analogWrite(KG_PIN_RGB_BLUE, value);
 }
 
 /**
@@ -82,14 +131,35 @@ void feedback_set_rgb_logic(uint8_t r, uint8_t g, uint8_t b) {
  * @param[in] b Blue mode
  */
 void feedback_set_rgb_mode(feedback_rgb_mode_t r, feedback_rgb_mode_t g, feedback_rgb_mode_t b) {
-    feedbackRGBModeRed = r;
-    feedbackRGBModeGreen = g;
-    feedbackRGBModeBlue = b;
-    // logic: r=0 -> off, r=5 -> on, else no immediate change
-    feedback_set_rgb_logic(
-        r == 0 ? 0 : (r == 5 ? 1 : 255),
-        g == 0 ? 0 : (g == 5 ? 1 : 255),
-        b == 0 ? 0 : (b == 5 ? 1 : 255)
+    feedbackRGBMode[0] = r;
+    feedbackRGBMode[1] = g;
+    feedbackRGBMode[2] = b;
+    feedbackRGBTick[0] = feedbackRGBTick[1] = feedbackRGBTick[2] = 0;
+    feedbackRGBLoop[0] = feedbackRGBLoop[1] = feedbackRGBLoop[2] = 0;
+
+    for (uint8_t i = 0; i < 3; i++) {
+             if (feedbackRGBMode[i] == KG_RGB_MODE_B200_100     || feedbackRGBMode[i] == KG_RGB_MODE_F200_100 ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_B200_50      || feedbackRGBMode[i] == KG_RGB_MODE_F200_50
+                ) feedbackRGBLoop[i] = 20;
+        else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_500    || feedbackRGBMode[i] == KG_RGB_MODE_F1000_500 ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_B1000_100    || feedbackRGBMode[i] == KG_RGB_MODE_F1000_100 ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_B1000_100_2X || feedbackRGBMode[i] == KG_RGB_MODE_F1000_100_2X ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_B1000_100_3X || feedbackRGBMode[i] == KG_RGB_MODE_F1000_100_3X ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_F1000_1000
+                ) feedbackRGBLoop[i] = 100;
+        else if (feedbackRGBMode[i] == KG_RGB_MODE_B3000_1000   || feedbackRGBMode[i] == KG_RGB_MODE_F3000_1000 ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_B3000_100    || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100 ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_B3000_100_2X || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100_2X ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_B3000_100_3X || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100_3X ||
+                 feedbackRGBMode[i] == KG_RGB_MODE_F3000_3000
+                ) feedbackRGBLoop[i] = 300;
+    }
+
+    // logic: r=OFF -> off, r=ON -> on, else no immediate change, update_feedback_rgb() will handling it
+    feedback_set_rgb_digital(
+        r == KG_RGB_MODE_OFF ? 0 : (r == KG_RGB_MODE_SOLID ? 1 : 255),
+        g == KG_RGB_MODE_OFF ? 0 : (g == KG_RGB_MODE_SOLID ? 1 : 255),
+        b == KG_RGB_MODE_OFF ? 0 : (b == KG_RGB_MODE_SOLID ? 1 : 255)
     );
 }
 
@@ -105,27 +175,54 @@ void setup_feedback_rgb() {
     digitalWrite(KG_PIN_RGB_BLUE, LOW);
 
     // SELF-TEST
-    //feedback_set_rgb_logic(1, 1, 1); // turn everything on and wait 1/20 sec
+    //feedback_set_rgb_digital(1, 1, 1); // turn everything on and wait 1/20 sec
     //delay(50);
-    //feedback_set_rgb_logic(0, 0, 0); // turn everything off again
+    //feedback_set_rgb_digital(0, 0, 0); // turn everything off again
 }
 
 /**
  * @brief Update status of RGB feedback subystem, called at 100Hz from loop()
  */
 void update_feedback_rgb() {
-    if      (feedbackRGBModeRed   == KG_RGB_MODE_LONGBLINK  && keygloveTick % 50 == 0) feedback_set_rgb_logic(keygloveTick % 100 >= 50 ? 0 : 1, 255, 255);
-    else if (feedbackRGBModeRed   == KG_RGB_MODE_LONGPULSE  && keygloveTick % 25 == 0) feedback_set_rgb_logic(keygloveTick % 100 >= 25 ? 0 : 1, 255, 255);
-    else if (feedbackRGBModeRed   == KG_RGB_MODE_SHORTBLINK && keygloveTick % 10 == 0) feedback_set_rgb_logic(keygloveTick %  20 >= 10 ? 0 : 1, 255, 255);
-    else if (feedbackRGBModeRed   == KG_RGB_MODE_SHORTPULSE && keygloveTick %  5 == 0) feedback_set_rgb_logic(keygloveTick %  20 >=  5 ? 0 : 1, 255, 255);
-    if      (feedbackRGBModeGreen == KG_RGB_MODE_LONGBLINK  && keygloveTick % 50 == 0) feedback_set_rgb_logic(255, keygloveTick % 100 >= 50 ? 0 : 1, 255);
-    else if (feedbackRGBModeGreen == KG_RGB_MODE_LONGPULSE  && keygloveTick % 25 == 0) feedback_set_rgb_logic(255, keygloveTick % 100 >= 25 ? 0 : 1, 255);
-    else if (feedbackRGBModeGreen == KG_RGB_MODE_SHORTBLINK && keygloveTick % 10 == 0) feedback_set_rgb_logic(255, keygloveTick %  20 >= 10 ? 0 : 1, 255);
-    else if (feedbackRGBModeGreen == KG_RGB_MODE_SHORTPULSE && keygloveTick %  5 == 0) feedback_set_rgb_logic(255, keygloveTick %  20 >=  5 ? 0 : 1, 255);
-    if      (feedbackRGBModeBlue  == KG_RGB_MODE_LONGBLINK  && keygloveTick % 50 == 0) feedback_set_rgb_logic(255, 255, keygloveTick % 100 >= 50 ? 0 : 1);
-    else if (feedbackRGBModeBlue  == KG_RGB_MODE_LONGPULSE  && keygloveTick % 25 == 0) feedback_set_rgb_logic(255, 255, keygloveTick % 100 >= 25 ? 0 : 1);
-    else if (feedbackRGBModeBlue  == KG_RGB_MODE_SHORTBLINK && keygloveTick % 10 == 0) feedback_set_rgb_logic(255, 255, keygloveTick %  20 >= 10 ? 0 : 1);
-    else if (feedbackRGBModeBlue  == KG_RGB_MODE_SHORTPULSE && keygloveTick %  5 == 0) feedback_set_rgb_logic(255, 255, keygloveTick %  20 >=  5 ? 0 : 1);
+    // each "keygloveTick" is 10ms, loops at 100 (1 second)
+    // each "RGBTick" is also 10ms, loops at cycle period (can be greater than 1 second, actually 6553 seconds)
+    for (uint8_t i = 0; i < 3; i++) {
+        if (feedbackRGBMode[i] == KG_RGB_MODE_B200_100) {
+            feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 20, 50));
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B200_50) {
+            feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 10, 25));
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_500) {
+            feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 100, 50));
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B3000_1000) {
+            feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 300, 33));
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_100 || feedbackRGBMode[i] == KG_RGB_MODE_B3000_100) {
+            feedback_set_rgb_digital_channel(i, feedbackRGBTick[i] < 10 ? square_wave(feedbackRGBTick[i], 20, 50) : 0);
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_100_2X || feedbackRGBMode[i] == KG_RGB_MODE_B3000_100_2X) {
+            feedback_set_rgb_digital_channel(i, feedbackRGBTick[i] < 30 ? square_wave(feedbackRGBTick[i], 20, 50) : 0);
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_100_3X || feedbackRGBMode[i] == KG_RGB_MODE_B3000_100_3X) {
+            feedback_set_rgb_digital_channel(i, feedbackRGBTick[i] < 50 ? square_wave(feedbackRGBTick[i], 20, 50) : 0);
+
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F200_50) {
+            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 5 ? triangle_wave(feedbackRGBTick[i], 10, 400) : 0);
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F1000_500) {
+            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 50 ? triangle_wave(feedbackRGBTick[i], 100, 400) : 0);
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F1000_1000) {
+            feedback_set_rgb_analog_channel(i, triangle_wave(feedbackRGBTick[i], 200, 400));
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F3000_1000) {
+            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 100 ? triangle_wave(feedbackRGBTick[i], 200, 400) : 0);
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F3000_3000) {
+            feedback_set_rgb_analog_channel(i, triangle_wave(feedbackRGBTick[i], 600, 400));
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F200_100 || feedbackRGBMode[i] == KG_RGB_MODE_F1000_100 || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100) {
+            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 10 ? triangle_wave(feedbackRGBTick[i], 20, 400) : 0);
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F1000_100_2X || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100_2X) {
+            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 30 ? triangle_wave(feedbackRGBTick[i], 20, 400) : 0);
+        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F1000_100_3X || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100_3X) {
+            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 50 ? triangle_wave(feedbackRGBTick[i], 20, 400) : 0);
+        }
+
+        feedbackRGBTick[i]++;
+        if (feedbackRGBTick[i] == feedbackRGBLoop[i]) feedbackRGBTick[i] = 0;
+    }
 }
 
 /* ============================= */
@@ -142,9 +239,9 @@ void update_feedback_rgb() {
  */
 uint16_t kg_cmd_feedback_get_rgb_mode(uint8_t index, uint8_t *mode_red, uint8_t *mode_green, uint8_t *mode_blue) {
     // "index" is currently ignored, as there is only one RGB device in the design
-    *mode_red = feedbackRGBModeRed;
-    *mode_green = feedbackRGBModeGreen;
-    *mode_blue = feedbackRGBModeBlue;
+    *mode_red = feedbackRGBMode[0];
+    *mode_green = feedbackRGBMode[1];
+    *mode_blue = feedbackRGBMode[2];
     return 0; // success
 }
 

@@ -104,4 +104,57 @@ THE SOFTWARE.
 /* ================================ */
 /* ================================ */
 
+// for people who don't want to waste lots of hours: "%" != "mod" ...
+
+/**
+ * @brief Modulo function that correctly handles negative values
+ * @param[in] x Input value
+ * @param[in] m Modulo constant
+ * @return Calculated result on range [0, m-1]
+ */
+int16_t mod(int16_t x, int16_t m) {
+	return ((x) < 0 ? (((x) % m) + m) % m : (x) % m);
+}
+
+/**
+ * @brief Simple 1/0 square wave generator function
+ * @param[in] x Input value
+ * @param[in] period Period of full 1/0 cycle
+ * @param[in] duty Duty cycle between 0 - 100 (%)
+ * @return Output level (1=high, 0=low)
+ */
+uint8_t square_wave(int32_t x, int32_t period, uint8_t duty) {
+	return (mod(x, period) < (period * duty / 100)) ? 1 : 0;
+}
+
+/**
+ * @brief Simple triangle wave generator function
+ * @param[in] x Input value
+ * @param[in] period Period of full cycle
+ * @param[in] amplitude Full amplitude (100 will give range = [-50, +50])
+ * @return Output value
+ *
+ * This wave is aligned to exhibit the following pattern:
+ * - (0,         0)
+ * - (period/4,  amplitude/2)
+ * - (period/2,  0)
+ * - (3period/4, -amplitude/2)
+ * - (period,    0)
+ *
+ * Or in graphscii:
+ *
+ *    |  A
+ *    | / \
+ * ___|/___\_____ (period, 0)
+ *    |     \   /
+ *    |      \ /
+ *    |       V
+ *
+ * It can be shifted in either the X or Y dimension if necessary, but this form
+ * makes it easily useful for a number of different LED fading routines.
+ */
+int16_t triangle_wave(int32_t x, int32_t period, int32_t amplitude) {
+    return abs((amplitude * mod(x - (period >> 2), period) / (period >> 1)) - amplitude) - (amplitude >> 1);
+}
+
 #endif // _SUPPORT_FEEDBACK_H_

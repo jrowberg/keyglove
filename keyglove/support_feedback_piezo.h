@@ -99,6 +99,7 @@ void feedback_set_piezo_mode(feedback_piezo_mode_t mode, uint8_t duration, uint1
 void setup_feedback_piezo() {
     pinMode(KG_PIN_PIEZO, OUTPUT);
     digitalWrite(KG_PIN_PIEZO, LOW);
+    noTone(KG_PIN_PIEZO);
 
     // SELF-TEST
     //feedback_set_piezo_mode(KG_PIEZO_TINYPULSE, 20);

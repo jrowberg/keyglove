@@ -49,23 +49,22 @@ THE SOFTWARE.
 typedef enum {
     KG_BLINK_MODE_OFF = 0,      ///< (0) LED solid off
     KG_BLINK_MODE_SOLID,        ///< (1) LED solid on
-    KG_BLINK_MODE_200_100,      ///< (2) LED blinking with 200ms period, 100ms pulse
-    KG_BLINK_MODE_200_50,       ///< (3) LED blinking with 200ms period, 50ms pulse
-    KG_BLINK_MODE_1000_500,     ///< (4) LED blinking with 1sec period, 500ms pulse
-    KG_BLINK_MODE_1000_100,     ///< (5) LED blinking with 1sec period, 100ms pulse
-    KG_BLINK_MODE_1000_100_2X,  ///< (6) LED blinking with 1sec period, 100ms pulse 2x
-    KG_BLINK_MODE_1000_100_3X,  ///< (7) LED blinking with 1sec period, 100ms pulse 3x
-    KG_BLINK_MODE_3000_1000,    ///< (8) LED blinking with 3sec period, 1sec pulse
-    KG_BLINK_MODE_3000_100,     ///< (9) LED blinking with 3sec period, 100ms pulse
-    KG_BLINK_MODE_3000_100_2X,  ///< (10) LED blinking with 3sec period, 100ms pulse 2x
-    KG_BLINK_MODE_3000_100_3X,  ///< (11) LED blinking with 3sec period, 100ms pulse 3x
+    KG_BLINK_MODE_B200_100,     ///< (2) LED blinking with 200ms period, 100ms pulse
+    KG_BLINK_MODE_B200_50,      ///< (3) LED blinking with 200ms period, 50ms pulse
+    KG_BLINK_MODE_B1000_500,    ///< (4) LED blinking with 1sec period, 500ms pulse
+    KG_BLINK_MODE_B1000_100,    ///< (5) LED blinking with 1sec period, 100ms pulse
+    KG_BLINK_MODE_B1000_100_2X, ///< (6) LED blinking with 1sec period, 100ms pulse 2x
+    KG_BLINK_MODE_B1000_100_3X, ///< (7) LED blinking with 1sec period, 100ms pulse 3x
+    KG_BLINK_MODE_B3000_1000,   ///< (8) LED blinking with 3sec period, 1sec pulse
+    KG_BLINK_MODE_B3000_100,    ///< (9) LED blinking with 3sec period, 100ms pulse
+    KG_BLINK_MODE_B3000_100_2X, ///< (10) LED blinking with 3sec period, 100ms pulse 2x
+    KG_BLINK_MODE_B3000_100_3X, ///< (11) LED blinking with 3sec period, 100ms pulse 3x
     KG_BLINK_MODE_MAX
 } feedback_blink_mode_t;
 
 feedback_blink_mode_t feedbackBlinkMode;    ///< LED blink mode
 uint8_t feedbackBlinkTick;                  ///< LED blink tick reference
 uint8_t feedbackBlinkLoop;                  ///< Tick loop length for LED blink timing
-uint8_t feedbackBlinkMod;                   ///< Modulo calculation for LED blink timing
 
 /**
  * @brief Sets LED feedpack pin logic state
@@ -89,16 +88,19 @@ void feedback_set_blink_mode(feedback_blink_mode_t mode) {
     // logic: mode=0 -> off, mode=5 -> on, else no immediate change
     if (feedbackBlinkMode == KG_BLINK_MODE_OFF) feedback_set_blink_logic(0);
     else if (feedbackBlinkMode == KG_BLINK_MODE_SOLID) feedback_set_blink_logic(1);
-    else if (feedbackBlinkMode == KG_BLINK_MODE_200_100) feedbackBlinkLoop = 4;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_200_50) feedbackBlinkLoop = 4;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_1000_500) feedbackBlinkLoop = 20;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_1000_100) feedbackBlinkLoop = 20;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_1000_100_2X) feedbackBlinkLoop = 20;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_1000_100_3X) feedbackBlinkLoop = 20;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_3000_1000) feedbackBlinkLoop = 60;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_3000_100) feedbackBlinkLoop = 60;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_3000_100_2X) feedbackBlinkLoop = 60;
-    else if (feedbackBlinkMode == KG_BLINK_MODE_3000_100_3X) feedbackBlinkLoop = 60;
+    else if (feedbackBlinkMode == KG_BLINK_MODE_B200_100 ||
+             feedbackBlinkMode == KG_BLINK_MODE_B200_50
+            ) feedbackBlinkLoop = 4;
+    else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_500 ||
+             feedbackBlinkMode == KG_BLINK_MODE_B1000_100 ||
+             feedbackBlinkMode == KG_BLINK_MODE_B1000_100_2X ||
+             feedbackBlinkMode == KG_BLINK_MODE_B1000_100_3X
+            ) feedbackBlinkLoop = 20;
+    else if (feedbackBlinkMode == KG_BLINK_MODE_B3000_1000 ||
+             feedbackBlinkMode == KG_BLINK_MODE_B3000_100 ||
+             feedbackBlinkMode == KG_BLINK_MODE_B3000_100_2X ||
+             feedbackBlinkMode == KG_BLINK_MODE_B3000_100_3X
+            ) feedbackBlinkLoop = 60;
 }
 
 /**
@@ -121,27 +123,44 @@ void update_feedback_blink() {
     // each "keygloveTick" is 10ms, loops at 100 (1 second)
     // each "blinkTick" is 50ms, loops at cycle period (max 12.5 seconds = 250, near 255)
     if (feedbackBlinkLoop && (keygloveTick % 5) == 0) {
-        feedbackBlinkMod = feedbackBlinkTick % feedbackBlinkLoop;
-        if (feedbackBlinkMode == KG_BLINK_MODE_200_100 && feedbackBlinkTick % 2 == 0) {
+        //feedbackBlinkMod = feedbackBlinkTick % feedbackBlinkLoop;
+
+        if (feedbackBlinkMode == KG_BLINK_MODE_B200_100) {
+            feedback_set_blink_logic(square_wave(feedbackBlinkTick, 4, 50));
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B200_50) {
+            feedback_set_blink_logic(square_wave(feedbackBlinkTick, 2, 25));
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_500) {
+            feedback_set_blink_logic(square_wave(feedbackBlinkTick, 20, 50));
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B3000_1000) {
+            feedback_set_blink_logic(square_wave(feedbackBlinkTick, 60, 33));
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_100 || feedbackBlinkMode == KG_BLINK_MODE_B3000_100) {
+            feedback_set_blink_logic(feedbackBlinkTick < 2 ? square_wave(feedbackBlinkTick, 4, 50) : 0);
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_100_2X || feedbackBlinkMode == KG_BLINK_MODE_B3000_100_2X) {
+            feedback_set_blink_logic(feedbackBlinkTick < 6 ? square_wave(feedbackBlinkTick, 4, 50) : 0);
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_100_3X || feedbackBlinkMode == KG_BLINK_MODE_B3000_100_3X) {
+            feedback_set_blink_logic(feedbackBlinkTick < 10 ? square_wave(feedbackBlinkTick, 4, 50) : 0);
+
+        // 41354
+        /*if (feedbackBlinkMode == KG_BLINK_MODE_B200_100 && feedbackBlinkTick % 2 == 0) {
             feedback_set_blink_logic(feedbackBlinkMod >= 2 ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_200_50) {
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B200_50) {
             feedback_set_blink_logic(feedbackBlinkMod >= 1 ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_1000_500 && feedbackBlinkTick % 10 == 0) {
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_500 && feedbackBlinkTick % 10 == 0) {
             feedback_set_blink_logic(feedbackBlinkMod >= 10 ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_1000_100 && feedbackBlinkTick % 2 == 0) {
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_100 && feedbackBlinkTick % 2 == 0) {
             feedback_set_blink_logic(feedbackBlinkMod >= 2 ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_1000_100_2X && feedbackBlinkTick % 2 == 0) {
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_100_2X && feedbackBlinkTick % 2 == 0) {
             feedback_set_blink_logic(((feedbackBlinkMod >= 2 && feedbackBlinkMod < 4) || (feedbackBlinkMod >= 6)) ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_1000_100_3X && feedbackBlinkTick % 2 == 0) {
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B1000_100_3X && feedbackBlinkTick % 2 == 0) {
             feedback_set_blink_logic(((feedbackBlinkMod >= 2 && feedbackBlinkMod < 4) || (feedbackBlinkMod >= 6 && feedbackBlinkMod < 8) || (feedbackBlinkMod >= 10)) ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_3000_1000 && feedbackBlinkTick % 20 == 0) {
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B3000_1000 && feedbackBlinkTick % 20 == 0) {
             feedback_set_blink_logic(feedbackBlinkMod >= 20 ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_3000_100 && feedbackBlinkTick % 2 == 0) {
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B3000_100 && feedbackBlinkTick % 2 == 0) {
             feedback_set_blink_logic(feedbackBlinkMod >= 2 ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_3000_100_2X && feedbackBlinkTick % 2 == 0) {
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B3000_100_2X && feedbackBlinkTick % 2 == 0) {
             feedback_set_blink_logic(((feedbackBlinkMod >= 2 && feedbackBlinkMod < 4) || (feedbackBlinkMod >= 6)) ? 0 : 1);
-        } else if (feedbackBlinkMode == KG_BLINK_MODE_3000_100_3X && feedbackBlinkTick % 2 == 0) {
-            feedback_set_blink_logic(((feedbackBlinkMod >= 2 && feedbackBlinkMod < 4) || (feedbackBlinkMod >= 6 && feedbackBlinkMod < 8) || (feedbackBlinkMod >= 10)) ? 0 : 1);
+        } else if (feedbackBlinkMode == KG_BLINK_MODE_B3000_100_3X && feedbackBlinkTick % 2 == 0) {
+            feedback_set_blink_logic(((feedbackBlinkMod >= 2 && feedbackBlinkMod < 4) || (feedbackBlinkMod >= 6 && feedbackBlinkMod < 8) || (feedbackBlinkMod >= 10)) ? 0 : 1);*/
         }
         feedbackBlinkTick++;
         if (feedbackBlinkTick == feedbackBlinkLoop) feedbackBlinkTick = 0;
