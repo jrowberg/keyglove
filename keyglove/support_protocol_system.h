@@ -1,5 +1,5 @@
 // Keyglove controller source code - KGAPI "system" protocol command parser
-// 2014-07-27 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-08-25 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
 /* ============================================
@@ -30,7 +30,7 @@ THE SOFTWARE.
  * @file support_protocol_system.h
  * @brief KGAPI "system" protocol command parser
  * @author Jeff Rowberg
- * @date 2014-07-27
+ * @date 2014-08-25
  *
  * This file implements subsystem-specific command processing functions for the
  * "system" part of the KGAPI protocol.
@@ -49,6 +49,8 @@ THE SOFTWARE.
  * @see KGAPI command: kg_cmd_system_ping()
  * @see KGAPI command: kg_cmd_system_reset()
  * @see KGAPI command: kg_cmd_system_get_info()
+ * @see KGAPI command: kg_cmd_system_set_timer()
+ * @see KGAPI command: kg_cmd_system_get_battery_status()
  */
 uint8_t process_protocol_command_system(uint8_t *rxPacket) {
     // check for valid command IDs
@@ -113,6 +115,44 @@ uint8_t process_protocol_command_system(uint8_t *rxPacket) {
         
                 // send response
                 send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 7, rxPacket[2], rxPacket[3], payload);
+            }
+            break;
+        
+        case KG_PACKET_ID_CMD_SYSTEM_SET_TIMER: // 0x04
+            // system_set_timer(uint8_t handle, uint16_t interval, uint8_t oneshot)(uint16_t result)
+            // parameters = 4 bytes
+            if (rxPacket[1] != 4) {
+                // incorrect parameter length
+                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
+            } else {
+                // run command
+                uint16_t result = kg_cmd_system_set_timer(rxPacket[4], rxPacket[5] | (rxPacket[6] << 8), rxPacket[7]);
+        
+                // build response
+                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
+        
+                // send response
+                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
+            }
+            break;
+        
+        case KG_PACKET_ID_CMD_SYSTEM_GET_BATTERY_STATUS: // 0x05
+            // system_get_battery_status()(uint8_t status, uint8_t level)
+            // parameters = 0 bytes
+            if (rxPacket[1] != 0) {
+                // incorrect parameter length
+                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
+            } else {
+                // run command
+                uint8_t status;
+                uint8_t level;
+                uint16_t result = kg_cmd_system_get_battery_status(&status, &level);
+        
+                // build response
+                uint8_t payload[2] = { status, level };
+        
+                // send response
+                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
             }
             break;
         

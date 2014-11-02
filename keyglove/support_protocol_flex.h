@@ -1,5 +1,5 @@
 // Keyglove controller source code - KGAPI "flex" protocol command parser
-// 2014-07-27 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-08-25 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
 /* ============================================
@@ -30,7 +30,7 @@ THE SOFTWARE.
  * @file support_protocol_flex.h
  * @brief KGAPI "flex" protocol command parser
  * @author Jeff Rowberg
- * @date 2014-07-27
+ * @date 2014-08-25
  *
  * This file implements subsystem-specific command processing functions for the
  * "flex" part of the KGAPI protocol.
