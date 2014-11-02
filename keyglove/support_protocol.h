@@ -97,10 +97,14 @@ THE SOFTWARE.
 #define KG_PACKET_ID_CMD_SYSTEM_PING                        0x01
 #define KG_PACKET_ID_CMD_SYSTEM_RESET                       0x02
 #define KG_PACKET_ID_CMD_SYSTEM_GET_INFO                    0x03
+#define KG_PACKET_ID_CMD_SYSTEM_SET_TIMER                   0x04
+#define KG_PACKET_ID_CMD_SYSTEM_GET_BATTERY_STATUS          0x05
 // -- command/event split --
 #define KG_PACKET_ID_EVT_SYSTEM_BOOT                        0x01
 #define KG_PACKET_ID_EVT_SYSTEM_READY                       0x02
 #define KG_PACKET_ID_EVT_SYSTEM_ERROR                       0x03
+#define KG_PACKET_ID_EVT_SYSTEM_TIMER_TICK                  0x04
+#define KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS              0x05
 
 /* ================================ */
 /* KGAPI COMMAND/EVENT DECLARATIONS */
@@ -109,10 +113,14 @@ THE SOFTWARE.
 /* 0x01 */ uint16_t kg_cmd_system_ping(uint32_t *runtime);
 /* 0x02 */ uint16_t kg_cmd_system_reset(uint8_t type);
 /* 0x03 */ uint16_t kg_cmd_system_get_info(uint8_t *major, uint8_t *minor, uint8_t *patch, uint32_t *timestamp);
+/* 0x04 */ uint16_t kg_cmd_system_set_timer(uint8_t handle, uint16_t interval, uint8_t oneshot);
+/* 0x05 */ uint16_t kg_cmd_system_get_battery_status(uint8_t *status, uint8_t *level);
 // -- command/event split --
 /* 0x01 */ uint8_t (*kg_evt_system_boot)(uint8_t major, uint8_t minor, uint8_t patch, uint32_t timestamp);
 /* 0x02 */ uint8_t (*kg_evt_system_ready)();
 /* 0x03 */ uint8_t (*kg_evt_system_error)(uint16_t code);
+/* 0x04 */ uint8_t (*kg_evt_system_timer_tick)(uint8_t handle, uint32_t seconds, uint8_t subticks);
+/* 0x05 */ uint8_t (*kg_evt_system_battery_status)(uint8_t status, uint8_t level);
 
 #define KG_SYSTEM_RESET_TYPE_NORMAL                         0x01
 #define KG_SYSTEM_RESET_TYPE_KGONLY                         0x02
@@ -534,7 +542,7 @@ uint16_t kg_cmd_system_ping(uint32_t *runtime) {
 uint16_t kg_cmd_system_reset(uint8_t type) {
     // validate type
     if (type < 1 || type > 2) {
-        return 0x0001; // 0x0001 result code = parameter(s) out of range
+        return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
     }
 
     // send response
@@ -565,6 +573,48 @@ uint16_t kg_cmd_system_get_info(uint8_t *major, uint8_t *minor, uint8_t *patch, 
     *minor = KG_FIRMWARE_VERSION_MINOR;
     *patch = KG_FIRMWARE_VERSION_PATCH;
     *timestamp = KG_FIRMWARE_BUILD_TIMESTAMP;
+    return 0; // success
+}
+
+/**
+ * @brief Set a timer interval to trigger future behavior
+ * @param[in] handle Timer handle (0-7)
+ * @param[in] interval Interval (10ms units)
+ * @param[in] oneshot Repeating (0) or one-shot (1)
+ * @return Result code (0=success)
+ */
+uint16_t kg_cmd_system_set_timer(uint8_t handle, uint16_t interval, uint8_t oneshot) {
+    if (handle > 7) {
+        return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
+    }
+    if (interval == 0) {
+        // stop this timer
+        keygloveSoftTimers &= ~(1 << handle);
+    } else {
+        // schedule/reschedule this timer
+        keygloveSoftTimers |= (1 << handle);
+        if (oneshot) keygloveSoftTimersRepeat &= ~(1 << handle);
+        else keygloveSoftTimersRepeat |= (1 << handle);
+        keygloveSoftTimerInterval[handle] = interval;
+        keygloveSoftTimerSec[handle] = keygloveTock + (interval / 100);
+        keygloveSoftTimer10ms[handle] = keygloveTick + (interval % 100);
+        if (keygloveSoftTimer10ms[handle] > 99) {
+            keygloveSoftTimer10ms[handle] -= 100;
+            keygloveSoftTimerSec[handle]++;
+        }
+    }
+    return 0; // success
+}
+
+/**
+ * @brief Get battery status
+ * @param[out] status Battery status
+ * @param[out] level Charge level (0-100)
+ * @return Result code (0=success)
+ */
+uint16_t kg_cmd_system_get_battery_status(uint8_t *status, uint8_t *level) {
+    *status = keygloveBatteryStatus;
+    *level = keygloveBatteryLevel;
     return 0; // success
 }
 
