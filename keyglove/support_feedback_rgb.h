@@ -264,8 +264,8 @@ uint16_t kg_cmd_feedback_set_rgb_mode(uint8_t index, uint8_t mode_red, uint8_t m
         if (!inBinPacket) {
             uint8_t payload[4] = { index, mode_red, mode_green, mode_blue };
             skipPacket = 0;
-            if (kg_evt_feedback_rgb_mode) skipPacket = kg_evt_feedback_rgb_mode(index, mode_red, mode_green, mode_blue);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 4, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_RGB_MODE, payload);
+            if (kg_evt_feedback_rgb_mode != 0) { skipPacket = kg_evt_feedback_rgb_mode(index, mode_red, mode_green, mode_blue); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 4, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_RGB_MODE, payload); }
         }
     }
     return 0; // success

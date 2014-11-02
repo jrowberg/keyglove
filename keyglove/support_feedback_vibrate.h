@@ -144,8 +144,8 @@ uint16_t kg_cmd_feedback_set_vibrate_mode(uint8_t index, uint8_t mode, uint8_t d
         if (!inBinPacket) {
             uint8_t payload[3] = { index, mode, duration };
             skipPacket = 0;
-            if (kg_evt_feedback_piezo_mode) skipPacket = kg_evt_feedback_vibrate_mode(index, mode, duration);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 3, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_PIEZO_MODE, payload);
+            if (kg_evt_feedback_piezo_mode != 0) { skipPacket = kg_evt_feedback_vibrate_mode(index, mode, duration); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 3, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_PIEZO_MODE, payload); }
         }
     }
     return 0; // success

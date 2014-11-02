@@ -207,8 +207,8 @@ void protocol_parse(uint8_t inputByte) {
             // this should NEVER happen, but if it does, I want to know
             uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
             skipPacket = 0;
-            if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+            if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
             return;
         }
     }
@@ -224,8 +224,8 @@ void protocol_parse(uint8_t inputByte) {
             // error (data payload too long)
             uint8_t payload[2] = { KG_PROTOCOL_ERROR_BAD_LENGTH, 0x00 };
             skipPacket = 0;
-            if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(payload[0]);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+            if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(payload[0]); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
             inBinPacket = false;
             rxPacketLength = 0;
         } else {
@@ -301,8 +301,8 @@ void protocol_parse(uint8_t inputByte) {
                     if (protocol_error) {
                         uint8_t payload[2] = { protocol_error, 0x00 };
                         skipPacket = 0;
-                        if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(payload[0]);
-                        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+                        if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(payload[0]); }
+                        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
                     }
                 }
             }
@@ -350,8 +350,8 @@ uint8_t check_incoming_protocol_data() {
         // error (data payload too long)
         uint8_t payload[2] = { KG_PROTOCOL_ERROR_PACKET_TIMEOUT, 0x00 };
         skipPacket = 0;
-        if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(payload[0]);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+        if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(payload[0]); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
         inBinPacket = false;
         rxPacketLength = 0;
     }

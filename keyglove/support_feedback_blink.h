@@ -196,8 +196,8 @@ uint16_t kg_cmd_feedback_set_blink_mode(uint8_t mode) {
         if (!inBinPacket) {
             uint8_t payload[1] = { mode };
             skipPacket = 0;
-            if (kg_evt_feedback_blink_mode) skipPacket = kg_evt_feedback_blink_mode(mode);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 1, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_BLINK_MODE, payload);
+            if (kg_evt_feedback_blink_mode != 0) { skipPacket = kg_evt_feedback_blink_mode(mode); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 1, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_BLINK_MODE, payload); }
         }
     }
     return 0; // success

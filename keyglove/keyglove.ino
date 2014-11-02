@@ -210,8 +210,8 @@ void setup() {
         (KG_FIRMWARE_BUILD_TIMESTAMP >> 24) & 0xFF
     };
     skipPacket = 0;
-    if (kg_evt_system_boot) skipPacket = kg_evt_system_boot(KG_FIRMWARE_VERSION_MAJOR, KG_FIRMWARE_VERSION_MINOR, KG_FIRMWARE_VERSION_PATCH, KG_FIRMWARE_BUILD_TIMESTAMP);
-    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 7, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BOOT, payload);
+    if (kg_evt_system_boot != 0) { skipPacket = kg_evt_system_boot(KG_FIRMWARE_VERSION_MAJOR, KG_FIRMWARE_VERSION_MINOR, KG_FIRMWARE_VERSION_PATCH, KG_FIRMWARE_BUILD_TIMESTAMP); }
+    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 7, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BOOT, payload); }
 
     // CORE TOUCH SENSOR LOGIC
     setup_touch();
@@ -250,8 +250,8 @@ void setup() {
 
     // send system_ready event
     skipPacket = 0;
-    if (kg_evt_system_ready) skipPacket = kg_evt_system_ready();
-    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_READY, 0);
+    if (kg_evt_system_ready != 0) { skipPacket = kg_evt_system_ready(); }
+    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_READY, 0); }
 }
 
 
@@ -325,8 +325,8 @@ void loop() {
                     keygloveBatteryLevel
                 };
                 skipPacket = 0;
-                if (kg_evt_system_battery_status) skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel);
-                if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload);
+                if (kg_evt_system_battery_status != 0) { skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel); }
+                if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload); }
             }
             */
         }
@@ -357,8 +357,8 @@ void loop() {
                         keygloveTick
                     };
                     skipPacket = 0;
-                    if (kg_evt_system_timer_tick) skipPacket = kg_evt_system_timer_tick(handle, keygloveTock, keygloveTick);
-                    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 6, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_TIMER_TICK, payload);
+                    if (kg_evt_system_timer_tick != 0) { skipPacket = kg_evt_system_timer_tick(handle, keygloveTock, keygloveTick); }
+                    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 6, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_TIMER_TICK, payload); }
                 }
             }
         }
@@ -384,8 +384,8 @@ void loop() {
             keygloveBatteryLevel
         };
         skipPacket = 0;
-        if (kg_evt_system_battery_status) skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload);
+        if (kg_evt_system_battery_status != 0) { skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload); }
     }
     */
     

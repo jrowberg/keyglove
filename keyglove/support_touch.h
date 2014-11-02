@@ -127,8 +127,8 @@ void update_touch() {
 
         // send event
         skipPacket = 0;
-        if (kg_evt_touch_status) skipPacket = kg_evt_touch_status(payload[0], payload + 1);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, sizeof(payload), KG_PACKET_CLASS_TOUCH, KG_PACKET_ID_EVT_TOUCH_STATUS, payload);
+        if (kg_evt_touch_status != 0) { skipPacket = kg_evt_touch_status(payload[0], payload + 1); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, sizeof(payload), KG_PACKET_CLASS_TOUCH, KG_PACKET_ID_EVT_TOUCH_STATUS, payload); }
     }
 
     // set "verify" readings to match "now" readings (debouncing)

@@ -544,8 +544,8 @@ uint8_t bluetooth_check_incoming_protocol_data() {
                     
                     // send kg_evt_bluetooth_ready()
                     skipPacket = 0;
-                    if (kg_evt_bluetooth_ready) skipPacket = kg_evt_bluetooth_ready();
-                    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_READY, 0);
+                    if (kg_evt_bluetooth_ready != 0) { skipPacket = kg_evt_bluetooth_ready(); }
+                    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_READY, 0); }
                 }
                 iwrap_state = IWRAP_STATE_IDLE;
             } else if (iwrap_state == IWRAP_STATE_PENDING_CALL && !iwrap_pending_calls) {
@@ -556,8 +556,8 @@ uint8_t bluetooth_check_incoming_protocol_data() {
                 // send kg_evt_bluetooth_pairings_cleared()
                 if (!inBinPacket) {
                     skipPacket = 0;
-                    if (kg_evt_bluetooth_pairings_cleared) skipPacket = kg_evt_bluetooth_pairings_cleared();
-                    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_PAIRINGS_CLEARED, 0);
+                    if (kg_evt_bluetooth_pairings_cleared != 0) { skipPacket = kg_evt_bluetooth_pairings_cleared(); }
+                    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 0, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_PAIRINGS_CLEARED, 0); }
                 }
                 iwrap_state = IWRAP_STATE_IDLE;
             }
@@ -576,8 +576,8 @@ uint8_t bluetooth_check_incoming_protocol_data() {
                     // this should NEVER happen, but if it does, I want to know
                     uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
                     skipPacket = 0;
-                    if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-                    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+                    if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+                    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
                     return 0xFF;
                 }
 
@@ -773,15 +773,15 @@ void my_iwrap_rsp_call(uint8_t link_id) {
         
         // send kg_evt_bluetooth_connection_status(...)
         skipPacket = 0;
-        if (kg_evt_bluetooth_connection_status) skipPacket = kg_evt_bluetooth_connection_status(payload[0], payload + 1, payload[7], payload[8], payload[9]);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 10, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_STATUS, payload);
+        if (kg_evt_bluetooth_connection_status != 0) { skipPacket = kg_evt_bluetooth_connection_status(payload[0], payload + 1, payload[7], payload[8], payload[9]); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 10, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_STATUS, payload); }
         bluetoothPendingConnectionStatus |= (1 << link_id);
     } else {
         // this should NEVER happen, but if it does, I want to know
         uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
         skipPacket = 0;
-        if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+        if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
     }
 }
 
@@ -816,8 +816,8 @@ void my_iwrap_rsp_inquiry_result(const iwrap_address_t *mac, uint32_t class_of_d
 
     // send kg_evt_bluetooth_inquiry_response(...) event
     skipPacket = 0;
-    if (kg_evt_bluetooth_inquiry_response) skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], 0);
-    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 13, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE, payload);
+    if (kg_evt_bluetooth_inquiry_response != 0) { skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], 0); }
+    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 13, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE, payload); }
 }
 
 /**
@@ -868,8 +868,8 @@ void my_iwrap_rsp_pair(const iwrap_address_t *mac, uint8_t result) {
 
         // send event
         skipPacket = 0;
-        if (kg_evt_bluetooth_pairing_failed) skipPacket = kg_evt_bluetooth_pairing_failed(payload);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 6, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_PAIRING_FAILED, payload);
+        if (kg_evt_bluetooth_pairing_failed != 0) { skipPacket = kg_evt_bluetooth_pairing_failed(payload); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 6, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_PAIRING_FAILED, payload); }
     } else {
         // zero = "OK" result, send bluetooth_pairing_status() event
         
@@ -887,8 +887,8 @@ void my_iwrap_rsp_pair(const iwrap_address_t *mac, uint8_t result) {
                 // this should NEVER happen, but if it does, I want to know
                 uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
                 skipPacket = 0;
-                if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-                if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+                if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+                if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
                 return;
             }
         }
@@ -924,14 +924,14 @@ void my_iwrap_rsp_pair(const iwrap_address_t *mac, uint8_t result) {
             
             // send event
             skipPacket = 0;
-            if (kg_evt_bluetooth_pairing_status) skipPacket = kg_evt_bluetooth_pairing_status(payload[0], payload + 1, payload[7], payload[8], payload[9], payload[10], payload + 11);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 11 + payload[10], KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_PAIRING_STATUS, payload);
+            if (kg_evt_bluetooth_pairing_status != 0) { skipPacket = kg_evt_bluetooth_pairing_status(payload[0], payload + 1, payload[7], payload[8], payload[9], payload[10], payload + 11); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 11 + payload[10], KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_PAIRING_STATUS, payload); }
         } else {
             // this should NEVER happen, but if it does, I want to know
             uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
             skipPacket = 0;
-            if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+            if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
             return;
         }
     }
@@ -967,8 +967,8 @@ void my_iwrap_rsp_set(uint8_t category, const char *option, const char *value) {
                     // this should NEVER happen, but if it does, I want to know
                     uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
                     skipPacket = 0;
-                    if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-                    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+                    if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+                    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
                     return;
                 }
             }
@@ -993,8 +993,8 @@ void my_iwrap_rsp_set(uint8_t category, const char *option, const char *value) {
                 // this should NEVER happen, but if it does, I want to know
                 uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
                 skipPacket = 0;
-                if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-                if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+                if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+                if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
                 return;
             }
         }
@@ -1045,8 +1045,8 @@ void my_iwrap_evt_inquiry_extended(const iwrap_address_t *mac, uint8_t length, c
 
     // send kg_evt_bluetooth_inquiry_response(...) event
     skipPacket = 0;
-    if (kg_evt_bluetooth_inquiry_response) skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], 0);
-    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 13, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE, payload);
+    if (kg_evt_bluetooth_inquiry_response != 0) { skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], 0); }
+    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 13, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE, payload); }
 }
 
 /**
@@ -1074,8 +1074,8 @@ void my_iwrap_evt_inquiry_partial(const iwrap_address_t *mac, uint32_t class_of_
 
     // send kg_evt_bluetooth_inquiry_response(...) event
     skipPacket = 0;
-    if (kg_evt_bluetooth_inquiry_response) skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], 0);
-    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 13, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE, payload);
+    if (kg_evt_bluetooth_inquiry_response != 0) { skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], 0); }
+    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 13, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE, payload); }
 }
 
 /**
@@ -1104,8 +1104,8 @@ void my_iwrap_evt_name(const iwrap_address_t *mac, const char *friendly_name) {
 
     // send kg_evt_bluetooth_inquiry_response(...) event
     skipPacket = 0;
-    if (kg_evt_bluetooth_inquiry_response) skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], name_len ? payload + 13 : 0);
-    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 13 + name_len, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE, payload);
+    if (kg_evt_bluetooth_inquiry_response != 0) { skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], name_len ? payload + 13 : 0); }
+    if (skipPacket == 0) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 13 + name_len, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE, payload);
 }
 
 /*x*
@@ -1141,8 +1141,8 @@ void my_iwrap_evt_no_carrier(uint8_t link_id, uint16_t error_code, const char *m
     // send kg_evt_bluetooth_connection_closed()
     skipPacket = 0;
     uint8_t payload[3] = { link_id, error_code & 0xFF, error_code >> 8 };
-    if (kg_evt_bluetooth_connection_closed) skipPacket = kg_evt_bluetooth_connection_closed(link_id, error_code);
-    if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 3, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_CLOSED, payload);
+    if (kg_evt_bluetooth_connection_closed != 0) { skipPacket = kg_evt_bluetooth_connection_closed(link_id, error_code); }
+    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 3, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_CLOSED, payload); }
 }
 
 /**
@@ -1193,8 +1193,8 @@ uint8_t find_pairing_from_mac(const iwrap_address_t *mac) {
             // this should NEVER happen, but if it does, I want to know
             uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
             skipPacket = 0;
-            if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+            if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
             return 0xFF;
         }
     }
@@ -1224,8 +1224,8 @@ uint8_t find_pairing_from_link_id(uint8_t link_id) {
             // this should NEVER happen, but if it does, I want to know
             uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
             skipPacket = 0;
-            if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+            if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
             return 0xFF;
         }
     }
@@ -1250,8 +1250,8 @@ void add_mapped_connection(uint8_t link_id, const iwrap_address_t *mac, const ch
         // this should NEVER happen, but if it does, I want to know
         uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
         skipPacket = 0;
-        if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+        if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
         return;
     }
 
@@ -1330,8 +1330,8 @@ void add_mapped_connection(uint8_t link_id, const iwrap_address_t *mac, const ch
     if (bluetoothPendingConnectionStatus & (1 << link_id)) {
         // send kg_evt_bluetooth_connection_status(...)
         skipPacket = 0;
-        if (kg_evt_bluetooth_connection_status) skipPacket = kg_evt_bluetooth_connection_status(payload[0], payload + 1, payload[7], payload[8], payload[9]);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 10, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_STATUS, payload);
+        if (kg_evt_bluetooth_connection_status != 0) { skipPacket = kg_evt_bluetooth_connection_status(payload[0], payload + 1, payload[7], payload[8], payload[9]); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 10, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_STATUS, payload); }
         bluetoothPendingConnectionStatus &= ~(1 << link_id);
     }
 }
@@ -1456,8 +1456,8 @@ uint8_t remove_mapped_connection(uint8_t link_id) {
             // this should NEVER happen, but if it does, I want to know
             uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
             skipPacket = 0;
-            if (kg_evt_protocol_error) skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload);
+            if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
             return 0xFF;
         }
     }
@@ -1610,8 +1610,8 @@ uint16_t kg_cmd_bluetooth_set_mode(uint8_t mode) {
             if (!inBinPacket) {
                 uint8_t payload[1] = { bluetoothMode };
                 skipPacket = 0;
-                if (kg_evt_bluetooth_mode) skipPacket = kg_evt_bluetooth_mode(payload[0]);
-                if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 1, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_MODE, payload);
+                if (kg_evt_bluetooth_mode != 0) { skipPacket = kg_evt_bluetooth_mode(payload[0]); }
+                if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 1, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_MODE, payload); }
             }
         } else {
             return KG_BLUETOOTH_ERROR_INTERFACE_NOT_READY;
@@ -1698,8 +1698,8 @@ uint16_t kg_cmd_bluetooth_get_pairings(uint8_t *count) {
 
                 // queue event
                 skipPacket = 0;
-                if (kg_evt_bluetooth_pairing_status) skipPacket = kg_evt_bluetooth_pairing_status(payload[0], payload + 1, payload[7], payload[8], payload[9], payload[10], payload + 11);
-                if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 11 + payload[10], KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_PAIRING_STATUS, payload);
+                if (kg_evt_bluetooth_pairing_status != 0) { skipPacket = kg_evt_bluetooth_pairing_status(payload[0], payload + 1, payload[7], payload[8], payload[9], payload[10], payload + 11); }
+                if (skipPacket == 0) { queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 11 + payload[10], KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_PAIRING_STATUS, payload); }
             } else {
                 // this should NEVER happen, but if it does, I want to know
                 return KG_PROTOCOL_ERROR_NULL_POINTER;
@@ -1881,8 +1881,8 @@ uint16_t kg_cmd_bluetooth_get_connections(uint8_t *count) {
             
             // queue kg_evt_bluetooth_connection_status(...)
             skipPacket = 0;
-            if (kg_evt_bluetooth_connection_status) skipPacket = kg_evt_bluetooth_connection_status(payload[0], payload + 1, payload[7], payload[8], payload[9]);
-            if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 10, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_STATUS, payload);
+            if (kg_evt_bluetooth_connection_status != 0) { skipPacket = kg_evt_bluetooth_connection_status(payload[0], payload + 1, payload[7], payload[8], payload[9]); }
+            if (skipPacket == 0) { queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 10, KG_PACKET_CLASS_BLUETOOTH, KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_STATUS, payload); }
 
             activeLinks >>= 1;
             curId++;

@@ -180,8 +180,8 @@ void update_motion_mpu6050_hand() {
         payload[13] = gv.z & 0xFF;
         payload[14] = gv.z >> 8;
         skipPacket = 0;
-        if (kg_evt_motion_data) skipPacket = kg_evt_motion_data(payload[0], payload[1], payload[2], payload + 3);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, sizeof(payload), KG_PACKET_CLASS_MOTION, KG_PACKET_ID_EVT_MOTION_DATA, payload);
+        if (kg_evt_motion_data != 0) { skipPacket = kg_evt_motion_data(payload[0], payload[1], payload[2], payload + 3); }
+        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, sizeof(payload), KG_PACKET_CLASS_MOTION, KG_PACKET_ID_EVT_MOTION_DATA, payload); }
     }
     if (mpuInt & 0x20) {
         send_keyglove_log(KG_LOG_LEVEL_VERBOSE, 10, F("MOTION INT"));

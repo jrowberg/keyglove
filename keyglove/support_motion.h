@@ -117,8 +117,8 @@ uint16_t kg_cmd_motion_set_mode(uint8_t index, uint8_t mode) {
         if (!inBinPacket) {
             uint8_t payload[2] = { index, mode };
             skipPacket = 0;
-            if (kg_evt_motion_mode) skipPacket = kg_evt_motion_mode(index, mode);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_MOTION, KG_PACKET_ID_EVT_MOTION_MODE, payload);
+            if (kg_evt_motion_mode != 0) { skipPacket = kg_evt_motion_mode(index, mode); }
+            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_MOTION, KG_PACKET_ID_EVT_MOTION_MODE, payload); }
         }
     }
     return 0; // success
