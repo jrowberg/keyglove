@@ -64,10 +64,42 @@ uint8_t touch_data_xor[KG_BASE_COMBINATION_BYTES];      ///< Container for XOR'd
  */
 uint8_t my_kg_evt_system_ready() {
     // start 3-second LED pulse after boot process finishes
-    kg_cmd_feedback_set_blink_mode(KG_BLINK_MODE_3000_100);
+    kg_cmd_feedback_set_blink_mode(KG_BLINK_MODE_B3000_100);
+
+    // start RGB (red) LED fade cycle
+    //kg_cmd_feedback_set_rgb_mode(0, KG_RGB_MODE_F3000_3000, KG_RGB_MODE_F3000_3000, KG_RGB_MODE_F3000_3000);
+
+    // start 10-second repeating timer
+    //kg_cmd_system_set_timer(0, 1000, 0);
 
     // allow KGAPI event packet transmission
     return 0;
+}
+
+uint8_t my_kg_evt_system_timer_tick(uint8_t handle, uint32_t seconds, uint8_t subticks) {
+    // read raw battery voltage
+    int16_t rawBat = analogRead(0);
+    uint8_t payload[2] = { rawBat & 0xFF, (rawBat >> 8) & 0xFF };
+    send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, 0xFE, 0xFE, payload);
+
+    // prevent KGAPI event packet transmission
+    return 1;
+}
+
+/**
+ * @brief Indicates that a motion sensor's measurement data has been updated
+ * @param[in] index Relevant motion sensor
+ * @param[in] flags Flags indicating which measurement data is represented
+ * @param[in] data_len Length in bytes of data_data buffer
+ * @param[in] data_data New measurement data
+ * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
+ */
+uint8_t my_kg_evt_motion_data(uint8_t index, uint8_t flags, uint8_t data_len, uint8_t *data_data) {
+    // TODO: special event handler code here
+    // ...
+
+    // prevent KGAPI event packet transmission
+    return 1;
 }
 
 /**
@@ -141,6 +173,8 @@ uint8_t my_kg_evt_touch_status(uint8_t status_len, uint8_t *status_data) {
 void setup_application() {
     // assign any events implemented above here so they will take effect
     kg_evt_system_ready = my_kg_evt_system_ready;
+    kg_evt_system_timer_tick = my_kg_evt_system_timer_tick;
+    kg_evt_motion_data = my_kg_evt_motion_data;
     kg_evt_bluetooth_ready = my_kg_evt_bluetooth_ready;
     kg_evt_touch_status = my_kg_evt_touch_status;
 }
