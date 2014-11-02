@@ -1,4 +1,4 @@
-// Keyglove controller source code - Host MCU definitions specific to Teensy++ v2.0
+// Keyglove controller source code - Host MCU definitions specific to Teensy++ v2.0 / Touch:37
 // 7/4/2014 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
@@ -26,8 +26,8 @@ THE SOFTWARE.
 */
 
 /**
- * @file support_board_teensypp2.h
- * @brief Host MCU definitions specific to Teensy++ v2.0
+ * @file support_board_teensypp2_t37.h
+ * @brief Host MCU definitions specific to Teensy++ v2.0 / Touch:37
  * @author Jeff Rowberg
  * @date 2014-07-04
  *
@@ -68,11 +68,11 @@ Teensy++ 2.0 Pin arrangement:
 This is a grand total of 46 usable I/O pins.
 
 - We use SCL (0) and SDA (1) for I2C communication, leaving 44 usable pins.
-- We use RXD (2) and TXD (2) for Bluetooth UART communication, leaving 42 usable pins.
+- We use RXD (2) and TXD (3) for Bluetooth UART communication, leaving 42 usable pins.
 - We use INT4 (36) and INT5 (37) for accel and gyro interrupts, leaving 40 usable pins.
 - We use INT7 (19) for Bluetooth Link interrupts, leaving 39 usable pins.
 - We use INT6 (18) for DTR control, leaving 38 usable pins.
-- We use LED for BLINK feedback, leaving 37 usable pins.
+- We use LED (6) for BLINK feedback, leaving 37 usable pins.
 - ...and we have a total of 37 sensors. Yay!
 
 Pin Change interrupts (not currently used, could help with sleep modes):
@@ -94,12 +94,12 @@ and so on. Start with pin 26 (B6)
 
  */
 
-#ifndef _SUPPORT_BOARD_TEENSYPP2_H_
-#define _SUPPORT_BOARD_TEENSYPP2_H_
+#ifndef _SUPPORT_BOARD_TEENSYPP2_T37_H_
+#define _SUPPORT_BOARD_TEENSYPP2_T37_H_
 
 // ======================== BEGIN PIN DEFINITIONS ========================
 
-#define KEYGLOVE_KIT_BUG_PORTA_REVERSED     ///< Software fix for internal Port A pin position bug in Eagle package
+//#define KEYGLOVE_KIT_BUG_PORTA_REVERSED     ///< Software fix for internal Port A pin position bug in Eagle package
 
 #define USBSerial Serial                    ///< USB serial interface name
 #define BT2Serial Serial1                   ///< Bluetooth module UART interface name
@@ -107,45 +107,17 @@ and so on. Start with pin 26 (B6)
 #define KG_HOSTIF_USB_SERIAL_BAUD 115200    ///< USB serial interface baud rate
 #define KG_HOSTIF_BT2_SERIAL_BAUD 125000    ///< Bluetooth module UART interface baud rate
 
-#define KG_INTERRUPT_PIN_ACCEL  36  ///< PE4 (internal/tiny, right)
-#define KG_INTERRUPT_NUM_ACCEL  4   ///< Teensy++ interrupt #4
+#define KG_INTERRUPT_PIN_MPU6050_HAND 36    ///< PE4 (internal/tiny, right)
+#define KG_INTERRUPT_NUM_MPU6050_HAND 4     ///< Teensy++ interrupt #4
 
-#define KG_INTERRUPT_PIN_GYRO   37  ///< PE5 (internal/tiny, left)
-#define KG_INTERRUPT_NUM_GYRO   5   ///< Teensy++ interrupt #5
-
-// FUSION and ACCEL are never both used at the same time
-#define KG_INTERRUPT_PIN_FUSION 36  ///< PE4 (internal/tiny, right)
-#define KG_INTERRUPT_NUM_FUSION 4   ///< Teensy++ interrupt #4
-
-#define KG_PIN_BLINK            6   ///< PD6
-
-#define KG_PIN_BT_RTS           19  ///< PE7
-#define KG_INTERRUPT_NUM_BT_RTS 7   ///< Teensy++ interrupt #7
-#define KG_PIN_BT_CTS           18  ///< PE6
-
-// ITEMS BELOW THIS CANNOT BE USED SIMULTANEOUSLY WITH ALL ABOVE FEATURES
-
-// direct I/O feedback pins (kills 3 thumb sensors and Bluetooth flow control)
-#define KG_PIN_PIEZO        19  ///< PE7
-#define KG_PIN_VIBRATE      18  ///< PE6
-#define KG_PIN_RGB_RED      21  ///< PB1
-#define KG_PIN_RGB_GREEN    22  ///< PB2
-#define KG_PIN_RGB_BLUE     24  ///< PB4
-
-// PS/2 clock/data pins for keyboard (kills direct I/O piezo/vibe or Bluetooth flow control)
-#define KG_PIN_KB_CLOCK     19  ///< PE7
-#define KG_PIN_KB_DATA      18  ///< PE6
-
-// PS/2 clock/data pins for mouse (kills Bluetooth UART connection)
-#define KG_PIN_MOUSE_CLOCK  3   ///< PD3
-#define KG_PIN_MOUSE_DATA   2   ///< PD2
+#define KG_PIN_BLINK                6       ///< PD6
 
 // ======================== END PIN DEFINITIONS ========================
 
 // sensor count and base combination count
-#define KG_TOTAL_SENSORS 37             ///< Total sensor count with most efficient pin configuration
-#define KG_BASE_COMBINATIONS 60         ///< Number of physically reasonable 1-to-1 touch combinations
-#define KG_BASE_COMBINATION_BYTES 8     ///< Number of bytes required to store all touch status bits
+#define KG_TOTAL_SENSORS 37                 ///< Total sensor count with most efficient pin configuration
+#define KG_BASE_COMBINATIONS 60             ///< Number of physically reasonable 1-to-1 touch combinations
+#define KG_BASE_COMBINATION_BYTES 8         ///< Number of bytes required to store all touch status bits
 
 // NOTE: KG_BASE_COMBINATIONS seems like it would be very high, but there are
 // physical and practical limitations that make this number much smaller
@@ -241,7 +213,7 @@ ISR(TIMER1_COMPA_vect) {
 }
 
 /**
- * @brief Initialize Teensy++ v2.0 board hardware/registers
+ * @brief Initialize Teensy++ v2.0 board hardware/registers (37-sensor arrangement)
  *
  * This function sets the required hardware timer for a 100Hz tick interrupt,
  * initializes touch sensor pins to be pulled high, and starts the necessary
@@ -249,7 +221,7 @@ ISR(TIMER1_COMPA_vect) {
  *
  * @see setup()
  */
-void setup_board_teensypp2() {
+void setup_board_teensypp2_t37() {
     // setup internal 100Hz "tick" interrupt
     // thanks to http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1212098919 (and 'bens')
     // also, lots of timer info here and here:
@@ -304,12 +276,16 @@ void setup_board_teensypp2() {
         // start USB serial interface
         USBSerial.begin(KG_HOSTIF_USB_SERIAL_BAUD);
         interfaceUSBSerialReady = true;
-        interfaceUSBSerialMode = KG_API_USB_SERIAL;
+        interfaceUSBSerialMode = KG_APIMODE_USB_SERIAL;
     #endif
 
     #if KG_HOSTIF & KG_HOSTIF_USB_RAWHID
         interfaceUSBRawHIDReady = true;
-        interfaceUSBRawHIDMode = KG_API_USB_RAWHID;
+        interfaceUSBRawHIDMode = KG_APIMODE_USB_RAWHID;
+    #endif
+
+    #if KG_HOSTIF & KG_HOSTIF_USB_HID
+        interfaceUSBHIDReady = true;
     #endif
 
     #if KG_HOSTIF & (KG_HOSTIF_BT2_SERIAL | KG_HOSTIF_BT2_RAWHID | KG_HOSTIF_BT2_HID | KG_HOSTIF_BT2_IAP)
@@ -608,4 +584,4 @@ void update_board_touch(uint8_t *touches) {
 //     { KSP_J, KSP_8 /* 2 J8 */ },
 }
 
-#endif // _SUPPORT_BOARD_TEENSYPP2_H_
+#endif // _SUPPORT_BOARD_TEENSYPP2_T37_H_

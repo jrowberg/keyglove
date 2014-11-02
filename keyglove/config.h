@@ -61,11 +61,13 @@ THE SOFTWARE.
         /**
          * @brief Host controller board selection
          * @see KG_BOARD_USER
-         * @see KG_BOARD_TEENSYPP2
+         * @see KG_BOARD_TEENSYPP2_T19
+         * @see KG_BOARD_TEENSYPP2_T37
          * @see KG_BOARD_ARDUINO_DUE
          * @see KG_BOARD_KEYGLOVE100
          */
-        #define KG_BOARD                        KG_BOARD_TEENSYPP2
+        #define KG_BOARD                        KG_BOARD_TEENSYPP2_T19
+        //#define KG_BOARD                        KG_BOARD_TEENSYPP2_T37
         #ifdef CORE_TEENSY_SERIAL
             /**
              * @brief Automatic USB serial host interface option based on Arduino IDE board selection
@@ -149,8 +151,8 @@ THE SOFTWARE.
  * @see AUTO_KG_HOSTIF_USB_RAWHID
  * @see AUTO_KG_HOSTIF_USB_HID
  */
-#define KG_HOSTIF           (AUTO_KG_HOSTIF_USB_SERIAL | AUTO_KG_HOSTIF_USB_RAWHID | AUTO_KG_HOSTIF_USB_HID)    // <-- no Bluetooth
-//#define KG_HOSTIF           (AUTO_KG_HOSTIF_USB_SERIAL | AUTO_KG_HOSTIF_USB_RAWHID | AUTO_KG_HOSTIF_USB_HID | KG_HOSTIF_BT2_HID | KG_HOSTIF_BT2_RAWHID)
+//#define KG_HOSTIF           (AUTO_KG_HOSTIF_USB_SERIAL | AUTO_KG_HOSTIF_USB_RAWHID | AUTO_KG_HOSTIF_USB_HID)    // <-- no Bluetooth
+#define KG_HOSTIF           (AUTO_KG_HOSTIF_USB_SERIAL | AUTO_KG_HOSTIF_USB_RAWHID | AUTO_KG_HOSTIF_USB_HID | KG_HOSTIF_BT2_SERIAL | KG_HOSTIF_BT2_HID | KG_HOSTIF_BT2_RAWHID)
 
 /**
  * @brief KGAPI traffic mode for USB serial interface
@@ -159,7 +161,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_API_USB_SERIAL   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_USB_SERIAL   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
 
 /**
  * @brief KGAPI traffic mode for USB serial interface
@@ -168,7 +170,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_API_USB_RAWHID   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_USB_RAWHID   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
 
 /**
  * @brief KGAPI traffic mode for Bluetooth v2 serial interface
@@ -177,7 +179,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_API_BT2_SERIAL   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_BT2_SERIAL   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
 
 /**
  * @brief KGAPI traffic mode for Bluetooth v2 iAP interface
@@ -186,7 +188,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_API_BT2_IAP      KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_BT2_IAP      KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
 
 /**
  * @brief KGAPI traffic mode for Bluetooth v2 raw HID interface
@@ -195,7 +197,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_API_BT2_RAWHID   KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_BT2_RAWHID   KG_INTERFACE_MODE_INCOMING_PACKET
 
 /**
  * @brief HID support type selection
@@ -225,7 +227,6 @@ THE SOFTWARE.
  */
 //#define KG_FEEDBACK         KG_FEEDBACK_BLINK
 #define KG_FEEDBACK         (KG_FEEDBACK_BLINK | KG_FEEDBACK_PIEZO | KG_FEEDBACK_VIBRATE | KG_FEEDBACK_RGB)
-//NOT RE-IMPLEMENTED YET: #define KG_FEEDBACK         (KG_FEEDBACK_BLINK | KG_FEEDBACK_PIEZO | KG_FEEDBACK_VIBRATE | KG_FEEDBACK_RGB)
 
 /**
  * @brief Dual-glove support selection (NOT IMPLEMENTED YET)

@@ -46,7 +46,8 @@ THE SOFTWARE.
 /* Main controller board options. Only one board may be selected at compile time. (defined in KG_BOARD) */
 
 #define KG_BOARD_USER                   0           ///< Totally custom board, you better know what you're doing
-#define KG_BOARD_TEENSYPP2              100         ///< AT90USB128x MCU, 46 I/O pins and prototype/kit design
+#define KG_BOARD_TEENSYPP2_T37          100         ///< AT90USB128x MCU, 46 I/O pins and prototype/kit design, 37 touch sensors
+#define KG_BOARD_TEENSYPP2_T19          101         ///< AT90USB128x MCU, 46 I/O pins and prototype/kit design, 19 touch sensors
 #define KG_BOARD_ARDUINO_DUE            200         ///< **NOT SUPPORTED YET:** SAM3X8E MCU, 50+ I/O pins and prototype/Arduino design
 #define KG_BOARD_KEYGLOVE100            300         ///< **NOT SUPPORTED YET:** SAM3X8E MCU, 50+ I/O pins and custom design
 
