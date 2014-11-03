@@ -128,15 +128,15 @@ Basic Bluetooth Functionality:
 /* 0x0B */ uint16_t kg_cmd_bluetooth_connect(uint8_t index, uint8_t profile);
 /* 0x0C */ uint16_t kg_cmd_bluetooth_disconnect(uint8_t handle);
 // -- command/event split --
-/* 0x01 */ uint8_t (*kg_evt_bluetooth_mode)(uint8_t mode);
-/* 0x02 */ uint8_t (*kg_evt_bluetooth_ready)();
-/* 0x03 */ uint8_t (*kg_evt_bluetooth_inquiry_response)(uint8_t *address, uint8_t *cod, int8_t rssi, uint8_t status, uint8_t index, uint8_t name_len, uint8_t *name_data);
-/* 0x04 */ uint8_t (*kg_evt_bluetooth_inquiry_complete)(uint8_t count);
-/* 0x05 */ uint8_t (*kg_evt_bluetooth_pairing_status)(uint8_t index, uint8_t *address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t handle_list_len, uint8_t *handle_list_data);
-/* 0x06 */ uint8_t (*kg_evt_bluetooth_pairing_failed)(uint8_t *address);
-/* 0x07 */ uint8_t (*kg_evt_bluetooth_pairings_cleared)();
-/* 0x08 */ uint8_t (*kg_evt_bluetooth_connection_status)(uint8_t handle, uint8_t *address, uint8_t index, uint8_t profile, uint8_t status);
-/* 0x09 */ uint8_t (*kg_evt_bluetooth_connection_closed)(uint8_t handle, uint16_t reason);
+/* 0x01 */ uint8_t (*kg_evt_bluetooth_mode)(uint8_t mode) = 0;
+/* 0x02 */ uint8_t (*kg_evt_bluetooth_ready)() = 0;
+/* 0x03 */ uint8_t (*kg_evt_bluetooth_inquiry_response)(uint8_t *address, uint8_t *cod, int8_t rssi, uint8_t status, uint8_t index, uint8_t name_len, uint8_t *name_data) = 0;
+/* 0x04 */ uint8_t (*kg_evt_bluetooth_inquiry_complete)(uint8_t count) = 0;
+/* 0x05 */ uint8_t (*kg_evt_bluetooth_pairing_status)(uint8_t index, uint8_t *address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t handle_list_len, uint8_t *handle_list_data) = 0;
+/* 0x06 */ uint8_t (*kg_evt_bluetooth_pairing_failed)(uint8_t *address) = 0;
+/* 0x07 */ uint8_t (*kg_evt_bluetooth_pairings_cleared)() = 0;
+/* 0x08 */ uint8_t (*kg_evt_bluetooth_connection_status)(uint8_t handle, uint8_t *address, uint8_t index, uint8_t profile, uint8_t status) = 0;
+/* 0x09 */ uint8_t (*kg_evt_bluetooth_connection_closed)(uint8_t handle, uint16_t reason) = 0;
 
 /* ================================ */
 /* ================================ */
@@ -1100,6 +1100,7 @@ void my_iwrap_evt_name(const iwrap_address_t *mac, const char *friendly_name) {
     payload[9] = 0; // RSSI
     payload[10] = 4; // inquiry status
     payload[11] = find_pairing_from_mac(mac);
+    payload[12] = name_len;
     if (name_len) memcpy(payload + 13, friendly_name, name_len);
 
     // send kg_evt_bluetooth_inquiry_response(...) event
