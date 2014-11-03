@@ -1106,13 +1106,6 @@ void my_iwrap_evt_name(const iwrap_address_t *mac, const char *friendly_name) {
     payload[12] = name_len;
     if (name_len) memcpy(payload + 13, friendly_name, name_len);
 
-    Serial.write(0x80);
-    Serial.write(0x02);
-    Serial.write(0xFF);
-    Serial.write(0xFF);
-    Serial.write(0x01);
-    Serial.write(name_len);
-
     // send kg_evt_bluetooth_inquiry_response(...) event
     skipPacket = 0;
     if (kg_evt_bluetooth_inquiry_response != 0) { skipPacket = kg_evt_bluetooth_inquiry_response(payload + 0, payload + 6, payload[9], payload[10], payload[11], payload[12], name_len ? payload + 13 : 0); }
