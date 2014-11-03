@@ -570,28 +570,31 @@ uint8_t bluetooth_check_incoming_protocol_data() {
                 char *cptr = cmd + 5;
                 
                 // find first unconnected device
-                for (; iwrap_connection_map[iwrap_autocall_index] != 0 && iwrap_connection_map[iwrap_autocall_index] -> active_links; iwrap_autocall_index++);
+                for (; iwrap_connection_map[iwrap_autocall_index] != 0 && iwrap_connection_map[iwrap_autocall_index] -> active_links && iwrap_autocall_index < IWRAP_MAX_PAIRINGS; iwrap_autocall_index++);
                 
-                if (!iwrap_connection_map[iwrap_autocall_index]) {
-                    // this should NEVER happen, but if it does, I want to know
-                    uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
-                    skipPacket = 0;
-                    if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
-                    if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
-                    return 0xFF;
+                // make sure we didn't go past the index bounds (logically impossible based on program flow, but let's be safe)
+                if (iwrap_autocall_index < IWRAP_MAX_PAIRINGS) {
+                    if (!iwrap_connection_map[iwrap_autocall_index]) {
+                        // this should NEVER happen, but if it does, I want to know
+                        uint8_t payload[2] = { KG_PROTOCOL_ERROR_NULL_POINTER & 0xFF, KG_PROTOCOL_ERROR_NULL_POINTER >> 8 };
+                        skipPacket = 0;
+                        if (kg_evt_protocol_error != 0) { skipPacket = kg_evt_protocol_error(KG_PROTOCOL_ERROR_NULL_POINTER); }
+                        if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_PROTOCOL, KG_PACKET_ID_EVT_PROTOCOL_ERROR, payload); }
+                        return 0xFF;
+                    }
+
+                    bluetoothPendingCallPairIndex = iwrap_autocall_index;
+                    bluetoothPendingCallProfile = BLUETOOTH_PROFILE_MASK_HID_CONTROL;
+
+                    // write MAC string into call command buffer and send it
+                    iwrap_bintohexstr((uint8_t *)(iwrap_connection_map[iwrap_autocall_index] -> mac.address), 6, &cptr, ':', 0);
+                    char s[21];
+                    sprintf(s, "Calling device #%d\r\n", iwrap_autocall_index);
+                    send_keyglove_log(KG_LOG_LEVEL_NORMAL, strlen(s), s);
+                    iwrap_send_command(cmd, iwrap_mode);
+                    //iwrap_autocall_last_time = millis();
+                    bluetoothTock = keygloveTock;
                 }
-
-                bluetoothPendingCallPairIndex = iwrap_autocall_index;
-                bluetoothPendingCallProfile = BLUETOOTH_PROFILE_MASK_HID_CONTROL;
-
-                // write MAC string into call command buffer and send it
-                iwrap_bintohexstr((uint8_t *)(iwrap_connection_map[iwrap_autocall_index] -> mac.address), 6, &cptr, ':', 0);
-                char s[21];
-                sprintf(s, "Calling device #%d\r\n", iwrap_autocall_index);
-                send_keyglove_log(KG_LOG_LEVEL_NORMAL, strlen(s), s);
-                iwrap_send_command(cmd, iwrap_mode);
-                //iwrap_autocall_last_time = millis();
-                bluetoothTock = keygloveTock;
             }
         }
     }
@@ -1102,6 +1105,13 @@ void my_iwrap_evt_name(const iwrap_address_t *mac, const char *friendly_name) {
     payload[11] = find_pairing_from_mac(mac);
     payload[12] = name_len;
     if (name_len) memcpy(payload + 13, friendly_name, name_len);
+
+    Serial.write(0x80);
+    Serial.write(0x02);
+    Serial.write(0xFF);
+    Serial.write(0xFF);
+    Serial.write(0x01);
+    Serial.write(name_len);
 
     // send kg_evt_bluetooth_inquiry_response(...) event
     skipPacket = 0;
