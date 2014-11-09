@@ -1,5 +1,5 @@
-// Keyglove controller source code - Modular hardware/architecture option definition file
-// 7/4/2014 by Jeff Rowberg <jeff@rowberg.net>
+// Keyglove controller source code - Modular hardware/architecture option definitions
+// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -27,13 +27,13 @@ THE SOFTWARE.
 
 /**
  * @file hardware.h
- * @brief Modular hardware/architecture option definition file
+ * @brief Modular hardware/architecture option definitions
  * @author Jeff Rowberg
- * @date 2014-07-04
+ * @date 2014-11-07
  *
  * This file defines all of the selectable options which you may want to use in
  * the "config.h" file. If you create new functionality which a modular add-on
- * beyond the already implemented Keyglove code, it should be define here as a
+ * beyond the already implemented Keyglove code, it should be defined here as a
  * new option and then enabled as a module in the "config.h" file. This file
  * will not normally need to be modified.
  *
@@ -153,5 +153,4 @@ THE SOFTWARE.
 #define KG_INTERFACENUM_BT2_IAP                 5       ///< KGAPI interface identifier for BT2 IAP
 
 #endif // _HARDWARE_H_
-
-
+ 

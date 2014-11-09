@@ -1,5 +1,5 @@
 // Keyglove controller source code - KGAPI "bluetooth" protocol command parser
-// 2014-08-25 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-11-03 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
 /* ============================================
@@ -30,7 +30,7 @@ THE SOFTWARE.
  * @file support_protocol_bluetooth.h
  * @brief KGAPI "bluetooth" protocol command parser
  * @author Jeff Rowberg
- * @date 2014-08-25
+ * @date 2014-11-03
  *
  * This file implements subsystem-specific command processing functions for the
  * "bluetooth" part of the KGAPI protocol.
@@ -41,253 +41,60 @@ THE SOFTWARE.
 #ifndef _SUPPORT_PROTOCOL_BLUETOOTH_H_
 #define _SUPPORT_PROTOCOL_BLUETOOTH_H_
 
-/**
- * @brief Command processing routine for "bluetooth" packet class
- * @param[in] rxPacket Incoming KGAPI packet buffer
- * @return Protocol error, if any (0 for success)
- * @see protocol_parse()
- * @see KGAPI command: kg_cmd_bluetooth_get_mode()
- * @see KGAPI command: kg_cmd_bluetooth_set_mode()
- * @see KGAPI command: kg_cmd_bluetooth_reset()
- * @see KGAPI command: kg_cmd_bluetooth_get_mac()
- * @see KGAPI command: kg_cmd_bluetooth_get_pairings()
- * @see KGAPI command: kg_cmd_bluetooth_discover()
- * @see KGAPI command: kg_cmd_bluetooth_pair()
- * @see KGAPI command: kg_cmd_bluetooth_delete_pairing()
- * @see KGAPI command: kg_cmd_bluetooth_clear_pairings()
- * @see KGAPI command: kg_cmd_bluetooth_get_connections()
- * @see KGAPI command: kg_cmd_bluetooth_connect()
- * @see KGAPI command: kg_cmd_bluetooth_disconnect()
- */
-uint8_t process_protocol_command_bluetooth(uint8_t *rxPacket) {
-    // check for valid command IDs
-    uint8_t protocol_error = 0;
-    switch (rxPacket[3]) {
-        case KG_PACKET_ID_CMD_BLUETOOTH_GET_MODE: // 0x01
-            // bluetooth_get_mode()(uint16_t result, uint8_t mode)
-            // parameters = 0 bytes
-            if (rxPacket[1] != 0) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint8_t mode;
-                uint16_t result = kg_cmd_bluetooth_get_mode(&mode);
-        
-                // build response
-                uint8_t payload[3] = { result & 0xFF, (result >> 8) & 0xFF, mode };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 3, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_SET_MODE: // 0x02
-            // bluetooth_set_mode(uint8_t mode)(uint16_t result)
-            // parameters = 1 byte
-            if (rxPacket[1] != 1) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_bluetooth_set_mode(rxPacket[4]);
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_RESET: // 0x03
-            // bluetooth_reset()(uint16_t result)
-            // parameters = 0 bytes
-            if (rxPacket[1] != 0) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_bluetooth_reset();
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_GET_MAC: // 0x04
-            // bluetooth_get_mac()(uint16_t result, macaddr_t address)
-            // parameters = 0 bytes
-            if (rxPacket[1] != 0) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint8_t address[6];
-                uint16_t result = kg_cmd_bluetooth_get_mac(address);
-        
-                // build response
-                uint8_t payload[8] = { result & 0xFF, (result >> 8) & 0xFF, 0,0,0,0,0,0 };
-                memcpy(payload + 2, address, 6);
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 8, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_GET_PAIRINGS: // 0x05
-            // bluetooth_get_pairings()(uint16_t result, uint8_t count)
-            // parameters = 0 bytes
-            if (rxPacket[1] != 0) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint8_t count;
-                uint16_t result = kg_cmd_bluetooth_get_pairings(&count);
-        
-                // build response
-                uint8_t payload[3] = { result & 0xFF, (result >> 8) & 0xFF, count };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 3, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_DISCOVER: // 0x06
-            // bluetooth_discover(uint8_t duration)(uint16_t result)
-            // parameters = 1 byte
-            if (rxPacket[1] != 1) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_bluetooth_discover(rxPacket[4]);
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_PAIR: // 0x07
-            // bluetooth_pair(macaddr_t address)(uint16_t result)
-            // parameters = 6 bytes
-            if (rxPacket[1] != 6) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_bluetooth_pair(rxPacket + 4);
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_DELETE_PAIRING: // 0x08
-            // bluetooth_delete_pairing(uint8_t index)(uint16_t result)
-            // parameters = 1 byte
-            if (rxPacket[1] != 1) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_bluetooth_delete_pairing(rxPacket[4]);
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_CLEAR_PAIRINGS: // 0x09
-            // bluetooth_clear_pairings()(uint16_t result)
-            // parameters = 0 bytes
-            if (rxPacket[1] != 0) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_bluetooth_clear_pairings();
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_GET_CONNECTIONS: // 0x0A
-            // bluetooth_get_connections()(uint16_t result, uint8_t count)
-            // parameters = 0 bytes
-            if (rxPacket[1] != 0) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint8_t count;
-                uint16_t result = kg_cmd_bluetooth_get_connections(&count);
-        
-                // build response
-                uint8_t payload[3] = { result & 0xFF, (result >> 8) & 0xFF, count };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 3, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_CONNECT: // 0x0B
-            // bluetooth_connect(uint8_t index, uint8_t profile)(uint16_t result)
-            // parameters = 2 bytes
-            if (rxPacket[1] != 2) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_bluetooth_connect(rxPacket[4], rxPacket[5]);
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_BLUETOOTH_DISCONNECT: // 0x0C
-            // bluetooth_disconnect(uint8_t handle)(uint16_t result)
-            // parameters = 1 byte
-            if (rxPacket[1] != 1) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_bluetooth_disconnect(rxPacket[4]);
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        default:
-            protocol_error = KG_PROTOCOL_ERROR_INVALID_COMMAND;
-    }
-    return protocol_error;
-}
+/* =========================== */
+/* KGAPI CONSTANT DECLARATIONS */
+/* =========================== */
+
+#define KG_PACKET_ID_CMD_BLUETOOTH_GET_MODE                 0x01
+#define KG_PACKET_ID_CMD_BLUETOOTH_SET_MODE                 0x02
+#define KG_PACKET_ID_CMD_BLUETOOTH_RESET                    0x03
+#define KG_PACKET_ID_CMD_BLUETOOTH_GET_MAC                  0x04
+#define KG_PACKET_ID_CMD_BLUETOOTH_GET_PAIRINGS             0x05
+#define KG_PACKET_ID_CMD_BLUETOOTH_DISCOVER                 0x06
+#define KG_PACKET_ID_CMD_BLUETOOTH_PAIR                     0x07
+#define KG_PACKET_ID_CMD_BLUETOOTH_DELETE_PAIRING           0x08
+#define KG_PACKET_ID_CMD_BLUETOOTH_CLEAR_PAIRINGS           0x09
+#define KG_PACKET_ID_CMD_BLUETOOTH_GET_CONNECTIONS          0x0A
+#define KG_PACKET_ID_CMD_BLUETOOTH_CONNECT                  0x0B
+#define KG_PACKET_ID_CMD_BLUETOOTH_DISCONNECT               0x0C
+// -- command/event split --
+#define KG_PACKET_ID_EVT_BLUETOOTH_MODE                     0x01
+#define KG_PACKET_ID_EVT_BLUETOOTH_READY                    0x02
+#define KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_RESPONSE         0x03
+#define KG_PACKET_ID_EVT_BLUETOOTH_INQUIRY_COMPLETE         0x04
+#define KG_PACKET_ID_EVT_BLUETOOTH_PAIRING_STATUS           0x05
+#define KG_PACKET_ID_EVT_BLUETOOTH_PAIRING_FAILED           0x06
+#define KG_PACKET_ID_EVT_BLUETOOTH_PAIRINGS_CLEARED         0x07
+#define KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_STATUS        0x08
+#define KG_PACKET_ID_EVT_BLUETOOTH_CONNECTION_CLOSED        0x09
+
+/* ================================ */
+/* KGAPI COMMAND/EVENT DECLARATIONS */
+/* ================================ */
+
+/* 0x01 */ uint16_t kg_cmd_bluetooth_get_mode(uint8_t *mode);
+/* 0x02 */ uint16_t kg_cmd_bluetooth_set_mode(uint8_t mode);
+/* 0x03 */ uint16_t kg_cmd_bluetooth_reset();
+/* 0x04 */ uint16_t kg_cmd_bluetooth_get_mac(uint8_t *address);
+/* 0x05 */ uint16_t kg_cmd_bluetooth_get_pairings(uint8_t *count);
+/* 0x06 */ uint16_t kg_cmd_bluetooth_discover(uint8_t duration);
+/* 0x07 */ uint16_t kg_cmd_bluetooth_pair(uint8_t *address);
+/* 0x08 */ uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t index);
+/* 0x09 */ uint16_t kg_cmd_bluetooth_clear_pairings();
+/* 0x0A */ uint16_t kg_cmd_bluetooth_get_connections(uint8_t *count);
+/* 0x0B */ uint16_t kg_cmd_bluetooth_connect(uint8_t index, uint8_t profile);
+/* 0x0C */ uint16_t kg_cmd_bluetooth_disconnect(uint8_t handle);
+// -- command/event split --
+/* 0x01 */ extern uint8_t (*kg_evt_bluetooth_mode)(uint8_t mode);
+/* 0x02 */ extern uint8_t (*kg_evt_bluetooth_ready)();
+/* 0x03 */ extern uint8_t (*kg_evt_bluetooth_inquiry_response)(uint8_t *address, uint8_t *cod, int8_t rssi, uint8_t status, uint8_t index, uint8_t name_len, uint8_t *name_data);
+/* 0x04 */ extern uint8_t (*kg_evt_bluetooth_inquiry_complete)(uint8_t count);
+/* 0x05 */ extern uint8_t (*kg_evt_bluetooth_pairing_status)(uint8_t index, uint8_t *address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t handle_list_len, uint8_t *handle_list_data);
+/* 0x06 */ extern uint8_t (*kg_evt_bluetooth_pairing_failed)(uint8_t *address);
+/* 0x07 */ extern uint8_t (*kg_evt_bluetooth_pairings_cleared)();
+/* 0x08 */ extern uint8_t (*kg_evt_bluetooth_connection_status)(uint8_t handle, uint8_t *address, uint8_t index, uint8_t profile, uint8_t status);
+/* 0x09 */ extern uint8_t (*kg_evt_bluetooth_connection_closed)(uint8_t handle, uint16_t reason);
+ 
+uint8_t process_protocol_command_bluetooth(uint8_t *rxPacket);
 
 #endif // _SUPPORT_PROTOCOL_BLUETOOTH_H_

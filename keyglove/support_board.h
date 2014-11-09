@@ -1,4 +1,4 @@
-// Keyglove controller source code - General feedback support declarations
+// Keyglove controller source code - General board support declaration file
 // 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
@@ -26,8 +26,8 @@ THE SOFTWARE.
 */
 
 /**
- * @file support_feedback.h
- * @brief General feedback support declarations
+ * @file support_board.h
+ * @brief General board support declaration file
  * @author Jeff Rowberg
  * @date 2014-11-07
  *
@@ -35,29 +35,23 @@ THE SOFTWARE.
  * files for a general category based on Keyglove configuration settings,
  * without needing to have that conditional logic in every implementation file
  * that might need to include the functional support in question. This header
- * deals specifically with feedback support.
+ * deals specifically with core board/platform selection.
  *
  * Normally it is not necessary to edit this file.
  */
 
-#ifndef _SUPPORT_FEEDBACK_H_
-#define _SUPPORT_FEEDBACK_H_
+#ifndef _SUPPORT_BOARD_H_
+#define _SUPPORT_BOARD_H_
 
-#if (KG_FEEDBACK & KG_FEEDBACK_BLINK)
-    #include "support_feedback_blink.h"
-#endif
-#if (KG_FEEDBACK & KG_FEEDBACK_PIEZO)
-    #include "support_feedback_piezo.h"
-#endif
-#if (KG_FEEDBACK & KG_FEEDBACK_VIBRATE)
-    #include "support_feedback_vibrate.h"
-#endif
-#if (KG_FEEDBACK & KG_FEEDBACK_RGB)
-    #include "support_feedback_rgb.h"
+#if KG_BOARD == KG_BOARD_TEENSYPP2_T37
+    #include "support_board_teensypp2_t37.h"
+#elif KG_BOARD == KG_BOARD_TEENSYPP2_T19
+    #include "support_board_teensypp2_t19.h"
+//#elif KG_BOARD == KG_BOARD_ARDUINO_DUE
+    //#include "support_board_arduino_due.h"
+    // TODO: Arduino Due ARM chip support
+#else
+    #error Unsupported platform selected in KG_BOARD
 #endif
 
-int16_t mod(int16_t x, int16_t m);
-uint8_t square_wave(int32_t x, int32_t period, uint8_t duty);
-int16_t triangle_wave(int32_t x, int32_t period, int32_t amplitude);
-
-#endif // _SUPPORT_FEEDBACK_H_
+#endif // _SUPPORT_BOARD_H_

@@ -1,5 +1,5 @@
-// Keyglove controller source code - Modular hardware/architecture configuration file
-// 7/4/2014 by Jeff Rowberg <jeff@rowberg.net>
+// Keyglove controller source code - Modular hardware/architecture configuration definitions
+// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -27,9 +27,9 @@ THE SOFTWARE.
 
 /**
  * @file config.h
- * @brief **USER-DEFINED:** Modular hardware/architecture configuration file
+ * @brief **USER-DEFINED:** Modular hardware/architecture configuration definitions
  * @author Jeff Rowberg
- * @date 2014-07-04
+ * @date 2014-11-07
  *
  * Use this file to specify which microcontroller board design and connected
  * peripheral devices you have in your Keyglove build. For example, if you are

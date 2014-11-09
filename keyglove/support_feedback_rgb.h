@@ -1,4 +1,4 @@
-// Keyglove controller source code - Feedback implementation for RGB LED
+// Keyglove controller source code - Feedback declarations for RGB LED
 // 8/9/2014 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 /**
  * @file support_feedback_rgb.h
- * @brief Feedback implementation for RGB LED
+ * @brief Feedback declarations for RGB LED
  * @author Jeff Rowberg
  * @date 2014-08-09
  *
@@ -74,201 +74,12 @@ typedef enum {
     KG_RGB_MODE_MAX
 } feedback_rgb_mode_t;
 
-feedback_rgb_mode_t feedbackRGBMode[3];     ///< RGB feedback red component mode
-int16_t feedbackRGBTick[3];                 ///< RGB fade tick reference (signed because of abs equations)
-uint16_t feedbackRGBLoop[3];                ///< Tick loop length for RGB fade timing
-
-/**
- * @brief Sets RGB feedpack pin digital logic states (red/green/blue)
- * @param[in] r Red: zero for low (off), non-zero for high (on), 255 for no change
- * @param[in] g Green: zero for low (off), non-zero for high (on), 255 for no change
- * @param[in] b Blue: zero for low (off), non-zero for high (on), 255 for no change
- */
-void feedback_set_rgb_digital(uint8_t r, uint8_t g, uint8_t b) {
-    if (r != 255) digitalWrite(KG_PIN_RGB_RED, r);
-    if (g != 255) digitalWrite(KG_PIN_RGB_GREEN, g);
-    if (b != 255) digitalWrite(KG_PIN_RGB_BLUE, b);
-}
-
-/**
- * @brief Sets RGB feedpack pin digital logic state on one channel (red/green/blue)
- * @param[in] channel Channel number (0=RED, 1=GREEN, 2=BLUE)
- * @param[in] value Logic state (zero for low/off, non-zero for high/on)
- */
-void feedback_set_rgb_digital_channel(uint8_t channel, uint8_t value) {
-    if (channel == 0) digitalWrite(KG_PIN_RGB_RED, value);
-    else if (channel == 1) digitalWrite(KG_PIN_RGB_GREEN, value);
-    else if (channel == 2) digitalWrite(KG_PIN_RGB_BLUE, value);
-}
-
-/**
- * @brief Sets RGB feedpack pin analog PWM states (red/green/blue)
- * @param[in] r Red: zero for off, non-zero for PWM (on), 255 for no change
- * @param[in] g Green: zero for off, non-zero for PWM (on), 255 for no change
- * @param[in] b Blue: zero for off, non-zero for PWM (on), 255 for no change
- */
-void feedback_set_rgb_analog(uint8_t r, uint8_t g, uint8_t b) {
-    if (r != 255) analogWrite(KG_PIN_RGB_RED, r);
-    if (g != 255) analogWrite(KG_PIN_RGB_GREEN, g);
-    if (b != 255) analogWrite(KG_PIN_RGB_BLUE, b);
-}
-
-/**
- * @brief Sets RGB feedpack pin analog PWM state on one channel (red/green/blue)
- * @param[in] channel Channel number (0=RED, 1=GREEN, 2=BLUE)
- * @param[in] value PWM duty cycle (zero for off, non-zero for PWM/on)
- */
-void feedback_set_rgb_analog_channel(uint8_t channel, uint8_t value) {
-    if (channel == 0) analogWrite(KG_PIN_RGB_RED, value);
-    else if (channel == 1) analogWrite(KG_PIN_RGB_GREEN, value);
-    else if (channel == 2) analogWrite(KG_PIN_RGB_BLUE, value);
-}
-
-/**
- * @brief Sets RGB feedback modes (red/green/blue)
- * @param[in] r Red mode
- * @param[in] g Green mode
- * @param[in] b Blue mode
- */
-void feedback_set_rgb_mode(feedback_rgb_mode_t r, feedback_rgb_mode_t g, feedback_rgb_mode_t b) {
-    feedbackRGBMode[0] = r;
-    feedbackRGBMode[1] = g;
-    feedbackRGBMode[2] = b;
-    feedbackRGBTick[0] = feedbackRGBTick[1] = feedbackRGBTick[2] = 0;
-    feedbackRGBLoop[0] = feedbackRGBLoop[1] = feedbackRGBLoop[2] = 0;
-
-    for (uint8_t i = 0; i < 3; i++) {
-             if (feedbackRGBMode[i] == KG_RGB_MODE_B200_100     || feedbackRGBMode[i] == KG_RGB_MODE_F200_100 ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_B200_50      || feedbackRGBMode[i] == KG_RGB_MODE_F200_50
-                ) feedbackRGBLoop[i] = 20;
-        else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_500    || feedbackRGBMode[i] == KG_RGB_MODE_F1000_500 ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_B1000_100    || feedbackRGBMode[i] == KG_RGB_MODE_F1000_100 ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_B1000_100_2X || feedbackRGBMode[i] == KG_RGB_MODE_F1000_100_2X ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_B1000_100_3X || feedbackRGBMode[i] == KG_RGB_MODE_F1000_100_3X ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_F1000_1000
-                ) feedbackRGBLoop[i] = 100;
-        else if (feedbackRGBMode[i] == KG_RGB_MODE_B3000_1000   || feedbackRGBMode[i] == KG_RGB_MODE_F3000_1000 ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_B3000_100    || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100 ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_B3000_100_2X || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100_2X ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_B3000_100_3X || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100_3X ||
-                 feedbackRGBMode[i] == KG_RGB_MODE_F3000_3000
-                ) feedbackRGBLoop[i] = 300;
-    }
-
-    // logic: r=OFF -> off, r=ON -> on, else no immediate change, update_feedback_rgb() will handling it
-    feedback_set_rgb_digital(
-        r == KG_RGB_MODE_OFF ? 0 : (r == KG_RGB_MODE_SOLID ? 1 : 255),
-        g == KG_RGB_MODE_OFF ? 0 : (g == KG_RGB_MODE_SOLID ? 1 : 255),
-        b == KG_RGB_MODE_OFF ? 0 : (b == KG_RGB_MODE_SOLID ? 1 : 255)
-    );
-}
-
-/**
- * @brief Initialize RGB feedback subsystem
- */
-void setup_feedback_rgb() {
-    pinMode(KG_PIN_RGB_RED, OUTPUT);
-    pinMode(KG_PIN_RGB_GREEN, OUTPUT);
-    pinMode(KG_PIN_RGB_BLUE, OUTPUT);
-    digitalWrite(KG_PIN_RGB_RED, LOW);
-    digitalWrite(KG_PIN_RGB_GREEN, LOW);
-    digitalWrite(KG_PIN_RGB_BLUE, LOW);
-
-    // SELF-TEST
-    //feedback_set_rgb_digital(1, 1, 1); // turn everything on and wait 1/20 sec
-    //delay(50);
-    //feedback_set_rgb_digital(0, 0, 0); // turn everything off again
-}
-
-/**
- * @brief Update status of RGB feedback subystem, called at 100Hz from loop()
- */
-void update_feedback_rgb() {
-    // each "keygloveTick" is 10ms, loops at 100 (1 second)
-    // each "RGBTick" is also 10ms, loops at cycle period (can be greater than 1 second, actually 6553 seconds)
-    for (uint8_t i = 0; i < 3; i++) {
-        if (feedbackRGBMode[i] == KG_RGB_MODE_B200_100) {
-            feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 20, 50));
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B200_50) {
-            feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 10, 25));
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_500) {
-            feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 100, 50));
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B3000_1000) {
-            feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 300, 33));
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_100 || feedbackRGBMode[i] == KG_RGB_MODE_B3000_100) {
-            feedback_set_rgb_digital_channel(i, feedbackRGBTick[i] < 10 ? square_wave(feedbackRGBTick[i], 20, 50) : 0);
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_100_2X || feedbackRGBMode[i] == KG_RGB_MODE_B3000_100_2X) {
-            feedback_set_rgb_digital_channel(i, feedbackRGBTick[i] < 30 ? square_wave(feedbackRGBTick[i], 20, 50) : 0);
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_B1000_100_3X || feedbackRGBMode[i] == KG_RGB_MODE_B3000_100_3X) {
-            feedback_set_rgb_digital_channel(i, feedbackRGBTick[i] < 50 ? square_wave(feedbackRGBTick[i], 20, 50) : 0);
-
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F200_50) {
-            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 5 ? triangle_wave(feedbackRGBTick[i], 10, 400) : 0);
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F1000_500) {
-            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 50 ? triangle_wave(feedbackRGBTick[i], 100, 400) : 0);
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F1000_1000) {
-            feedback_set_rgb_analog_channel(i, triangle_wave(feedbackRGBTick[i], 200, 400));
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F3000_1000) {
-            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 100 ? triangle_wave(feedbackRGBTick[i], 200, 400) : 0);
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F3000_3000) {
-            feedback_set_rgb_analog_channel(i, triangle_wave(feedbackRGBTick[i], 600, 400));
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F200_100 || feedbackRGBMode[i] == KG_RGB_MODE_F1000_100 || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100) {
-            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 10 ? triangle_wave(feedbackRGBTick[i], 20, 400) : 0);
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F1000_100_2X || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100_2X) {
-            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 30 ? triangle_wave(feedbackRGBTick[i], 20, 400) : 0);
-        } else if (feedbackRGBMode[i] == KG_RGB_MODE_F1000_100_3X || feedbackRGBMode[i] == KG_RGB_MODE_F3000_100_3X) {
-            feedback_set_rgb_analog_channel(i, feedbackRGBTick[i] < 50 ? triangle_wave(feedbackRGBTick[i], 20, 400) : 0);
-        }
-
-        feedbackRGBTick[i]++;
-        if (feedbackRGBTick[i] == feedbackRGBLoop[i]) feedbackRGBTick[i] = 0;
-    }
-}
-
-/* ============================= */
-/* KGAPI COMMAND IMPLEMENTATIONS */
-/* ============================= */
-
-/**
- * @brief Get current feedback mode for an RGB LED
- * @param[in] index Index of RGB device for which to get the current mode
- * @param[out] mode_red Current feedback mode for specified RGB device red LED
- * @param[out] mode_green Current feedback mode for specified RGB device green LED
- * @param[out] mode_blue Current feedback mode for specified RGB device blue LED
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_feedback_get_rgb_mode(uint8_t index, uint8_t *mode_red, uint8_t *mode_green, uint8_t *mode_blue) {
-    // "index" is currently ignored, as there is only one RGB device in the design
-    *mode_red = feedbackRGBMode[0];
-    *mode_green = feedbackRGBMode[1];
-    *mode_blue = feedbackRGBMode[2];
-    return 0; // success
-}
-
-/**
- * @brief Set a new RGB LED feedback mode
- * @param[in] index Index of RGB device for which to set a new mode
- * @param[in] mode_red New feedback mode to set for specified RGB device red LED
- * @param[in] mode_green New feedback mode to set for specified RGB device green LED
- * @param[in] mode_blue New feedback mode to set for specified RGB device blue LED
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_feedback_set_rgb_mode(uint8_t index, uint8_t mode_red, uint8_t mode_green, uint8_t mode_blue) {
-    if (mode_red >= KG_RGB_MODE_MAX || mode_green >= KG_RGB_MODE_MAX || mode_blue >= KG_RGB_MODE_MAX) {
-        return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
-    } else {
-        // "index" is currently ignored, as there is only one RGB device in the design
-        feedback_set_rgb_mode((feedback_rgb_mode_t)mode_red, (feedback_rgb_mode_t)mode_green, (feedback_rgb_mode_t)mode_blue);
-
-        // send kg_evt_feedback_rgb_mode packet (if we aren't setting it from an API command)
-        if (!inBinPacket) {
-            uint8_t payload[4] = { index, mode_red, mode_green, mode_blue };
-            skipPacket = 0;
-            if (kg_evt_feedback_rgb_mode != 0) { skipPacket = kg_evt_feedback_rgb_mode(index, mode_red, mode_green, mode_blue); }
-            if (skipPacket == 0) { send_keyglove_packet(KG_PACKET_TYPE_EVENT, 4, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_RGB_MODE, payload); }
-        }
-    }
-    return 0; // success
-}
+void feedback_set_rgb_digital(uint8_t r, uint8_t g, uint8_t b);
+void feedback_set_rgb_digital_channel(uint8_t channel, uint8_t value);
+void feedback_set_rgb_analog(uint8_t r, uint8_t g, uint8_t b);
+void feedback_set_rgb_analog_channel(uint8_t channel, uint8_t value);
+void feedback_set_rgb_mode(feedback_rgb_mode_t r, feedback_rgb_mode_t g, feedback_rgb_mode_t b);
+void setup_feedback_rgb();
+void update_feedback_rgb();
 
 #endif // _SUPPORT_FEEDBACK_RGB_H_

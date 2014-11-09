@@ -1,5 +1,5 @@
 // Keyglove controller source code - KGAPI "flex" protocol command parser
-// 2014-08-25 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-11-03 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
 /* ============================================
@@ -30,7 +30,7 @@ THE SOFTWARE.
  * @file support_protocol_flex.h
  * @brief KGAPI "flex" protocol command parser
  * @author Jeff Rowberg
- * @date 2014-08-25
+ * @date 2014-11-03
  *
  * This file implements subsystem-specific command processing functions for the
  * "flex" part of the KGAPI protocol.
@@ -41,21 +41,6 @@ THE SOFTWARE.
 #ifndef _SUPPORT_PROTOCOL_FLEX_H_
 #define _SUPPORT_PROTOCOL_FLEX_H_
 
-/**
- * @brief Command processing routine for "flex" packet class
- * @param[in] rxPacket Incoming KGAPI packet buffer
- * @return Protocol error, if any (0 for success)
- * @see protocol_parse()
- */
-uint8_t process_protocol_command_flex(uint8_t *rxPacket) {
-    // check for valid command IDs
-    uint8_t protocol_error = 0;
-    switch (rxPacket[3]) {
-        
-        default:
-            protocol_error = KG_PROTOCOL_ERROR_INVALID_COMMAND;
-    }
-    return protocol_error;
-}
+uint8_t process_protocol_command_flex(uint8_t *rxPacket);
 
 #endif // _SUPPORT_PROTOCOL_FLEX_H_
