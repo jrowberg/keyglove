@@ -52,18 +52,18 @@ THE SOFTWARE.
 
 #include <iWRAP.h>
 
-#define IWRAP_STATE_IDLE                0
-#define IWRAP_STATE_UNKNOWN             1
-#define IWRAP_STATE_PENDING_AT          2
-#define IWRAP_STATE_PENDING_SET         3
-#define IWRAP_STATE_PENDING_LIST        4
-#define IWRAP_STATE_PENDING_CALL        5
-#define IWRAP_STATE_PENDING_INQUIRY     6
-#define IWRAP_STATE_PENDING_PAIR        7
-#define IWRAP_STATE_PENDING_SETBTPAIR   8
-#define IWRAP_STATE_COMM_FAILED         255
+#define IWRAP_STATE_IDLE                0               ///< iWRAP is idle (known state)
+#define IWRAP_STATE_UNKNOWN             1               ///< iWRAP state unknown (e.g. fresh boot)
+#define IWRAP_STATE_PENDING_AT          2               ///< iWRAP "AT" communication test pending
+#define IWRAP_STATE_PENDING_SET         3               ///< iWRAP settings dump request pending
+#define IWRAP_STATE_PENDING_LIST        4               ///< iWRAP connection list request pending
+#define IWRAP_STATE_PENDING_CALL        5               ///< iWRAP outgoing call pending
+#define IWRAP_STATE_PENDING_INQUIRY     6               ///< iWRAP device inquiry pending
+#define IWRAP_STATE_PENDING_PAIR        7               ///< iWRAP outgoing pair attempt pending
+#define IWRAP_STATE_PENDING_SETBTPAIR   8               ///< iWRAP pairing entry removal pending
+#define IWRAP_STATE_COMM_FAILED         255             ///< iWRAP communication attempted and failed (unusable)
 
-#define IWRAP_MAX_PAIRINGS              16
+#define IWRAP_MAX_PAIRINGS              16              ///< Maximum pairing entries allowed in iWRAP
 
 /**
  * @brief iWRAP paired device record structure
@@ -131,16 +131,16 @@ extern BTKeyboardWrapper BTKeyboard;
 extern BTMouseWrapper BTMouse;
 
 // Bluetooth link/interface readiness
-extern bool interfaceBT2Ready;          ///< General Bluetooth ready indicator
-extern bool interfaceBT2SerialReady;    ///< Bluetooth SPP connection active indicator
-extern uint8_t interfaceBT2SerialMode;  ///< Bluetooth SPP connection KGAPI mode
-extern bool interfaceBT2IAPReady;       ///< Bluetooth iAP connection active indicator
-extern uint8_t interfaceBT2IAPMode;     ///< Bluetooth IAP connection KGAPI mode
-extern bool interfaceBT2RawHIDReady;    ///< Bluetooth raw HID connection active indicator
-extern uint8_t interfaceBT2RawHIDMode;  ///< Bluetooth raw HID connection KGAPI mode
-extern bool interfaceBT2HIDReady;       ///< Bluetooth HID connection active indicator
-extern bool interfaceBT2HFPReady;       ///< Bluetooth HFP connection active indicator
-extern bool interfaceBT2AVRCPReady;     ///< Bluetooth AVRCP connection active indicator
+extern bool interfaceBT2Ready;
+extern bool interfaceBT2SerialReady;
+extern uint8_t interfaceBT2SerialMode;
+extern bool interfaceBT2IAPReady;
+extern uint8_t interfaceBT2IAPMode;
+extern bool interfaceBT2RawHIDReady;
+extern uint8_t interfaceBT2RawHIDMode;
+extern bool interfaceBT2HIDReady;
+extern bool interfaceBT2HFPReady;
+extern bool interfaceBT2AVRCPReady;
 
 // iWRAP callbacks necessary for application
 void my_iwrap_callback_txcommand(uint16_t length, const uint8_t *data);

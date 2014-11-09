@@ -31,10 +31,9 @@ THE SOFTWARE.
  * @author Jeff Rowberg
  * @date 2014-11-07
  *
- * This is the main entry point and program flow control code for the entire
- * Keyglove Arduino firmware project. All of the relevant `#include` files for
- * library support and other conditional support files are listed here. The main
- * setup() and loop() functions run from here as well.
+ * This file is the entry point for the Arduino sketch, but all real code has
+ * been moved to .cpp/.h files for better organization. See the following link:
+ * http://www.gammon.com.au/forum/?id=12625 - Thanks, Nick!
  *
  * Normally it is not necessary to edit this file, unless you add new Arduino
  * libraries for certain functionality.
@@ -49,6 +48,3 @@ THE SOFTWARE.
 #include <MPU6050.h>    // MPU-6050 I2C sensor support for I2Cdevlib
 #include <iWRAP.h>      // Bluegiga iWRAP parser library
 #include <EEPROM.h>     // Core Arduino EEPROM library
-
-// everything else has been moved to .cpp/.h files for better organization
-// http://www.gammon.com.au/forum/?id=12625 - thanks, Nick!

@@ -37,14 +37,14 @@ THE SOFTWARE.
 
 void touch_set_mode(uint8_t mode);
 
-extern uint8_t touchMode;   ///< Touch mode
-extern uint8_t touchTick;   ///< Touch
+extern uint8_t touchMode;
+extern uint8_t touchTick;
 
-extern uint32_t touchTime;                  ///< Touch detection reference timestamp
+extern uint32_t touchTime;
 
-extern uint8_t touches_now[KG_BASE_COMBINATION_BYTES];      ///< Immediate status of all touch combinations
-extern uint8_t touches_verify[KG_BASE_COMBINATION_BYTES];   ///< Previous status of all touch combinations (debouncing in progress)
-extern uint8_t touches_active[KG_BASE_COMBINATION_BYTES];   ///< Registered (debounced) status of all touch combinations
+extern uint8_t touches_now[KG_BASE_COMBINATION_BYTES];
+extern uint8_t touches_verify[KG_BASE_COMBINATION_BYTES];
+extern uint8_t touches_active[KG_BASE_COMBINATION_BYTES];
 
 void setup_touch();
 void update_touch();

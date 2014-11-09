@@ -127,6 +127,9 @@ ISR(TIMER1_COMPA_vect) {
     keyglove100Hz = 1;
 }
 
+/**
+ * @brief Pin change interrupt for battery status signals
+ */
 ISR(PCINT0_vect) {
     keygloveBatteryStatus0 = (~PINB) & 0x07;
     if (keygloveBatteryStatus0 != (keygloveBatteryStatus & 0x07)) {

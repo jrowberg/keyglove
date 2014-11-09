@@ -26,7 +26,7 @@ THE SOFTWARE.
 */
 
 /**
- * @file custom_protocol.h
+ * @file custom_protocol.cpp
  * @brief **USER-DEFINED:** Custom protocol filtering implementations
  * @author Jeff Rowberg
  * @date 2014-11-07

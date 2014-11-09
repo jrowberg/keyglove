@@ -1,4 +1,4 @@
-// Keyglove controller source code - KGAPI "feedback" protocol command parser
+// Keyglove controller source code - KGAPI "feedback" protocol command parser declarations
 // 2014-11-03 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 /**
  * @file support_protocol_feedback.h
- * @brief KGAPI "feedback" protocol command parser
+ * @brief KGAPI "feedback" protocol command parser declarations
  * @author Jeff Rowberg
  * @date 2014-11-03
  *

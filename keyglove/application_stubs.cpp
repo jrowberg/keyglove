@@ -26,7 +26,7 @@ THE SOFTWARE.
 */
 
 /**
- * @file application_stubs.h
+ * @file application_stubs.cpp
  * @brief **USER-DEFINED:** Custom application behavior stub/reference implementations
  * @author Jeff Rowberg
  * @date 2014-11-07

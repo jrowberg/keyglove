@@ -115,12 +115,12 @@ uint8_t queue_keyglove_packet(uint8_t packetType, uint8_t payloadLength, uint8_t
     uint8_t bluetooth_send_keyglove_packet_buffer(uint8_t *buffer, uint8_t length, uint8_t specificInterface);
 #endif
 
-extern bool inBinPacket;            ///< Indicates whether we have started parsing a binary packet or not
-extern uint8_t binDataLength;       ///< Expected size of incoming binary data (should be rxPacketLength - 4)
-extern uint8_t skipPacket;          ///< Global var to control whether event packet will be skipped due to custom handler
+extern bool inBinPacket;
+extern uint8_t binDataLength;
+extern uint8_t skipPacket;
 
-extern uint8_t lastCommandInterfaceNum; ///< Source interface number of last incoming command packet
-extern uint8_t systemResetFlags;    ///< Controls what to reset when we use "system_reset" API command
+extern uint8_t lastCommandInterfaceNum;
+extern uint8_t systemResetFlags;
 
 void setup_protocol();
 void protocol_parse(uint8_t inputByte);

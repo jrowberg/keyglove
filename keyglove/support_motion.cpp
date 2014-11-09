@@ -57,7 +57,7 @@ uint16_t kg_cmd_motion_get_mode(uint8_t index, uint8_t *mode) {
     if (index >= KG_MOTION_SENSOR_COUNT) {
         return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
     } else {
-    	*mode = motionMode[index];
+        *mode = motionMode[index];
     }
     return 0; // success
 }
@@ -74,7 +74,7 @@ uint16_t kg_cmd_motion_set_mode(uint8_t index, uint8_t mode) {
     } else {
         //motion_set_mode((motion_mode_t)mode);
         if (index == 0) {
-        	motion_set_mpu6050_hand_mode(mode);
+            motion_set_mpu6050_hand_mode(mode);
         }
 
         // send kg_evt_feedback_vibrate_mode packet (if we aren't setting it from an API command)

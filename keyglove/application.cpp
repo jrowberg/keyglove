@@ -26,7 +26,7 @@ THE SOFTWARE.
 */
 
 /**
- * @file application.h
+ * @file application.cpp
  * @brief **USER-DEFINED:** Custom application behavior definition
  * @author Jeff Rowberg
  * @date 2014-11-07
@@ -83,6 +83,13 @@ uint8_t my_kg_evt_system_ready() {
     return 0;
 }
 
+/**
+ * @brief Indicates that a previously scheduled software timer has elapsed
+ * @param[in] handle Timer handle which triggered this event
+ * @param[in] seconds Seconds elapsed since boot
+ * @param[in] subticks 10ms subticks above whole second
+ * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
+ */
 uint8_t my_kg_evt_system_timer_tick(uint8_t handle, uint32_t seconds, uint8_t subticks) {
     // read raw battery voltage
     int16_t rawBat = analogRead(0);

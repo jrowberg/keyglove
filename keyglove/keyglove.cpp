@@ -76,21 +76,21 @@ THE SOFTWARE.
 // USE THIS FILE TO IMPLEMENT ANY AUTONOMOUS BEHAVIOUR, SUCH AS ENABLING BLUETOOTH ON BOOT
 #include "application.h"
 
-volatile uint8_t keyglove100Hz = 0;          ///< Flag for 100Hz hardware timer interrupt
-uint8_t keygloveTick = 0;                    ///< Fast 100Hz counter, increments every ~10ms and loops at 100
-uint32_t keygloveTock = 0;                   ///< Slow 1Hz counter (a.k.a. "uptime"), increments every 100 ticks and loops at 2^32 (~4 billion)
-//uint32_t keygloveTickTime = 0;               ///< Benchmark testing "end" reference timestamp
-//uint32_t keygloveTickTime0 = 0;              ///< Benchmark testing "start" reference timestamp
+volatile uint8_t keyglove100Hz = 0;         ///< Flag for 100Hz hardware timer interrupt
+uint8_t keygloveTick = 0;                   ///< Fast 100Hz counter, increments every ~10ms and loops at 100
+uint32_t keygloveTock = 0;                  ///< Slow 1Hz counter (a.k.a. "uptime"), increments every 100 ticks and loops at 2^32 (~4 billion)
+//uint32_t keygloveTickTime = 0;              ///< Benchmark testing "end" reference timestamp
+//uint32_t keygloveTickTime0 = 0;             ///< Benchmark testing "start" reference timestamp
 
-uint8_t keygloveSoftTimers = 0;
-uint8_t keygloveSoftTimersRepeat = 0;
-uint16_t keygloveSoftTimerInterval[8];
-uint32_t keygloveSoftTimerSec[8];
-uint8_t keygloveSoftTimer10ms[8];
+uint8_t keygloveSoftTimers = 0;             ///< Bitmask for defined scheduled timers (one-shot or repeating)
+uint8_t keygloveSoftTimersRepeat = 0;       ///< Bitmask for which scheduled timers are repeating
+uint16_t keygloveSoftTimerInterval[8];      ///< Interval for each defined timer (units are 10ms)
+uint32_t keygloveSoftTimerSec[8];           ///< Next "second" (tock) to execute each timer
+uint8_t keygloveSoftTimer10ms[8];           ///< Next 10ms (tick) to execute each timer (w/corresponding second)
 
-volatile uint8_t keygloveBatteryInterrupt;   ///< Flag for battery status change interrupt
-volatile uint8_t keygloveBatteryStatus;      ///< Battery status signal container for post-interrupt processing
-uint8_t keygloveBatteryLevel;                ///< Battery charge level (0-100)
+volatile uint8_t keygloveBatteryInterrupt;  ///< Flag for battery status change interrupt
+volatile uint8_t keygloveBatteryStatus;     ///< Battery status signal container for post-interrupt processing
+uint8_t keygloveBatteryLevel;               ///< Battery charge level (0-100)
 
 /**
  * @brief Microcontroller initial setup routine

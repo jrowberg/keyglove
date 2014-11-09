@@ -1,4 +1,4 @@
-// Keyglove controller source code - KGAPI "touchset" protocol command parser
+// Keyglove controller source code - KGAPI "touchset" protocol command parser implementation
 // 2014-11-03 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
@@ -27,8 +27,8 @@ THE SOFTWARE.
 */
 
 /**
- * @file support_protocol_touchset.h
- * @brief KGAPI "touchset" protocol command parser
+ * @file support_protocol_touchset.cpp
+ * @brief KGAPI "touchset" protocol command parser implementation
  * @author Jeff Rowberg
  * @date 2014-11-03
  *

@@ -1,4 +1,4 @@
-// Keyglove controller source code - KGAPI "system" protocol command parser
+// Keyglove controller source code - KGAPI "system" protocol command parser implementation
 // 2014-11-03 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
@@ -27,8 +27,8 @@ THE SOFTWARE.
 */
 
 /**
- * @file support_protocol_system.h
- * @brief KGAPI "system" protocol command parser
+ * @file support_protocol_system.cpp
+ * @brief KGAPI "system" protocol command parser implementation
  * @author Jeff Rowberg
  * @date 2014-11-03
  *

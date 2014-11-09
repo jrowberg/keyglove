@@ -25,6 +25,18 @@ THE SOFTWARE.
 ===============================================
 */
 
+/* X *
+ * @defgroup system System Core
+ * @defgroup config Configuration
+ * @defgroup protocol KGAPI Protocol
+ * @defgroup feedback Feedback
+ * @defgroup touch Touch Sensors
+ * @defgroup motion Motion Sensors
+ * @defgroup flex Flex Sensors
+ * @defgroup pressure Pressure Sensors
+ * @defgroup bluetooth Bluetooth
+ */
+
 /**
  * @file keyglove.h
  * @brief Main setup/loop controller declarations
@@ -44,11 +56,11 @@ THE SOFTWARE.
 #include "hardware.h"
 #include "config.h"
 
-extern volatile uint8_t keyglove100Hz;              ///< Flag for 100Hz hardware timer interrupt
-extern uint8_t keygloveTick;                        ///< Fast 100Hz counter, increments every ~10ms and loops at 100
-extern uint32_t keygloveTock;                       ///< Slow 1Hz counter (a.k.a. "uptime"), increments every 100 ticks and loops at 2^32 (~4 billion)
-//extern uint32_t keygloveTickTime;                   ///< Benchmark testing "end" reference timestamp
-//extern uint32_t keygloveTickTime0;                  ///< Benchmark testing "start" reference timestamp
+extern volatile uint8_t keyglove100Hz;
+extern uint8_t keygloveTick;
+extern uint32_t keygloveTock;
+//extern uint32_t keygloveTickTime;
+//extern uint32_t keygloveTickTime0;
 
 extern uint8_t keygloveSoftTimers;
 extern uint8_t keygloveSoftTimersRepeat;
@@ -56,11 +68,8 @@ extern uint16_t keygloveSoftTimerInterval[8];
 extern uint32_t keygloveSoftTimerSec[8];
 extern uint8_t keygloveSoftTimer10ms[8];
 
-extern volatile uint8_t keygloveBatteryInterrupt;   ///< Flag for battery status change interrupt
-extern volatile uint8_t keygloveBatteryStatus;      ///< Battery status signal container for post-interrupt processing
-extern uint8_t keygloveBatteryLevel;                ///< Battery charge level (0-100)
-
-void keyglove_setup();
-void keyglove_loop();
+extern volatile uint8_t keygloveBatteryInterrupt;
+extern volatile uint8_t keygloveBatteryStatus;
+extern uint8_t keygloveBatteryLevel;
 
 #endif // _KEYGLOVE_H_

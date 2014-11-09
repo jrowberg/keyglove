@@ -45,7 +45,7 @@ THE SOFTWARE.
 uint8_t touchMode;          ///< Touch mode
 //uint32_t touchBench;        ///< Touch benchmark reference end
 //uint32_t touchBench0;       ///< Touch benchmark reference start
-uint8_t touchTick;          ///< Touch
+uint8_t touchTick;          ///< Touch tick reference
 
 uint16_t opt_touch_detect_threshold = 20;   ///< OPTION: Milliseconds required for a touch to register as legitimate
 

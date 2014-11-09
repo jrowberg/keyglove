@@ -26,7 +26,7 @@ THE SOFTWARE.
 */
 
 /**
- * @file support_protocol.h
+ * @file support_protocol.cpp
  * @brief KGAPI protocol core implementations
  * @author Jeff Rowberg
  * @date 2014-11-07
@@ -79,6 +79,10 @@ void setup_protocol() {
     }
 }
 
+/**
+ * @brief Set RX packet state back to "empty" state
+ * @return Number of bytes in packet buffer at time of reset
+ */
 uint16_t reset_keyglove_rx_packet() {
     uint16_t prevLength = rxPacketLength;
     inBinPacket = false;

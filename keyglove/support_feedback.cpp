@@ -49,7 +49,7 @@ THE SOFTWARE.
  * @return Calculated result on range [0, m-1]
  */
 int16_t mod(int16_t x, int16_t m) {
-	return ((x) < 0 ? (((x) % m) + m) % m : (x) % m);
+    return ((x) < 0 ? (((x) % m) + m) % m : (x) % m);
 }
 
 /**
@@ -60,7 +60,7 @@ int16_t mod(int16_t x, int16_t m) {
  * @return Output level (1=high, 0=low)
  */
 uint8_t square_wave(int32_t x, int32_t period, uint8_t duty) {
-	return (mod(x, period) < (period * duty / 100)) ? 1 : 0;
+    return (mod(x, period) < (period * duty / 100)) ? 1 : 0;
 }
 
 /**
@@ -79,12 +79,12 @@ uint8_t square_wave(int32_t x, int32_t period, uint8_t duty) {
  *
  * Or in graphscii:
  *
- *    |  A
- *    | / \
- * ___|/___\_____ (period, 0)
- *    |     \   /
- *    |      \ /
- *    |       V
+ *        |  A
+ *        | / \
+ *     ___|/___\_____ (period, 0)
+ *        |     \   /
+ *        |      \ /
+ *        |       V
  *
  * It can be shifted in either the X or Y dimension if necessary, but this form
  * makes it easily useful for a number of different LED fading routines.

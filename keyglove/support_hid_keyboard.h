@@ -178,8 +178,8 @@ THE SOFTWARE.
     #define KEY_VOLDOWN    129
 #endif /* !KEYPAD_ASTERISK */
 
-extern uint8_t hidModifiersDown;    ///< Modifier keys currently down
-extern uint8_t hidKeysDown[6];      ///< Normal keys currently down
+extern uint8_t hidModifiersDown;
+extern uint8_t hidKeysDown[6];
 
 void setup_hid_keyboard();
 //void update_hid_keyboard() {

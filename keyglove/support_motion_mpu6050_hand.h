@@ -40,10 +40,10 @@ THE SOFTWARE.
 
 #include "support_helper_3dmath.h"
 
-extern bool mpuHandInterrupt;           ///< Interrupt flag for motion data availability
+extern bool mpuHandInterrupt;
 
-extern VectorInt16 aa;                  ///< Filtered linear acceleration
-extern VectorInt16 gv;                  ///< Filtered rotational velocity
+extern VectorInt16 aa;
+extern VectorInt16 gv;
 
 void motion_mpu6050_hand_interrupt();
 void motion_set_mpu6050_hand_mode(uint8_t mode);

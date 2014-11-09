@@ -109,11 +109,11 @@ THE SOFTWARE.
 #define SET(x, y) (x |= (1 << y))       ///< Bit-setting macro for port/pin combination
 #define _BV(bit) (1 << (bit))           ///< Bit-value calculation macro for lazy people
 
-extern bool interfaceUSBSerialReady;    ///< Status indicator for USB serial interface
-extern uint8_t interfaceUSBSerialMode;  ///< USB serial communication mode setting @see KG_INTERFACE_MODE_NONE, @see KG_INTERFACE_MODE_OUTGOING_PACKET, @see KG_INTERFACE_MODE_INCOMING_PACKET
-extern bool interfaceUSBRawHIDReady;    ///< Status indicator for USB raw HID interface
-extern uint8_t interfaceUSBRawHIDMode;  ///< USB raw HID communication mode setting @see KG_INTERFACE_MODE_NONE, @see KG_INTERFACE_MODE_OUTGOING_PACKET, @see KG_INTERFACE_MODE_INCOMING_PACKET
-extern bool interfaceUSBHIDReady;       ///< Status indicator for USB HID interface
+extern bool interfaceUSBSerialReady;
+extern uint8_t interfaceUSBSerialMode;
+extern bool interfaceUSBRawHIDReady;
+extern uint8_t interfaceUSBRawHIDMode;
+extern bool interfaceUSBHIDReady;
 
 void setup_board();
 void update_board_touch(uint8_t *touches);

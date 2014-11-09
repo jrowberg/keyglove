@@ -41,9 +41,9 @@ THE SOFTWARE.
 
 // info included in system_boot() event
 #define KG_FIRMWARE_VERSION_MAJOR 0                         ///< Firmware major version number
-#define KG_FIRMWARE_VERSION_MINOR 9                         ///< Firmware minor version number
+#define KG_FIRMWARE_VERSION_MINOR 5                         ///< Firmware minor version number
 #define KG_FIRMWARE_VERSION_PATCH 0                         ///< Firmware patch version number
-#define KG_FIRMWARE_BUILD_TIMESTAMP 1405189045				///< Firmware build UNIX timestamp
+#define KG_FIRMWARE_BUILD_TIMESTAMP 1415420841              ///< Firmware build UNIX timestamp
 
 // info available for reference, not in system_boot() event
 #define KG_FIRMWARE_NAME_STRING "Keyglove Official"         ///< Firmware name string

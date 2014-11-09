@@ -1,4 +1,4 @@
-// Keyglove controller source code - KGAPI "system" protocol command parser
+// Keyglove controller source code - KGAPI "system" protocol command parser declarations
 // 2014-11-03 by Jeff Rowberg <jeff@rowberg.net>
 // Updates should (hopefully) always be available at https://github.com/jrowberg/keyglove
 
@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 /**
  * @file support_protocol_system.h
- * @brief KGAPI "system" protocol command parser
+ * @brief KGAPI "system" protocol command parser declarations
  * @author Jeff Rowberg
  * @date 2014-11-03
  *
@@ -75,8 +75,8 @@ THE SOFTWARE.
 /* 0x04 */ extern uint8_t (*kg_evt_system_timer_tick)(uint8_t handle, uint32_t seconds, uint8_t subticks);
 /* 0x05 */ extern uint8_t (*kg_evt_system_battery_status)(uint8_t status, uint8_t level);
 
-#define KG_SYSTEM_RESET_TYPE_NORMAL                         0x01
-#define KG_SYSTEM_RESET_TYPE_KGONLY                         0x02
+#define KG_SYSTEM_RESET_TYPE_NORMAL                         0x01    ///< Reset all components (e.g. core, motion, Bluetooth)
+#define KG_SYSTEM_RESET_TYPE_KGONLY                         0x02    ///< Reset only core Keyglove board
 
 uint8_t process_protocol_command_system(uint8_t *rxPacket);
 

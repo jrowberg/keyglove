@@ -44,21 +44,21 @@ THE SOFTWARE.
 #define _SUPPORT_MOTION_H_
 
 #if (KG_MOTION & KG_MOTION_MPU6050_HAND)
- 	#include "support_motion_mpu6050_hand.h"
-	#define KG_MOTION_SENSOR_COUNT  1
+     #include "support_motion_mpu6050_hand.h"
+    #define KG_MOTION_SENSOR_COUNT  1
 #else
-	#define KG_MOTION_SENSOR_COUNT  0
+    #define KG_MOTION_SENSOR_COUNT  0           ///< Number of motion sensors incorporated in design
 #endif
 
 /**
  * @brief List of possible values for motion sensor mode
  */
 typedef enum {
-    KG_MOTION_MODE_OFF = 0,		///< (0) Motion sensor disabled
+    KG_MOTION_MODE_OFF = 0,     ///< (0) Motion sensor disabled
     KG_MOTION_MODE_ON,          ///< (1) Motion sensor enabled
     KG_MOTION_MODE_MAX
 } motion_mode_t;
 
-extern motion_mode_t motionMode[KG_MOTION_SENSOR_COUNT];    ///< Motion sensor modes
+extern motion_mode_t motionMode[KG_MOTION_SENSOR_COUNT];
 
 #endif // _SUPPORT_MOTION_H_
