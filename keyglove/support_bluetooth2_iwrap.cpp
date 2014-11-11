@@ -727,7 +727,7 @@ void my_iwrap_rsp_pair(const iwrap_address_t *mac, uint8_t result) {
             }
         }
 
-        if (i = iwrap_pairings) {
+        if (i == iwrap_pairings) {
             // this is a new pairing, so increment count
             iwrap_pairings++;
         }
