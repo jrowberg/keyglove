@@ -45,8 +45,8 @@ THE SOFTWARE.
 #define BLUETOOTH_PROFILE_MASK_HFP              0x10    ///< Bitmask indicating HFP link
 #define BLUETOOTH_PROFILE_MASK_AVRCP            0x20    ///< Bitmask indicating AVRCP link
 
-#define BT2_RAWHID_RX_SIZE 16                               ///< Raw HID input payload size
-#define BT2_RAWHID_TX_SIZE 16                               ///< Raw HID output payload size
+#define BT2_RAWHID_RX_SIZE 16                           ///< Raw HID input payload size
+#define BT2_RAWHID_TX_SIZE 16                           ///< Raw HID output payload size
 
 // ======== BEGIN DECLARATIONS COPIED/TWEAKED FROM IWRAP ARDUINO DEMO ========
 
