@@ -788,13 +788,13 @@ void my_iwrap_rsp_set(uint8_t category, const char *option, const char *value) {
                 // rename device to include BT MAC address for unique name
                 char *cmdName = (char *)malloc(30);
                 if (cmdName) {
-                    strcpy(cmdName, "SET BT NAME Keyglove 000000");
+                    strcpy(cmdName, "SET BT NAME Keyglove 00:00:00");
                     cmdName[21] = (iwrap_module_mac.address[3] / 0x10) + 48 + ((iwrap_module_mac.address[3] / 0x10) / 10 * 7);
                     cmdName[22] = (iwrap_module_mac.address[3] & 0x0f) + 48 + ((iwrap_module_mac.address[3] & 0x0f) / 10 * 7);
-                    cmdName[23] = (iwrap_module_mac.address[4] / 0x10) + 48 + ((iwrap_module_mac.address[4] / 0x10) / 10 * 7);
-                    cmdName[24] = (iwrap_module_mac.address[4] & 0x0f) + 48 + ((iwrap_module_mac.address[4] & 0x0f) / 10 * 7);
-                    cmdName[25] = (iwrap_module_mac.address[5] / 0x10) + 48 + ((iwrap_module_mac.address[5] / 0x10) / 10 * 7);
-                    cmdName[26] = (iwrap_module_mac.address[5] & 0x0f) + 48 + ((iwrap_module_mac.address[5] & 0x0f) / 10 * 7);
+                    cmdName[24] = (iwrap_module_mac.address[4] / 0x10) + 48 + ((iwrap_module_mac.address[4] / 0x10) / 10 * 7);
+                    cmdName[25] = (iwrap_module_mac.address[4] & 0x0f) + 48 + ((iwrap_module_mac.address[4] & 0x0f) / 10 * 7);
+                    cmdName[27] = (iwrap_module_mac.address[5] / 0x10) + 48 + ((iwrap_module_mac.address[5] / 0x10) / 10 * 7);
+                    cmdName[28] = (iwrap_module_mac.address[5] & 0x0f) + 48 + ((iwrap_module_mac.address[5] & 0x0f) / 10 * 7);
                     iwrap_send_command(cmdName, iwrap_mode);
                     free(cmdName);
                 } else {
