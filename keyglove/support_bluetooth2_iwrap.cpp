@@ -1081,7 +1081,7 @@ uint8_t find_pairing_from_link_id(uint8_t link_id) {
  * @param[in] mode Profile used for connection (e.g. "HID", "RFCOMM", etc.)
  * @param[in] channel RFCOMM or L2CAP channel of connection
  */
-void add_mapped_connection(uint8_t link_id, const iwrap_address_t *mac, const char *mode, uint16_t channel) {
+void add_mapped_connection(uint8_t link_id, const iwrap_address_t *mac, const char *profile, uint16_t channel) {
     uint8_t pairing_index = find_pairing_from_mac(mac);
 
     // make sure we found a match (we SHOULD always match something, if we properly parsed the pairing data first)
@@ -1110,28 +1110,28 @@ void add_mapped_connection(uint8_t link_id, const iwrap_address_t *mac, const ch
     payload[5] = iwrap_connection_map[pairing_index] -> mac.address[1];
     payload[6] = iwrap_connection_map[pairing_index] -> mac.address[0];
 
-                // add link ID to connection map
-    /*if (strcmp(mode, "A2DP") == 0) {
+    // add link ID to connection map
+    /*if (strcmp(profile, "A2DP") == 0) {
         if (iwrap_connection_map[pairing_index] -> link_a2dp1 == 0xFF) {
             iwrap_connection_map[pairing_index] -> link_a2dp1 = link_id;
         } else {
             iwrap_connection_map[pairing_index] -> link_a2dp2 = link_id;
         }
-    } else*/ if (strcmp(mode, "AVRCP") == 0) {
+    } else*/ if (strcmp(profile, "AVRCP") == 0) {
         iwrap_connection_map[pairing_index] -> link_avrcp = link_id;
         iwrap_connection_map[pairing_index] -> profiles_active |= BLUETOOTH_PROFILE_MASK_AVRCP;
         payload[8] = BLUETOOTH_PROFILE_MASK_AVRCP;
         interfaceBT2AVRCPReady = true;
         bluetoothAVRCPDeviceIndex = pairing_index;
-    } else if (strcmp(mode, "HFP") == 0) {
+    } else if (strcmp(profile, "HFP") == 0) {
         iwrap_connection_map[pairing_index] -> link_hfp = link_id;
         iwrap_connection_map[pairing_index] -> profiles_active |= BLUETOOTH_PROFILE_MASK_HFP;
         payload[8] = BLUETOOTH_PROFILE_MASK_HFP;
         interfaceBT2HFPReady = false;
         bluetoothHFPDeviceIndex = pairing_index;
-    //} else if (strcmp(mode, "HFPAG") == 0) {
+    //} else if (strcmp(profile, "HFPAG") == 0) {
     //    iwrap_connection_map[pairing_index] -> link_hfpag = link_id;
-    } else if (strcmp(mode, "HID") == 0) {
+    } else if (strcmp(profile, "HID") == 0) {
         if (channel == 0x11) {
             iwrap_connection_map[pairing_index] -> link_hid_control = link_id;
             iwrap_connection_map[pairing_index] -> profiles_active |= BLUETOOTH_PROFILE_MASK_HID_CONTROL;
@@ -1145,17 +1145,17 @@ void add_mapped_connection(uint8_t link_id, const iwrap_address_t *mac, const ch
             bluetoothHIDDeviceIndex = pairing_index;
             bluetoothRawHIDDeviceIndex = pairing_index;
         }
-    //} else if (strcmp(mode, "HSP") == 0) {
+    //} else if (strcmp(profile, "HSP") == 0) {
     //    iwrap_connection_map[pairing_index] -> link_hsp = link_id;
-    //} else if (strcmp(mode, "HSPAG") == 0) {
+    //} else if (strcmp(profile, "HSPAG") == 0) {
     //    iwrap_connection_map[pairing_index] -> link_hspag = link_id;
-    } else if (strcmp(mode, "IAP") == 0) {
+    } else if (strcmp(profile, "IAP") == 0) {
         iwrap_connection_map[pairing_index] -> link_iap = link_id;
         iwrap_connection_map[pairing_index] -> profiles_active |= BLUETOOTH_PROFILE_MASK_IAP;
         payload[8] = BLUETOOTH_PROFILE_MASK_IAP;
         interfaceBT2IAPReady = true;
         bluetoothIAPDeviceIndex = pairing_index;
-    } else if (strcmp(mode, "RFCOMM") == 0) {
+    } else if (strcmp(profile, "RFCOMM") == 0) {
         // probably SPP, possibly other RFCOMM-based connections
         if (channel == 1) {
             iwrap_connection_map[pairing_index] -> link_spp = link_id;
@@ -1654,7 +1654,7 @@ uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t index) {
         iwrap_connection_map[iwrap_pairings] = 0;
         
         // change Bluetooth page mode if we just deleted the last pairing
-        if (iwrap_pairings == 0 && bluetoothMode == KG_BLUETOOTH_MODE_MANUAL) {
+        if (iwrap_pairings == 0 && (bluetoothMode == KG_BLUETOOTH_MODE_MANUAL || bluetoothMode == KG_BLUETOOTH_MODE_AUTOCALL)) {
             // not connected or paired, so default to discoverable/connectable
             if (iwrap_page_mode != 4) {
                 iwrap_send_command("SET BT PAGE 4", iwrap_mode);
@@ -1701,7 +1701,7 @@ uint16_t kg_cmd_bluetooth_clear_pairings() {
         }
 
         // change Bluetooth page mode if we are in the right mode
-        if (bluetoothMode == KG_BLUETOOTH_MODE_MANUAL) {
+        if (bluetoothMode == KG_BLUETOOTH_MODE_MANUAL || bluetoothMode == KG_BLUETOOTH_MODE_AUTOCALL) {
             // not connected or paired, so default to discoverable/connectable
             if (iwrap_page_mode != 4) {
                 iwrap_send_command("SET BT PAGE 4", iwrap_mode);
