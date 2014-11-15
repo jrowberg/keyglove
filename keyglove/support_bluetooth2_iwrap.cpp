@@ -727,9 +727,16 @@ void my_iwrap_rsp_pair(const iwrap_address_t *mac, uint8_t result) {
             }
         }
 
+        // check for new vs. overwritten pairing (most likely new)
         if (i == iwrap_pairings) {
             // this is a new pairing, so increment count
             iwrap_pairings++;
+        }
+
+        // push back autocall timer if this is the first pairing
+        // (host will likely autoconnect first, this skips a disconnection hiccup)
+        if (iwrap_pairings == 1) {
+            if (keygloveTock >= 5) bluetoothTock = keygloveTock - 5;
         }
 
         // make sure we allocate memory if needed
@@ -966,11 +973,11 @@ void my_iwrap_evt_no_carrier(uint8_t link_id, uint16_t error_code, const char *m
         if (iwrap_pending_calls) iwrap_pending_calls--;
         if (iwrap_state == IWRAP_STATE_PENDING_CALL) iwrap_state = IWRAP_STATE_IDLE;
         iwrap_pending_call_link_id = 0xFF;
-    }
-    if (remove_mapped_connection(link_id) != 0xFF) {
-        // only update if the connection was already mapped
-        // (i.e. not already closed or a failed outgoing connection attempt)
-        if (iwrap_active_connections) iwrap_active_connections--;
+    } else {
+        //if (remove_mapped_connection(link_id) != 0xFF) {
+            // remove from connection count if not a failed pending/outgoing attempt
+            if (iwrap_active_connections) iwrap_active_connections--;
+        //}
     }
 
     // send kg_evt_bluetooth_connection_closed()
@@ -1371,7 +1378,6 @@ uint16_t kg_cmd_bluetooth_get_mode(uint8_t *mode) {
  * @return Result code (0=success)
  */
 uint16_t kg_cmd_bluetooth_set_mode(uint8_t mode) {
-    uint8_t curId = 0;
     char cmdClose[] = "CLOSE 00";
 
     // validate mode
@@ -1391,17 +1397,17 @@ uint16_t kg_cmd_bluetooth_set_mode(uint8_t mode) {
                         iwrap_page_mode = 0;
                         
                         // close any open links
-                        while (bluetoothActiveLinkMask) {
-                            if (curId > 9) {
-                                cmdClose[6] = '1';
-                                cmdClose[7] = curId + 38;
-                            } else {
-                                cmdClose[6] = curId + 48;
-                                cmdClose[7] = 0;
+                        for (uint8_t i = 0; i < 16; i++) {
+                            if ((bluetoothActiveLinkMask & (1 << i)) != 0) {
+                                if (i > 9) {
+                                    cmdClose[6] = '1';
+                                    cmdClose[7] = i + 38;
+                                } else {
+                                    cmdClose[6] = i + 48;
+                                    cmdClose[7] = 0;
+                                }
+                                iwrap_send_command(cmdClose, iwrap_mode);
                             }
-                            iwrap_send_command(cmdClose, iwrap_mode);
-                            bluetoothActiveLinkMask >>= 1;
-                            curId++;
                         }
                         break;
                         
@@ -1621,8 +1627,27 @@ uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t index) {
         char *cptr = cmd + 12;
         iwrap_bintohexstr((uint8_t *)(iwrap_connection_map[index] -> mac.address), 6, &cptr, ':', 0);
         iwrap_send_command(cmd, iwrap_mode);
-        iwrap_pairings--;
+
+        // close any open links for this pairing entry
+        char cmdClose[] = "CLOSE 00";
+        for (uint8_t i = 0; i < 16; i++) {
+            if ((bluetoothActiveLinkMask & (1 << i)) != 0) {
+                if (find_pairing_from_link_id(i) == index) {
+                    if (i > 9) {
+                        cmdClose[6] = '1';
+                        cmdClose[7] = i + 38;
+                    } else {
+                        cmdClose[6] = i + 48;
+                        cmdClose[7] = 0;
+                    }
+                    iwrap_send_command(cmdClose, iwrap_mode);
+                }
+            }
+        }
+
+        // free this entry and shift any below it up one position
         free(iwrap_connection_map[index]);
+        iwrap_pairings--;
         for (uint8_t i = index; i < iwrap_pairings; i++) {
             iwrap_connection_map[i] = iwrap_connection_map[i + 1];
         }
@@ -1659,6 +1684,21 @@ uint16_t kg_cmd_bluetooth_clear_pairings() {
     if (interfaceBT2Ready) {
         iwrap_pairings = 0;
         iwrap_send_command("SET BT PAIR *", iwrap_mode);
+
+        // close any open links
+        char cmdClose[] = "CLOSE 00";
+        for (uint8_t i = 0; i < 16; i++) {
+            if ((bluetoothActiveLinkMask & (1 << i)) != 0) {
+                if (i > 9) {
+                    cmdClose[6] = '1';
+                    cmdClose[7] = i + 38;
+                } else {
+                    cmdClose[6] = i + 48;
+                    cmdClose[7] = 0;
+                }
+                iwrap_send_command(cmdClose, iwrap_mode);
+            }
+        }
 
         // change Bluetooth page mode if we are in the right mode
         if (bluetoothMode == KG_BLUETOOTH_MODE_MANUAL) {
@@ -1722,17 +1762,24 @@ uint16_t kg_cmd_bluetooth_get_connections(uint8_t *count) {
                     return KG_PROTOCOL_ERROR_NULL_POINTER;
                 }
             }
-            if (i == iwrap_pairings) continue; // this shouldn't happen, ever! (we didn't find a link match)
 
-            pairing_index = i;
-            payload[1] = iwrap_connection_map[pairing_index] -> mac.address[5]; // little-endian byte order
-            payload[2] = iwrap_connection_map[pairing_index] -> mac.address[4];
-            payload[3] = iwrap_connection_map[pairing_index] -> mac.address[3];
-            payload[4] = iwrap_connection_map[pairing_index] -> mac.address[2];
-            payload[5] = iwrap_connection_map[pairing_index] -> mac.address[1];
-            payload[6] = iwrap_connection_map[pairing_index] -> mac.address[0];
-            payload[7] = pairing_index;
-            
+            if (i == iwrap_pairings) {
+                // no link match found, only reason this should happen is if we
+                // deleted the pairing without closing the link (which is possible,
+                // if this API command is called at exactly the right time);
+                memset(payload + 1, 0xFF, 8);
+            } else {
+                // found a matching paired device
+                pairing_index = i;
+                payload[1] = iwrap_connection_map[pairing_index] -> mac.address[5]; // little-endian byte order
+                payload[2] = iwrap_connection_map[pairing_index] -> mac.address[4];
+                payload[3] = iwrap_connection_map[pairing_index] -> mac.address[3];
+                payload[4] = iwrap_connection_map[pairing_index] -> mac.address[2];
+                payload[5] = iwrap_connection_map[pairing_index] -> mac.address[1];
+                payload[6] = iwrap_connection_map[pairing_index] -> mac.address[0];
+                payload[7] = pairing_index;
+            }
+
             // queue kg_evt_bluetooth_connection_status(...)
             skipPacket = 0;
             if (kg_evt_bluetooth_connection_status) skipPacket = kg_evt_bluetooth_connection_status(payload[0], payload + 1, payload[7], payload[8], payload[9]);
