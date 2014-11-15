@@ -1628,6 +1628,15 @@ uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t index) {
         }
         iwrap_connection_map[iwrap_pairings] = 0;
         
+        // change Bluetooth page mode if we just deleted the last pairing
+        if (iwrap_pairings == 0 && bluetoothMode == KG_BLUETOOTH_MODE_MANUAL) {
+            // not connected or paired, so default to discoverable/connectable
+            if (iwrap_page_mode != 4) {
+                iwrap_send_command("SET BT PAGE 4", iwrap_mode);
+                iwrap_page_mode = 4;
+            }
+        }
+
         // adjust active device indexes if necessary
         if (bluetoothSPPDeviceIndex >= index) bluetoothSPPDeviceIndex--;
         if (bluetoothIAPDeviceIndex >= index) bluetoothIAPDeviceIndex--;
@@ -1650,6 +1659,16 @@ uint16_t kg_cmd_bluetooth_clear_pairings() {
     if (interfaceBT2Ready) {
         iwrap_pairings = 0;
         iwrap_send_command("SET BT PAIR *", iwrap_mode);
+
+        // change Bluetooth page mode if we are in the right mode
+        if (bluetoothMode == KG_BLUETOOTH_MODE_MANUAL) {
+            // not connected or paired, so default to discoverable/connectable
+            if (iwrap_page_mode != 4) {
+                iwrap_send_command("SET BT PAGE 4", iwrap_mode);
+                iwrap_page_mode = 4;
+            }
+        }
+
         return 0; // success
     } else {
         return KG_BLUETOOTH_ERROR_INTERFACE_NOT_READY;
