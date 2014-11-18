@@ -40,6 +40,7 @@ THE SOFTWARE.
  */
 
 #include "keyglove.h"
+#include "support_board.h"
 #include "support_hid_mouse.h"
 #include "support_motion.h"
 #include "support_bluetooth2_iwrap.h"
