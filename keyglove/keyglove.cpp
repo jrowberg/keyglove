@@ -276,6 +276,9 @@ void loop() {
                 }
             }
         }
+    } else if (touchOn) {
+        // update touch status instantly for low-latency when any are active
+        update_touch();
     }
 
     /*

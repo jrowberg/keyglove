@@ -46,8 +46,9 @@ uint8_t touchMode;          ///< Touch mode
 //uint32_t touchBench;        ///< Touch benchmark reference end
 //uint32_t touchBench0;       ///< Touch benchmark reference start
 uint8_t touchTick;          ///< Touch tick reference
+uint8_t touchOn;            ///< Indicates whether any touches are active
 
-uint16_t opt_touch_detect_threshold = 20;   ///< OPTION: Milliseconds required for a touch to register as legitimate
+uint16_t opt_touch_detect_threshold = 10;   ///< OPTION: Milliseconds required for a touch to register as legitimate
 
 uint32_t touchTime;                         ///< Touch detection reference timestamp
 
@@ -97,6 +98,10 @@ void update_touch() {
 
         // set official sensor readings to current readings
         memcpy(touches_active, touches_verify, KG_BASE_COMBINATION_BYTES);
+
+        // check overall touch state (on or off)
+        touchOn = 0;
+        for (i = 0; i < KG_BASE_COMBINATION_BYTES && !touchOn; i++) touchOn |= touches_active[i];
 
         // build event (uint8_t index, uint8_t[] touches)
         uint8_t payload[KG_BASE_COMBINATION_BYTES + 1];

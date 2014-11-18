@@ -39,6 +39,7 @@ void touch_set_mode(uint8_t mode);
 
 extern uint8_t touchMode;
 extern uint8_t touchTick;
+extern uint8_t touchOn;
 
 extern uint32_t touchTime;
 
