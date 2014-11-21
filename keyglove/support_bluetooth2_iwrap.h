@@ -169,6 +169,7 @@ uint8_t find_pairing_from_mac(const iwrap_address_t *mac);
 uint8_t find_pairing_from_link_id(uint8_t link_id);
 void add_mapped_connection(uint8_t link_id, const iwrap_address_t *addr, const char *mode, uint16_t channel);
 uint8_t remove_mapped_connection(uint8_t link_id);
+uint8_t set_master_role(uint8_t link_id);
 
 // platform-specific helper functions
 int serial_out(const char *str);

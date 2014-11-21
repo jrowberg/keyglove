@@ -682,6 +682,10 @@ void my_iwrap_rsp_list_count(uint8_t num_of_connections) {
 void my_iwrap_rsp_list_result(uint8_t link_id, const char *mode, uint16_t blocksize, uint32_t elapsed_time, uint16_t local_msc, uint16_t remote_msc, const iwrap_address_t *mac, uint16_t channel, uint8_t direction, uint8_t powermode, uint8_t role, uint8_t crypt, uint16_t buffer, uint8_t eretx) {
     bluetoothActiveLinkMask |= (1 << link_id);
     add_mapped_connection(link_id, mac, mode, channel);
+    if (role == IWRAP_CONNECTION_ROLE_SLAVE) {
+        // attempt role switching to master for lower latency and power
+        set_master_role(link_id);
+    }
 }
 
 /**
@@ -859,6 +863,10 @@ void my_iwrap_evt_connect(uint8_t link_id, const char *type, uint16_t target, co
     bluetoothPendingConnectionStatus |= (1 << link_id);
     bluetoothActiveLinkMask |= (1 << link_id);
     add_mapped_connection(link_id, mac, type, target);
+
+    // attempt role switching to master for lower latency and power
+    // (we might already be a master here, but just to be safe)
+    set_master_role(link_id);
 }
 
 /**
@@ -1015,6 +1023,10 @@ void my_iwrap_evt_ring(uint8_t link_id, const iwrap_address_t *mac, uint16_t cha
     bluetoothPendingConnectionStatus |= (1 << link_id);
     bluetoothActiveLinkMask |= (1 << link_id);
     add_mapped_connection(link_id, mac, profile, channel);
+
+    // attempt role switching to master for lower latency and power
+    // (we might already be a master here, but just to be safe)
+    set_master_role(link_id);
 }
 
 /* ============================================================================
@@ -1316,6 +1328,28 @@ uint8_t remove_mapped_connection(uint8_t link_id) {
     
     // not found, return 0xFF
     return 0xFF;
+}
+
+/**
+ * @brief Set link to MASTER Bluetooth role
+ * @param[in] link_id Link ID of connection to set
+ * @return 0 if command sent successfully, -1 (0xFF) otherwise
+ */
+uint8_t set_master_role(uint8_t link_id) {
+    char *cmdRole = (char *)malloc(16);
+    if (cmdRole) {
+        strcpy(cmdRole, "SET 00 MASTER");
+        if (link_id > 9) {
+            cmdRole[4] = '1';
+            cmdRole[5] = link_id + 38;
+        } else {
+            cmdRole[5] = link_id + 48;
+        }
+        iwrap_send_command(cmdRole, iwrap_mode);
+        free(cmdRole);
+        return 0; // successfully sent command
+    }
+    return 0xFF; // could not send command (memory allocation)
 }
 
 /* ============================================================================
