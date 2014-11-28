@@ -1,5 +1,5 @@
 // Keyglove controller source code - Custom application behavior stub/reference implementations
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-11-28 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file application_stubs.cpp
  * @brief **USER-DEFINED:** Custom application behavior stub/reference implementations
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2014-11-28
  *
  * This file contains empty "stub" implementations of all existing API events.
  * It is also not included in the compile process. It is intended only that you
@@ -286,12 +286,12 @@ uint8_t my_kg_evt_bluetooth_ready() {
  * @param[in] cod Three-byte Bluetooth Class-of-Device value
  * @param[in] rssi RSSI value from discovered device
  * @param[in] status Status within inquiry process
- * @param[in] index Index of device in pairing list (0xFF if not paired)
+ * @param[in] pairing Index of device in pairing list (0xFF if not paired)
  * @param[in] name_len Length in bytes of name_data buffer
  * @param[in] name_data Friendly name of remote device (if available)
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
-uint8_t my_kg_evt_bluetooth_inquiry_response(uint8_t *address, uint8_t *cod, int8_t rssi, uint8_t status, uint8_t index, uint8_t name_len, uint8_t *name_data) {
+uint8_t my_kg_evt_bluetooth_inquiry_response(uint8_t *address, uint8_t *cod, int8_t rssi, uint8_t status, uint8_t pairing, uint8_t name_len, uint8_t *name_data) {
     // TODO: special event handler code here
     // ...
 
@@ -312,7 +312,7 @@ uint8_t my_kg_evt_bluetooth_inquiry_complete(uint8_t count) {
 
 /**
  * @brief Provides a single pairing entry detailed status record
- * @param[in] index Index of device in pairing list
+ * @param[in] pairing Index of device in pairing list
  * @param[in] address Six-byte Bluetooth MAC address of remote device
  * @param[in] priority Auto-connection priority
  * @param[in] profiles_supported Bitmask of supported profiles
@@ -321,7 +321,7 @@ uint8_t my_kg_evt_bluetooth_inquiry_complete(uint8_t count) {
  * @param[in] handle_list_data Handles for all active Bluetooth profile connections
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
-uint8_t my_kg_evt_bluetooth_pairing_status(uint8_t index, uint8_t *address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t handle_list_len, uint8_t *handle_list_data) {
+uint8_t my_kg_evt_bluetooth_pairing_status(uint8_t pairing, uint8_t *address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t handle_list_len, uint8_t *handle_list_data) {
     // TODO: special event handler code here
     // ...
 
@@ -355,12 +355,12 @@ uint8_t my_kg_evt_bluetooth_pairings_cleared() {
  * @brief Indicates that a paired device has connected
  * @param[in] handle Connection handle
  * @param[in] address Six-byte Bluetooth MAC address of remote device
- * @param[in] index Index of device in pairing list
+ * @param[in] pairing Index of device in pairing list
  * @param[in] profile Bluetooth profile used for this connection
  * @param[in] status Status
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
-uint8_t my_kg_evt_bluetooth_connection_status(uint8_t handle, uint8_t *address, uint8_t index, uint8_t profile, uint8_t status) {
+uint8_t my_kg_evt_bluetooth_connection_status(uint8_t handle, uint8_t *address, uint8_t pairing, uint8_t profile, uint8_t status) {
     // TODO: special event handler code here
     // ...
 
@@ -380,4 +380,5 @@ uint8_t my_kg_evt_bluetooth_connection_closed(uint8_t handle, uint16_t reason) {
     return 0; // 0=send event API packet, otherwise skip sending
 }
 
-#endif
+
+#endif // false
