@@ -197,7 +197,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_APIMODE_BT2_RAWHID   KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_BT2_RAWHID   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
 
 /**
  * @brief HID support type selection

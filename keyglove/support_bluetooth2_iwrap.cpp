@@ -581,8 +581,34 @@ void my_iwrap_callback_rxdata(uint8_t channel, uint16_t length, const uint8_t *d
     send_keyglove_log(KG_LOG_LEVEL_VERBOSE, strlen(s), s);
     */
 
-    lastCommandInterfaceNum = KG_INTERFACENUM_BT2_SERIAL;
-    for (uint16_t i = 0; i < length; i++) protocol_parse((uint8_t)data[i]);
+    #if KG_HOSTIF & KG_HOSTIF_BT2_SERIAL
+        if (interfaceBT2SerialReady && (interfaceBT2SerialMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0 && iwrap_connection_map[bluetoothSPPDeviceIndex] && iwrap_connection_map[bluetoothSPPDeviceIndex] -> link_spp == channel) {
+            // new data coming in over SPP link
+            lastCommandInterfaceNum = KG_INTERFACENUM_BT2_SERIAL;
+            for (uint16_t i = 0; i < length; i++) protocol_parse((uint8_t)data[i]);
+        }
+    #endif
+
+    #if KG_HOSTIF & KG_HOSTIF_BT2_RAWHID
+        if (interfaceBT2RawHIDReady && (interfaceBT2RawHIDMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0 && iwrap_connection_map[bluetoothRawHIDDeviceIndex] && iwrap_connection_map[bluetoothRawHIDDeviceIndex] -> link_hid_interrupt == channel) {
+            // new data coming in over raw HID link
+            if (length > 3 && data[0] == 0xA2 && data[1] == 0x04) {
+                // non-empty HID output report with the raw HID report ID
+                lastCommandInterfaceNum = KG_INTERFACENUM_BT2_RAWHID;
+                for (uint16_t i = 0; i < data[2]; i++) {
+                    protocol_parse((uint8_t)data[3 + i]);
+                }
+            }
+        }
+    #endif
+
+    #if KG_HOSTIF & KG_HOSTIF_BT2_IAP
+        // new data coming in over raw IAP link
+        if (interfaceBT2IAPReady && (interfaceBT2IAPMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0 && iwrap_connection_map[bluetoothIAPDeviceIndex] && iwrap_connection_map[bluetoothIAPDeviceIndex] -> link_iap == channel) {
+            lastCommandInterfaceNum = KG_INTERFACENUM_BT2_IAP;
+            for (uint16_t i = 0; i < length; i++) protocol_parse((uint8_t)data[i]);
+        }
+    #endif
 }
 
 /**
