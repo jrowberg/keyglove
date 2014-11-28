@@ -737,7 +737,7 @@ void my_iwrap_rsp_pair(const iwrap_address_t *mac, uint8_t result) {
     } else {
         // zero = "OK" result, send bluetooth_pairing_status() event
         
-        // build event (uint8_t index, macaddr_t address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t[] handle_list)
+        // build event (uint8_t pairing, macaddr_t address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t[] handle_list)
         uint8_t i;
         
         // identify pairing by address in case it's been updated
@@ -1571,7 +1571,7 @@ uint16_t kg_cmd_bluetooth_get_pairings(uint8_t *count) {
         uint8_t payload[18];
         for (uint8_t i = 0; i < iwrap_pairings; i++) {
             if (iwrap_connection_map[i]) {
-                // build event (uint8_t index, macaddr_t address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t[] handle_list)
+                // build event (uint8_t pairing, macaddr_t address, uint8_t priority, uint8_t profiles_supported, uint8_t profiles_active, uint8_t[] handle_list)
                 payload[0] = i;    // pairing index
                 payload[1] = iwrap_connection_map[i] -> mac.address[5];
                 payload[2] = iwrap_connection_map[i] -> mac.address[4];
@@ -1670,29 +1670,29 @@ uint16_t kg_cmd_bluetooth_pair(uint8_t *address) {
 
 /**
  * @brief Remove a specific pairing entry
- * @param[in] index Index of pairing to delete
+ * @param[in] pairing Index of pairing to delete
  * @return Result code (0=success)
  */
-uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t index) {
+uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t pairing) {
     if (interfaceBT2Ready) {
         // validate pairing index
-        if (index >= iwrap_pairings) {
+        if (pairing >= iwrap_pairings) {
             return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
         }
-        if (iwrap_connection_map[index] == 0) {
+        if (iwrap_connection_map[pairing] == 0) {
             // this should NEVER happen, but if it does, I want to know
             return KG_PROTOCOL_ERROR_NULL_POINTER;
         }
         char cmd[] = "SET BT PAIR 00:00:00:00:00:00";
         char *cptr = cmd + 12;
-        iwrap_bintohexstr((uint8_t *)(iwrap_connection_map[index] -> mac.address), 6, &cptr, ':', 0);
+        iwrap_bintohexstr((uint8_t *)(iwrap_connection_map[pairing] -> mac.address), 6, &cptr, ':', 0);
         iwrap_send_command(cmd, iwrap_mode);
 
         // close any open links for this pairing entry
         char cmdClose[] = "CLOSE 00";
         for (uint8_t i = 0; i < 16; i++) {
             if ((bluetoothActiveLinkMask & (1 << i)) != 0) {
-                if (find_pairing_from_link_id(i) == index) {
+                if (find_pairing_from_link_id(i) == pairing) {
                     if (i > 9) {
                         cmdClose[6] = '1';
                         cmdClose[7] = i + 38;
@@ -1706,9 +1706,9 @@ uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t index) {
         }
 
         // free this entry and shift any below it up one position
-        free(iwrap_connection_map[index]);
+        free(iwrap_connection_map[pairing]);
         iwrap_pairings--;
-        for (uint8_t i = index; i < iwrap_pairings; i++) {
+        for (uint8_t i = pairing; i < iwrap_pairings; i++) {
             iwrap_connection_map[i] = iwrap_connection_map[i + 1];
         }
         iwrap_connection_map[iwrap_pairings] = 0;
@@ -1723,12 +1723,12 @@ uint16_t kg_cmd_bluetooth_delete_pairing(uint8_t index) {
         }
 
         // adjust active device indexes if necessary
-        if (bluetoothSPPDeviceIndex >= index) bluetoothSPPDeviceIndex--;
-        if (bluetoothIAPDeviceIndex >= index) bluetoothIAPDeviceIndex--;
-        if (bluetoothHIDDeviceIndex >= index) bluetoothHIDDeviceIndex--;
-        if (bluetoothRawHIDDeviceIndex >= index) bluetoothRawHIDDeviceIndex--;
-        if (bluetoothHFPDeviceIndex >= index) bluetoothHFPDeviceIndex--;
-        if (bluetoothAVRCPDeviceIndex >= index) bluetoothAVRCPDeviceIndex--;
+        if (bluetoothSPPDeviceIndex >= pairing) bluetoothSPPDeviceIndex--;
+        if (bluetoothIAPDeviceIndex >= pairing) bluetoothIAPDeviceIndex--;
+        if (bluetoothHIDDeviceIndex >= pairing) bluetoothHIDDeviceIndex--;
+        if (bluetoothRawHIDDeviceIndex >= pairing) bluetoothRawHIDDeviceIndex--;
+        if (bluetoothHFPDeviceIndex >= pairing) bluetoothHFPDeviceIndex--;
+        if (bluetoothAVRCPDeviceIndex >= pairing) bluetoothAVRCPDeviceIndex--;
         
         return 0; // success
     } else {
@@ -1856,14 +1856,14 @@ uint16_t kg_cmd_bluetooth_get_connections(uint8_t *count) {
 
 /**
  * @brief Attempt to open a connection to a specific paired device using a specific profile
- * @param[in] index Index of pairing to use
+ * @param[in] pairing Index of pairing to use
  * @param[in] profile Profile to use for connection
  * @return Result code (0=success)
  */
-uint16_t kg_cmd_bluetooth_connect(uint8_t index, uint8_t profile) {
+uint16_t kg_cmd_bluetooth_connect(uint8_t pairing, uint8_t profile) {
     if (interfaceBT2Ready) {
         // validate pairing index
-        if (index >= iwrap_pairings) {
+        if (pairing >= iwrap_pairings) {
             return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
         }
         
@@ -1871,13 +1871,13 @@ uint16_t kg_cmd_bluetooth_connect(uint8_t index, uint8_t profile) {
         if (iwrap_state == IWRAP_STATE_PENDING_CALL || iwrap_state == IWRAP_STATE_PENDING_INQUIRY || iwrap_state == IWRAP_STATE_PENDING_PAIR) {
             // can't initiate an outgoing call when there is another pending BT radio operation
             return KG_BLUETOOTH_ERROR_INTERFACE_BUSY;
-        } else if (!iwrap_connection_map[index]) {
+        } else if (!iwrap_connection_map[pairing]) {
             // this should NEVER happen, but if it does, I want to know
             return KG_PROTOCOL_ERROR_NULL_POINTER;
         } else {
             char cmd[] = "CALL 00:00:00:00:00:00 0011 HID\0\0\0";
             char *cptr = cmd + 5;
-            iwrap_bintohexstr((uint8_t *)(iwrap_connection_map[index] -> mac.address), 6, &cptr, ':', 0);
+            iwrap_bintohexstr((uint8_t *)(iwrap_connection_map[pairing] -> mac.address), 6, &cptr, ':', 0);
             switch (profile) {
                 case BLUETOOTH_PROFILE_MASK_AVRCP:
                     cmd[26] = '7'; // 0017
