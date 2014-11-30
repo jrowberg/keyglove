@@ -77,7 +77,7 @@ uint8_t process_protocol_command_system(uint8_t *rxPacket) {
             break;
         
         case KG_PACKET_ID_CMD_SYSTEM_RESET: // 0x02
-            // system_reset(uint8_t type)(uint16_t result)
+            // system_reset(uint8_t mode)(uint16_t result)
             // parameters = 1 byte
             if (rxPacket[1] != 1) {
                 // incorrect parameter length

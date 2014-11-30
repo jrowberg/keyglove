@@ -335,12 +335,12 @@ uint16_t kg_cmd_system_ping(uint32_t *runtime) {
 
 /**
  * @brief Reset Keyglove device
- * @param[in] type Type of reset to perform
+ * @param[in] mode Type of reset to perform
  * @return Result code (0=success)
  */
-uint16_t kg_cmd_system_reset(uint8_t type) {
+uint16_t kg_cmd_system_reset(uint8_t mode) {
     // validate type
-    if (type < 1 || type > 2) {
+    if (mode < 1 || mode > 2) {
         return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
     }
 
@@ -351,7 +351,7 @@ uint16_t kg_cmd_system_reset(uint8_t type) {
     // reboot Keyglove
     systemResetFlags = 0xFF; // reset everything
     reset_keyglove_rx_packet(); // clear packet status
-    if (type == KG_SYSTEM_RESET_TYPE_KGONLY) {
+    if (mode == KG_SYSTEM_RESET_MODE_KGONLY) {
         systemResetFlags = 0; // don't reset anything except the main core system
     }
     setup();

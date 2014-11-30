@@ -62,7 +62,7 @@ THE SOFTWARE.
 /* ================================ */
 
 /* 0x01 */ uint16_t kg_cmd_system_ping(uint32_t *uptime);
-/* 0x02 */ uint16_t kg_cmd_system_reset(uint8_t type);
+/* 0x02 */ uint16_t kg_cmd_system_reset(uint8_t mode);
 /* 0x03 */ uint16_t kg_cmd_system_get_info(uint8_t *major, uint8_t *minor, uint8_t *patch, uint32_t *timestamp);
 /* 0x04 */ uint16_t kg_cmd_system_get_memory(uint32_t *free_ram, uint32_t *total_ram);
 /* 0x05 */ uint16_t kg_cmd_system_set_timer(uint8_t handle, uint16_t interval, uint8_t oneshot);
@@ -74,8 +74,8 @@ THE SOFTWARE.
 /* 0x04 */ extern uint8_t (*kg_evt_system_timer_tick)(uint8_t handle, uint32_t seconds, uint8_t subticks);
 /* 0x05 */ extern uint8_t (*kg_evt_system_battery_status)(uint8_t status, uint8_t level);
 
-#define KG_SYSTEM_RESET_TYPE_NORMAL                         0x01    ///< Reset all components (e.g. core, motion, Bluetooth)
-#define KG_SYSTEM_RESET_TYPE_KGONLY                         0x02    ///< Reset only core Keyglove board
+#define KG_SYSTEM_RESET_MODE_NORMAL                         0x01    ///< Reset all components (e.g. core, motion, Bluetooth)
+#define KG_SYSTEM_RESET_MODE_KGONLY                         0x02    ///< Reset only core Keyglove board
 
 uint8_t process_protocol_command_system(uint8_t *rxPacket);
 
