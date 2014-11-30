@@ -1008,6 +1008,7 @@ void my_iwrap_evt_no_carrier(uint8_t link_id, uint16_t error_code, const char *m
         if (iwrap_state == IWRAP_STATE_PENDING_CALL) iwrap_state = IWRAP_STATE_IDLE;
         iwrap_pending_call_link_id = 0xFF;
     } else {
+        remove_mapped_connection(link_id);
         //if (remove_mapped_connection(link_id) != 0xFF) {
             // remove from connection count if not a failed pending/outgoing attempt
             if (iwrap_active_connections) iwrap_active_connections--;
