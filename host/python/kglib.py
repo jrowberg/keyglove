@@ -210,8 +210,7 @@ class KeygloveDevice(object):
 
             elif self.backend == 'pyusb':
                 try:
-                    if self.devobj.is_kernel_driver_active(0):
-                        self.devobj.detach_kernel_driver(0)
+                    self.devobj.detach_kernel_driver(0)
                 except usb.core.USBError as e:
                     if e.errno == 2:
                         # already detached kernel driver
