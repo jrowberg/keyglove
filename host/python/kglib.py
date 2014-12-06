@@ -349,10 +349,8 @@ class KeygloveDevice(object):
                         report_i = report_i + 1
 
                     # finish sending the last (or only) output report
-                    print "s1"
                     raw_packet += [0] * (report_size - len(raw_packet)) # pad array to full size
                     self.pyusb_endpoint_out.write(raw_packet)
-                    print "s2"
 
                 except usb.core.USBError as e:
                     # error on write means the device is no longer available
