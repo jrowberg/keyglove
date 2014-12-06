@@ -1,0 +1,757 @@
+{
+    "info": {
+        "date": "2014-07-26",
+        "name": "Keyglove Standard Protocol",
+        "author": "Jeff Rowberg <jeff@rowberg.net>"
+    },
+    "classes": [
+        {
+            "id": 0,
+            "name": "protocol",
+            "description": "<p>Protocol events occur when you try to use the protocol in an invalid way, or when you unintentionally send an incomplete command, invalid data, bad parameters, etc. They alert you to the fact that something has gone wrong.</p><p>There are no commands within this class; it only has events.</p>",
+            "commands": [
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "error",
+                    "description": "<p>This event occurs when a problem exists with a command you have sent.</p>",
+                    "doxbrief": "Occurs when a problem exists with a command you have sent",
+                    "parameters": [
+                        { "type": "uint16_t", "name": "code", "format": "hex", "description": "Error code describing what went wrong with the protocol communication", "references": { "enumerations": [ "protocol_error_code" ] } }
+                    ]
+                }
+            ],
+            "enumerations": [
+                {
+                    "name": "error_code",
+                    "description": "<p>Describes the nature of a protocol error that has occurred.</p>",
+                    "values": [
+                        { "name": "invalid_command", "value": 1, "description": "Command class or ID is unknown" },
+                        { "name": "packet_timeout", "value": 2, "description": "Command packet not completed in time" },
+                        { "name": "bad_length", "value": 3, "description": "Length value not supported, 250 bytes or less" },
+                        { "name": "parameter_length", "value": 4, "description": "Length of supplied parameters does not match with command definition" },
+                        { "name": "parameter_range", "value": 5, "description": "Value of supplied parameter(s) outside of valid range" },
+                        { "name": "not_implemented", "value": 6, "description": "Command known but not implemented in this firmware configuration" }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "name": "system",
+            "description": "<p>System commands and events relate to the core device, describing things like system boot and uptime, and verifying proper communication or resetting to an initial state.",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "ping",
+                    "description": "<p>Test communication with Keyglove device and get current uptime.</p>",
+                    "doxbrief": "Test communication with Keyglove device and get current uptime",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint32_t", "name": "uptime", "format": "decimal", "units": "second,seconds", "description": "Number of seconds since last boot/reset" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "reset",
+                    "description": "<p>Reset Keyglove device.</p>",
+                    "doxbrief": "Reset Keyglove device",
+                    "autoresponse": "test",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "description": "Type of reset to perform", "references": { "enumerations": [ "system_reset_mode" ] } }
+                    ],
+                    "references": { "events": [ "system_boot" ] },
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'reset' command" }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "get_info",
+                    "description": "<p>Get firmware build info</p>",
+                    "doxbrief": "Get firmware build info",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "major", "format": "decimal", "description": "Firmware major version number" },
+                        { "type": "uint8_t", "name": "minor", "format": "decimal", "description": "Firmware minor version number" },
+                        { "type": "uint8_t", "name": "patch", "format": "decimal", "description": "Firmware patch version number" },
+                        { "type": "uint32_t", "name": "timestamp", "format": "decimal", "description": "Firmware build timestamp" }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "get_memory",
+                    "description": "<p>Get system memory usage</p>",
+                    "doxbrief": "Get system memory usage",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint32_t", "name": "free_ram", "format": "decimal", "units": "byte,bytes", "description": "Free bytes of RAM" },
+                        { "type": "uint32_t", "name": "total_ram", "format": "decimal", "units": "byte,bytes", "description": "Total bytes of RAM" }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "name": "set_timer",
+                    "description": "<p>Set a timer interval to trigger future behavior</p>",
+                    "doxbrief": "Set a timer interval to trigger future behavior",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Timer handle (0-7)" },
+                        { "type": "uint16_t", "name": "interval", "format": "decimal", "description": "Interval (10ms units)" },
+                        { "type": "uint8_t", "name": "oneshot", "format": "decimal", "description": "Repeating (0) or one-shot (1)" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'set_timer' command" }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "name": "get_battery_status",
+                    "description": "<p>Get battery status (presence, charge status, charge level)</p>",
+                    "doxbrief": "Get battery status",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "status", "format": "hex", "description": "Battery status" },
+                        { "type": "uint8_t", "name": "level", "format": "percentage", "description": "Charge level (0-100)" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "boot",
+                    "description": "<p>Indicates that Keyglove has started the boot process.</p>",
+                    "doxbrief": "Indicates that Keyglove has started the boot process",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "major", "format": "decimal", "description": "Firmware major version number" },
+                        { "type": "uint8_t", "name": "minor", "format": "decimal", "description": "Firmware minor version number" },
+                        { "type": "uint8_t", "name": "patch", "format": "decimal", "description": "Firmware patch version number" },
+                        { "type": "uint32_t", "name": "timestamp", "format": "decimal", "description": "Firmware build timestamp" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "ready",
+                    "description": "<p>Indicates that Keyglove has completed the boot process and is ready for use.</p>",
+                    "doxbrief": "Indicates that Keyglove has completed the boot process",
+                    "parameters": [ ]
+                },
+                {
+                    "id": 3,
+                    "name": "error",
+                    "description": "<p>Indicates that Keyglove has encountered an error (RAM, hardware, etc.) that will result in unintended behavior.</p>",
+                    "doxbrief": "Indicates that Keyglove has encountered an error",
+                    "parameters": [
+                        { "type": "uint16_t", "name": "code", "format": "hex", "description": "Error code describing what went wrong with the system", "references": { "enumerations": [ "system_error_code" ] } }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "timer_tick",
+                    "description": "<p>Indicates that a previously scheduled software timer has elapsed.</p>",
+                    "doxbrief": "Indicates that a previously scheduled software timer has elapsed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Timer handle which triggered this event" },
+                        { "type": "uint32_t", "name": "seconds", "format": "decimal", "description": "Seconds elapsed since boot" },
+                        { "type": "uint8_t", "name": "subticks", "format": "decimal", "description": "10ms subticks above whole second" }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "name": "battery_status",
+                    "description": "<p>Indicates that battery status has changed</p>",
+                    "doxbrief": "Indicates that battery status has changed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "status", "format": "hex", "description": "Battery status" },
+                        { "type": "uint8_t", "name": "level", "format": "percentage", "description": "Charge level (0-100)" }
+                    ]
+                }
+            ],
+            "enumerations": [
+                {
+                    "name": "error_code",
+                    "description": "<p>Describes the nature of a system error that has occurred.</p>",
+                    "values": [
+                        { "name": "out_of_memory", "value": 1, "description": "Could not allocate required memory" }
+                    ]
+                },
+                {
+                    "name": "reset_mode",
+                    "description": "<p>Describes the type of reset to perform.</p>",
+                    "values": [
+                        { "name": "normal", "value": 1, "description": "Reset Keyglove hardware and all peripherals (Bluetooth, sensors, etc.)" },
+                        { "name": "kgonly", "value": 2, "description": "Reset Keyglove hardware only, no peripherals" }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "touch",
+            "description": "<p>Touch commands and events control and report the behavior of the touch detection interface.</p>",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "get_mode",
+                    "description": "<p>Get the current touch mode.</p>",
+                    "doxbrief": "Get the current touch mode",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current touch mode setting" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "set_mode",
+                    "description": "<p>Set a new touch mode.</p>",
+                    "doxbrief": "Set a new touch mode",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode to set" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'set_mode' command" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "mode",
+                    "description": "<p>Indicates that the touch mode has changed.</p>",
+                    "doxbrief": "Indicates that the touch mode has changed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "status",
+                    "description": "<p>Indicates that the touch sensor status has changed.</p>",
+                    "doxbrief": "Indicates that the touch sensor status has changed",
+                    "parameters": [
+                        { "type": "uint8_t[]", "name": "status", "format": "hex", "description": "New touch status" }
+                    ]
+                }
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 3,
+            "name": "feedback",
+            "description": "<p>Feedback commands and events control and report on the various types of feedback subsystems, such as a simple LED or more complex devices such as RGB LEDs or piezo buzzers.</p>",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "get_blink_mode",
+                    "description": "<p>Get current blink feedback mode.</p>",
+                    "doxbrief": "Get current blink feedback mode",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current blink feedback mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "set_blink_mode",
+                    "description": "<p>Set new blink feedback mode.</p>",
+                    "doxbrief": "Set new blink feedback mode",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New blink feedback mode to set" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "get_piezo_mode",
+                    "description": "<p>Get current feedback mode for a piezo buzzer.</p>",
+                    "doxbrief": "Get current feedback mode for a piezo buzzer",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of piezo device for which to get the current mode" }
+                    ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current feedback mode for specified piezo device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
+                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "set_piezo_mode",
+                    "description": "<p>Set a new piezo feedback mode for a piezo buzzer.</p>",
+                    "doxbrief": "Set a new piezo feedback mode for a piezo buzzer",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of piezo device for which to set a new mode" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New feedback mode to set for specified piezo device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
+                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "name": "get_vibrate_mode",
+                    "description": "<p>Get current feedback mode for a vibration motor.</p>",
+                    "doxbrief": "Get current feedback mode for a vibration motor",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of vibration device for which to get the current mode" }
+                    ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current feedback mode for specified vibration device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "10", "multiplier": 10, "description": "Duration to maintain vibration" }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "name": "set_vibrate_mode",
+                    "description": "<p>Set a new vibration motor feedback mode.</p>",
+                    "doxbrief": "Set a new vibration motor feedback mode",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of vibration device for which to set a new mode" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New feedback mode to set for specified vibration device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain vibration" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "name": "get_rgb_mode",
+                    "description": "<p>Get current feedback mode for an RGB LED.</p>",
+                    "doxbrief": "Get current feedback mode for an RGB LED",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of RGB device for which to get the current mode" }
+                    ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "Current feedback mode for specified RGB device red LED" },
+                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "Current feedback mode for specified RGB device green LED" },
+                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "Current feedback mode for specified RGB device blue LED" }
+                    ]
+                },
+                {
+                    "id": 8,
+                    "name": "set_rgb_mode",
+                    "description": "<p>Set a new RGB LED feedback mode.</p>",
+                    "doxbrief": "Set a new RGB LED feedback mode",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of RGB device for which to set a new mode" },
+                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "New feedback mode to set for specified RGB device red LED" },
+                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "New feedback mode to set for specified RGB device green LED" },
+                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "New feedback mode to set for specified RGB device blue LED" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "blink_mode",
+                    "description": "<p>Indicates that the blink feedback mode has changed.</p>",
+                    "doxbrief": "Indicates that the blink feedback mode has changed",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New blink feedback mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "piezo_mode",
+                    "description": "<p>Indicates that a piezo buzzer feedback mode has changed.</p>",
+                    "doxbrief": "Indicates that a piezo buzzer feedback mode has changed",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Piezo feedback device index" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New piezo feedback mode for indicated piezo device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
+                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "vibrate_mode",
+                    "description": "<p>Indicates that a vibration feedback mode has changed.</p>",
+                    "doxbrief": "Indicates that a vibration feedback mode has changed",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Vibration feedback device index" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New vibration feedback mode for indicated vibration device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain vibration" }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "rgb_mode",
+                    "description": "<p>Indicates that an RGB LED feedback mode has changed.</p>",
+                    "doxbrief": "Indicates that an RGB LED feedback mode has changed",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "RGB feedback device index" },
+                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "New feedback mode for indicated RGB device red LED" },
+                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "New feedback mode for indicated RGB device green LED" },
+                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "New feedback mode for indicated RGB device blue LED" }
+                    ]
+                }
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 4,
+            "name": "motion",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "get_mode",
+                    "description": "<p>Get current mode for specified motion sensor.</p>",
+                    "doxbrief": "Get current mode for specified motion sensor",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of motion sensor for which to get the current mode" }
+                    ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current motion sensor mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "set_mode",
+                    "description": "<p>Set new mode for specified motion sensor.</p>",
+                    "doxbrief": "Set new mode for specified motion sensor",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of motion sensor for which to get the current mode" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New motion sensor mode to set" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "mode",
+                    "description": "<p>Indicates that a motion sensor's mode has changed.</p>",
+                    "doxbrief": "Indicates that a motion sensor's mode has changed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Affected motion sensor" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New motion sensor mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "data",
+                    "description": "<p>Indicates that a motion sensor's measurement data has been updated.</p>",
+                    "doxbrief": "Indicates that a motion sensor's measurement data has been updated",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Relevant motion sensor" },
+                        { "type": "uint8_t", "name": "flags", "format": "hex", "description": "Flags indicating which measurement data is represented" },
+                        { "type": "uint8_t[]", "name": "data", "format": "hex", "description": "New measurement data" }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "state",
+                    "description": "<p>Motion state change detected, such as 'still' or 'moving'.</p>",
+                    "doxbrief": "Motion state change detected, such as 'still' or 'moving'",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Relevant motion sensor" },
+                        { "type": "uint8_t", "name": "state", "format": "hex", "description": "Type of motion state detected" }
+                    ]
+                }
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 5,
+            "name": "flex",
+            "commands": [
+            ],
+            "events": [
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 6,
+            "name": "pressure",
+            "commands": [
+            ],
+            "events": [
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 7,
+            "name": "touchset",
+            "commands": [
+            ],
+            "events": [
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 8,
+            "name": "bluetooth",
+            "description": "<p>Bluetooth commands and events control and report on the wireless functionality.</p>",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "get_mode",
+                    "description": "<p>Get current mode for Bluetooth subsystem.</p>",
+                    "doxbrief": "Get current mode for Bluetooth subsystem",
+                    "parameters": [
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current Bluetooth mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "set_mode",
+                    "description": "<p>Set new mode for Bluetooth subsystem.</p>",
+                    "doxbrief": "Set new mode for Bluetooth subsystem",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New Bluetooth mode to set" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "reset",
+                    "description": "<p>Reset Bluetooth subsystem.</p>",
+                    "doxbrief": "Reset Bluetooth subsystem",
+                    "parameters": [
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "get_mac",
+                    "description": "<p>Get local Bluetooth MAC address.</p>",
+                    "doxbrief": "Get local Bluetooth MAC address",
+                    "parameters": [
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" },
+                        { "type": "macaddr_t", "name": "address", "format": "macaddr", "description": "Local six-byte Bluetooth MAC address" }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "name": "get_pairings",
+                    "description": "<p>Get a list of all paired devices. The response will be followed by one 'bluetooth_pairing_status' event for each existing pairing entry.</p>",
+                    "doxbrief": "Get a list of all paired devices",
+                    "parameters": [
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" },
+                        { "type": "uint8_t", "name": "count", "format": "hex", "description": "Number of paired devices" }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "name": "discover",
+                    "description": "<p>Perform Bluetooth inquiry to locate nearby devices. The response will be followed by one 'bluetooth_inquiry_response' event for each device that is discovered during the inquiry. Once the inquiry is finished, the 'bluetooth_inquiry_complete' event will occur.</p>",
+                    "doxbrief": "Perform Bluetooth inquiry to locate nearby devices",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "second,seconds", "description": "Number of seconds to run discovery process" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "name": "pair",
+                    "description": "<p>Initiate pairing request to remote device. The response will be followed by a 'bluetooth_pairing_status' event upon success, or a 'bluetooth_pairing_failed' event if unsuccessful.</p>", 
+                    "doxbrief": "Initiate pairing request to remote device",
+                    "parameters": [
+                        { "type": "macaddr_t", "name": "address", "format": "macaddr", "description": "Six-byte Bluetooth MAC address of remote device to pair with" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 8,
+                    "name": "delete_pairing",
+                    "description": "<p>Remove a specific pairing entry. Note that this will not actively close any Bluetooth connections to that device, if they are already open.</p>",
+                    "doxbrief": "Remove a specific pairing entry",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "pairing", "format": "decimal", "description": "Index of pairing to delete" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 9,
+                    "name": "clear_pairings",
+                    "description": "<p>Remove all pairing entries. Note that this will not immediately close any Bluetooth connections.</p>",
+                    "doxbrief": "Remove all pairing entries",
+                    "parameters": [
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 10,
+                    "name": "get_connections",
+                    "description": "<p>Get a list of all open or pending connections. The response will be followed by one 'bluetooth_connection_status' event for each open or pending connection.</p>",
+                    "doxbrief": "Get a list of all open or pending connections",
+                    "parameters": [
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" },
+                        { "type": "uint8_t", "name": "count", "format": "hex", "description": "Number of open or pending connections" }
+                    ]
+                },
+                {
+                    "id": 11,
+                    "name": "connect",
+                    "description": "<p>Attempt to open a connection to a specific paired device using a specific profile. This will be followed by a 'bluetooth_connection_status' event once the handle has been allocated.</p>",
+                    "doxbrief": "Attempt to open a connection to a specific paired device using a specific profile",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "pairing", "format": "decimal", "description": "Index of pairing to use" },
+                        { "type": "uint8_t", "name": "profile", "format": "hex", "description": "Profile to use for connection" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 12,
+                    "name": "disconnect",
+                    "description": "<p>Close a specific Bluetooth connection.</p>",
+                    "doxbrief": "Close a specific Bluetooth connection",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Link ID of connection to close" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "mode",
+                    "description": "<p>Indicates that the Bluetooth mode has been changed.</p>",
+                    "doxbrief": "Indicates that the Bluetooth mode has been changed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New Bluetooth connectivity mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "ready",
+                    "description": "<p>Indicates that the Bluetooth subsystem is ready for use.</p>",
+                    "doxbrief": "Indicates that the Bluetooth subsystem is ready for use",
+                    "parameters": [ ]
+                },
+                {
+                    "id": 3,
+                    "name": "inquiry_response",
+                    "description": "<p>Indicates that a new device has been paired.</p>",
+                    "doxbrief": "Indicates that a new device has been paired",
+                    "parameters": [
+                        { "type": "macaddr_t", "name": "address", "format": "macaddr", "description": "Six-byte Bluetooth MAC address of remote device" },
+                        { "type": "btcod_t", "name": "cod", "format": "hex", "description": "Three-byte Bluetooth Class-of-Device value" },
+                        { "type": "int8_t", "name": "rssi", "format": "decimal", "units": "dBm", "description": "RSSI value from discovered device" },
+                        { "type": "uint8_t", "name": "status", "format": "hex", "description": "Status within inquiry process" },
+                        { "type": "uint8_t", "name": "pairing", "format": "decimal", "description": "Index of device in pairing list (0xFF if not paired)" },
+                        { "type": "uint8_t[]", "name": "name", "format": "string", "description": "Friendly name of remote device (if available)" }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "inquiry_complete",
+                    "description": "<p>Indicates that an ongoing Bluetooth discovery process has finished.</p>",
+                    "doxbrief": "Indicates that an ongoing Bluetooth discovery process has finished",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "count", "format": "decimal", "units": "device,devices", "description": "Total number of devices found during discovery" }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "name": "pairing_status",
+                    "description": "<p>Provides a single pairing entry detailed status record.</p>",
+                    "doxbrief": "Provides a single pairing entry detailed status record",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "pairing", "format": "decimal", "description": "Index of device in pairing list" },
+                        { "type": "macaddr_t", "name": "address", "format": "macaddr", "description": "Six-byte Bluetooth MAC address of remote device" },
+                        { "type": "uint8_t", "name": "priority", "format": "hex", "description": "Auto-connection priority" },
+                        { "type": "uint8_t", "name": "profiles_supported", "format": "hex", "description": "Bitmask of supported profiles" },
+                        { "type": "uint8_t", "name": "profiles_active", "format": "hex", "description": "Bitmask of active profiles" },
+                        { "type": "uint8_t[]", "name": "handle_list", "format": "hex", "description": "Handles for all active Bluetooth profile connections" }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "name": "pairing_failed",
+                    "description": "<p>Indicates that a pending pair attempt has failed.</p>",
+                    "doxbrief": "Indicates that a pending pair attempt has failed",
+                    "parameters": [
+                        { "type": "macaddr_t", "name": "address", "format": "macaddr", "description": "Six-byte Bluetooth MAC address which failed pairing attempt" }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "name": "pairings_cleared",
+                    "description": "<p>Indicates that all pairings have been removed.</p>",
+                    "doxbrief": "Indicates that all pairings have been removed",
+                    "parameters": [
+                    ]
+                },
+                {
+                    "id": 8,
+                    "name": "connection_status",
+                    "description": "<p>Indicates that a paired device has connected.</p>",
+                    "doxbrief": "Indicates that a paired device has connected",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Connection handle" },
+                        { "type": "macaddr_t", "name": "address", "format": "macaddr", "description": "Six-byte Bluetooth MAC address of remote device" },
+                        { "type": "uint8_t", "name": "pairing", "format": "decimal", "description": "Index of device in pairing list" },
+                        { "type": "uint8_t", "name": "profile", "format": "hex", "description": "Bluetooth profile used for this connection" },
+                        { "type": "uint8_t", "name": "status", "format": "hex", "description": "Status" }
+                    ]
+                },
+                {
+                    "id": 9,
+                    "name": "connection_closed",
+                    "description": "<p>Indicates that an active connection has been closed.</p>",
+                    "doxbrief": "Indicates that an active connection has been closed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Connection handle" },
+                        { "type": "uint16_t", "name": "reason", "format": "hex", "description": "Reason for connection closure" }
+                    ]
+                }
+            ],
+            "enumerations": [
+            ]
+        }
+    ]
+}
