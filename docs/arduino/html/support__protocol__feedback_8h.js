@@ -1,0 +1,28 @@
+var support__protocol__feedback_8h =
+[
+    [ "KG_PACKET_ID_CMD_FEEDBACK_GET_BLINK_MODE", "support__protocol__feedback_8h.html#aeb4efc20c8634135f0b220ca5b1ff8cd", null ],
+    [ "KG_PACKET_ID_CMD_FEEDBACK_GET_PIEZO_MODE", "support__protocol__feedback_8h.html#a37ec4f7639e72a69f087ee140a2e168f", null ],
+    [ "KG_PACKET_ID_CMD_FEEDBACK_GET_RGB_MODE", "support__protocol__feedback_8h.html#a3d0aa741e1a0506036b4cf560d4694cf", null ],
+    [ "KG_PACKET_ID_CMD_FEEDBACK_GET_VIBRATE_MODE", "support__protocol__feedback_8h.html#ae060deeca4eed7138349ce76d8a90013", null ],
+    [ "KG_PACKET_ID_CMD_FEEDBACK_SET_BLINK_MODE", "support__protocol__feedback_8h.html#a1890a03ccb487da1a033b1c37cc10b7b", null ],
+    [ "KG_PACKET_ID_CMD_FEEDBACK_SET_PIEZO_MODE", "support__protocol__feedback_8h.html#a01614a71ba9b638f64f8136dc5028927", null ],
+    [ "KG_PACKET_ID_CMD_FEEDBACK_SET_RGB_MODE", "support__protocol__feedback_8h.html#a908d24ecce307a5816a48cc0b05e3427", null ],
+    [ "KG_PACKET_ID_CMD_FEEDBACK_SET_VIBRATE_MODE", "support__protocol__feedback_8h.html#a3b7c27da94a5623fd6c9d5cbd4fa7248", null ],
+    [ "KG_PACKET_ID_EVT_FEEDBACK_BLINK_MODE", "support__protocol__feedback_8h.html#a7eacf92cad681c14820a1534c1bac2cf", null ],
+    [ "KG_PACKET_ID_EVT_FEEDBACK_PIEZO_MODE", "support__protocol__feedback_8h.html#a923333952fca5b912048c01081a0d03f", null ],
+    [ "KG_PACKET_ID_EVT_FEEDBACK_RGB_MODE", "support__protocol__feedback_8h.html#a9ed8c86c5d63bc01ed2d7879da07c3f2", null ],
+    [ "KG_PACKET_ID_EVT_FEEDBACK_VIBRATE_MODE", "support__protocol__feedback_8h.html#a482c8da0915d313ab37bb69ff46c9174", null ],
+    [ "kg_cmd_feedback_get_blink_mode", "support__protocol__feedback_8h.html#a9cea3dfe23aa8c27b7bb35eb1eb46be7", null ],
+    [ "kg_cmd_feedback_get_piezo_mode", "support__protocol__feedback_8h.html#ab3fbf1bd776edfd05566c55c4bfe6f1d", null ],
+    [ "kg_cmd_feedback_get_rgb_mode", "support__protocol__feedback_8h.html#a63f4bd9567bf00bd65c206e2ca596eae", null ],
+    [ "kg_cmd_feedback_get_vibrate_mode", "support__protocol__feedback_8h.html#adc02383b14f9278b23b1870c744220d3", null ],
+    [ "kg_cmd_feedback_set_blink_mode", "support__protocol__feedback_8h.html#a8d1bb83d1d7b0f03e0f1b164e7e8c477", null ],
+    [ "kg_cmd_feedback_set_piezo_mode", "support__protocol__feedback_8h.html#ab838390fea1d14a3ed4af132ef221cd7", null ],
+    [ "kg_cmd_feedback_set_rgb_mode", "support__protocol__feedback_8h.html#af8dcd808c8d3977a11cbfc41c51408e9", null ],
+    [ "kg_cmd_feedback_set_vibrate_mode", "support__protocol__feedback_8h.html#a4c5d08ec15ab2bdfae8890c1da13f13d", null ],
+    [ "process_protocol_command_feedback", "support__protocol__feedback_8h.html#af5adc2bdba5ae26edb1a31db53f090de", null ],
+    [ "kg_evt_feedback_blink_mode", "support__protocol__feedback_8h.html#a37f025ea765b814d01ac2ec53bd55ce1", null ],
+    [ "kg_evt_feedback_piezo_mode", "support__protocol__feedback_8h.html#ac36d2ecba688e386217dcee254ccf223", null ],
+    [ "kg_evt_feedback_rgb_mode", "support__protocol__feedback_8h.html#a9ed3fa646285e7a9c385a353c8b8448b", null ],
+    [ "kg_evt_feedback_vibrate_mode", "support__protocol__feedback_8h.html#ad869bd57d00cffcd8f33d27a30e7e048", null ]
+];

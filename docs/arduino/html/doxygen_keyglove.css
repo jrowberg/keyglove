@@ -1,0 +1,18 @@
+#titlearea {
+	padding: 16px 0;
+}
+#titlearea > table {
+	margin-left: 16px;
+}
+#projectlogo {
+	padding-right: 16px;
+}
+#projectname {
+	font-weight: bold;
+}
+#projectnumber {
+	background-color: #DDD;
+	font-size: 100%;
+	font-weight: normal;
+	padding: 0 12px;
+}

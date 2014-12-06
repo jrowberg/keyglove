@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['touch_5fcheck_5fmode',['touch_check_mode',['../support__touch_8cpp.html#a150d96e7854df7fc7ebd25caa7d3caa3',1,'touch_check_mode(uint8_t mode, uint8_t pos):&#160;support_touch.cpp'],['../support__touch_8h.html#a150d96e7854df7fc7ebd25caa7d3caa3',1,'touch_check_mode(uint8_t mode, uint8_t pos):&#160;support_touch.cpp']]],
+  ['touch_5fpop_5fmode',['touch_pop_mode',['../support__touch_8cpp.html#a1d57e256c7abf04da9e977ea49bf369d',1,'touch_pop_mode():&#160;support_touch.cpp'],['../support__touch_8h.html#a1d57e256c7abf04da9e977ea49bf369d',1,'touch_pop_mode():&#160;support_touch.cpp']]],
+  ['touch_5fpush_5fmode',['touch_push_mode',['../support__touch_8cpp.html#a81594939184599b11818fc096871e246',1,'touch_push_mode(uint8_t mode):&#160;support_touch.cpp'],['../support__touch_8h.html#a81594939184599b11818fc096871e246',1,'touch_push_mode(uint8_t mode):&#160;support_touch.cpp']]],
+  ['touch_5fset_5fmode',['touch_set_mode',['../support__touch_8cpp.html#ab14d6e3531f27e19cede3e5cc070bef9',1,'touch_set_mode(uint8_t mode):&#160;support_touch.cpp'],['../support__touch_8h.html#ab14d6e3531f27e19cede3e5cc070bef9',1,'touch_set_mode(uint8_t mode):&#160;support_touch.cpp']]],
+  ['touch_5ftoggle_5fmode',['touch_toggle_mode',['../support__touch_8cpp.html#a5b111260f1a897fb16b8a5e5fc305a45',1,'touch_toggle_mode(uint8_t mode):&#160;support_touch.cpp'],['../support__touch_8h.html#a5b111260f1a897fb16b8a5e5fc305a45',1,'touch_toggle_mode(uint8_t mode):&#160;support_touch.cpp']]],
+  ['triangle_5fwave',['triangle_wave',['../support__feedback_8cpp.html#a72b326a780080ae94546f77ea12e662a',1,'triangle_wave(int32_t x, int32_t period, int32_t amplitude):&#160;support_feedback.cpp'],['../support__feedback_8h.html#a72b326a780080ae94546f77ea12e662a',1,'triangle_wave(int32_t x, int32_t period, int32_t amplitude):&#160;support_feedback.cpp']]]
+];

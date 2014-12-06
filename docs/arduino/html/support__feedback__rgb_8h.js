@@ -1,0 +1,37 @@
+var support__feedback__rgb_8h =
+[
+    [ "feedback_rgb_mode_t", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298a", [
+      [ "KG_RGB_MODE_OFF", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aac5a1f2d7488c5972b6ff22371e3451dd", null ],
+      [ "KG_RGB_MODE_SOLID", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa11dd512859c4294a4ae3346385611b02", null ],
+      [ "KG_RGB_MODE_B200_100", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa48c4c0157dbf4791d9dadac5a55c4091", null ],
+      [ "KG_RGB_MODE_B200_50", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa3defce1e64c37a050d2f1a7b5098b329", null ],
+      [ "KG_RGB_MODE_B1000_500", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa39cd98d9900b588e98937ac5574bf773", null ],
+      [ "KG_RGB_MODE_B1000_100", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aad2dc9f9dedad1f08f73aff2fcddf5df8", null ],
+      [ "KG_RGB_MODE_B1000_100_2X", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aab5d43d5a8b0daad4ccbee7135fff9d1b", null ],
+      [ "KG_RGB_MODE_B1000_100_3X", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa83a8101ff6d87b31d73f88f30075161d", null ],
+      [ "KG_RGB_MODE_B3000_1000", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aacbe9ea44e05a32da245abde61a80cb71", null ],
+      [ "KG_RGB_MODE_B3000_100", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa9ad59b91e0945771cd3ec1ac4e487d91", null ],
+      [ "KG_RGB_MODE_B3000_100_2X", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aad20e8d2493caa19dea96d0ec745658f6", null ],
+      [ "KG_RGB_MODE_B3000_100_3X", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa5c6f8d0c23aa58f8c9d9af3fc1290c96", null ],
+      [ "KG_RGB_MODE_F200_100", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa50ee1c28875755e079e2ed37fe156b3b", null ],
+      [ "KG_RGB_MODE_F200_50", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa76b5efb8488db7fa9edd0a63d3387e3c", null ],
+      [ "KG_RGB_MODE_F1000_1000", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa4f4e19586b556064e4b94d46462946cc", null ],
+      [ "KG_RGB_MODE_F1000_500", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aacddc5eb9fc63e7de832c39c2298fd6ee", null ],
+      [ "KG_RGB_MODE_F1000_100", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aadfcc359ea86cc991d88f54e39b16124a", null ],
+      [ "KG_RGB_MODE_F1000_100_2X", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aaaa64ba2e1c9c4fd5b721f3f12c8a87c4", null ],
+      [ "KG_RGB_MODE_F1000_100_3X", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa94df01d737ac53758bfa490bbb738f66", null ],
+      [ "KG_RGB_MODE_F3000_3000", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa59c6338c32f3b366835c080ccc5af6f8", null ],
+      [ "KG_RGB_MODE_F3000_1000", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa9625837d299d70bd0e940309c6b2539b", null ],
+      [ "KG_RGB_MODE_F3000_100", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aac0ce19f653fc9c35f4ab04d5a4b88519", null ],
+      [ "KG_RGB_MODE_F3000_100_2X", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa09114d879b33805beac4d464a1d8e38e", null ],
+      [ "KG_RGB_MODE_F3000_100_3X", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa052ab4c5abb29957d75fda89d50bfbf4", null ],
+      [ "KG_RGB_MODE_MAX", "support__feedback__rgb_8h.html#acdc1a1039cb3c8ecf451e8f36b10298aa1a9081900f5d3ad09841668028eb11aa", null ]
+    ] ],
+    [ "feedback_set_rgb_analog", "support__feedback__rgb_8h.html#ac2ad8842aff9347962e8c4cd6ba66ab2", null ],
+    [ "feedback_set_rgb_analog_channel", "support__feedback__rgb_8h.html#a9e0c6f3d65a9ca990fc90ec05c653225", null ],
+    [ "feedback_set_rgb_digital", "support__feedback__rgb_8h.html#aa9dda8feb31c965c7e70e3915b040093", null ],
+    [ "feedback_set_rgb_digital_channel", "support__feedback__rgb_8h.html#a0a101135e03c07fcdfa3e1e450ffe7a8", null ],
+    [ "feedback_set_rgb_mode", "support__feedback__rgb_8h.html#a464eb9fec87af811c8d4bffb2fd4dda2", null ],
+    [ "setup_feedback_rgb", "support__feedback__rgb_8h.html#a7bbcd1f08367e6ec31c3afbab2a33ffd", null ],
+    [ "update_feedback_rgb", "support__feedback__rgb_8h.html#abbdc2affc85e4991bfa7ec04f2f38bed", null ]
+];
