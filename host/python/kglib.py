@@ -413,7 +413,7 @@ class KeygloveDevice(object):
                             if self.responses_pending == 0:
                                 self.on_api_idle()
             except usb.core.USBError as e:
-                if e.errno == 110 or "not detach" in str(e):
+                if e.errno == 110 or "timed out" in str(e) or "not detach" in str(e):
                     # PyUSB timeout, probably just no data
                     sys.exc_clear()
                 elif e.errno == 5 or e.errno == 19 or "such device" in str(e):
