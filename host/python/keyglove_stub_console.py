@@ -136,11 +136,9 @@ if __name__ == '__main__':
     try:
         main()
     except KeyboardInterrupt:
-        if keyglove != None:
+        if keyglove != None and keyglove.connected:
             print("Disconnecting from Keyglove...")
-            if keyglove.disconnect():
-                print("Disconnected")
-            else:
+            if not keyglove.disconnect():
                 print("Could not disconnect!")
 
         print("Goodbye!")
