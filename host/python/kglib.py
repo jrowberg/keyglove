@@ -388,7 +388,11 @@ class KeygloveDevice(object):
             return None
         else:
             # got response back correctly
-            return self.kgapi.get_last_response()
+            if self.kgapi:
+                return self.kgapi.get_last_response()
+            else:
+                # extremely unlikely but not impossible case where KGAPI object is gone before this finishes
+                return None
 
     # handler for reading incoming raw HID packets via PyWinUSB (thread started inside PyWinUSB code)
     def pywinusb_read_handler(self, data):
