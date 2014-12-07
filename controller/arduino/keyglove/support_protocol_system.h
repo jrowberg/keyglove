@@ -1,8 +1,9 @@
 // Keyglove controller source code - KGAPI "system" protocol command parser declarations
-// 2014-11-28 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-12-07 by Jeff Rowberg <jeff@rowberg.net>
 
-/* ============================================
-Controller code is placed under the MIT license
+/*
+================================================================================
+Keyglove source code is placed under the MIT license
 Copyright (c) 2014 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,14 +23,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-===============================================
+
+================================================================================
 */
 
 /**
  * @file support_protocol_system.h
  * @brief KGAPI "system" protocol command parser declarations
  * @author Jeff Rowberg
- * @date 2014-11-28
+ * @date 2014-12-07
  *
  * This file implements subsystem-specific command processing functions for the
  * "system" part of the KGAPI protocol.
@@ -63,7 +65,7 @@ THE SOFTWARE.
 
 /* 0x01 */ uint16_t kg_cmd_system_ping(uint32_t *uptime);
 /* 0x02 */ uint16_t kg_cmd_system_reset(uint8_t mode);
-/* 0x03 */ uint16_t kg_cmd_system_get_info(uint8_t *major, uint8_t *minor, uint8_t *patch, uint32_t *timestamp);
+/* 0x03 */ uint16_t kg_cmd_system_get_info(uint16_t *major, uint16_t *minor, uint16_t *patch, uint16_t *protocol, uint32_t *timestamp);
 /* 0x04 */ uint16_t kg_cmd_system_get_memory(uint32_t *free_ram, uint32_t *total_ram);
 /* 0x05 */ uint16_t kg_cmd_system_set_timer(uint8_t handle, uint16_t interval, uint8_t oneshot);
 /* 0x06 */ uint16_t kg_cmd_system_get_battery_status(uint8_t *status, uint8_t *level);

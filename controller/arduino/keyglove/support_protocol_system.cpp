@@ -1,8 +1,9 @@
 // Keyglove controller source code - KGAPI "system" protocol command parser implementation
-// 2014-11-28 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-12-07 by Jeff Rowberg <jeff@rowberg.net>
 
-/* ============================================
-Controller code is placed under the MIT license
+/*
+================================================================================
+Keyglove source code is placed under the MIT license
 Copyright (c) 2014 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,14 +23,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-===============================================
+
+================================================================================
 */
 
 /**
  * @file support_protocol_system.cpp
  * @brief KGAPI "system" protocol command parser implementation
  * @author Jeff Rowberg
- * @date 2014-11-28
+ * @date 2014-12-07
  *
  * This file implements subsystem-specific command processing functions for the
  * "system" part of the KGAPI protocol.
@@ -98,24 +100,25 @@ uint8_t process_protocol_command_system(uint8_t *rxPacket) {
             break;
         
         case KG_PACKET_ID_CMD_SYSTEM_GET_INFO: // 0x03
-            // system_get_info()(uint8_t major, uint8_t minor, uint8_t patch, uint32_t timestamp)
+            // system_get_info()(uint16_t major, uint16_t minor, uint16_t patch, uint16_t protocol, uint32_t timestamp)
             // parameters = 0 bytes
             if (rxPacket[1] != 0) {
                 // incorrect parameter length
                 protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
             } else {
                 // run command
-                uint8_t major;
-                uint8_t minor;
-                uint8_t patch;
+                uint16_t major;
+                uint16_t minor;
+                uint16_t patch;
+                uint16_t protocol;
                 uint32_t timestamp;
-                uint16_t result = kg_cmd_system_get_info(&major, &minor, &patch, &timestamp);
+                uint16_t result = kg_cmd_system_get_info(&major, &minor, &patch, &protocol, &timestamp);
         
                 // build response
-                uint8_t payload[7] = { major, minor, patch, timestamp & 0xFF, (timestamp >> 8) & 0xFF, (timestamp >> 16) & 0xFF, (timestamp >> 24) & 0xFF };
+                uint8_t payload[12] = { major & 0xFF, (major >> 8) & 0xFF, minor & 0xFF, (minor >> 8) & 0xFF, patch & 0xFF, (patch >> 8) & 0xFF, protocol & 0xFF, (protocol >> 8) & 0xFF, timestamp & 0xFF, (timestamp >> 8) & 0xFF, (timestamp >> 16) & 0xFF, (timestamp >> 24) & 0xFF };
         
                 // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 7, rxPacket[2], rxPacket[3], payload);
+                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 12, rxPacket[2], rxPacket[3], payload);
             }
             break;
         
