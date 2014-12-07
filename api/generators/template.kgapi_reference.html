@@ -1,0 +1,157 @@
+<!--
+Keyglove API Reference Guide
+{%date_ymd%} by Jeff Rowberg <jeff@rowberg.net>
+
+================================================================================
+Keyglove source code is placed under the MIT license
+Copyright (c) {%date_year%} Jeff Rowberg
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+================================================================================
+-->
+<html>
+  <head>
+    <title>Keyglove API Reference Guide</title>
+    <style>
+
+.kgapidoc div, .kgapidoc p, .kgapidoc td, .kgapidoc th, .kgapidoc h1, .kgapidoc h2, .kgapidoc h3, .kgapidoc h4, .kgapidoc h5 {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+@media screen
+  {
+.kgapidoc div, .kgapidoc p, .kgapidoc td, .kgapidoc th {
+    font-size: 13px;
+}
+  }
+@media print
+  {
+.kgapidoc div, .kgapidoc p, .kgapidoc td, .kgapidoc th {
+    font-size: 11px;
+}
+  }
+
+@media screen, print
+  {
+.kgapidoc h2 {
+    page-break-before: always;
+}
+.kgapidoc h3, .kgapidoc h4, .kgapidoc h5 {
+    page-break-before: auto;
+}
+.kgapidoc h5 {
+    margin-bottom: 0.5em;
+}
+.kgapidoc span.headingtab {
+    display: inline-block;
+    min-width: 40px;
+}
+
+.kgapidoc table {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin: 0 0 1em;
+}
+
+.kgapidoc table th, .kgapidoc table td {
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.kgapidoc table thead td {
+    background-color: #FFF;
+    border: 1px solid #EEE;
+    border-bottom: #CCC;
+    color: #DDD;
+    font-size: 2.4em;
+    font-style: italic;
+    font-weight: bold;
+    height: 85px;
+    overflow: hidden;
+    padding: 8px 10px 0;
+}
+.kgapidoc table thead th.tabletitle {
+    background-color: #5e858c;
+    border-color: #5e858c #fff;
+    font-size: 1.2em;
+    text-align: right;
+}
+.kgapidoc table.command, .kgapidoc table.response, .kgapidoc table.event {
+    min-width: 750px;
+}
+.kgapidoc table.command thead td {
+    text-align: right;
+    vertical-align: bottom;
+}
+.kgapidoc table.response thead td, .kgapidoc table.event thead td {
+    text-align: left;
+    vertical-align: baseline;
+}
+.kgapidoc table.command thead td img {
+    display: block;
+    float: left;
+}
+.kgapidoc table.response thead td img, .kgapidoc table.event thead td img {
+    display: block;
+    float: right;
+}
+
+.kgapidoc table thead th {
+    background-color: #000;
+    color: #fff;
+}
+
+.kgapidoc table tbody tr.header {
+    background-color: #f4f4f4;
+}
+
+.kgapidoc table tbody tr.payload td {
+    font-weight: bold;
+}
+
+.kgapidoc ul {
+    margin: 0.5em 0;
+}
+
+.kgapidoc pre {
+    border: 1px solid #CCC;
+    width: 750px;
+}
+  }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/googlecode.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+    <!-- link rel="stylesheet" href="googlecode.css" />
+    <script src="highlight.pack.js"></script> -->
+  </head>
+  <body class="kgapidoc">
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+<h1 align="center">Keyglove API Reference Guide</h1>
+<h4 align="center">{%date_ymd%}</h4>
+<h4 align="center"><a href="http://keyglove.net" target="_blank">keyglove.net</a><br /><a href="https://github.com/jrowberg/keyglove" target="_blank">github.com/jrowberg/keyglove</a></h4>
+
+{%apiref_html%}
+
+  </body>
+</html>
