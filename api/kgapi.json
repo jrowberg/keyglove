@@ -73,10 +73,11 @@
                     "doxbrief": "Get firmware build info",
                     "parameters": [ ],
                     "returns": [
-                        { "type": "uint8_t", "name": "major", "format": "decimal", "description": "Firmware major version number" },
-                        { "type": "uint8_t", "name": "minor", "format": "decimal", "description": "Firmware minor version number" },
-                        { "type": "uint8_t", "name": "patch", "format": "decimal", "description": "Firmware patch version number" },
-                        { "type": "uint32_t", "name": "timestamp", "format": "decimal", "description": "Firmware build timestamp" }
+                        { "type": "uint16_t", "name": "major", "format": "decimal", "description": "Firmware major version number" },
+                        { "type": "uint16_t", "name": "minor", "format": "decimal", "description": "Firmware minor version number" },
+                        { "type": "uint16_t", "name": "patch", "format": "decimal", "description": "Firmware patch version number" },
+                        { "type": "uint16_t", "name": "protocol", "format": "decimal", "description": "API protocol version number" },
+                        { "type": "uint32_t", "name": "timestamp", "format": "decimal", "description": "Version timestamp" }
                     ]
                 },
                 {
