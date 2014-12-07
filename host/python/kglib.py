@@ -41,7 +41,7 @@ THE SOFTWARE.
 
 __author__ = "Jeff Rowberg"
 __license__ = "MIT"
-__version__ = "2014-12-06"
+__version__ = "2014-12-07"
 __email__ = "jeff@rowberg.net"
 
 import struct, platform, sys, threading, time
@@ -457,12 +457,12 @@ class KGAPI(object):
         return struct.pack('<4BBHB', 0xC0, 0x04, 0x01, 0x05, handle, interval, oneshot)
     def kg_cmd_system_get_battery_status(self):
         return struct.pack('<4B', 0xC0, 0x00, 0x01, 0x06)
-
+    
     def kg_cmd_touch_get_mode(self):
         return struct.pack('<4B', 0xC0, 0x00, 0x02, 0x01)
     def kg_cmd_touch_set_mode(self, mode):
         return struct.pack('<4BB', 0xC0, 0x01, 0x02, 0x02, mode)
-
+    
     def kg_cmd_feedback_get_blink_mode(self):
         return struct.pack('<4B', 0xC0, 0x00, 0x03, 0x01)
     def kg_cmd_feedback_set_blink_mode(self, mode):
@@ -479,12 +479,12 @@ class KGAPI(object):
         return struct.pack('<4BB', 0xC0, 0x01, 0x03, 0x07, index)
     def kg_cmd_feedback_set_rgb_mode(self, index, mode_red, mode_green, mode_blue):
         return struct.pack('<4BBBBB', 0xC0, 0x04, 0x03, 0x08, index, mode_red, mode_green, mode_blue)
-
+    
     def kg_cmd_motion_get_mode(self, index):
         return struct.pack('<4BB', 0xC0, 0x01, 0x04, 0x01, index)
     def kg_cmd_motion_set_mode(self, index, mode):
         return struct.pack('<4BBB', 0xC0, 0x02, 0x04, 0x02, index, mode)
-
+    
     def kg_cmd_bluetooth_get_mode(self):
         return struct.pack('<4B', 0xC0, 0x00, 0x08, 0x01)
     def kg_cmd_bluetooth_set_mode(self, mode):
@@ -509,17 +509,17 @@ class KGAPI(object):
         return struct.pack('<4BBB', 0xC0, 0x02, 0x08, 0x0B, pairing, profile)
     def kg_cmd_bluetooth_disconnect(self, handle):
         return struct.pack('<4BB', 0xC0, 0x01, 0x08, 0x0C, handle)
-
+    
     kg_rsp_system_ping = KeygloveEvent()
     kg_rsp_system_reset = KeygloveEvent()
     kg_rsp_system_get_info = KeygloveEvent()
     kg_rsp_system_get_memory = KeygloveEvent()
     kg_rsp_system_set_timer = KeygloveEvent()
     kg_rsp_system_get_battery_status = KeygloveEvent()
-
+    
     kg_rsp_touch_get_mode = KeygloveEvent()
     kg_rsp_touch_set_mode = KeygloveEvent()
-
+    
     kg_rsp_feedback_get_blink_mode = KeygloveEvent()
     kg_rsp_feedback_set_blink_mode = KeygloveEvent()
     kg_rsp_feedback_get_piezo_mode = KeygloveEvent()
@@ -528,10 +528,10 @@ class KGAPI(object):
     kg_rsp_feedback_set_vibrate_mode = KeygloveEvent()
     kg_rsp_feedback_get_rgb_mode = KeygloveEvent()
     kg_rsp_feedback_set_rgb_mode = KeygloveEvent()
-
+    
     kg_rsp_motion_get_mode = KeygloveEvent()
     kg_rsp_motion_set_mode = KeygloveEvent()
-
+    
     kg_rsp_bluetooth_get_mode = KeygloveEvent()
     kg_rsp_bluetooth_set_mode = KeygloveEvent()
     kg_rsp_bluetooth_reset = KeygloveEvent()
@@ -544,27 +544,27 @@ class KGAPI(object):
     kg_rsp_bluetooth_get_connections = KeygloveEvent()
     kg_rsp_bluetooth_connect = KeygloveEvent()
     kg_rsp_bluetooth_disconnect = KeygloveEvent()
-
+    
     kg_evt_protocol_error = KeygloveEvent()
-
+    
     kg_evt_system_boot = KeygloveEvent()
     kg_evt_system_ready = KeygloveEvent()
     kg_evt_system_error = KeygloveEvent()
     kg_evt_system_timer_tick = KeygloveEvent()
     kg_evt_system_battery_status = KeygloveEvent()
-
+    
     kg_evt_touch_mode = KeygloveEvent()
     kg_evt_touch_status = KeygloveEvent()
-
+    
     kg_evt_feedback_blink_mode = KeygloveEvent()
     kg_evt_feedback_piezo_mode = KeygloveEvent()
     kg_evt_feedback_vibrate_mode = KeygloveEvent()
     kg_evt_feedback_rgb_mode = KeygloveEvent()
-
+    
     kg_evt_motion_mode = KeygloveEvent()
     kg_evt_motion_data = KeygloveEvent()
     kg_evt_motion_state = KeygloveEvent()
-
+    
     kg_evt_bluetooth_mode = KeygloveEvent()
     kg_evt_bluetooth_ready = KeygloveEvent()
     kg_evt_bluetooth_inquiry_response = KeygloveEvent()
@@ -574,7 +574,7 @@ class KGAPI(object):
     kg_evt_bluetooth_pairings_cleared = KeygloveEvent()
     kg_evt_bluetooth_connection_status = KeygloveEvent()
     kg_evt_bluetooth_connection_closed = KeygloveEvent()
-
+    
     kg_log = KeygloveEvent()
 
     kg_response = KeygloveEvent()
@@ -639,8 +639,8 @@ class KGAPI(object):
                         self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_rsp_system_reset(self.last_response['payload'])
                     elif packet_command == 3: # kg_rsp_system_get_info
-                        major, minor, patch, timestamp, = struct.unpack('<BBBL', self.kgapi_rx_payload[:7])
-                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'major': major, 'minor': minor, 'patch': patch, 'timestamp': timestamp }, 'raw': self.kgapi_last_rx_packet }
+                        major, minor, patch, protocol, timestamp, = struct.unpack('<HHHHL', self.kgapi_rx_payload[:12])
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'major': major, 'minor': minor, 'patch': patch, 'protocol': protocol, 'timestamp': timestamp }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_rsp_system_get_info(self.last_response['payload'])
                     elif packet_command == 4: # kg_rsp_system_get_memory
                         free_ram, total_ram, = struct.unpack('<LL', self.kgapi_rx_payload[:8])
@@ -991,8 +991,8 @@ class KGAPI(object):
                         result, = struct.unpack('<H', payload[:2])
                         return { 'type': 'response', 'name': 'kg_rsp_system_reset', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': ('%04X' % result) }, 'payload_keys': [ 'result' ] }
                     elif packet_command == 3: # kg_rsp_system_get_info
-                        major, minor, patch, timestamp, = struct.unpack('<BBBL', payload[:7])
-                        return { 'type': 'response', 'name': 'kg_rsp_system_get_info', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'major': ('%d' % (major)), 'minor': ('%d' % (minor)), 'patch': ('%d' % (patch)), 'timestamp': ('%d' % (timestamp)) }, 'payload_keys': [ 'major', 'minor', 'patch', 'timestamp' ] }
+                        major, minor, patch, protocol, timestamp, = struct.unpack('<HHHHL', payload[:12])
+                        return { 'type': 'response', 'name': 'kg_rsp_system_get_info', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'major': ('%d' % (major)), 'minor': ('%d' % (minor)), 'patch': ('%d' % (patch)), 'protocol': ('%d' % (protocol)), 'timestamp': ('%d' % (timestamp)) }, 'payload_keys': [ 'major', 'minor', 'patch', 'protocol', 'timestamp' ] }
                     elif packet_command == 4: # kg_rsp_system_get_memory
                         free_ram, total_ram, = struct.unpack('<LL', payload[:8])
                         return { 'type': 'response', 'name': 'kg_rsp_system_get_memory', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'free_ram': ('%d %s' % (free_ram, 'byte' if (free_ram == 1) else 'bytes')), 'total_ram': ('%d %s' % (total_ram, 'byte' if (total_ram == 1) else 'bytes')) }, 'payload_keys': [ 'free_ram', 'total_ram' ] }
