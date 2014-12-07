@@ -294,7 +294,7 @@
                         { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
                     ],
                     "returns": [
-                        { "type": "uint16_t", "name": "result", "description": "Result code from command" }
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
                     ]
                 },
                 {
@@ -414,6 +414,7 @@
         {
             "id": 4,
             "name": "motion",
+            "description": "<p>Motion commands and events allow the control and detection of various motion sensors in the design.</p>",
             "commands": [
                 {
                     "id": 1,
