@@ -431,7 +431,7 @@ uint8_t bluetooth_check_incoming_protocol_data() {
     }
     
     // check for incoming iWRAP data
-    if ((result = BT2Serial.read()) < 256) iwrap_parse(result & 0xFF, iwrap_mode);
+    if ((result = BT2Serial.read()) < 256) iwrap_parse(result, iwrap_mode);
 
     // check for timeout if still testing communication
     if (!iwrap_initialized && iwrap_state == IWRAP_STATE_PENDING_AT) {
