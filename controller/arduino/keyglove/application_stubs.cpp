@@ -1,8 +1,9 @@
 // Keyglove controller source code - Custom application behavior stub/reference implementations
-// 2014-11-28 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-12-07 by Jeff Rowberg <jeff@rowberg.net>
 
-/* ============================================
-Controller code is placed under the MIT license
+/*
+================================================================================
+Keyglove source code is placed under the MIT license
 Copyright (c) 2014 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,14 +23,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-===============================================
+
+================================================================================
 */
 
 /**
  * @file application_stubs.cpp
  * @brief **USER-DEFINED:** Custom application behavior stub/reference implementations
  * @author Jeff Rowberg
- * @date 2014-11-28
+ * @date 2014-12-07
  *
  * This file contains empty "stub" implementations of all existing API events.
  * It is also not included in the compile process. It is intended only that you
