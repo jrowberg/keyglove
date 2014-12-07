@@ -45,6 +45,10 @@ import kglib
 keyglove = None         # Keyglove device instance (see 'kglib.KeygloveDevice')
 kgapi = kglib.KGAPI()   # API protocol parser instance (see 'kglib.KGAPI')
 
+# ==============================================================================
+# DEVICE CONNECTION MANAGEMENT EVENTS (triggered from KeygloveDevice object)
+# ==============================================================================
+
 def my_on_connected(sender, args):
     print("+++ Keyglove connected")
 
@@ -57,8 +61,33 @@ def my_on_unplugged(sender, args):
 def my_on_api_timeout(sender, args):
     print("??? API command timed out waiting for response, device may be disconnected")
 
+# ==============================================================================
+# API COMMUNICATION CALLBACKS (assigned in main(), triggered from KGAPI object)
+# ==============================================================================
+
+def my_kg_response(sender, args):
+    friendly = kgapi.friendly_packet(args["raw"], True)
+    if friendly:
+        print("%.2f <-- %s { %s }" % (time.time(), friendly["name"], ', '.join([ ("%s: %s" % (x, friendly["payload"][x])) for x in friendly["payload"]])))
+    else:
+        print("%.2f <-- UNKNOWN RESPONSE: [ %s ]" % (time.time(), ' '.join(['%02X' % b for b in args['raw']])))
+
+def my_kg_event(sender, args):
+    friendly = kgapi.friendly_packet(args["raw"], True)
+    if friendly:
+        print("%.2f <-- %s { %s }" % (time.time(), friendly["name"], ', '.join([ ("%s: %s" % (x, friendly["payload"][x])) for x in friendly["payload"]])))
+    else:
+        print("%.2f <-- UNKNOWN EVENT: [ %s ]" % (time.time(), ' '.join(['%02X' % b for b in args['raw']])))
+
+def my_kg_log(sender, args):
+    print("%.2f <-- LOG (%d): %s" % (time.time(), args["level"], args["log"]))
+
 def my_kg_evt_touch_status(sender, args):
-    print("*** Touch update: %s" % (' '.join(['%02X' % b for b in args['status']])))
+    print("%.2f *** Touch update: %s" % (time.time(), ' '.join(['%02X' % b for b in args['status']])))
+
+# ==============================================================================
+# MAIN APPLICATION LOGIC
+# ==============================================================================
 
 def main():
     global keyglove
@@ -99,6 +128,11 @@ def main():
         keyglove.on_unplugged += my_on_unplugged
         keyglove.on_api_timeout += my_on_api_timeout
 
+        # assign custom generic handlers for responses, events, and log entries
+        kgapi.kg_response += my_kg_response
+        kgapi.kg_event += my_kg_event
+        kgapi.kg_log += my_kg_log
+
         # assign custom event handler for kg_evt_touch_status() API event
         kgapi.kg_evt_touch_status += my_kg_evt_touch_status
 
@@ -108,29 +142,26 @@ def main():
                 # build outgoing command packet
                 cmd_packet = kgapi.kg_cmd_system_ping()
 
-                # -------- get friendly info (completely unnecessary in production) --------
+                # pass raw command to "friendly" interpreter in KGAPI object
+                # (this is totally optional and mostly just helps debug output)
                 friendly = kgapi.friendly_packet(cmd_packet, False)
                 if friendly:
-                    print("--> %s: %s" % (friendly['name'], friendly['payload']))
+                    print("%.2f --> %s { %s }" % (time.time(), friendly["name"], ', '.join([ ("%s: %s" % (x, friendly["payload"][x])) for x in friendly["payload"]])))
                 else:
-                    print("--> ERROR GETTING FRIENDLY PACKET INFO FOR COMMAND")
-                # --------------------------------------------------------------------------
+                    print("%.2f --> UNKNOWN COMMAND: [ %s ]" % (time.time(), ' '.join(['%02X' % b for b in cmd_packet])))
 
+                # send command and wait up to 1 second for response
                 response = keyglove.send_and_return(cmd_packet, 1)
-                if response:
-                    # -------- get friendly info (completely unnecessary in production) --------
-                    friendly = kgapi.friendly_packet(response['raw'], True)
-                    if friendly:
-                        print("<-- %s: %s" % (friendly['name'], friendly['payload']))
-                    else:
-                        print("<-- ERROR GETTING FRIENDLY PACKET INFO FOR RESPONSE")
-                    # --------------------------------------------------------------------------
 
                 # wait 5 seconds before repeating
                 if keyglove.connected: time.sleep(5)
 
     except kglib.KeygloveError as e:
         print("Keyglove error (%s): %s" % (type(e), e))
+
+# ==============================================================================
+# PYTHON "__main__" ENTRY POINT DEFINITION
+# ==============================================================================
 
 if __name__ == '__main__':
     try:
