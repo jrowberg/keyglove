@@ -1,10 +1,12 @@
 What is Keyglove?
 =================
 
-The Keyglove is an [Arduino](http://arduino.cc)-powered glove that uses touch combinations to generate keyboard and mouse control codes. Once learned, the glove can easily be used without looking, making it perfect for embedded/wearable environments. The glove is thin and light, built to allow other activities (such as writing) without being in the way.
+The [Keyglove](http://keyglove.net) is an [Arduino](http://arduino.cc)-powered glove that uses touch combinations to generate keyboard and mouse control codes. Once learned, the glove can easily be used without looking, making it perfect for embedded/wearable environments. The glove is thin and light, built to allow other activities (such as writing) without being in the way.
 
 Keyglove Design
 ===============
+
+![Keyglove Prototype E](http://www.keyglove.net/wp-content/uploads/2013/07/front03-01.jpg "Keyglove Prototype E")
 
 Because the glove design allows for multi-sensor combinations, the keyglove provides exponentially more possibilities than many other glove-based input devices (prototypes or commercial products). 34 strategically placed contact sensors and smart controller software make it possible to implement the entire English alphabet using simple one-to-one sensor contacts. When you include multi-sensor contacts, there are many hundreds of ergonomically usable combinations.
 
