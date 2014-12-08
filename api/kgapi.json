@@ -77,7 +77,7 @@
                         { "type": "uint16_t", "name": "minor", "format": "decimal", "description": "Firmware minor version number" },
                         { "type": "uint16_t", "name": "patch", "format": "decimal", "description": "Firmware patch version number" },
                         { "type": "uint16_t", "name": "protocol", "format": "decimal", "description": "API protocol version number" },
-                        { "type": "uint32_t", "name": "timestamp", "format": "decimal", "description": "Version timestamp" }
+                        { "type": "uint32_t", "name": "timestamp", "format": "decimal", "description": "Build timestamp" }
                     ]
                 },
                 {
@@ -124,10 +124,11 @@
                     "description": "<p>Indicates that Keyglove has started the boot process.</p>",
                     "doxbrief": "Indicates that Keyglove has started the boot process",
                     "parameters": [
-                        { "type": "uint8_t", "name": "major", "format": "decimal", "description": "Firmware major version number" },
-                        { "type": "uint8_t", "name": "minor", "format": "decimal", "description": "Firmware minor version number" },
-                        { "type": "uint8_t", "name": "patch", "format": "decimal", "description": "Firmware patch version number" },
-                        { "type": "uint32_t", "name": "timestamp", "format": "decimal", "description": "Firmware build timestamp" }
+                        { "type": "uint16_t", "name": "major", "format": "decimal", "description": "Firmware major version number" },
+                        { "type": "uint16_t", "name": "minor", "format": "decimal", "description": "Firmware minor version number" },
+                        { "type": "uint16_t", "name": "patch", "format": "decimal", "description": "Firmware patch version number" },
+                        { "type": "uint16_t", "name": "protocol", "format": "decimal", "description": "API protocol version number" },
+                        { "type": "uint32_t", "name": "timestamp", "format": "decimal", "description": "Build timestamp" }
                     ]
                 },
                 {

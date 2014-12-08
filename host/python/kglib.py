@@ -767,8 +767,8 @@ class KGAPI(object):
                         self.kg_evt_protocol_error(self.last_event['payload'])
                 elif packet_class == 1: # SYSTEM
                     if packet_command == 1: # kg_evt_system_boot
-                        major, minor, patch, timestamp, = struct.unpack('<BBBL', self.kgapi_rx_payload[:7])
-                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'major': major, 'minor': minor, 'patch': patch, 'timestamp': timestamp }, 'raw': self.kgapi_last_rx_packet }
+                        major, minor, patch, protocol, timestamp, = struct.unpack('<HHHHL', self.kgapi_rx_payload[:12])
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'major': major, 'minor': minor, 'patch': patch, 'protocol': protocol, 'timestamp': timestamp }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_evt_system_boot(self.last_event['payload'])
                     elif packet_command == 2: # kg_evt_system_ready
                         self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': {  }, 'raw': self.kgapi_last_rx_packet }
@@ -1086,8 +1086,8 @@ class KGAPI(object):
                         return { 'type': 'event', 'name': 'kg_evt_protocol_error', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'code': ('%04X' % code) }, 'payload_keys': [ 'code' ] }
                 elif packet_class == 1: # SYSTEM
                     if packet_command == 1: # kg_evt_system_boot
-                        major, minor, patch, timestamp, = struct.unpack('<BBBL', payload[:7])
-                        return { 'type': 'event', 'name': 'kg_evt_system_boot', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'major': ('%d' % (major)), 'minor': ('%d' % (minor)), 'patch': ('%d' % (patch)), 'timestamp': ('%d' % (timestamp)) }, 'payload_keys': [ 'major', 'minor', 'patch', 'timestamp' ] }
+                        major, minor, patch, protocol, timestamp, = struct.unpack('<HHHHL', payload[:12])
+                        return { 'type': 'event', 'name': 'kg_evt_system_boot', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'major': ('%d' % (major)), 'minor': ('%d' % (minor)), 'patch': ('%d' % (patch)), 'protocol': ('%d' % (protocol)), 'timestamp': ('%d' % (timestamp)) }, 'payload_keys': [ 'major', 'minor', 'patch', 'protocol', 'timestamp' ] }
                     elif packet_command == 2: # kg_evt_system_ready
                         return { 'type': 'event', 'name': 'kg_evt_system_ready', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
                     elif packet_command == 3: # kg_evt_system_error
