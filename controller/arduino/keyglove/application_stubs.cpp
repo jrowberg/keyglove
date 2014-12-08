@@ -66,7 +66,7 @@ uint8_t my_kg_evt_protocol_error(uint16_t code) {
  * @param[in] minor Firmware minor version number
  * @param[in] patch Firmware patch version number
  * @param[in] protocol API protocol version number
- * @param[in] timestamp Version timestamp
+ * @param[in] timestamp Build timestamp
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
 uint8_t my_kg_evt_system_boot(uint16_t major, uint16_t minor, uint16_t patch, uint16_t protocol, uint32_t timestamp) {
@@ -100,13 +100,13 @@ uint8_t my_kg_evt_system_error(uint16_t code) {
 }
 
 /**
- * @brief Indicates that a previously scheduled software timer has elapsed
- * @param[in] handle Timer handle which triggered this event
- * @param[in] seconds Seconds elapsed since boot
- * @param[in] subticks 10ms subticks above whole second
+ * @brief Provides a record describing specific capabilities designed into this unit.
+ * @param[in] category Category that this capability report is included in
+ * @param[in] record_len Length in bytes of record_data buffer
+ * @param[in] record_data Capability record(s) in type-length-value format
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
-uint8_t my_kg_evt_system_timer_tick(uint8_t handle, uint32_t seconds, uint8_t subticks) {
+uint8_t my_kg_evt_system_capability(uint16_t category, uint8_t record_len, uint8_t *record_data) {
     // TODO: special event handler code here
     // ...
 
@@ -120,6 +120,20 @@ uint8_t my_kg_evt_system_timer_tick(uint8_t handle, uint32_t seconds, uint8_t su
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
 uint8_t my_kg_evt_system_battery_status(uint8_t status, uint8_t level) {
+    // TODO: special event handler code here
+    // ...
+
+    return 0; // 0=send event API packet, otherwise skip sending
+}
+
+/**
+ * @brief Indicates that a previously scheduled software timer has elapsed
+ * @param[in] handle Timer handle which triggered this event
+ * @param[in] seconds Seconds elapsed since boot
+ * @param[in] subticks 10ms subticks above whole second
+ * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
+ */
+uint8_t my_kg_evt_system_timer_tick(uint8_t handle, uint32_t seconds, uint8_t subticks) {
     // TODO: special event handler code here
     // ...
 

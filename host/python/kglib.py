@@ -451,12 +451,14 @@ class KGAPI(object):
         return struct.pack('<4BB', 0xC0, 0x01, 0x01, 0x02, mode)
     def kg_cmd_system_get_info(self):
         return struct.pack('<4B', 0xC0, 0x00, 0x01, 0x03)
+    def kg_cmd_system_get_capabilities(self, category):
+        return struct.pack('<4BB', 0xC0, 0x01, 0x01, 0x04, category)
     def kg_cmd_system_get_memory(self):
-        return struct.pack('<4B', 0xC0, 0x00, 0x01, 0x04)
-    def kg_cmd_system_set_timer(self, handle, interval, oneshot):
-        return struct.pack('<4BBHB', 0xC0, 0x04, 0x01, 0x05, handle, interval, oneshot)
+        return struct.pack('<4B', 0xC0, 0x00, 0x01, 0x05)
     def kg_cmd_system_get_battery_status(self):
         return struct.pack('<4B', 0xC0, 0x00, 0x01, 0x06)
+    def kg_cmd_system_set_timer(self, handle, interval, oneshot):
+        return struct.pack('<4BBHB', 0xC0, 0x04, 0x01, 0x07, handle, interval, oneshot)
     
     def kg_cmd_touch_get_mode(self):
         return struct.pack('<4B', 0xC0, 0x00, 0x02, 0x01)
@@ -513,9 +515,10 @@ class KGAPI(object):
     kg_rsp_system_ping = KeygloveEvent()
     kg_rsp_system_reset = KeygloveEvent()
     kg_rsp_system_get_info = KeygloveEvent()
+    kg_rsp_system_get_capabilities = KeygloveEvent()
     kg_rsp_system_get_memory = KeygloveEvent()
-    kg_rsp_system_set_timer = KeygloveEvent()
     kg_rsp_system_get_battery_status = KeygloveEvent()
+    kg_rsp_system_set_timer = KeygloveEvent()
     
     kg_rsp_touch_get_mode = KeygloveEvent()
     kg_rsp_touch_set_mode = KeygloveEvent()
@@ -550,8 +553,9 @@ class KGAPI(object):
     kg_evt_system_boot = KeygloveEvent()
     kg_evt_system_ready = KeygloveEvent()
     kg_evt_system_error = KeygloveEvent()
-    kg_evt_system_timer_tick = KeygloveEvent()
+    kg_evt_system_capability = KeygloveEvent()
     kg_evt_system_battery_status = KeygloveEvent()
+    kg_evt_system_timer_tick = KeygloveEvent()
     
     kg_evt_touch_mode = KeygloveEvent()
     kg_evt_touch_status = KeygloveEvent()
@@ -642,18 +646,22 @@ class KGAPI(object):
                         major, minor, patch, protocol, timestamp, = struct.unpack('<HHHHL', self.kgapi_rx_payload[:12])
                         self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'major': major, 'minor': minor, 'patch': patch, 'protocol': protocol, 'timestamp': timestamp }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_rsp_system_get_info(self.last_response['payload'])
-                    elif packet_command == 4: # kg_rsp_system_get_memory
+                    elif packet_command == 4: # kg_rsp_system_get_capabilities
+                        count, = struct.unpack('<H', self.kgapi_rx_payload[:2])
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'count': count }, 'raw': self.kgapi_last_rx_packet }
+                        self.kg_rsp_system_get_capabilities(self.last_response['payload'])
+                    elif packet_command == 5: # kg_rsp_system_get_memory
                         free_ram, total_ram, = struct.unpack('<LL', self.kgapi_rx_payload[:8])
                         self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'free_ram': free_ram, 'total_ram': total_ram }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_rsp_system_get_memory(self.last_response['payload'])
-                    elif packet_command == 5: # kg_rsp_system_set_timer
-                        result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result }, 'raw': self.kgapi_last_rx_packet }
-                        self.kg_rsp_system_set_timer(self.last_response['payload'])
                     elif packet_command == 6: # kg_rsp_system_get_battery_status
                         status, level, = struct.unpack('<BB', self.kgapi_rx_payload[:2])
                         self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'status': status, 'level': level }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_rsp_system_get_battery_status(self.last_response['payload'])
+                    elif packet_command == 7: # kg_rsp_system_set_timer
+                        result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result }, 'raw': self.kgapi_last_rx_packet }
+                        self.kg_rsp_system_set_timer(self.last_response['payload'])
                 elif packet_class == 2: # TOUCH
                     if packet_command == 1: # kg_rsp_touch_get_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
@@ -777,14 +785,19 @@ class KGAPI(object):
                         code, = struct.unpack('<H', self.kgapi_rx_payload[:2])
                         self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'code': code }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_evt_system_error(self.last_event['payload'])
-                    elif packet_command == 4: # kg_evt_system_timer_tick
-                        handle, seconds, subticks, = struct.unpack('<BLB', self.kgapi_rx_payload[:6])
-                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'handle': handle, 'seconds': seconds, 'subticks': subticks }, 'raw': self.kgapi_last_rx_packet }
-                        self.kg_evt_system_timer_tick(self.last_event['payload'])
+                    elif packet_command == 4: # kg_evt_system_capability
+                        category, record_len, = struct.unpack('<HB', self.kgapi_rx_payload[:3])
+                        record_data = [ord(b) for b in self.kgapi_rx_payload[3:]]
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'category': category, 'record': record_data }, 'raw': self.kgapi_last_rx_packet }
+                        self.kg_evt_system_capability(self.last_event['payload'])
                     elif packet_command == 5: # kg_evt_system_battery_status
                         status, level, = struct.unpack('<BB', self.kgapi_rx_payload[:2])
                         self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'status': status, 'level': level }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_evt_system_battery_status(self.last_event['payload'])
+                    elif packet_command == 6: # kg_evt_system_timer_tick
+                        handle, seconds, subticks, = struct.unpack('<BLB', self.kgapi_rx_payload[:6])
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'handle': handle, 'seconds': seconds, 'subticks': subticks }, 'raw': self.kgapi_last_rx_packet }
+                        self.kg_evt_system_timer_tick(self.last_event['payload'])
                 elif packet_class == 2: # TOUCH
                     if packet_command == 1: # kg_evt_touch_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
@@ -905,13 +918,16 @@ class KGAPI(object):
                     return { 'type': 'command', 'name': 'kg_cmd_system_reset', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
                 elif packet_command == 3: # kg_cmd_system_get_info
                     return { 'type': 'command', 'name': 'kg_cmd_system_get_info', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
-                elif packet_command == 4: # kg_cmd_system_get_memory
+                elif packet_command == 4: # kg_cmd_system_get_capabilities
+                    category, = struct.unpack('<B', payload[:1])
+                    return { 'type': 'command', 'name': 'kg_cmd_system_get_capabilities', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'category': ('%02X' % category) }, 'payload_keys': [ 'category' ] }
+                elif packet_command == 5: # kg_cmd_system_get_memory
                     return { 'type': 'command', 'name': 'kg_cmd_system_get_memory', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
-                elif packet_command == 5: # kg_cmd_system_set_timer
-                    handle, interval, oneshot, = struct.unpack('<BHB', payload[:4])
-                    return { 'type': 'command', 'name': 'kg_cmd_system_set_timer', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'handle': ('%d' % (handle)), 'interval': ('%d' % (interval)), 'oneshot': ('%d' % (oneshot)) }, 'payload_keys': [ 'handle', 'interval', 'oneshot' ] }
                 elif packet_command == 6: # kg_cmd_system_get_battery_status
                     return { 'type': 'command', 'name': 'kg_cmd_system_get_battery_status', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
+                elif packet_command == 7: # kg_cmd_system_set_timer
+                    handle, interval, oneshot, = struct.unpack('<BHB', payload[:4])
+                    return { 'type': 'command', 'name': 'kg_cmd_system_set_timer', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'handle': ('%d' % (handle)), 'interval': ('%d' % (interval)), 'oneshot': ('%d' % (oneshot)) }, 'payload_keys': [ 'handle', 'interval', 'oneshot' ] }
             elif packet_class == 2: # TOUCH
                 if packet_command == 1: # kg_cmd_touch_get_mode
                     return { 'type': 'command', 'name': 'kg_cmd_touch_get_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
@@ -993,15 +1009,18 @@ class KGAPI(object):
                     elif packet_command == 3: # kg_rsp_system_get_info
                         major, minor, patch, protocol, timestamp, = struct.unpack('<HHHHL', payload[:12])
                         return { 'type': 'response', 'name': 'kg_rsp_system_get_info', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'major': ('%d' % (major)), 'minor': ('%d' % (minor)), 'patch': ('%d' % (patch)), 'protocol': ('%d' % (protocol)), 'timestamp': ('%d' % (timestamp)) }, 'payload_keys': [ 'major', 'minor', 'patch', 'protocol', 'timestamp' ] }
-                    elif packet_command == 4: # kg_rsp_system_get_memory
+                    elif packet_command == 4: # kg_rsp_system_get_capabilities
+                        count, = struct.unpack('<H', payload[:2])
+                        return { 'type': 'response', 'name': 'kg_rsp_system_get_capabilities', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'count': ('%d' % (count)) }, 'payload_keys': [ 'count' ] }
+                    elif packet_command == 5: # kg_rsp_system_get_memory
                         free_ram, total_ram, = struct.unpack('<LL', payload[:8])
                         return { 'type': 'response', 'name': 'kg_rsp_system_get_memory', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'free_ram': ('%d %s' % (free_ram, 'byte' if (free_ram == 1) else 'bytes')), 'total_ram': ('%d %s' % (total_ram, 'byte' if (total_ram == 1) else 'bytes')) }, 'payload_keys': [ 'free_ram', 'total_ram' ] }
-                    elif packet_command == 5: # kg_rsp_system_set_timer
-                        result, = struct.unpack('<H', payload[:2])
-                        return { 'type': 'response', 'name': 'kg_rsp_system_set_timer', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': ('%04X' % result) }, 'payload_keys': [ 'result' ] }
                     elif packet_command == 6: # kg_rsp_system_get_battery_status
                         status, level, = struct.unpack('<BB', payload[:2])
                         return { 'type': 'response', 'name': 'kg_rsp_system_get_battery_status', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'status': ('%02X' % status), 'level': ('%02X' % level) }, 'payload_keys': [ 'status', 'level' ] }
+                    elif packet_command == 7: # kg_rsp_system_set_timer
+                        result, = struct.unpack('<H', payload[:2])
+                        return { 'type': 'response', 'name': 'kg_rsp_system_set_timer', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': ('%04X' % result) }, 'payload_keys': [ 'result' ] }
                 elif packet_class == 2: # TOUCH
                     if packet_command == 1: # kg_rsp_touch_get_mode
                         mode, = struct.unpack('<B', payload[:1])
@@ -1093,12 +1112,16 @@ class KGAPI(object):
                     elif packet_command == 3: # kg_evt_system_error
                         code, = struct.unpack('<H', payload[:2])
                         return { 'type': 'event', 'name': 'kg_evt_system_error', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'code': ('%04X' % code) }, 'payload_keys': [ 'code' ] }
-                    elif packet_command == 4: # kg_evt_system_timer_tick
-                        handle, seconds, subticks, = struct.unpack('<BLB', payload[:6])
-                        return { 'type': 'event', 'name': 'kg_evt_system_timer_tick', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'handle': ('%d' % (handle)), 'seconds': ('%d' % (seconds)), 'subticks': ('%d' % (subticks)) }, 'payload_keys': [ 'handle', 'seconds', 'subticks' ] }
+                    elif packet_command == 4: # kg_evt_system_capability
+                        category, record_len, = struct.unpack('<HB', payload[:3])
+                        record_data = [ord(b) for b in payload[3:]]
+                        return { 'type': 'event', 'name': 'kg_evt_system_capability', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'category': ('%04X' % category), 'record': ' '.join(['%02X' % b for b in record_data]) }, 'payload_keys': [ 'category', 'record' ] }
                     elif packet_command == 5: # kg_evt_system_battery_status
                         status, level, = struct.unpack('<BB', payload[:2])
                         return { 'type': 'event', 'name': 'kg_evt_system_battery_status', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'status': ('%02X' % status), 'level': ('%02X' % level) }, 'payload_keys': [ 'status', 'level' ] }
+                    elif packet_command == 6: # kg_evt_system_timer_tick
+                        handle, seconds, subticks, = struct.unpack('<BLB', payload[:6])
+                        return { 'type': 'event', 'name': 'kg_evt_system_timer_tick', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'handle': ('%d' % (handle)), 'seconds': ('%d' % (seconds)), 'subticks': ('%d' % (subticks)) }, 'payload_keys': [ 'handle', 'seconds', 'subticks' ] }
                 elif packet_class == 2: # TOUCH
                     if packet_command == 1: # kg_evt_touch_mode
                         mode, = struct.unpack('<B', payload[:1])

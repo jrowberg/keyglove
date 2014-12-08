@@ -51,9 +51,10 @@ THE SOFTWARE.
  * @see KGAPI command: kg_cmd_system_ping()
  * @see KGAPI command: kg_cmd_system_reset()
  * @see KGAPI command: kg_cmd_system_get_info()
+ * @see KGAPI command: kg_cmd_system_get_capabilities()
  * @see KGAPI command: kg_cmd_system_get_memory()
- * @see KGAPI command: kg_cmd_system_set_timer()
  * @see KGAPI command: kg_cmd_system_get_battery_status()
+ * @see KGAPI command: kg_cmd_system_set_timer()
  */
 uint8_t process_protocol_command_system(uint8_t *rxPacket) {
     // check for valid command IDs
@@ -122,7 +123,26 @@ uint8_t process_protocol_command_system(uint8_t *rxPacket) {
             }
             break;
         
-        case KG_PACKET_ID_CMD_SYSTEM_GET_MEMORY: // 0x04
+        case KG_PACKET_ID_CMD_SYSTEM_GET_CAPABILITIES: // 0x04
+            // system_get_capabilities(uint8_t category)(uint16_t count)
+            // parameters = 1 byte
+            if (rxPacket[1] != 1) {
+                // incorrect parameter length
+                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
+            } else {
+                // run command
+                uint16_t count;
+                uint16_t result = kg_cmd_system_get_capabilities(rxPacket[4], &count);
+        
+                // build response
+                uint8_t payload[2] = { count & 0xFF, (count >> 8) & 0xFF };
+        
+                // send response
+                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
+            }
+            break;
+        
+        case KG_PACKET_ID_CMD_SYSTEM_GET_MEMORY: // 0x05
             // system_get_memory()(uint32_t free_ram, uint32_t total_ram)
             // parameters = 0 bytes
             if (rxPacket[1] != 0) {
@@ -139,24 +159,6 @@ uint8_t process_protocol_command_system(uint8_t *rxPacket) {
         
                 // send response
                 send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 8, rxPacket[2], rxPacket[3], payload);
-            }
-            break;
-        
-        case KG_PACKET_ID_CMD_SYSTEM_SET_TIMER: // 0x05
-            // system_set_timer(uint8_t handle, uint16_t interval, uint8_t oneshot)(uint16_t result)
-            // parameters = 4 bytes
-            if (rxPacket[1] != 4) {
-                // incorrect parameter length
-                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
-            } else {
-                // run command
-                uint16_t result = kg_cmd_system_set_timer(rxPacket[4], rxPacket[5] | (rxPacket[6] << 8), rxPacket[7]);
-        
-                // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
-        
-                // send response
-                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
             }
             break;
         
@@ -180,6 +182,24 @@ uint8_t process_protocol_command_system(uint8_t *rxPacket) {
             }
             break;
         
+        case KG_PACKET_ID_CMD_SYSTEM_SET_TIMER: // 0x07
+            // system_set_timer(uint8_t handle, uint16_t interval, uint8_t oneshot)(uint16_t result)
+            // parameters = 4 bytes
+            if (rxPacket[1] != 4) {
+                // incorrect parameter length
+                protocol_error = KG_PROTOCOL_ERROR_PARAMETER_LENGTH;
+            } else {
+                // run command
+                uint16_t result = kg_cmd_system_set_timer(rxPacket[4], rxPacket[5] | (rxPacket[6] << 8), rxPacket[7]);
+        
+                // build response
+                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
+        
+                // send response
+                send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
+            }
+            break;
+        
         default:
             protocol_error = KG_PROTOCOL_ERROR_INVALID_COMMAND;
     }
@@ -189,5 +209,6 @@ uint8_t process_protocol_command_system(uint8_t *rxPacket) {
 /* 0x01 */ uint8_t (*kg_evt_system_boot)(uint16_t major, uint16_t minor, uint16_t patch, uint16_t protocol, uint32_t timestamp);
 /* 0x02 */ uint8_t (*kg_evt_system_ready)();
 /* 0x03 */ uint8_t (*kg_evt_system_error)(uint16_t code);
-/* 0x04 */ uint8_t (*kg_evt_system_timer_tick)(uint8_t handle, uint32_t seconds, uint8_t subticks);
+/* 0x04 */ uint8_t (*kg_evt_system_capability)(uint16_t category, uint8_t record_len, uint8_t *record_data);
 /* 0x05 */ uint8_t (*kg_evt_system_battery_status)(uint8_t status, uint8_t level);
+/* 0x06 */ uint8_t (*kg_evt_system_timer_tick)(uint8_t handle, uint32_t seconds, uint8_t subticks);
