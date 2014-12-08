@@ -125,13 +125,13 @@ void setup() {
         KG_FIRMWARE_VERSION_MAJOR,
         KG_FIRMWARE_VERSION_MINOR,
         KG_FIRMWARE_VERSION_PATCH,
-        KG_FIRMWARE_BUILD_TIMESTAMP & 0xFF,
-        (KG_FIRMWARE_BUILD_TIMESTAMP >> 8) & 0xFF,
-        (KG_FIRMWARE_BUILD_TIMESTAMP >> 16) & 0xFF,
-        (KG_FIRMWARE_BUILD_TIMESTAMP >> 24) & 0xFF
+        KG_BUILD_TIMESTAMP & 0xFF,
+        (KG_BUILD_TIMESTAMP >> 8) & 0xFF,
+        (KG_BUILD_TIMESTAMP >> 16) & 0xFF,
+        (KG_BUILD_TIMESTAMP >> 24) & 0xFF
     };
     skipPacket = 0;
-    if (kg_evt_system_boot) skipPacket = kg_evt_system_boot(KG_FIRMWARE_VERSION_MAJOR, KG_FIRMWARE_VERSION_MINOR, KG_FIRMWARE_VERSION_PATCH, KG_FIRMWARE_BUILD_TIMESTAMP);
+    if (kg_evt_system_boot) skipPacket = kg_evt_system_boot(KG_FIRMWARE_VERSION_MAJOR, KG_FIRMWARE_VERSION_MINOR, KG_FIRMWARE_VERSION_PATCH, KG_PROTOCOL_VERSION, KG_BUILD_TIMESTAMP);
     if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 7, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BOOT, payload);
 
     // CORE TOUCH SENSOR LOGIC
@@ -363,14 +363,16 @@ uint16_t kg_cmd_system_reset(uint8_t mode) {
  * @param[out] major Firmware major version number
  * @param[out] minor Firmware minor version number
  * @param[out] patch Firmware patch version number
- * @param[out] timestamp Firmware build timestamp
+ * @param[out] protocol API protocol version
+ * @param[out] timestamp Build timestamp
  * @return Result code (0=success)
  */
-uint16_t kg_cmd_system_get_info(uint8_t *major, uint8_t *minor, uint8_t *patch, uint32_t *timestamp) {
+uint16_t kg_cmd_system_get_info(uint16_t *major, uint16_t *minor, uint16_t *patch, uint16_t *protocol, uint32_t *timestamp) {
     *major = KG_FIRMWARE_VERSION_MAJOR;
     *minor = KG_FIRMWARE_VERSION_MINOR;
     *patch = KG_FIRMWARE_VERSION_PATCH;
-    *timestamp = KG_FIRMWARE_BUILD_TIMESTAMP;
+    *protocol = KG_PROTOCOL_VERSION;
+    *timestamp = KG_BUILD_TIMESTAMP;
     return 0; // success
 }
 

@@ -70,7 +70,7 @@ THE SOFTWARE.
 /* 0x05 */ uint16_t kg_cmd_system_set_timer(uint8_t handle, uint16_t interval, uint8_t oneshot);
 /* 0x06 */ uint16_t kg_cmd_system_get_battery_status(uint8_t *status, uint8_t *level);
 // -- command/event split --
-/* 0x01 */ extern uint8_t (*kg_evt_system_boot)(uint8_t major, uint8_t minor, uint8_t patch, uint32_t timestamp);
+/* 0x01 */ extern uint8_t (*kg_evt_system_boot)(uint16_t major, uint16_t minor, uint16_t patch, uint16_t protocol, uint32_t timestamp);
 /* 0x02 */ extern uint8_t (*kg_evt_system_ready)();
 /* 0x03 */ extern uint8_t (*kg_evt_system_error)(uint16_t code);
 /* 0x04 */ extern uint8_t (*kg_evt_system_timer_tick)(uint8_t handle, uint32_t seconds, uint8_t subticks);

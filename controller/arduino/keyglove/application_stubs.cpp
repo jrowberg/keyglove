@@ -65,10 +65,11 @@ uint8_t my_kg_evt_protocol_error(uint16_t code) {
  * @param[in] major Firmware major version number
  * @param[in] minor Firmware minor version number
  * @param[in] patch Firmware patch version number
- * @param[in] timestamp Firmware build timestamp
+ * @param[in] protocol API protocol version number
+ * @param[in] timestamp Version timestamp
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
-uint8_t my_kg_evt_system_boot(uint8_t major, uint8_t minor, uint8_t patch, uint32_t timestamp) {
+uint8_t my_kg_evt_system_boot(uint16_t major, uint16_t minor, uint16_t patch, uint16_t protocol, uint32_t timestamp) {
     // TODO: special event handler code here
     // ...
 

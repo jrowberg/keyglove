@@ -186,7 +186,7 @@ uint8_t process_protocol_command_system(uint8_t *rxPacket) {
     return protocol_error;
 }
 
-/* 0x01 */ uint8_t (*kg_evt_system_boot)(uint8_t major, uint8_t minor, uint8_t patch, uint32_t timestamp);
+/* 0x01 */ uint8_t (*kg_evt_system_boot)(uint16_t major, uint16_t minor, uint16_t patch, uint16_t protocol, uint32_t timestamp);
 /* 0x02 */ uint8_t (*kg_evt_system_ready)();
 /* 0x03 */ uint8_t (*kg_evt_system_error)(uint16_t code);
 /* 0x04 */ uint8_t (*kg_evt_system_timer_tick)(uint8_t handle, uint32_t seconds, uint8_t subticks);
