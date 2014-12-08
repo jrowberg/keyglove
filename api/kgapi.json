@@ -86,7 +86,7 @@
                     "description": "<p>Get capabilities designed into this unit.</p>",
                     "doxbrief": "Get capabilities designed into this unit",
                     "parameters": [
-                        { "type": "uint8_t", "name": "category", "description": "Category of capabilities to report (0xFF for all)" }
+                        { "type": "uint8_t", "name": "category", "description": "Category of capabilities to report (0x00 for all)" }
                     ],
                     "returns": [
                         { "type": "uint16_t", "name": "count", "format": "decimal", "description": "Number of capability reports to expect" }
