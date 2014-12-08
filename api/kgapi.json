@@ -1,8 +1,9 @@
 {
     "info": {
-        "date": "2014-07-26",
+        "date": "2014-12-07",
         "name": "Keyglove Standard Protocol",
-        "author": "Jeff Rowberg <jeff@rowberg.net>"
+        "author": "Jeff Rowberg <jeff@rowberg.net>",
+        "version": 1
     },
     "classes": [
         {
