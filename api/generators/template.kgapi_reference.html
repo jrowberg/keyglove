@@ -63,6 +63,9 @@ THE SOFTWARE.
     display: inline-block;
     min-width: 40px;
 }
+.kgapidoc .breakauto {
+    page-break-before: auto;
+}
 
 .kgapidoc table {
     border: 1px solid #ccc;
@@ -92,7 +95,10 @@ THE SOFTWARE.
 .kgapidoc table thead th.tabletitle {
     background-color: #5e858c;
     border-color: #5e858c #fff;
-    font-size: 1.2em;
+    font-size: 1.1em;
+    font-style: italic;
+    font-weight: normal;
+    padding: 3px 8px 2px;
     text-align: right;
 }
 .kgapidoc table.command, .kgapidoc table.response, .kgapidoc table.event {
@@ -150,6 +156,18 @@ THE SOFTWARE.
 <h1 align="center">Keyglove API Reference Guide</h1>
 <h4 align="center">{%date_ymd%}</h4>
 <h4 align="center"><a href="http://keyglove.net" target="_blank">keyglove.net</a><br /><a href="https://github.com/jrowberg/keyglove" target="_blank">github.com/jrowberg/keyglove</a></h4>
+
+<p style="font-size: 1.2em;">This API Reference Guide describes the complete packet structure of all
+currently defined commands, responses, and events that are part of the Keyglove
+API binary protocol.</p>
+<p>
+
+<p style="font-size: 1.2em;"><strong style="color: #F00;">This protocol is still under active development
+and has not been officially locked to a specific structure and definition. This
+means that the class/ID values as well as the parameter names, types, and order
+for any API method MAY CHANGE AT ANY TIME. Please make very sure that you are
+always working with the latest available code and reference material.</strong>
+</p>
 
 {%apiref_html%}
 
