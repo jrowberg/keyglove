@@ -69,7 +69,7 @@
                 {
                     "id": 3,
                     "name": "get_info",
-                    "description": "<p>Get firmware build info</p>",
+                    "description": "<p>Get firmware build info.</p>",
                     "doxbrief": "Get firmware build info",
                     "parameters": [ ],
                     "returns": [
@@ -82,27 +82,25 @@
                 },
                 {
                     "id": 4,
+                    "name": "get_capabilities",
+                    "description": "<p>Get capabilities designed into this unit.</p>",
+                    "doxbrief": "Get capabilities designed into this unit",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "category", "description": "Category of capabilities to report (0xFF for all)" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "count", "format": "decimal", "description": "Number of capability reports to expect" }
+                    ]
+                },
+                {
+                    "id": 5,
                     "name": "get_memory",
-                    "description": "<p>Get system memory usage</p>",
+                    "description": "<p>Get system memory usage.</p>",
                     "doxbrief": "Get system memory usage",
                     "parameters": [ ],
                     "returns": [
                         { "type": "uint32_t", "name": "free_ram", "format": "decimal", "units": "byte,bytes", "description": "Free bytes of RAM" },
                         { "type": "uint32_t", "name": "total_ram", "format": "decimal", "units": "byte,bytes", "description": "Total bytes of RAM" }
-                    ]
-                },
-                {
-                    "id": 5,
-                    "name": "set_timer",
-                    "description": "<p>Set a timer interval to trigger future behavior</p>",
-                    "doxbrief": "Set a timer interval to trigger future behavior",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Timer handle (0-7)" },
-                        { "type": "uint16_t", "name": "interval", "format": "decimal", "description": "Interval (10ms units)" },
-                        { "type": "uint8_t", "name": "oneshot", "format": "decimal", "description": "Repeating (0) or one-shot (1)" }
-                    ],
-                    "returns": [
-                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'set_timer' command" }
                     ]
                 },
                 {
@@ -114,6 +112,20 @@
                     "returns": [
                         { "type": "uint8_t", "name": "status", "format": "hex", "description": "Battery status" },
                         { "type": "uint8_t", "name": "level", "format": "percentage", "description": "Charge level (0-100)" }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "name": "set_timer",
+                    "description": "<p>Set a timer interval to trigger future behavior.</p>",
+                    "doxbrief": "Set a timer interval to trigger future behavior",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Timer handle (0-7)" },
+                        { "type": "uint16_t", "name": "interval", "format": "decimal", "description": "Interval (10ms units)" },
+                        { "type": "uint8_t", "name": "oneshot", "format": "decimal", "description": "Repeating (0) or one-shot (1)" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'set_timer' command" }
                     ]
                 }
             ],
@@ -149,13 +161,12 @@
                 },
                 {
                     "id": 4,
-                    "name": "timer_tick",
-                    "description": "<p>Indicates that a previously scheduled software timer has elapsed.</p>",
-                    "doxbrief": "Indicates that a previously scheduled software timer has elapsed",
+                    "name": "capability",
+                    "description": "<p>Provides a record describing specific capabilities designed into this unit.</p>",
+                    "doxbrief": "Provides a record describing specific capabilities designed into this unit.",
                     "parameters": [
-                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Timer handle which triggered this event" },
-                        { "type": "uint32_t", "name": "seconds", "format": "decimal", "description": "Seconds elapsed since boot" },
-                        { "type": "uint8_t", "name": "subticks", "format": "decimal", "description": "10ms subticks above whole second" }
+                        { "type": "uint16_t", "name": "category", "format": "hex", "description": "Category that this capability report is included in" },
+                        { "type": "uint8_t[]", "name": "record", "description": "Capability record(s) in type-length-value format" }
                     ]
                 },
                 {
@@ -166,6 +177,17 @@
                     "parameters": [
                         { "type": "uint8_t", "name": "status", "format": "hex", "description": "Battery status" },
                         { "type": "uint8_t", "name": "level", "format": "percentage", "description": "Charge level (0-100)" }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "name": "timer_tick",
+                    "description": "<p>Indicates that a previously scheduled software timer has elapsed.</p>",
+                    "doxbrief": "Indicates that a previously scheduled software timer has elapsed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "handle", "format": "decimal", "description": "Timer handle which triggered this event" },
+                        { "type": "uint32_t", "name": "seconds", "format": "decimal", "description": "Seconds elapsed since boot" },
+                        { "type": "uint8_t", "name": "subticks", "format": "decimal", "description": "10ms subticks above whole second" }
                     ]
                 }
             ],
