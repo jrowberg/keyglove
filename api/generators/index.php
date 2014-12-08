@@ -265,7 +265,7 @@ foreach ($kgapi["classes"] as $class) {
                             $pythonUnpackList[] = $parameter["name"]."_len";
                             $pythonHandlerPrintList[] = $parameter["name"].': %s';
                             $pythonHandlerFormatList[] = "' '.join(['%02X' % b for b in ".$parameter["name"]."])";
-                            switch ($parameter["format"]) {
+                            switch (@$parameter["format"]) {
                                 case "string":
                                     $pythonFriendlyArgList[] = "'".$parameter["name"]."': ''.join(['%c' % b for b in ".$parameter["name"]."_data])";
                                     break;
@@ -319,7 +319,7 @@ foreach ($kgapi["classes"] as $class) {
                             $pythonUnpackList[] = $parameter["name"];
                             $pythonHandlerPrintList[] = $parameter["name"].': %02X';
                             $pythonHandlerFormatList[] = $parameter["name"];
-                            switch ($parameter["format"]) {
+                            switch (@$parameter["format"]) {
                                 case "decimal":
                                     $pythonFriendlyArgList[] = "'".$parameter["name"]."': ('%d".($unit ? " %s": "")."' % (".$parameter["name"].($multiplier != 1 ? " * ".$multiplier : "").($unit ? ", '".$unit."'".($units ? " if (".$parameter["name"]." == 1) else '".$units."'" : "") : "")."))";
                                     break;
@@ -343,7 +343,7 @@ foreach ($kgapi["classes"] as $class) {
                             $pythonUnpackList[] = $parameter["name"];
                             $pythonHandlerPrintList[] = $parameter["name"].': %04X';
                             $pythonHandlerFormatList[] = $parameter["name"];
-                            switch ($parameter["format"]) {
+                            switch (@$parameter["format"]) {
                                 case "decimal":
                                     $pythonFriendlyArgList[] = "'".$parameter["name"]."': ('%d".($unit ? " %s": "")."' % (".$parameter["name"].($multiplier != 1 ? " * ".$multiplier : "").($unit ? ", '".$unit."'".($units ? " if (".$parameter["name"]." == 1) else '".$units."'" : "") : "")."))";
                                     break;
@@ -367,7 +367,7 @@ foreach ($kgapi["classes"] as $class) {
                             $pythonUnpackList[] = $parameter["name"];
                             $pythonHandlerPrintList[] = $parameter["name"].': %08X';
                             $pythonHandlerFormatList[] = $parameter["name"];
-                            switch ($parameter["format"]) {
+                            switch (@$parameter["format"]) {
                                 case "decimal":
                                     $pythonFriendlyArgList[] = "'".$parameter["name"]."': ('%d".($unit ? " %s": "")."' % (".$parameter["name"].($multiplier != 1 ? " * ".$multiplier : "").($unit ? ", '".$unit."'".($units ? " if (".$parameter["name"]." == 1) else '".$units."'" : "") : "")."))";
                                     break;
@@ -408,10 +408,11 @@ foreach ($kgapi["classes"] as $class) {
                 }
                 $htmlRef .= '<h4><span class="headingtab">'.$htmlRefNav[0].'.'.$htmlRefNav[1].'.'.$htmlRefNav[2].'</span> '.$class["name"].'_'.$command["name"].' <code style="color: #F00;">[ C0 '.sprintf("%02X", $payloadLength).($fixedLength ? '' : '+').' '.sprintf("%02X %02X", $class["id"], $command["id"]).' '.($payloadLength > 0 ? '... ' : '').']</code></h4>'; // ('.$command["id"].')';
                 $htmlRef .= $command["description"];
+                $htmlRef .= '<div class="breakauto">';
                 $htmlRef .= '<table class="command">';
                 $htmlRef .= '<thead>';
                 //$htmlRef .= '<tr><td colspan="4"><img src="kgapi_command.png" title="KGAPI Command" width="200" height="70" />COMMAND STRUCTURE</td></tr>';
-                $htmlRef .= '<tr><th colspan="4" class="tabletitle">COMMAND STRUCTURE</th></tr>';
+                $htmlRef .= '<tr><th colspan="4" class="tabletitle">OUTGOING COMMAND PACKET STRUCTURE</th></tr>';
                 $htmlRef .= '<tr><th>Byte</th><th>Type</th><th>Name</th><th>Description</th></tr>';
                 $htmlRef .= '</thead>';
                 $htmlRef .= '<tbody>';
@@ -428,6 +429,7 @@ foreach ($kgapi["classes"] as $class) {
                 $htmlRef .= $payloadHTML;
                 $htmlRef .= '</thead>';
                 $htmlRef .= '</table>';
+                $htmlRef .= '</div>';
                 
                 $arduinoCommandPayloadLength = $payloadLength;
                 $arduinoCommandFixedLength = $fixedLength;
@@ -672,10 +674,11 @@ foreach ($kgapi["classes"] as $class) {
                         }
                         $payloadHTML .= '</td></tr>';
                     }
+                    $htmlRef .= '<div class="breakauto">';
                     $htmlRef .= '<table class="response">';
                     $htmlRef .= '<thead>';
                     //$htmlRef .= '<tr><td colspan="4"><img src="kgapi_response.png" alt="KGAPI Command" width="200" height="70" />RESPONSE STRUCTURE</td></tr>';
-                    $htmlRef .= '<tr><th colspan="4" class="tabletitle">RESPONSE STRUCTURE</th></tr>';
+                    $htmlRef .= '<tr><th colspan="4" class="tabletitle">INCOMING RESPONSE PACKET STRUCTURE</th></tr>';
                     $htmlRef .= '<tr><th>Byte</th><th>Type</th><th>Name</th><th>Description</th></tr>';
                     $htmlRef .= '</thead>';
                     $htmlRef .= '<tbody>';
@@ -692,6 +695,7 @@ foreach ($kgapi["classes"] as $class) {
                     $htmlRef .= $payloadHTML;
                     $htmlRef .= '</thead>';
                     $htmlRef .= '</table>';
+                    $htmlRef .= '</div>';
                 }
                 
                 // append firmware protocol code
@@ -912,7 +916,7 @@ kglib_kg_rsp_'.$class["name"].'_'.$command["name"].' = my_kg_rsp_'.$class["name"
                             $pythonUnpackList[] = $parameter["name"]."_len";
                             $pythonHandlerPrintList[] = $parameter["name"].': %s';
                             $pythonHandlerFormatList[] = "' '.join(['%02X' % b for b in args['".$parameter["name"]."']])";
-                            switch ($parameter["format"]) {
+                            switch (@$parameter["format"]) {
                                 case "string":
                                     $pythonFriendlyArgList[] = "'".$parameter["name"]."': ''.join(['%c' % b for b in ".$parameter["name"]."_data])";
                                     break;
@@ -952,7 +956,7 @@ kglib_kg_rsp_'.$class["name"].'_'.$command["name"].' = my_kg_rsp_'.$class["name"
                             $pythonUnpackList[] = $parameter["name"];
                             $pythonHandlerPrintList[] = $parameter["name"].': %02X';
                             $pythonHandlerFormatList[] = "args['".$parameter["name"]."']";
-                            switch ($parameter["format"]) {
+                            switch (@$parameter["format"]) {
                                 case "decimal":
                                     $pythonFriendlyArgList[] = "'".$parameter["name"]."': ('%d".($unit ? " %s": "")."' % (".$parameter["name"].($multiplier != 1 ? " * ".$multiplier : "").($unit ? ", '".$unit."'".($units ? " if (".$parameter["name"]." == 1) else '".$units."'" : "") : "")."))";
                                     break;
@@ -970,7 +974,7 @@ kglib_kg_rsp_'.$class["name"].'_'.$command["name"].' = my_kg_rsp_'.$class["name"
                             $pythonUnpackList[] = $parameter["name"];
                             $pythonHandlerPrintList[] = $parameter["name"].': %04X';
                             $pythonHandlerFormatList[] = "args['".$parameter["name"]."']";
-                            switch ($parameter["format"]) {
+                            switch (@$parameter["format"]) {
                                 case "decimal":
                                     $pythonFriendlyArgList[] = "'".$parameter["name"]."': ('%d".($unit ? " %s": "")."' % (".$parameter["name"].($multiplier != 1 ? " * ".$multiplier : "").($unit ? ", '".$unit."'".($units ? " if (".$parameter["name"]." == 1) else '".$units."'" : "") : "")."))";
                                     break;
@@ -988,7 +992,7 @@ kglib_kg_rsp_'.$class["name"].'_'.$command["name"].' = my_kg_rsp_'.$class["name"
                             $pythonUnpackList[] = $parameter["name"];
                             $pythonHandlerPrintList[] = $parameter["name"].': %08X';
                             $pythonHandlerFormatList[] = "args['".$parameter["name"]."']";
-                            switch ($parameter["format"]) {
+                            switch (@$parameter["format"]) {
                                 case "decimal":
                                     $pythonFriendlyArgList[] = "'".$parameter["name"]."': ('%d".($unit ? " %s": "")."' % (".$parameter["name"].($multiplier != 1 ? " * ".$multiplier : "").($unit ? ", '".$unit."'".($units ? " if (".$parameter["name"]." == 1) else '".$units."'" : "") : "")."))";
                                     break;
@@ -1026,10 +1030,11 @@ kglib_kg_rsp_'.$class["name"].'_'.$command["name"].' = my_kg_rsp_'.$class["name"
                 }
                 $htmlRef .= '<h4><span class="headingtab">'.$htmlRefNav[0].'.'.$htmlRefNav[1].'.'.$htmlRefNav[2].'</span> '.$class["name"].'_'.$event["name"].' <code style="color: #F00;">[ 80 '.sprintf("%02X", $payloadLength).($fixedLength ? '' : '+').' '.sprintf("%02X %02X", $class["id"], $event["id"]).' '.($payloadLength > 0 ? '... ' : '').']</code></h4>'; // ('.$command["id"].')';
                 $htmlRef .= $event["description"];
+                $htmlRef .= '<div class="breakauto">';
                 $htmlRef .= '<table class="event">';
                 $htmlRef .= '<thead>';
                 //$htmlRef .= '<tr><td colspan="4"><img src="kgapi_event.png" alt="KGAPI Command" width="200" height="70" />EVENT STRUCTURE</td></tr>';
-                $htmlRef .= '<tr><th colspan="4" class="tabletitle">EVENT STRUCTURE</th></tr>';
+                $htmlRef .= '<tr><th colspan="4" class="tabletitle">INCOMING EVENT PACKET STRUCTURE</th></tr>';
                 $htmlRef .= '<tr><th>Byte</th><th>Type</th><th>Name</th><th>Description</th></tr>';
                 $htmlRef .= '</thead>';
                 $htmlRef .= '<tbody>';
@@ -1046,6 +1051,7 @@ kglib_kg_rsp_'.$class["name"].'_'.$command["name"].' = my_kg_rsp_'.$class["name"
                 $htmlRef .= $payloadHTML;
                 $htmlRef .= '</tbody>';
                 $htmlRef .= '</table>';
+                $htmlRef .= '</div>';
                 
                 // append firmware protocol code
                 if (!empty($event["ifcond"])) $arduinoEventDeclarations[$class["id"]][] = '#if '.$event["ifcond"];
