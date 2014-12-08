@@ -377,6 +377,17 @@ uint16_t kg_cmd_system_get_info(uint16_t *major, uint16_t *minor, uint16_t *patc
 }
 
 /**
+ * @brief Get capabilities designed into this unit
+ * @param[in] category Category of capabilities to report (0x00 for all)
+ * @param[out] count Number of capability reports to expect
+ * @return Result code (0=success)
+ */
+uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
+    *count = 0;
+    return 0; // success
+}
+
+/**
  * @brief Get system memory usage
  * @param[out] free_ram Free RAM
  * @param[out] total_ram Total RAM
@@ -388,6 +399,18 @@ uint16_t kg_cmd_system_get_memory(uint32_t *free_ram, uint32_t *total_ram) {
     // thanks, Adafruit! https://learn.adafruit.com/memories-of-an-arduino/measuring-free-memory
     *free_ram = (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
     *total_ram = 8*1024;
+    return 0; // success
+}
+
+/**
+ * @brief Get battery status
+ * @param[out] status Battery status
+ * @param[out] level Charge level (0-100)
+ * @return Result code (0=success)
+ */
+uint16_t kg_cmd_system_get_battery_status(uint8_t *status, uint8_t *level) {
+    *status = keygloveBatteryStatus;
+    *level = keygloveBatteryLevel;
     return 0; // success
 }
 
@@ -418,17 +441,5 @@ uint16_t kg_cmd_system_set_timer(uint8_t handle, uint16_t interval, uint8_t ones
             keygloveSoftTimerSec[handle]++;
         }
     }
-    return 0; // success
-}
-
-/**
- * @brief Get battery status
- * @param[out] status Battery status
- * @param[out] level Charge level (0-100)
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_system_get_battery_status(uint8_t *status, uint8_t *level) {
-    *status = keygloveBatteryStatus;
-    *level = keygloveBatteryLevel;
     return 0; // success
 }
