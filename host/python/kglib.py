@@ -485,27 +485,27 @@ class KGAPI(object):
     def kg_cmd_bluetooth_disconnect(self, handle):
         return struct.pack('<4BB', 0xC0, 0x01, 0x02, 0x0C, handle)
     
-    def kg_cmd_touch_get_mode(self):
-        return struct.pack('<4B', 0xC0, 0x00, 0x03, 0x01)
-    def kg_cmd_touch_set_mode(self, mode):
-        return struct.pack('<4BB', 0xC0, 0x01, 0x03, 0x02, mode)
-    
     def kg_cmd_feedback_get_blink_mode(self):
-        return struct.pack('<4B', 0xC0, 0x00, 0x04, 0x01)
+        return struct.pack('<4B', 0xC0, 0x00, 0x03, 0x01)
     def kg_cmd_feedback_set_blink_mode(self, mode):
-        return struct.pack('<4BB', 0xC0, 0x01, 0x04, 0x02, mode)
+        return struct.pack('<4BB', 0xC0, 0x01, 0x03, 0x02, mode)
     def kg_cmd_feedback_get_piezo_mode(self, index):
-        return struct.pack('<4BB', 0xC0, 0x01, 0x04, 0x03, index)
+        return struct.pack('<4BB', 0xC0, 0x01, 0x03, 0x03, index)
     def kg_cmd_feedback_set_piezo_mode(self, index, mode, duration, frequency):
-        return struct.pack('<4BBBBH', 0xC0, 0x05, 0x04, 0x04, index, mode, duration, frequency)
+        return struct.pack('<4BBBBH', 0xC0, 0x05, 0x03, 0x04, index, mode, duration, frequency)
     def kg_cmd_feedback_get_vibrate_mode(self, index):
-        return struct.pack('<4BB', 0xC0, 0x01, 0x04, 0x05, index)
+        return struct.pack('<4BB', 0xC0, 0x01, 0x03, 0x05, index)
     def kg_cmd_feedback_set_vibrate_mode(self, index, mode, duration):
-        return struct.pack('<4BBBB', 0xC0, 0x03, 0x04, 0x06, index, mode, duration)
+        return struct.pack('<4BBBB', 0xC0, 0x03, 0x03, 0x06, index, mode, duration)
     def kg_cmd_feedback_get_rgb_mode(self, index):
-        return struct.pack('<4BB', 0xC0, 0x01, 0x04, 0x07, index)
+        return struct.pack('<4BB', 0xC0, 0x01, 0x03, 0x07, index)
     def kg_cmd_feedback_set_rgb_mode(self, index, mode_red, mode_green, mode_blue):
-        return struct.pack('<4BBBBB', 0xC0, 0x04, 0x04, 0x08, index, mode_red, mode_green, mode_blue)
+        return struct.pack('<4BBBBB', 0xC0, 0x04, 0x03, 0x08, index, mode_red, mode_green, mode_blue)
+    
+    def kg_cmd_touch_get_mode(self):
+        return struct.pack('<4B', 0xC0, 0x00, 0x04, 0x01)
+    def kg_cmd_touch_set_mode(self, mode):
+        return struct.pack('<4BB', 0xC0, 0x01, 0x04, 0x02, mode)
     
     def kg_cmd_motion_get_mode(self, index):
         return struct.pack('<4BB', 0xC0, 0x01, 0x05, 0x01, index)
@@ -533,9 +533,6 @@ class KGAPI(object):
     kg_rsp_bluetooth_connect = KeygloveEvent()
     kg_rsp_bluetooth_disconnect = KeygloveEvent()
     
-    kg_rsp_touch_get_mode = KeygloveEvent()
-    kg_rsp_touch_set_mode = KeygloveEvent()
-    
     kg_rsp_feedback_get_blink_mode = KeygloveEvent()
     kg_rsp_feedback_set_blink_mode = KeygloveEvent()
     kg_rsp_feedback_get_piezo_mode = KeygloveEvent()
@@ -544,6 +541,9 @@ class KGAPI(object):
     kg_rsp_feedback_set_vibrate_mode = KeygloveEvent()
     kg_rsp_feedback_get_rgb_mode = KeygloveEvent()
     kg_rsp_feedback_set_rgb_mode = KeygloveEvent()
+    
+    kg_rsp_touch_get_mode = KeygloveEvent()
+    kg_rsp_touch_set_mode = KeygloveEvent()
     
     kg_rsp_motion_get_mode = KeygloveEvent()
     kg_rsp_motion_set_mode = KeygloveEvent()
@@ -567,13 +567,13 @@ class KGAPI(object):
     kg_evt_bluetooth_connection_status = KeygloveEvent()
     kg_evt_bluetooth_connection_closed = KeygloveEvent()
     
-    kg_evt_touch_mode = KeygloveEvent()
-    kg_evt_touch_status = KeygloveEvent()
-    
     kg_evt_feedback_blink_mode = KeygloveEvent()
     kg_evt_feedback_piezo_mode = KeygloveEvent()
     kg_evt_feedback_vibrate_mode = KeygloveEvent()
     kg_evt_feedback_rgb_mode = KeygloveEvent()
+    
+    kg_evt_touch_mode = KeygloveEvent()
+    kg_evt_touch_status = KeygloveEvent()
     
     kg_evt_motion_mode = KeygloveEvent()
     kg_evt_motion_data = KeygloveEvent()
@@ -712,16 +712,7 @@ class KGAPI(object):
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
                         self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_rsp_bluetooth_disconnect(self.last_response['payload'])
-                elif packet_class == 3: # TOUCH
-                    if packet_command == 1: # kg_rsp_touch_get_mode
-                        mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
-                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': mode }, 'raw': self.kgapi_last_rx_packet }
-                        self.kg_rsp_touch_get_mode(self.last_response['payload'])
-                    elif packet_command == 2: # kg_rsp_touch_set_mode
-                        result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
-                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result }, 'raw': self.kgapi_last_rx_packet }
-                        self.kg_rsp_touch_set_mode(self.last_response['payload'])
-                elif packet_class == 4: # FEEDBACK
+                elif packet_class == 3: # FEEDBACK
                     if packet_command == 1: # kg_rsp_feedback_get_blink_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
                         self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': mode }, 'raw': self.kgapi_last_rx_packet }
@@ -754,6 +745,15 @@ class KGAPI(object):
                         result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
                         self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_rsp_feedback_set_rgb_mode(self.last_response['payload'])
+                elif packet_class == 4: # TOUCH
+                    if packet_command == 1: # kg_rsp_touch_get_mode
+                        mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': mode }, 'raw': self.kgapi_last_rx_packet }
+                        self.kg_rsp_touch_get_mode(self.last_response['payload'])
+                    elif packet_command == 2: # kg_rsp_touch_set_mode
+                        result, = struct.unpack('<H', self.kgapi_rx_payload[:2])
+                        self.last_response = { 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': result }, 'raw': self.kgapi_last_rx_packet }
+                        self.kg_rsp_touch_set_mode(self.last_response['payload'])
                 elif packet_class == 5: # MOTION
                     if packet_command == 1: # kg_rsp_motion_get_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
@@ -840,17 +840,7 @@ class KGAPI(object):
                         handle, reason, = struct.unpack('<BH', self.kgapi_rx_payload[:3])
                         self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'handle': handle, 'reason': reason }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_evt_bluetooth_connection_closed(self.last_event['payload'])
-                elif packet_class == 3: # TOUCH
-                    if packet_command == 1: # kg_evt_touch_mode
-                        mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
-                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'mode': mode }, 'raw': self.kgapi_last_rx_packet }
-                        self.kg_evt_touch_mode(self.last_event['payload'])
-                    elif packet_command == 2: # kg_evt_touch_status
-                        status_len, = struct.unpack('<B', self.kgapi_rx_payload[:1])
-                        status_data = [ord(b) for b in self.kgapi_rx_payload[1:]]
-                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'status': status_data }, 'raw': self.kgapi_last_rx_packet }
-                        self.kg_evt_touch_status(self.last_event['payload'])
-                elif packet_class == 4: # FEEDBACK
+                elif packet_class == 3: # FEEDBACK
                     if packet_command == 1: # kg_evt_feedback_blink_mode
                         mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
                         self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'mode': mode }, 'raw': self.kgapi_last_rx_packet }
@@ -867,6 +857,16 @@ class KGAPI(object):
                         index, mode_red, mode_green, mode_blue, = struct.unpack('<BBBB', self.kgapi_rx_payload[:4])
                         self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'index': index, 'mode_red': mode_red, 'mode_green': mode_green, 'mode_blue': mode_blue }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_evt_feedback_rgb_mode(self.last_event['payload'])
+                elif packet_class == 4: # TOUCH
+                    if packet_command == 1: # kg_evt_touch_mode
+                        mode, = struct.unpack('<B', self.kgapi_rx_payload[:1])
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'mode': mode }, 'raw': self.kgapi_last_rx_packet }
+                        self.kg_evt_touch_mode(self.last_event['payload'])
+                    elif packet_command == 2: # kg_evt_touch_status
+                        status_len, = struct.unpack('<B', self.kgapi_rx_payload[:1])
+                        status_data = [ord(b) for b in self.kgapi_rx_payload[1:]]
+                        self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'status': status_data }, 'raw': self.kgapi_last_rx_packet }
+                        self.kg_evt_touch_status(self.last_event['payload'])
                 elif packet_class == 5: # MOTION
                     if packet_command == 1: # kg_evt_motion_mode
                         index, mode, = struct.unpack('<BB', self.kgapi_rx_payload[:2])
@@ -960,13 +960,7 @@ class KGAPI(object):
                 elif packet_command == 12: # kg_cmd_bluetooth_disconnect
                     handle, = struct.unpack('<B', payload[:1])
                     return { 'type': 'command', 'name': 'kg_cmd_bluetooth_disconnect', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'handle': ('%d' % (handle)) }, 'payload_keys': [ 'handle' ] }
-            elif packet_class == 3: # TOUCH
-                if packet_command == 1: # kg_cmd_touch_get_mode
-                    return { 'type': 'command', 'name': 'kg_cmd_touch_get_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
-                elif packet_command == 2: # kg_cmd_touch_set_mode
-                    mode, = struct.unpack('<B', payload[:1])
-                    return { 'type': 'command', 'name': 'kg_cmd_touch_set_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
-            elif packet_class == 4: # FEEDBACK
+            elif packet_class == 3: # FEEDBACK
                 if packet_command == 1: # kg_cmd_feedback_get_blink_mode
                     return { 'type': 'command', 'name': 'kg_cmd_feedback_get_blink_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
                 elif packet_command == 2: # kg_cmd_feedback_set_blink_mode
@@ -990,6 +984,12 @@ class KGAPI(object):
                 elif packet_command == 8: # kg_cmd_feedback_set_rgb_mode
                     index, mode_red, mode_green, mode_blue, = struct.unpack('<BBBB', payload[:4])
                     return { 'type': 'command', 'name': 'kg_cmd_feedback_set_rgb_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'index': ('%d' % (index)), 'mode_red': ('%02X' % mode_red), 'mode_green': ('%02X' % mode_green), 'mode_blue': ('%02X' % mode_blue) }, 'payload_keys': [ 'index', 'mode_red', 'mode_green', 'mode_blue' ] }
+            elif packet_class == 4: # TOUCH
+                if packet_command == 1: # kg_cmd_touch_get_mode
+                    return { 'type': 'command', 'name': 'kg_cmd_touch_get_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
+                elif packet_command == 2: # kg_cmd_touch_set_mode
+                    mode, = struct.unpack('<B', payload[:1])
+                    return { 'type': 'command', 'name': 'kg_cmd_touch_set_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
             elif packet_class == 5: # MOTION
                 if packet_command == 1: # kg_cmd_motion_get_mode
                     index, = struct.unpack('<B', payload[:1])
@@ -1059,14 +1059,7 @@ class KGAPI(object):
                     elif packet_command == 12: # kg_rsp_bluetooth_disconnect
                         result, = struct.unpack('<H', payload[:2])
                         return { 'type': 'response', 'name': 'kg_rsp_bluetooth_disconnect', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': ('%04X' % result) }, 'payload_keys': [ 'result' ] }
-                elif packet_class == 3: # TOUCH
-                    if packet_command == 1: # kg_rsp_touch_get_mode
-                        mode, = struct.unpack('<B', payload[:1])
-                        return { 'type': 'response', 'name': 'kg_rsp_touch_get_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
-                    elif packet_command == 2: # kg_rsp_touch_set_mode
-                        result, = struct.unpack('<H', payload[:2])
-                        return { 'type': 'response', 'name': 'kg_rsp_touch_set_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': ('%04X' % result) }, 'payload_keys': [ 'result' ] }
-                elif packet_class == 4: # FEEDBACK
+                elif packet_class == 3: # FEEDBACK
                     if packet_command == 1: # kg_rsp_feedback_get_blink_mode
                         mode, = struct.unpack('<B', payload[:1])
                         return { 'type': 'response', 'name': 'kg_rsp_feedback_get_blink_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
@@ -1091,6 +1084,13 @@ class KGAPI(object):
                     elif packet_command == 8: # kg_rsp_feedback_set_rgb_mode
                         result, = struct.unpack('<H', payload[:2])
                         return { 'type': 'response', 'name': 'kg_rsp_feedback_set_rgb_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': ('%04X' % result) }, 'payload_keys': [ 'result' ] }
+                elif packet_class == 4: # TOUCH
+                    if packet_command == 1: # kg_rsp_touch_get_mode
+                        mode, = struct.unpack('<B', payload[:1])
+                        return { 'type': 'response', 'name': 'kg_rsp_touch_get_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
+                    elif packet_command == 2: # kg_rsp_touch_set_mode
+                        result, = struct.unpack('<H', payload[:2])
+                        return { 'type': 'response', 'name': 'kg_rsp_touch_set_mode', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'result': ('%04X' % result) }, 'payload_keys': [ 'result' ] }
                 elif packet_class == 5: # MOTION
                     if packet_command == 1: # kg_rsp_motion_get_mode
                         mode, = struct.unpack('<B', payload[:1])
@@ -1155,15 +1155,7 @@ class KGAPI(object):
                     elif packet_command == 9: # kg_evt_bluetooth_connection_closed
                         handle, reason, = struct.unpack('<BH', payload[:3])
                         return { 'type': 'event', 'name': 'kg_evt_bluetooth_connection_closed', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'handle': ('%d' % (handle)), 'reason': ('%04X' % reason) }, 'payload_keys': [ 'handle', 'reason' ] }
-                elif packet_class == 3: # TOUCH
-                    if packet_command == 1: # kg_evt_touch_mode
-                        mode, = struct.unpack('<B', payload[:1])
-                        return { 'type': 'event', 'name': 'kg_evt_touch_mode', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
-                    elif packet_command == 2: # kg_evt_touch_status
-                        status_len, = struct.unpack('<B', payload[:1])
-                        status_data = [ord(b) for b in payload[1:]]
-                        return { 'type': 'event', 'name': 'kg_evt_touch_status', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'status': ' '.join(['%02X' % b for b in status_data]) }, 'payload_keys': [ 'status' ] }
-                elif packet_class == 4: # FEEDBACK
+                elif packet_class == 3: # FEEDBACK
                     if packet_command == 1: # kg_evt_feedback_blink_mode
                         mode, = struct.unpack('<B', payload[:1])
                         return { 'type': 'event', 'name': 'kg_evt_feedback_blink_mode', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
@@ -1176,6 +1168,14 @@ class KGAPI(object):
                     elif packet_command == 4: # kg_evt_feedback_rgb_mode
                         index, mode_red, mode_green, mode_blue, = struct.unpack('<BBBB', payload[:4])
                         return { 'type': 'event', 'name': 'kg_evt_feedback_rgb_mode', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'index': ('%d' % (index)), 'mode_red': ('%02X' % mode_red), 'mode_green': ('%02X' % mode_green), 'mode_blue': ('%02X' % mode_blue) }, 'payload_keys': [ 'index', 'mode_red', 'mode_green', 'mode_blue' ] }
+                elif packet_class == 4: # TOUCH
+                    if packet_command == 1: # kg_evt_touch_mode
+                        mode, = struct.unpack('<B', payload[:1])
+                        return { 'type': 'event', 'name': 'kg_evt_touch_mode', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'mode': ('%02X' % mode) }, 'payload_keys': [ 'mode' ] }
+                    elif packet_command == 2: # kg_evt_touch_status
+                        status_len, = struct.unpack('<B', payload[:1])
+                        status_data = [ord(b) for b in payload[1:]]
+                        return { 'type': 'event', 'name': 'kg_evt_touch_status', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'status': ' '.join(['%02X' % b for b in status_data]) }, 'payload_keys': [ 'status' ] }
                 elif packet_class == 5: # MOTION
                     if packet_command == 1: # kg_evt_motion_mode
                         index, mode, = struct.unpack('<BB', payload[:2])

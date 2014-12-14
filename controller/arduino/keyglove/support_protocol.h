@@ -36,13 +36,13 @@ THE SOFTWARE.
 #define _SUPPORT_PROTOCOL_H_
 
 #include "support_protocol_system.h"
-#include "support_protocol_touch.h"
+#include "support_protocol_bluetooth.h"
 #include "support_protocol_feedback.h"
+#include "support_protocol_touch.h"
 #include "support_protocol_motion.h"
 #include "support_protocol_flex.h"
 #include "support_protocol_pressure.h"
 #include "support_protocol_touchset.h"
-#include "support_protocol_bluetooth.h"
 #include "custom_protocol.h"
 
 #define KG_PROTOCOL_RX_TIMEOUT                  500     ///< Number of milliseconds before KGAPI parser will timeout after an incomplete packet
@@ -53,8 +53,8 @@ THE SOFTWARE.
 #define KG_PACKET_CLASS_PROTOCOL                0x00
 #define KG_PACKET_CLASS_SYSTEM                  0x01
 #define KG_PACKET_CLASS_BLUETOOTH               0x02
-#define KG_PACKET_CLASS_TOUCH                   0x03
-#define KG_PACKET_CLASS_FEEDBACK                0x04
+#define KG_PACKET_CLASS_FEEDBACK                0x03
+#define KG_PACKET_CLASS_TOUCH                   0x04
 #define KG_PACKET_CLASS_MOTION                  0x05
 #define KG_PACKET_CLASS_FLEX                    0x06
 #define KG_PACKET_CLASS_PRESSURE                0x07

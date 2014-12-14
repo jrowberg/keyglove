@@ -459,57 +459,6 @@
         },
         {
             "id": 3,
-            "name": "touch",
-            "description": "<p>Touch commands and events control and report the behavior of the touch detection interface.</p>",
-            "commands": [
-                {
-                    "id": 1,
-                    "name": "get_mode",
-                    "description": "<p>Get the current touch mode.</p>",
-                    "doxbrief": "Get the current touch mode",
-                    "parameters": [ ],
-                    "returns": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current touch mode setting" }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "set_mode",
-                    "description": "<p>Set a new touch mode.</p>",
-                    "doxbrief": "Set a new touch mode",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode to set" }
-                    ],
-                    "returns": [
-                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'set_mode' command" }
-                    ]
-                }
-            ],
-            "events": [
-                {
-                    "id": 1,
-                    "name": "mode",
-                    "description": "<p>Indicates that the touch mode has changed.</p>",
-                    "doxbrief": "Indicates that the touch mode has changed",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode" }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "status",
-                    "description": "<p>Indicates that the touch sensor status has changed.</p>",
-                    "doxbrief": "Indicates that the touch sensor status has changed",
-                    "parameters": [
-                        { "type": "uint8_t[]", "name": "status", "format": "hex", "description": "New touch status" }
-                    ]
-                }
-            ],
-            "enumerations": [
-            ]
-        },
-        {
-            "id": 4,
             "name": "feedback",
             "description": "<p>Feedback commands and events control and report on the various types of feedback subsystems, such as a simple LED or more complex devices such as RGB LEDs or piezo buzzers.</p>",
             "commands": [
@@ -676,6 +625,57 @@
                         { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "New feedback mode for indicated RGB device red LED" },
                         { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "New feedback mode for indicated RGB device green LED" },
                         { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "New feedback mode for indicated RGB device blue LED" }
+                    ]
+                }
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 4,
+            "name": "touch",
+            "description": "<p>Touch commands and events control and report the behavior of the touch detection interface.</p>",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "get_mode",
+                    "description": "<p>Get the current touch mode.</p>",
+                    "doxbrief": "Get the current touch mode",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current touch mode setting" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "set_mode",
+                    "description": "<p>Set a new touch mode.</p>",
+                    "doxbrief": "Set a new touch mode",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode to set" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'set_mode' command" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "mode",
+                    "description": "<p>Indicates that the touch mode has changed.</p>",
+                    "doxbrief": "Indicates that the touch mode has changed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "status",
+                    "description": "<p>Indicates that the touch sensor status has changed.</p>",
+                    "doxbrief": "Indicates that the touch sensor status has changed",
+                    "parameters": [
+                        { "type": "uint8_t[]", "name": "status", "format": "hex", "description": "New touch status" }
                     ]
                 }
             ],

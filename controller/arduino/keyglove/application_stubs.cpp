@@ -267,34 +267,6 @@ uint8_t my_kg_evt_bluetooth_connection_closed(uint8_t handle, uint16_t reason) {
 }
 
 
-//////////////////////////////// TOUCH ////////////////////////////////
-
-/**
- * @brief Indicates that the touch mode has changed
- * @param[in] mode New touch mode
- * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
- */
-uint8_t my_kg_evt_touch_mode(uint8_t mode) {
-    // TODO: special event handler code here
-    // ...
-
-    return 0; // 0=send event API packet, otherwise skip sending
-}
-
-/**
- * @brief Indicates that the touch sensor status has changed
- * @param[in] status_len Length in bytes of status_data buffer
- * @param[in] status_data New touch status
- * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
- */
-uint8_t my_kg_evt_touch_status(uint8_t status_len, uint8_t *status_data) {
-    // TODO: special event handler code here
-    // ...
-
-    return 0; // 0=send event API packet, otherwise skip sending
-}
-
-
 //////////////////////////////// FEEDBACK ////////////////////////////////
 
 /**
@@ -347,6 +319,34 @@ uint8_t my_kg_evt_feedback_vibrate_mode(uint8_t index, uint8_t mode, uint8_t dur
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
 uint8_t my_kg_evt_feedback_rgb_mode(uint8_t index, uint8_t mode_red, uint8_t mode_green, uint8_t mode_blue) {
+    // TODO: special event handler code here
+    // ...
+
+    return 0; // 0=send event API packet, otherwise skip sending
+}
+
+
+//////////////////////////////// TOUCH ////////////////////////////////
+
+/**
+ * @brief Indicates that the touch mode has changed
+ * @param[in] mode New touch mode
+ * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
+ */
+uint8_t my_kg_evt_touch_mode(uint8_t mode) {
+    // TODO: special event handler code here
+    // ...
+
+    return 0; // 0=send event API packet, otherwise skip sending
+}
+
+/**
+ * @brief Indicates that the touch sensor status has changed
+ * @param[in] status_len Length in bytes of status_data buffer
+ * @param[in] status_data New touch status
+ * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
+ */
+uint8_t my_kg_evt_touch_status(uint8_t status_len, uint8_t *status_data) {
     // TODO: special event handler code here
     // ...
 
