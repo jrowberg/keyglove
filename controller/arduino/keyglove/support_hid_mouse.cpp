@@ -136,10 +136,6 @@ void update_hid_mouse() {
             if (hidMouseDZ > 0) RX400.move(hidMouseDX, hidMouseDY, hidMouseDZ);
             else RX400.move(hidMouseDX, hidMouseDY);
         #endif /* KG_HOSTIF_R400_HID */
-        DEBUG_HID_MOUSE(Serial.print("mouse "));
-        DEBUG_HID_MOUSE(Serial.print(hidMouseDX)); DEBUG_HID_MOUSE(Serial.print(" "));
-        DEBUG_HID_MOUSE(Serial.print(hidMouseDY)); DEBUG_HID_MOUSE(Serial.print(" "));
-        DEBUG_HID_MOUSE(Serial.println(hidMouseDZ));
     }
     if (opt_hid_scroll_mode > 0 && hidScrollDY != 0) {
         if (opt_hid_mouse_invert_y == 1) hidMouseDY = -hidMouseDY;
@@ -152,8 +148,6 @@ void update_hid_mouse() {
         #if KG_HOSTIF & KG_HOSTIF_R400_HID
             RX400.scroll(hidScrollDY);
         #endif /* KG_HOSTIF_R400_HID */
-        DEBUG_HID_MOUSE(Serial.print("scroll "));
-        DEBUG_HID_MOUSE(Serial.println(hidScrollDY));
     }
 }
 
@@ -164,8 +158,6 @@ void update_hid_mouse() {
  * @see MOUSE_ACTION_SCROLL
  */
 void mouse_on(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset mouseon "));
-    DEBUG_TOUCHSET(Serial.println(mode));
     #if KG_HID & KG_HID_MOUSE
         if (mode == MOUSE_ACTION_MOVE) {
             opt_hid_mouse_mode = MOUSE_MODE_TILT_POSITION;
@@ -191,8 +183,6 @@ void mouse_on(uint8_t mode) {
  * @see MOUSE_ACTION_SCROLL
  */
 void mouse_off(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset mouseoff "));
-    DEBUG_TOUCHSET(Serial.println(mode));
     #if KG_HID & KG_HID_MOUSE
         if (mode == MOUSE_ACTION_MOVE) {
             opt_hid_mouse_mode = MOUSE_MODE_OFF;
@@ -219,8 +209,6 @@ void mouse_off(uint8_t mode) {
  * @see MOUSE_MIDDLE
  */
 void mouse_down(uint8_t button) {
-    DEBUG_TOUCHSET(Serial.print("touchset hidMouseDown "));
-    DEBUG_TOUCHSET(Serial.println(button));
     #if KG_HID & KG_HID_MOUSE
         hidMouseDown = hidMouseDown | button;
         #if KG_HOSTIF & KG_HOSTIF_USB_HID
@@ -239,8 +227,6 @@ void mouse_down(uint8_t button) {
  * @see MOUSE_MIDDLE
  */
 void mouse_up(uint8_t button) {
-    DEBUG_TOUCHSET(Serial.print("touchset mouseup "));
-    DEBUG_TOUCHSET(Serial.println(button));
     #if KG_HID & KG_HID_MOUSE
         if ((hidMouseDown & button) > 0) {
             hidMouseDown -= button;
@@ -261,8 +247,6 @@ void mouse_up(uint8_t button) {
  * @see MOUSE_MIDDLE
  */
 void mouse_click(uint8_t button) {
-    DEBUG_TOUCHSET(Serial.print("touchset mouseclick "));
-    DEBUG_TOUCHSET(Serial.println(button));
     mouse_down(button);
     delay(5);
     mouse_up(button);

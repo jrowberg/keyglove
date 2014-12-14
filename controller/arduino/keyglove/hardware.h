@@ -1,5 +1,5 @@
 // Keyglove controller source code - Modular hardware/architecture option definitions
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-12-13 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file hardware.h
  * @brief Modular hardware/architecture option definitions
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2014-12-13
  *
  * This file defines all of the selectable options which you may want to use in
  * the "config.h" file. If you create new functionality which a modular add-on
@@ -119,33 +119,22 @@ THE SOFTWARE.
 
 
 
-/* Debug settings. Multiple options may be enabled. (defined in KG_DEBUG) */
-
-#define KG_DEBUG_NONE                   0           ///< No debug output
-#define KG_DEBUG_BENCHMARK              1           ///< Generate benchmark-related debug output
-#define KG_DEBUG_FEEDBACK               2           ///< Generate feedback-related debug output
-#define KG_DEBUG_TOUCH                  4           ///< Generate touch-related debug output
-#define KG_DEBUG_TOUCHSET               8           ///< Generate touchset-related debug output
-#define KG_DEBUG_MOTION                 16          ///< Generate motion-related debug output
-#define KG_DEBUG_HOSTIF_USB             1024        ///< Generate USB-related debug output
-#define KG_DEBUG_HOSTIF_BT2             2048        ///< Generate Bluetooth2-related debug output
-#define KG_DEBUG_HID_KEYBOARD           4096        ///< Generate HID keyboard debug output
-#define KG_DEBUG_HID_MOUSE              8192        ///< Generate HID mouse debug output
-
-
-
 /* Interface mode definitions. Multiple options may be enabled. */
 
-#define KG_INTERFACE_MODE_NONE                  0x00    ///< Don't use this interface for KGAPI data
-#define KG_INTERFACE_MODE_OUTGOING_PACKET       0x01    ///< Use this interface to send outgoing KGAPI responses and events
-#define KG_INTERFACE_MODE_INCOMING_PACKET       0x02    ///< Use this interface to receive incoming KGAPI commands
-#define KG_INTERFACE_MODE_OUTGOING_INFO         0x04    ///< Use this interface to send outgoing log/info data
+#define KG_INTERFACE_MODE_NONE          0x00        ///< Don't use this interface for KGAPI data
+#define KG_INTERFACE_MODE_OUTGOING_API  0x01        ///< Use this interface to send outgoing KGAPI responses and events
+#define KG_INTERFACE_MODE_INCOMING_API  0x02        ///< Use this interface to receive incoming KGAPI commands
+#define KG_INTERFACE_MODE_OUTGOING_LOG  0x04        ///< Use this interface to send outgoing log/info data
 
-#define KG_INTERFACENUM_USB_SERIAL              1       ///< KGAPI interface identifier for USB serial 
-#define KG_INTERFACENUM_USB_RAWHID              2       ///< KGAPI interface identifier for USB raw HID
-#define KG_INTERFACENUM_BT2_SERIAL              3       ///< KGAPI interface identifier for BT2 serial
-#define KG_INTERFACENUM_BT2_RAWHID              4       ///< KGAPI interface identifier for BT2 raw HID
-#define KG_INTERFACENUM_BT2_IAP                 5       ///< KGAPI interface identifier for BT2 IAP
+
+
+/* Interface number definitions. Used for differentiating between possible incoming/outgoing channels for KGAPI packets. */
+
+#define KG_INTERFACENUM_USB_SERIAL      1           ///< KGAPI interface identifier for USB serial 
+#define KG_INTERFACENUM_USB_RAWHID      2           ///< KGAPI interface identifier for USB raw HID
+#define KG_INTERFACENUM_BT2_SERIAL      3           ///< KGAPI interface identifier for BT2 serial
+#define KG_INTERFACENUM_BT2_RAWHID      4           ///< KGAPI interface identifier for BT2 raw HID
+#define KG_INTERFACENUM_BT2_IAP         5           ///< KGAPI interface identifier for BT2 IAP
 
 #endif // _HARDWARE_H_
  

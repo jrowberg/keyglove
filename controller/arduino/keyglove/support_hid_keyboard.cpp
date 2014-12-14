@@ -64,8 +64,6 @@ void update_hid_keyboard() {
  * @param[in] code Key code
  */
 void keyboard_key_down(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset keydown "));
-    DEBUG_TOUCHSET(Serial.println(code));
     #if KG_HID & KG_HID_KEYBOARD
         uint8_t usePos = 0;
         for (usePos = 0; usePos < 6 && hidKeysDown[usePos] != 0; usePos++);
@@ -137,8 +135,6 @@ void keyboard_key_down(uint8_t code) {
  * @param[in] code Key code
  */
 void keyboard_key_up(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset keyup "));
-    DEBUG_TOUCHSET(Serial.println(code));
     #if KG_HID & KG_HID_KEYBOARD
         uint8_t usePos = 0;
         for (usePos = 0; usePos < 6 && hidKeysDown[usePos] != code; usePos++);
@@ -212,8 +208,6 @@ void keyboard_key_up(uint8_t code) {
  * @param[in] code Modifier key bitmask
  */
 void keyboard_key_press(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset keypress "));
-    DEBUG_TOUCHSET(Serial.println(code));
     keyboard_key_down(code);
     delay(5);
     keyboard_key_up(code);
@@ -224,8 +218,6 @@ void keyboard_key_press(uint8_t code) {
  * @param[in] code Modifier key bitmask
  */
 void keyboard_modifier_down(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset modifierdown "));
-    DEBUG_TOUCHSET(Serial.println(code));
     #if KG_HID & KG_HID_KEYBOARD
         hidModifiersDown = hidModifiersDown | code;
         #if KG_HOSTIF & KG_HOSTIF_USB_HID
@@ -244,8 +236,6 @@ void keyboard_modifier_down(uint8_t code) {
  * @param[in] code Modifier key bitmask
  */
 void keyboard_modifier_up(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset modifierup "));
-    DEBUG_TOUCHSET(Serial.println(code));
     #if KG_HID & KG_HID_KEYBOARD
         if ((hidModifiersDown & code) > 0) {
             hidModifiersDown -= code;
@@ -266,8 +256,6 @@ void keyboard_modifier_up(uint8_t code) {
  * @param[in] code Modifier key bitmask
  */
 void keyboard_modifier_toggle(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset modifiertoggle "));
-    DEBUG_TOUCHSET(Serial.println(code));
     if ((hidModifiersDown & code) > 0) {
         keyboard_modifier_up(code);
     } else {
@@ -280,8 +268,6 @@ void keyboard_modifier_toggle(uint8_t code) {
  * @param[in] code Modifier key bitmask
  */
 void keyboard_modifier_press(uint8_t code) {
-    DEBUG_TOUCHSET(Serial.print("touchset modifierpress "));
-    DEBUG_TOUCHSET(Serial.println(code));
     keyboard_modifier_down(code);
     delay(5);
     keyboard_modifier_up(code);

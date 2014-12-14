@@ -68,7 +68,7 @@ void setup_touch() {
 }
 
 /**
- * @brief Update status of touch system, called at 100Hz from loop()
+ * @brief Update status of touch system, called at 100Hz (or constantly while touches active) from loop()
  */
 void update_touch() {
     //touchBench0 = micros();
@@ -86,15 +86,6 @@ void update_touch() {
         touchTime = millis();
     } else if (memcmp(touches_verify, touches_active, KG_BASE_COMBINATION_BYTES) != 0 && millis() - touchTime >= opt_touch_detect_threshold) {
         // detection is over threshold and current readings are different from previous readings
-
-        #ifdef DEBUG_TOUCH
-            DEBUG_TOUCH(Serial.print("touch "));
-            for (i = 0; i < KG_BASE_COMBINATION_BYTES; i++) {
-                if (touches_verify[i] < 16) DEBUG_TOUCH(Serial.write('0'));
-                DEBUG_TOUCH(Serial.print(touches_verify[i], HEX));
-            }
-            DEBUG_TOUCH(Serial.print("\n"));
-        #endif /* DEBUG_TOUCH */
 
         // set official sensor readings to current readings
         memcpy(touches_active, touches_verify, KG_BASE_COMBINATION_BYTES);
@@ -150,8 +141,6 @@ uint8_t touch_check_mode(uint8_t mode, uint8_t pos) {
  * @param[in] mode New mode to set
  */
 void touch_set_mode(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset touch_set_mode "));
-    DEBUG_TOUCHSET(Serial.println(mode));
     //for (; touchModeStackPos > 0; touchModeStackPos--) deactivate_mode(touchModeStack[touchModeStackPos - 1]);
     touchModeStackPos = 1;
     touchModeStack[0] = mode;
@@ -163,8 +152,6 @@ void touch_set_mode(uint8_t mode) {
  * @param[in] mode New mode to push
  */
 void touch_push_mode(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset touch_push_mode "));
-    DEBUG_TOUCHSET(Serial.println(mode));
     if (touchModeStackPos < 10) {
         touchModeStack[touchModeStackPos] = mode;
         touchModeStackPos++;
@@ -176,7 +163,6 @@ void touch_push_mode(uint8_t mode) {
  * @brief Remove last touch mode from top of mode stack
  */
 void touch_pop_mode() {
-    DEBUG_TOUCHSET(Serial.println("touchset touch_pop_mode"));
     if (touchModeStackPos > 0) touchModeStackPos--; //deactivate_mode(touchModeStack[--touchModeStackPos]);
     if (touchModeStackPos == 0) touchModeStack[touchModeStackPos++] = 0;
     //activate_mode(touchModeStack[touchModeStackPos - 1]);
@@ -187,9 +173,6 @@ void touch_pop_mode() {
  * @param[in] mode Mode to toggle
  */
 void touch_toggle_mode(uint8_t mode) {
-    DEBUG_TOUCHSET(Serial.print("touchset touch_toggle_mode "));
-    DEBUG_TOUCHSET(Serial.println(mode));
-
     // find the mode and disable it if it's in the stack
     uint8_t i;
     for (i = 0; i < touchModeStackPos && touchModeStack[i] != mode; i++);
