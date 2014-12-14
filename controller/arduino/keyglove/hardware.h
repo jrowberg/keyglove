@@ -137,4 +137,3 @@ THE SOFTWARE.
 #define KG_INTERFACENUM_BT2_IAP         5           ///< KGAPI interface identifier for BT2 IAP
 
 #endif // _HARDWARE_H_
- 
