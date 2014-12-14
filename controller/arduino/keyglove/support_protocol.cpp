@@ -216,7 +216,7 @@ void protocol_parse(uint8_t inputByte) {
 uint8_t check_incoming_protocol_data() {
     #if KG_HOSTIF & KG_HOSTIF_USB_SERIAL
         // read available data from USB virtual serial
-        if (interfaceUSBSerialReady && (interfaceUSBSerialMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0) {
+        if (interfaceUSBSerialReady && (interfaceUSBSerialMode & KG_INTERFACE_MODE_INCOMING_API) != 0) {
             while ((rxByte = USBSerial.read()) < 256) {
                 lastCommandInterfaceNum = KG_INTERFACENUM_USB_SERIAL;
                 protocol_parse((uint8_t)rxByte);
@@ -226,7 +226,7 @@ uint8_t check_incoming_protocol_data() {
 
     #if KG_HOSTIF & KG_HOSTIF_USB_RAWHID
         // read raw HID data over USB
-        if (interfaceUSBRawHIDReady && (interfaceUSBRawHIDMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0) {
+        if (interfaceUSBRawHIDReady && (interfaceUSBRawHIDMode & KG_INTERFACE_MODE_INCOMING_API) != 0) {
             int8_t bytes = RawHID.recv(rxRawHIDPacket, 0);
             if (bytes > 0) {
                 lastCommandInterfaceNum = KG_INTERFACENUM_USB_RAWHID;
@@ -354,7 +354,7 @@ uint8_t send_keyglove_packet(uint8_t packetType, uint8_t payloadLength, uint8_t 
     #if KG_HOSTIF & KG_HOSTIF_USB_SERIAL
         if (!specificInterface || lastCommandInterfaceNum == KG_INTERFACENUM_USB_SERIAL) {
             // send packet out over wired serial (USB virtual serial)
-            if (interfaceUSBSerialReady && (interfaceUSBSerialMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
+            if (interfaceUSBSerialReady && (interfaceUSBSerialMode & KG_INTERFACE_MODE_OUTGOING_API) != 0) {
                 USBSerial.write((const uint8_t *)buffer, length); // packet data
             }
         }
@@ -364,7 +364,7 @@ uint8_t send_keyglove_packet(uint8_t packetType, uint8_t payloadLength, uint8_t 
         if (!specificInterface || lastCommandInterfaceNum == KG_INTERFACENUM_USB_RAWHID) {
             // send packet out over wired custom HID interface (USB raw HID)
             // 64-byte packets, formatted where byte 0 is [0-64] and bytes 1-63 are data
-            if (interfaceUSBRawHIDReady && (interfaceUSBRawHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0) {
+            if (interfaceUSBRawHIDReady && (interfaceUSBRawHIDMode & KG_INTERFACE_MODE_OUTGOING_API) != 0) {
                 int8_t bytes;
                 for (uint8_t i = 0; i < length; i += (USB_RAWHID_TX_SIZE - 1)) {
                     memset(txRawHIDPacket, 0, USB_RAWHID_TX_SIZE);

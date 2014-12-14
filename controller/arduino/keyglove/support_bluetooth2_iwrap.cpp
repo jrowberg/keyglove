@@ -456,7 +456,7 @@ uint8_t bluetooth_send_keyglove_packet_buffer(uint8_t *buffer, uint8_t length, u
     #if KG_HOSTIF & KG_HOSTIF_BT2_SERIAL
         if (!specificInterface || lastCommandInterfaceNum == KG_INTERFACENUM_BT2_SERIAL) {
             // send packet out over wireless serial (Bluetooth v2.1 SPP)
-            if (interfaceBT2SerialReady && (interfaceBT2SerialMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0 && iwrap_connection_map[bluetoothSPPDeviceIndex] && iwrap_connection_map[bluetoothSPPDeviceIndex] -> link_spp != 0xFF) {
+            if (interfaceBT2SerialReady && (interfaceBT2SerialMode & KG_INTERFACE_MODE_OUTGOING_API) != 0 && iwrap_connection_map[bluetoothSPPDeviceIndex] && iwrap_connection_map[bluetoothSPPDeviceIndex] -> link_spp != 0xFF) {
                 iwrap_send_data(iwrap_connection_map[bluetoothSPPDeviceIndex] -> link_spp, length, (const uint8_t *)buffer, iwrap_mode);
             }
         }
@@ -465,7 +465,7 @@ uint8_t bluetooth_send_keyglove_packet_buffer(uint8_t *buffer, uint8_t length, u
     #if KG_HOSTIF & KG_HOSTIF_BT2_RAWHID
         if (!specificInterface || lastCommandInterfaceNum == KG_INTERFACENUM_BT2_RAWHID) {
             // send packet out over wireless custom HID interface (Bluetooth v2.1 raw HID)
-            if (interfaceBT2RawHIDReady && (interfaceBT2RawHIDMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0 && iwrap_connection_map[bluetoothRawHIDDeviceIndex] && iwrap_connection_map[bluetoothRawHIDDeviceIndex] -> link_hid_interrupt != 0xFF) {
+            if (interfaceBT2RawHIDReady && (interfaceBT2RawHIDMode & KG_INTERFACE_MODE_OUTGOING_API) != 0 && iwrap_connection_map[bluetoothRawHIDDeviceIndex] && iwrap_connection_map[bluetoothRawHIDDeviceIndex] -> link_hid_interrupt != 0xFF) {
                 int8_t bytes;
                 for (uint8_t i = 0; i < length; i += (BT2_RAWHID_TX_SIZE - 1)) {
                     memset(bluetoothTXRawHIDPacket + 4, 0, BT2_RAWHID_TX_SIZE);
@@ -483,7 +483,7 @@ uint8_t bluetooth_send_keyglove_packet_buffer(uint8_t *buffer, uint8_t length, u
     #if KG_HOSTIF & KG_HOSTIF_BT2_IAP
         if (!specificInterface || lastCommandInterfaceNum == KG_INTERFACENUM_BT2_IAP) {
             // send packet out over wireless iAP link (Bluetooth v2.1 IAP)
-            if (interfaceBT2IAPReady && (interfaceBT2IAPMode & KG_INTERFACE_MODE_OUTGOING_PACKET) != 0 && iwrap_connection_map[bluetoothIAPDeviceIndex] && iwrap_connection_map[bluetoothIAPDeviceIndex] -> link_iap != 0xFF) {
+            if (interfaceBT2IAPReady && (interfaceBT2IAPMode & KG_INTERFACE_MODE_OUTGOING_API) != 0 && iwrap_connection_map[bluetoothIAPDeviceIndex] && iwrap_connection_map[bluetoothIAPDeviceIndex] -> link_iap != 0xFF) {
                 iwrap_send_data(iwrap_connection_map[bluetoothIAPDeviceIndex] -> link_iap, length, (const uint8_t *)buffer, iwrap_mode);
             }
         }
@@ -582,7 +582,7 @@ void my_iwrap_callback_rxdata(uint8_t channel, uint16_t length, const uint8_t *d
     */
 
     #if KG_HOSTIF & KG_HOSTIF_BT2_SERIAL
-        if (interfaceBT2SerialReady && (interfaceBT2SerialMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0 && iwrap_connection_map[bluetoothSPPDeviceIndex] && iwrap_connection_map[bluetoothSPPDeviceIndex] -> link_spp == channel) {
+        if (interfaceBT2SerialReady && (interfaceBT2SerialMode & KG_INTERFACE_MODE_INCOMING_API) != 0 && iwrap_connection_map[bluetoothSPPDeviceIndex] && iwrap_connection_map[bluetoothSPPDeviceIndex] -> link_spp == channel) {
             // new data coming in over SPP link
             lastCommandInterfaceNum = KG_INTERFACENUM_BT2_SERIAL;
             for (uint16_t i = 0; i < length; i++) protocol_parse((uint8_t)data[i]);
@@ -590,7 +590,7 @@ void my_iwrap_callback_rxdata(uint8_t channel, uint16_t length, const uint8_t *d
     #endif
 
     #if KG_HOSTIF & KG_HOSTIF_BT2_RAWHID
-        if (interfaceBT2RawHIDReady && (interfaceBT2RawHIDMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0 && iwrap_connection_map[bluetoothRawHIDDeviceIndex] && iwrap_connection_map[bluetoothRawHIDDeviceIndex] -> link_hid_interrupt == channel) {
+        if (interfaceBT2RawHIDReady && (interfaceBT2RawHIDMode & KG_INTERFACE_MODE_INCOMING_API) != 0 && iwrap_connection_map[bluetoothRawHIDDeviceIndex] && iwrap_connection_map[bluetoothRawHIDDeviceIndex] -> link_hid_interrupt == channel) {
             // new data coming in over raw HID link
             if (length > 3 && data[0] == 0xA2 && data[1] == 0x04) {
                 // non-empty HID output report with the raw HID report ID
@@ -604,7 +604,7 @@ void my_iwrap_callback_rxdata(uint8_t channel, uint16_t length, const uint8_t *d
 
     #if KG_HOSTIF & KG_HOSTIF_BT2_IAP
         // new data coming in over raw IAP link
-        if (interfaceBT2IAPReady && (interfaceBT2IAPMode & KG_INTERFACE_MODE_INCOMING_PACKET) != 0 && iwrap_connection_map[bluetoothIAPDeviceIndex] && iwrap_connection_map[bluetoothIAPDeviceIndex] -> link_iap == channel) {
+        if (interfaceBT2IAPReady && (interfaceBT2IAPMode & KG_INTERFACE_MODE_INCOMING_API) != 0 && iwrap_connection_map[bluetoothIAPDeviceIndex] && iwrap_connection_map[bluetoothIAPDeviceIndex] -> link_iap == channel) {
             lastCommandInterfaceNum = KG_INTERFACENUM_BT2_IAP;
             for (uint16_t i = 0; i < length; i++) protocol_parse((uint8_t)data[i]);
         }

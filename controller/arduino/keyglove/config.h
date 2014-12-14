@@ -161,7 +161,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_APIMODE_USB_SERIAL   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_USB_SERIAL   KG_INTERFACE_MODE_OUTGOING_API | KG_INTERFACE_MODE_INCOMING_API
 
 /**
  * @brief KGAPI traffic mode for USB serial interface
@@ -170,7 +170,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_APIMODE_USB_RAWHID   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_USB_RAWHID   KG_INTERFACE_MODE_OUTGOING_API | KG_INTERFACE_MODE_INCOMING_API
 
 /**
  * @brief KGAPI traffic mode for Bluetooth v2 serial interface
@@ -179,7 +179,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_APIMODE_BT2_SERIAL   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_BT2_SERIAL   KG_INTERFACE_MODE_OUTGOING_API | KG_INTERFACE_MODE_INCOMING_API
 
 /**
  * @brief KGAPI traffic mode for Bluetooth v2 iAP interface
@@ -188,7 +188,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_APIMODE_BT2_IAP      KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_BT2_IAP      KG_INTERFACE_MODE_OUTGOING_API | KG_INTERFACE_MODE_INCOMING_API
 
 /**
  * @brief KGAPI traffic mode for Bluetooth v2 raw HID interface
@@ -197,7 +197,7 @@ THE SOFTWARE.
  * generated, and whether those interfaces will be checked for command packets
  * (incoming) from a connected host.
  */
-#define KG_APIMODE_BT2_RAWHID   KG_INTERFACE_MODE_OUTGOING_PACKET | KG_INTERFACE_MODE_INCOMING_PACKET
+#define KG_APIMODE_BT2_RAWHID   KG_INTERFACE_MODE_OUTGOING_API | KG_INTERFACE_MODE_INCOMING_API
 
 /**
  * @brief HID support type selection
@@ -256,95 +256,5 @@ THE SOFTWARE.
 #define KG_PRESSURE         KG_PRESSURE_NONE
 
 
-
-/* ===============================================
- * DEBUG SETTINGS
-=============================================== */
-
-/**
- * @brief Debug output (NOT USED FOR PRODUCTION)
- *
- * This option can be used to selectively enable various debug output code. The
- * "Serial.write()" method is used in each case, so be aware that this can
- * really mess with KGAPI communications if you have the KG_HOSTIF option set to
- * use USB serial.
- *
- * @see KG_DEBUG_NONE
- */
-#define KG_DEBUG            KG_DEBUG_NONE
-
-/*
-Debug options:
-  KG_DEBUG_NONE
-  KG_DEBUG_BENCHMARK
-  KG_DEBUG_FEEDBACK
-  KG_DEBUG_TOUCH
-  KG_DEBUG_TOUCHSET
-  KG_DEBUG_MOTION
-  KG_DEBUG_HOSTIF_USB
-  KG_DEBUG_HOSTIF_BT2
-  KG_DEBUG_HID_KEYBOARD
-  KG_DEBUG_HID_MOUSE
-*/
-
-
-
-/* ===============================================
- * DEBUG COMPILER MACROS
-=============================================== */
-
-#if (KG_DEBUG & KG_DEBUG_BENCHMARK)
-    #define DEBUG_BENCHMARK(x)          x           ///< Debug block macro for benchmarking (enabled)
-#else
-    #define DEBUG_BENCHMARK(x)                      ///< Debug block macro for benchmarking (disabled)
-#endif
-
-#if (KG_DEBUG & KG_DEBUG_TOUCH)
-    #define DEBUG_TOUCH(x)              x           ///< Debug block macro for touch (enabled)
-#else
-    #define DEBUG_TOUCH(x)                          ///< Debug block macro for touch (disabled)
-#endif
-
-#if (KG_DEBUG & KG_DEBUG_TOUCHSET)
-    #define DEBUG_TOUCHSET(x)           x           ///< Debug block macro for touchset (enabled)
-#else
-    #define DEBUG_TOUCHSET(x)                       ///< Debug block macro for touchset (disabled)
-#endif
-
-#if (KG_DEBUG & KG_DEBUG_MOTION)
-    #define DEBUG_MOTION(x)             x           ///< Debug block macro for motion (enabled)
-#else
-    #define DEBUG_MOTION(x)                         ///< Debug block macro for motion (disabled)
-#endif
-
-#if (KG_DEBUG & KG_DEBUG_FEEDBACK)
-    #define DEBUG_FEEDBACK(x)           x           ///< Debug block macro for feedback (enabled)
-#else
-    #define DEBUG_FEEDBACK(x)                       ///< Debug block macro for feedback (disabled)
-#endif
-
-#if (KG_DEBUG & KG_DEBUG_HOSTIF_USB)
-    #define DEBUG_HOSTIF_USB(x)         x           ///< Debug block macro for USB (enabled)
-#else
-    #define DEBUG_HOSTIF_USB(x)                     ///< Debug block macro for USB (disabled)
-#endif
-
-#if (KG_DEBUG & KG_DEBUG_HOSTIF_BT2)
-    #define DEBUG_HOSTIF_BT2(x)         x           ///< Debug block macro for Bluetooth2 (enabled)
-#else
-    #define DEBUG_HOSTIF_BT2(x)                     ///< Debug block macro for Bluetooth2 (disabled)
-#endif
-
-#if (KG_DEBUG & KG_DEBUG_HID_KEYBOARD)
-    #define DEBUG_HID_KEYBOARD(x)       x           ///< Debug block macro for HID keyboard (enabled)
-#else
-    #define DEBUG_HID_KEYBOARD(x)                   ///< Debug block macro for HID keyboard (disabled)
-#endif
-
-#if (KG_DEBUG & KG_DEBUG_HID_MOUSE)
-    #define DEBUG_HID_MOUSE(x)          x           ///< Debug block macro for HID mouse (enabled)
-#else
-    #define DEBUG_HID_MOUSE(x)                      ///< Debug block macro for HID mouse (disabled)
-#endif
 
 #endif // _CONFIG_H_

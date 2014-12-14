@@ -115,9 +115,9 @@ uint8_t _pinf;                          ///< Container for reading Port F logic 
 volatile uint8_t keygloveBatteryStatus0;    ///< Variable for comparing new vs. old battery status
 
 bool interfaceUSBSerialReady = false;   ///< Status indicator for USB serial interface
-uint8_t interfaceUSBSerialMode = 0;     ///< USB serial communication mode setting @see KG_INTERFACE_MODE_NONE, @see KG_INTERFACE_MODE_OUTGOING_PACKET, @see KG_INTERFACE_MODE_INCOMING_PACKET
+uint8_t interfaceUSBSerialMode = 0;     ///< USB serial communication mode setting @see KG_INTERFACE_MODE_NONE, @see KG_INTERFACE_MODE_OUTGOING_API, @see KG_INTERFACE_MODE_INCOMING_API
 bool interfaceUSBRawHIDReady = false;   ///< Status indicator for USB raw HID interface
-uint8_t interfaceUSBRawHIDMode = 0;     ///< USB raw HID communication mode setting @see KG_INTERFACE_MODE_NONE, @see KG_INTERFACE_MODE_OUTGOING_PACKET, @see KG_INTERFACE_MODE_INCOMING_PACKET
+uint8_t interfaceUSBRawHIDMode = 0;     ///< USB raw HID communication mode setting @see KG_INTERFACE_MODE_NONE, @see KG_INTERFACE_MODE_OUTGOING_API, @see KG_INTERFACE_MODE_INCOMING_API
 bool interfaceUSBHIDReady = false;      ///< Status indicator for USB HID interface
 
 /**
