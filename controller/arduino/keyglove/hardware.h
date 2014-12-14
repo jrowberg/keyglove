@@ -119,14 +119,6 @@ THE SOFTWARE.
 
 
 
-/* Sensory feedback connection. Only one choice may be selected at a time. (defined in KG_FEEDBACKCONN) */
-
-#define KG_FEEDBACKCONN_NONE            0x00        ///< Don't do anything with feedback
-#define KG_FEEDBACKCONN_DIRECT          0x01        ///< Direct connection to I/O pins
-#define KG_FEEDBACKCONN_I2C             0x02        ///< Custom I2C-based RGB/vibe/piezo module
-
-
-
 /* Debug settings. Multiple options may be enabled. (defined in KG_DEBUG) */
 
 #define KG_DEBUG_NONE                   0           ///< No debug output
