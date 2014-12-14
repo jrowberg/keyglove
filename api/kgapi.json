@@ -1,6 +1,6 @@
 {
     "info": {
-        "date": "2014-12-07",
+        "date": "2014-12-13",
         "name": "Keyglove Standard Protocol",
         "author": "Jeff Rowberg <jeff@rowberg.net>",
         "version": 1
@@ -212,328 +212,6 @@
         },
         {
             "id": 2,
-            "name": "touch",
-            "description": "<p>Touch commands and events control and report the behavior of the touch detection interface.</p>",
-            "commands": [
-                {
-                    "id": 1,
-                    "name": "get_mode",
-                    "description": "<p>Get the current touch mode.</p>",
-                    "doxbrief": "Get the current touch mode",
-                    "parameters": [ ],
-                    "returns": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current touch mode setting" }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "set_mode",
-                    "description": "<p>Set a new touch mode.</p>",
-                    "doxbrief": "Set a new touch mode",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode to set" }
-                    ],
-                    "returns": [
-                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'set_mode' command" }
-                    ]
-                }
-            ],
-            "events": [
-                {
-                    "id": 1,
-                    "name": "mode",
-                    "description": "<p>Indicates that the touch mode has changed.</p>",
-                    "doxbrief": "Indicates that the touch mode has changed",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode" }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "status",
-                    "description": "<p>Indicates that the touch sensor status has changed.</p>",
-                    "doxbrief": "Indicates that the touch sensor status has changed",
-                    "parameters": [
-                        { "type": "uint8_t[]", "name": "status", "format": "hex", "description": "New touch status" }
-                    ]
-                }
-            ],
-            "enumerations": [
-            ]
-        },
-        {
-            "id": 3,
-            "name": "feedback",
-            "description": "<p>Feedback commands and events control and report on the various types of feedback subsystems, such as a simple LED or more complex devices such as RGB LEDs or piezo buzzers.</p>",
-            "commands": [
-                {
-                    "id": 1,
-                    "name": "get_blink_mode",
-                    "description": "<p>Get current blink feedback mode.</p>",
-                    "doxbrief": "Get current blink feedback mode",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
-                    "parameters": [ ],
-                    "returns": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current blink feedback mode" }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "set_blink_mode",
-                    "description": "<p>Set new blink feedback mode.</p>",
-                    "doxbrief": "Set new blink feedback mode",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New blink feedback mode to set" }
-                    ],
-                    "returns": [
-                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
-                    ]
-                },
-                {
-                    "id": 3,
-                    "name": "get_piezo_mode",
-                    "description": "<p>Get current feedback mode for a piezo buzzer.</p>",
-                    "doxbrief": "Get current feedback mode for a piezo buzzer",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of piezo device for which to get the current mode" }
-                    ],
-                    "returns": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current feedback mode for specified piezo device" },
-                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
-                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
-                    ]
-                },
-                {
-                    "id": 4,
-                    "name": "set_piezo_mode",
-                    "description": "<p>Set a new piezo feedback mode for a piezo buzzer.</p>",
-                    "doxbrief": "Set a new piezo feedback mode for a piezo buzzer",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of piezo device for which to set a new mode" },
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New feedback mode to set for specified piezo device" },
-                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
-                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
-                    ],
-                    "returns": [
-                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
-                    ]
-                },
-                {
-                    "id": 5,
-                    "name": "get_vibrate_mode",
-                    "description": "<p>Get current feedback mode for a vibration motor.</p>",
-                    "doxbrief": "Get current feedback mode for a vibration motor",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of vibration device for which to get the current mode" }
-                    ],
-                    "returns": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current feedback mode for specified vibration device" },
-                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "10", "multiplier": 10, "description": "Duration to maintain vibration" }
-                    ]
-                },
-                {
-                    "id": 6,
-                    "name": "set_vibrate_mode",
-                    "description": "<p>Set a new vibration motor feedback mode.</p>",
-                    "doxbrief": "Set a new vibration motor feedback mode",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of vibration device for which to set a new mode" },
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New feedback mode to set for specified vibration device" },
-                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain vibration" }
-                    ],
-                    "returns": [
-                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
-                    ]
-                },
-                {
-                    "id": 7,
-                    "name": "get_rgb_mode",
-                    "description": "<p>Get current feedback mode for an RGB LED.</p>",
-                    "doxbrief": "Get current feedback mode for an RGB LED",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of RGB device for which to get the current mode" }
-                    ],
-                    "returns": [
-                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "Current feedback mode for specified RGB device red LED" },
-                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "Current feedback mode for specified RGB device green LED" },
-                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "Current feedback mode for specified RGB device blue LED" }
-                    ]
-                },
-                {
-                    "id": 8,
-                    "name": "set_rgb_mode",
-                    "description": "<p>Set a new RGB LED feedback mode.</p>",
-                    "doxbrief": "Set a new RGB LED feedback mode",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of RGB device for which to set a new mode" },
-                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "New feedback mode to set for specified RGB device red LED" },
-                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "New feedback mode to set for specified RGB device green LED" },
-                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "New feedback mode to set for specified RGB device blue LED" }
-                    ],
-                    "returns": [
-                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
-                    ]
-                }
-            ],
-            "events": [
-                {
-                    "id": 1,
-                    "name": "blink_mode",
-                    "description": "<p>Indicates that the blink feedback mode has changed.</p>",
-                    "doxbrief": "Indicates that the blink feedback mode has changed",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New blink feedback mode" }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "piezo_mode",
-                    "description": "<p>Indicates that a piezo buzzer feedback mode has changed.</p>",
-                    "doxbrief": "Indicates that a piezo buzzer feedback mode has changed",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Piezo feedback device index" },
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New piezo feedback mode for indicated piezo device" },
-                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
-                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
-                    ]
-                },
-                {
-                    "id": 3,
-                    "name": "vibrate_mode",
-                    "description": "<p>Indicates that a vibration feedback mode has changed.</p>",
-                    "doxbrief": "Indicates that a vibration feedback mode has changed",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Vibration feedback device index" },
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New vibration feedback mode for indicated vibration device" },
-                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain vibration" }
-                    ]
-                },
-                {
-                    "id": 4,
-                    "name": "rgb_mode",
-                    "description": "<p>Indicates that an RGB LED feedback mode has changed.</p>",
-                    "doxbrief": "Indicates that an RGB LED feedback mode has changed",
-                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "RGB feedback device index" },
-                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "New feedback mode for indicated RGB device red LED" },
-                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "New feedback mode for indicated RGB device green LED" },
-                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "New feedback mode for indicated RGB device blue LED" }
-                    ]
-                }
-            ],
-            "enumerations": [
-            ]
-        },
-        {
-            "id": 4,
-            "name": "motion",
-            "description": "<p>Motion commands and events allow the control and detection of various motion sensors in the design.</p>",
-            "commands": [
-                {
-                    "id": 1,
-                    "name": "get_mode",
-                    "description": "<p>Get current mode for specified motion sensor.</p>",
-                    "doxbrief": "Get current mode for specified motion sensor",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of motion sensor for which to get the current mode" }
-                    ],
-                    "returns": [
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current motion sensor mode" }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "set_mode",
-                    "description": "<p>Set new mode for specified motion sensor.</p>",
-                    "doxbrief": "Set new mode for specified motion sensor",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of motion sensor for which to get the current mode" },
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New motion sensor mode to set" }
-                    ],
-                    "returns": [
-                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
-                    ]
-                }
-            ],
-            "events": [
-                {
-                    "id": 1,
-                    "name": "mode",
-                    "description": "<p>Indicates that a motion sensor's mode has changed.</p>",
-                    "doxbrief": "Indicates that a motion sensor's mode has changed",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Affected motion sensor" },
-                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New motion sensor mode" }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "name": "data",
-                    "description": "<p>Indicates that a motion sensor's measurement data has been updated.</p>",
-                    "doxbrief": "Indicates that a motion sensor's measurement data has been updated",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Relevant motion sensor" },
-                        { "type": "uint8_t", "name": "flags", "format": "hex", "description": "Flags indicating which measurement data is represented" },
-                        { "type": "uint8_t[]", "name": "data", "format": "hex", "description": "New measurement data" }
-                    ]
-                },
-                {
-                    "id": 3,
-                    "name": "state",
-                    "description": "<p>Motion state change detected, such as 'still' or 'moving'.</p>",
-                    "doxbrief": "Motion state change detected, such as 'still' or 'moving'",
-                    "parameters": [
-                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Relevant motion sensor" },
-                        { "type": "uint8_t", "name": "state", "format": "hex", "description": "Type of motion state detected" }
-                    ]
-                }
-            ],
-            "enumerations": [
-            ]
-        },
-        {
-            "id": 5,
-            "name": "flex",
-            "commands": [
-            ],
-            "events": [
-            ],
-            "enumerations": [
-            ]
-        },
-        {
-            "id": 6,
-            "name": "pressure",
-            "commands": [
-            ],
-            "events": [
-            ],
-            "enumerations": [
-            ]
-        },
-        {
-            "id": 7,
-            "name": "touchset",
-            "commands": [
-            ],
-            "events": [
-            ],
-            "enumerations": [
-            ]
-        },
-        {
-            "id": 8,
             "name": "bluetooth",
             "description": "<p>Bluetooth commands and events control and report on the wireless functionality.</p>",
             "commands": [
@@ -775,6 +453,328 @@
                         { "type": "uint16_t", "name": "reason", "format": "hex", "description": "Reason for connection closure" }
                     ]
                 }
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 3,
+            "name": "touch",
+            "description": "<p>Touch commands and events control and report the behavior of the touch detection interface.</p>",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "get_mode",
+                    "description": "<p>Get the current touch mode.</p>",
+                    "doxbrief": "Get the current touch mode",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current touch mode setting" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "set_mode",
+                    "description": "<p>Set a new touch mode.</p>",
+                    "doxbrief": "Set a new touch mode",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode to set" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from 'set_mode' command" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "mode",
+                    "description": "<p>Indicates that the touch mode has changed.</p>",
+                    "doxbrief": "Indicates that the touch mode has changed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New touch mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "status",
+                    "description": "<p>Indicates that the touch sensor status has changed.</p>",
+                    "doxbrief": "Indicates that the touch sensor status has changed",
+                    "parameters": [
+                        { "type": "uint8_t[]", "name": "status", "format": "hex", "description": "New touch status" }
+                    ]
+                }
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 4,
+            "name": "feedback",
+            "description": "<p>Feedback commands and events control and report on the various types of feedback subsystems, such as a simple LED or more complex devices such as RGB LEDs or piezo buzzers.</p>",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "get_blink_mode",
+                    "description": "<p>Get current blink feedback mode.</p>",
+                    "doxbrief": "Get current blink feedback mode",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
+                    "parameters": [ ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current blink feedback mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "set_blink_mode",
+                    "description": "<p>Set new blink feedback mode.</p>",
+                    "doxbrief": "Set new blink feedback mode",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New blink feedback mode to set" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "get_piezo_mode",
+                    "description": "<p>Get current feedback mode for a piezo buzzer.</p>",
+                    "doxbrief": "Get current feedback mode for a piezo buzzer",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of piezo device for which to get the current mode" }
+                    ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current feedback mode for specified piezo device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
+                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "set_piezo_mode",
+                    "description": "<p>Set a new piezo feedback mode for a piezo buzzer.</p>",
+                    "doxbrief": "Set a new piezo feedback mode for a piezo buzzer",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of piezo device for which to set a new mode" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New feedback mode to set for specified piezo device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
+                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 5,
+                    "name": "get_vibrate_mode",
+                    "description": "<p>Get current feedback mode for a vibration motor.</p>",
+                    "doxbrief": "Get current feedback mode for a vibration motor",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of vibration device for which to get the current mode" }
+                    ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current feedback mode for specified vibration device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "10", "multiplier": 10, "description": "Duration to maintain vibration" }
+                    ]
+                },
+                {
+                    "id": 6,
+                    "name": "set_vibrate_mode",
+                    "description": "<p>Set a new vibration motor feedback mode.</p>",
+                    "doxbrief": "Set a new vibration motor feedback mode",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of vibration device for which to set a new mode" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New feedback mode to set for specified vibration device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain vibration" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "name": "get_rgb_mode",
+                    "description": "<p>Get current feedback mode for an RGB LED.</p>",
+                    "doxbrief": "Get current feedback mode for an RGB LED",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of RGB device for which to get the current mode" }
+                    ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "Current feedback mode for specified RGB device red LED" },
+                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "Current feedback mode for specified RGB device green LED" },
+                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "Current feedback mode for specified RGB device blue LED" }
+                    ]
+                },
+                {
+                    "id": 8,
+                    "name": "set_rgb_mode",
+                    "description": "<p>Set a new RGB LED feedback mode.</p>",
+                    "doxbrief": "Set a new RGB LED feedback mode",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of RGB device for which to set a new mode" },
+                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "New feedback mode to set for specified RGB device red LED" },
+                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "New feedback mode to set for specified RGB device green LED" },
+                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "New feedback mode to set for specified RGB device blue LED" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "blink_mode",
+                    "description": "<p>Indicates that the blink feedback mode has changed.</p>",
+                    "doxbrief": "Indicates that the blink feedback mode has changed",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_BLINK",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New blink feedback mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "piezo_mode",
+                    "description": "<p>Indicates that a piezo buzzer feedback mode has changed.</p>",
+                    "doxbrief": "Indicates that a piezo buzzer feedback mode has changed",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_PIEZO",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Piezo feedback device index" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New piezo feedback mode for indicated piezo device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain tone" },
+                        { "type": "uint16_t", "name": "frequency", "format": "decimal", "units": "Hz", "description": "Frequency of tone to generate" }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "vibrate_mode",
+                    "description": "<p>Indicates that a vibration feedback mode has changed.</p>",
+                    "doxbrief": "Indicates that a vibration feedback mode has changed",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_VIBRATE",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Vibration feedback device index" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New vibration feedback mode for indicated vibration device" },
+                        { "type": "uint8_t", "name": "duration", "format": "decimal", "units": "ms", "multiplier": 10, "description": "Duration to maintain vibration" }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "name": "rgb_mode",
+                    "description": "<p>Indicates that an RGB LED feedback mode has changed.</p>",
+                    "doxbrief": "Indicates that an RGB LED feedback mode has changed",
+                    "ifcond": "KG_FEEDBACK & KG_FEEDBACK_RGB",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "RGB feedback device index" },
+                        { "type": "uint8_t", "name": "mode_red", "format": "hex", "description": "New feedback mode for indicated RGB device red LED" },
+                        { "type": "uint8_t", "name": "mode_green", "format": "hex", "description": "New feedback mode for indicated RGB device green LED" },
+                        { "type": "uint8_t", "name": "mode_blue", "format": "hex", "description": "New feedback mode for indicated RGB device blue LED" }
+                    ]
+                }
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 5,
+            "name": "motion",
+            "description": "<p>Motion commands and events allow the control and detection of various motion sensors in the design.</p>",
+            "commands": [
+                {
+                    "id": 1,
+                    "name": "get_mode",
+                    "description": "<p>Get current mode for specified motion sensor.</p>",
+                    "doxbrief": "Get current mode for specified motion sensor",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of motion sensor for which to get the current mode" }
+                    ],
+                    "returns": [
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "Current motion sensor mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "set_mode",
+                    "description": "<p>Set new mode for specified motion sensor.</p>",
+                    "doxbrief": "Set new mode for specified motion sensor",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Index of motion sensor for which to get the current mode" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New motion sensor mode to set" }
+                    ],
+                    "returns": [
+                        { "type": "uint16_t", "name": "result", "format": "hex", "description": "Result code from command" }
+                    ]
+                }
+            ],
+            "events": [
+                {
+                    "id": 1,
+                    "name": "mode",
+                    "description": "<p>Indicates that a motion sensor's mode has changed.</p>",
+                    "doxbrief": "Indicates that a motion sensor's mode has changed",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Affected motion sensor" },
+                        { "type": "uint8_t", "name": "mode", "format": "hex", "description": "New motion sensor mode" }
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "data",
+                    "description": "<p>Indicates that a motion sensor's measurement data has been updated.</p>",
+                    "doxbrief": "Indicates that a motion sensor's measurement data has been updated",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Relevant motion sensor" },
+                        { "type": "uint8_t", "name": "flags", "format": "hex", "description": "Flags indicating which measurement data is represented" },
+                        { "type": "uint8_t[]", "name": "data", "format": "hex", "description": "New measurement data" }
+                    ]
+                },
+                {
+                    "id": 3,
+                    "name": "state",
+                    "description": "<p>Motion state change detected, such as 'still' or 'moving'.</p>",
+                    "doxbrief": "Motion state change detected, such as 'still' or 'moving'",
+                    "parameters": [
+                        { "type": "uint8_t", "name": "index", "format": "decimal", "description": "Relevant motion sensor" },
+                        { "type": "uint8_t", "name": "state", "format": "hex", "description": "Type of motion state detected" }
+                    ]
+                }
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 6,
+            "name": "flex",
+            "commands": [
+            ],
+            "events": [
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 7,
+            "name": "pressure",
+            "commands": [
+            ],
+            "events": [
+            ],
+            "enumerations": [
+            ]
+        },
+        {
+            "id": 8,
+            "name": "touchset",
+            "commands": [
+            ],
+            "events": [
             ],
             "enumerations": [
             ]

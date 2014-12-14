@@ -52,13 +52,13 @@ THE SOFTWARE.
 
 #define KG_PACKET_CLASS_PROTOCOL                0x00
 #define KG_PACKET_CLASS_SYSTEM                  0x01
-#define KG_PACKET_CLASS_TOUCH                   0x02
-#define KG_PACKET_CLASS_FEEDBACK                0x03
-#define KG_PACKET_CLASS_MOTION                  0x04
-#define KG_PACKET_CLASS_FLEX                    0x05
-#define KG_PACKET_CLASS_PRESSURE                0x06
-#define KG_PACKET_CLASS_TOUCHSET                0x07
-#define KG_PACKET_CLASS_BLUETOOTH               0x08
+#define KG_PACKET_CLASS_BLUETOOTH               0x02
+#define KG_PACKET_CLASS_TOUCH                   0x03
+#define KG_PACKET_CLASS_FEEDBACK                0x04
+#define KG_PACKET_CLASS_MOTION                  0x05
+#define KG_PACKET_CLASS_FLEX                    0x06
+#define KG_PACKET_CLASS_PRESSURE                0x07
+#define KG_PACKET_CLASS_TOUCHSET                0x08
 
 #define KG_LOG_LEVEL_PANIC                      0       ///< Log level for "What a Terrible Failure" problems that will lock the MCU
 #define KG_LOG_LEVEL_CRITICAL                   1       ///< Log level for critical issues that will break core functionality
