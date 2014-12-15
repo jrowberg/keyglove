@@ -390,7 +390,7 @@ uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
         // TLV { 3, 1, KG_DUALGLOVE }
 
         // increment expected report count
-        *count++;
+        (*count)++;
 
         uint8_t payload[11];
         payload[0] = KG_CAPABILITY_CATEGORY_PLATFORM;
@@ -414,7 +414,7 @@ uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
         // TLV { 1, 1, KG_HOSTIF }
 
         // increment expected report count
-        *count++;
+        (*count)++;
 
         uint8_t payload[5];
         payload[0] = KG_CAPABILITY_CATEGORY_HOSTIF;
@@ -432,7 +432,7 @@ uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
         // TLV { 1, 1, KG_FEEDBACK }
 
         // increment expected report count
-        *count++;
+        (*count)++;
 
         uint8_t payload[5];
         payload[0] = KG_CAPABILITY_CATEGORY_FEEDBACK;
@@ -451,7 +451,7 @@ uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
         // TLV { 2, KG_BASE_COMBINATIONS*2+1, ... }
 
         // increment expected report count
-        *count++;
+        (*count)++;
 
         uint8_t payload[7 + (KG_BASE_COMBINATIONS * 2)];
         payload[0] = KG_CAPABILITY_CATEGORY_TOUCH;
@@ -471,7 +471,7 @@ uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
         // TLV { 1, 1, KG_MOTION }
 
         // increment expected report count
-        *count++;
+        (*count)++;
 
         uint8_t payload[5];
         payload[0] = KG_CAPABILITY_CATEGORY_MOTION;
@@ -489,7 +489,7 @@ uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
         // TLV { 1, 1, KG_FLEX }
 
         // increment expected report count
-        *count++;
+        (*count)++;
 
         uint8_t payload[5];
         payload[0] = KG_CAPABILITY_CATEGORY_FLEX;
@@ -507,7 +507,7 @@ uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
         // TLV { 1, 1, KG_PRESSURE }
 
         // increment expected report count
-        *count++;
+        (*count)++;
 
         uint8_t payload[5];
         payload[0] = KG_CAPABILITY_CATEGORY_PRESSURE;
