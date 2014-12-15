@@ -384,6 +384,143 @@ uint16_t kg_cmd_system_get_info(uint16_t *major, uint16_t *minor, uint16_t *patc
  */
 uint16_t kg_cmd_system_get_capabilities(uint8_t category, uint16_t *count) {
     *count = 0;
+    if (!category || category == KG_CAPABILITY_CATEGORY_PLATFORM) {
+        // TLV { 1, 1, KG_BOARD }
+        // TLV { 2, 1, KG_HAND }
+        // TLV { 3, 1, KG_DUALGLOVE }
+
+        // increment expected report count
+        *count++;
+
+        uint8_t payload[11];
+        payload[0] = KG_CAPABILITY_CATEGORY_PLATFORM;
+        payload[1] = 0x09;
+        payload[2] = 0x01;
+        payload[3] = 0x01;
+        payload[4] = KG_BOARD;
+        payload[5] = 0x01;
+        payload[6] = 0x02;
+        payload[7] = KG_HAND;
+        payload[8] = 0x01;
+        payload[9] = 0x03;
+        payload[10] = KG_DUALGLOVE;
+
+        // queue event
+        skipPacket = 0;
+        if (kg_evt_system_capability) skipPacket = kg_evt_system_capability(payload[0], payload[1], payload + 2);
+        if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 11, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_CAPABILITY, payload);
+    }
+    if (!category || category == KG_CAPABILITY_CATEGORY_HOSTIF) {
+        // TLV { 1, 1, KG_HOSTIF }
+
+        // increment expected report count
+        *count++;
+
+        uint8_t payload[5];
+        payload[0] = KG_CAPABILITY_CATEGORY_HOSTIF;
+        payload[1] = 0x03;
+        payload[2] = 0x01;
+        payload[3] = 0x01;
+        payload[4] = KG_HOSTIF;
+
+        // queue event
+        skipPacket = 0;
+        if (kg_evt_system_capability) skipPacket = kg_evt_system_capability(payload[0], payload[1], payload + 2);
+        if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 5, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_CAPABILITY, payload);
+    }
+    if (!category || category == KG_CAPABILITY_CATEGORY_FEEDBACK) {
+        // TLV { 1, 1, KG_FEEDBACK }
+
+        // increment expected report count
+        *count++;
+
+        uint8_t payload[5];
+        payload[0] = KG_CAPABILITY_CATEGORY_FEEDBACK;
+        payload[1] = 0x03;
+        payload[2] = 0x01;
+        payload[3] = 0x01;
+        payload[4] = KG_FEEDBACK;
+
+        // queue event
+        skipPacket = 0;
+        if (kg_evt_system_capability) skipPacket = kg_evt_system_capability(payload[0], payload[1], payload + 2);
+        if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 5, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_CAPABILITY, payload);
+    }
+    if (!category || category == KG_CAPABILITY_CATEGORY_TOUCH) {
+        // TLV { 1, 1, KG_TOTAL_SENSORS }
+        // TLV { 2, KG_BASE_COMBINATIONS*2+1, ... }
+
+        // increment expected report count
+        *count++;
+
+        uint8_t payload[7 + (KG_BASE_COMBINATIONS * 2)];
+        payload[0] = KG_CAPABILITY_CATEGORY_TOUCH;
+        payload[1] = 5 + (KG_BASE_COMBINATIONS * 2);
+        payload[2] = 0x01;
+        payload[3] = 0x01;
+        payload[4] = KG_TOTAL_SENSORS;
+        payload[5] = 0x02;
+        payload[6] = (KG_BASE_COMBINATIONS * 2);
+
+        // queue event
+        skipPacket = 0;
+        if (kg_evt_system_capability) skipPacket = kg_evt_system_capability(payload[0], payload[1], payload + 2);
+        if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 7 + (KG_BASE_COMBINATIONS * 2), KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_CAPABILITY, payload);
+    }
+    if (!category || category == KG_CAPABILITY_CATEGORY_MOTION) {
+        // TLV { 1, 1, KG_MOTION }
+
+        // increment expected report count
+        *count++;
+
+        uint8_t payload[5];
+        payload[0] = KG_CAPABILITY_CATEGORY_MOTION;
+        payload[1] = 0x03;
+        payload[2] = 0x01;
+        payload[3] = 0x01;
+        payload[4] = KG_MOTION;
+
+        // queue event
+        skipPacket = 0;
+        if (kg_evt_system_capability) skipPacket = kg_evt_system_capability(payload[0], payload[1], payload + 2);
+        if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 5, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_CAPABILITY, payload);
+    }
+    if (!category || category == KG_CAPABILITY_CATEGORY_FLEX) {
+        // TLV { 1, 1, KG_FLEX }
+
+        // increment expected report count
+        *count++;
+
+        uint8_t payload[5];
+        payload[0] = KG_CAPABILITY_CATEGORY_FLEX;
+        payload[1] = 0x03;
+        payload[2] = 0x01;
+        payload[3] = 0x01;
+        payload[4] = KG_FLEX;
+
+        // queue event
+        skipPacket = 0;
+        if (kg_evt_system_capability) skipPacket = kg_evt_system_capability(payload[0], payload[1], payload + 2);
+        if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 5, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_CAPABILITY, payload);
+    }
+    if (!category || category == KG_CAPABILITY_CATEGORY_PRESSURE) {
+        // TLV { 1, 1, KG_PRESSURE }
+
+        // increment expected report count
+        *count++;
+
+        uint8_t payload[5];
+        payload[0] = KG_CAPABILITY_CATEGORY_PRESSURE;
+        payload[1] = 0x09;
+        payload[2] = 0x01;
+        payload[3] = 0x01;
+        payload[4] = KG_PRESSURE;
+
+        // queue event
+        skipPacket = 0;
+        if (kg_evt_system_capability) skipPacket = kg_evt_system_capability(payload[0], payload[1], payload + 2);
+        if (!skipPacket) queue_keyglove_packet(KG_PACKET_TYPE_EVENT, 5, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_CAPABILITY, payload);
+    }
     return 0; // success
 }
 

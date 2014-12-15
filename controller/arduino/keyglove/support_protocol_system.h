@@ -83,6 +83,14 @@ THE SOFTWARE.
 #define KG_SYSTEM_RESET_MODE_NORMAL                         0x01    ///< Reset all components (e.g. core, motion, Bluetooth)
 #define KG_SYSTEM_RESET_MODE_KGONLY                         0x02    ///< Reset only core Keyglove board
 
+#define KG_CAPABILITY_CATEGORY_PLATFORM                     0x01    ///< Platform information (controller board)
+#define KG_CAPABILITY_CATEGORY_HOSTIF                       0x02    ///< Host interface information (USB, Bluetooth, etc.)
+#define KG_CAPABILITY_CATEGORY_FEEDBACK                     0x03    ///< Feedback subsystem informaiton
+#define KG_CAPABILITY_CATEGORY_TOUCH                        0x04    ///< Touch subsystem information
+#define KG_CAPABILITY_CATEGORY_MOTION                       0x05    ///< Motion subsystem information
+#define KG_CAPABILITY_CATEGORY_FLEX                         0x06    ///< Flex subsystem information
+#define KG_CAPABILITY_CATEGORY_PRESSURE                     0x07    ///< Pressure subsystem information
+
 uint8_t process_protocol_command_system(uint8_t *rxPacket);
 
 #endif // _SUPPORT_PROTOCOL_SYSTEM_H_
