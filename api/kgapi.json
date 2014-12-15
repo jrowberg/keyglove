@@ -87,7 +87,7 @@
                     "description": "<p>Get capabilities designed into this unit.</p>",
                     "doxbrief": "Get capabilities designed into this unit",
                     "parameters": [
-                        { "type": "uint8_t", "name": "category", "description": "Category of capabilities to report (0x00 for all)" }
+                        { "type": "uint8_t", "name": "category", "format": "decimal", "description": "Category of capabilities to report (0x00 for all)" }
                     ],
                     "returns": [
                         { "type": "uint16_t", "name": "count", "format": "decimal", "description": "Number of capability reports to expect" }
@@ -166,7 +166,7 @@
                     "description": "<p>Provides a record describing specific capabilities designed into this unit.</p>",
                     "doxbrief": "Provides a record describing specific capabilities designed into this unit.",
                     "parameters": [
-                        { "type": "uint16_t", "name": "category", "format": "hex", "description": "Category that this capability report is included in" },
+                        { "type": "uint8_t", "name": "category", "format": "decimal", "description": "Category that this capability report is included in" },
                         { "type": "uint8_t[]", "name": "record", "description": "Capability record(s) in type-length-value format" }
                     ]
                 },

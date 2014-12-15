@@ -1,5 +1,5 @@
 // Keyglove controller source code - KGAPI "system" protocol command parser declarations
-// 2014-12-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-12-14 by Jeff Rowberg <jeff@rowberg.net>
 
 /*
 ================================================================================
@@ -31,7 +31,7 @@ THE SOFTWARE.
  * @file support_protocol_system.h
  * @brief KGAPI "system" protocol command parser declarations
  * @author Jeff Rowberg
- * @date 2014-12-07
+ * @date 2014-12-14
  *
  * This file implements subsystem-specific command processing functions for the
  * "system" part of the KGAPI protocol.
@@ -76,7 +76,7 @@ THE SOFTWARE.
 /* 0x01 */ extern uint8_t (*kg_evt_system_boot)(uint16_t major, uint16_t minor, uint16_t patch, uint16_t protocol, uint32_t timestamp);
 /* 0x02 */ extern uint8_t (*kg_evt_system_ready)();
 /* 0x03 */ extern uint8_t (*kg_evt_system_error)(uint16_t code);
-/* 0x04 */ extern uint8_t (*kg_evt_system_capability)(uint16_t category, uint8_t record_len, uint8_t *record_data);
+/* 0x04 */ extern uint8_t (*kg_evt_system_capability)(uint8_t category, uint8_t record_len, uint8_t *record_data);
 /* 0x05 */ extern uint8_t (*kg_evt_system_battery_status)(uint8_t status, uint8_t level);
 /* 0x06 */ extern uint8_t (*kg_evt_system_timer_tick)(uint8_t handle, uint32_t seconds, uint8_t subticks);
 

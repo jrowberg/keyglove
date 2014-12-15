@@ -1,6 +1,6 @@
 <!--
 Keyglove API Reference Guide
-2014-12-13 by Jeff Rowberg <jeff@rowberg.net>
+2014-12-14 by Jeff Rowberg <jeff@rowberg.net>
 
 ================================================================================
 Keyglove source code is placed under the MIT license
@@ -154,7 +154,7 @@ THE SOFTWARE.
     <script>hljs.initHighlightingOnLoad();</script>
     
 <h1 align="center">Keyglove API Reference Guide</h1>
-<h4 align="center">2014-12-13</h4>
+<h4 align="center">2014-12-14</h4>
 <h4 align="center"><a href="http://keyglove.net" target="_blank">keyglove.net</a><br /><a href="https://github.com/jrowberg/keyglove" target="_blank">github.com/jrowberg/keyglove</a></h4>
 
 <p style="font-size: 1.2em;">This API Reference Guide describes the complete packet structure of all
@@ -266,9 +266,9 @@ def my_kg_evt_system_error(sender, args):
     print("kg_evt_system_error: { code: %04X }" % (args['code']))
     
 # assign callback function to appropriate KGLib event handler collection
-kglib.kg_evt_system_error += my_kg_evt_system_error</code></pre><h4><span class="headingtab">2.2.4</span> system_capability <code style="color: #F00;">[ 80 03+ 01 04 ... ]</code></h4><p>Provides a record describing specific capabilities designed into this unit.</p><div class="breakauto"><table class="event"><thead><tr><th colspan="4" class="tabletitle">INCOMING EVENT PACKET STRUCTURE</th></tr><tr><th>Byte</th><th>Type</th><th>Name</th><th>Description</th></tr></thead><tbody><tr class="header"><td>0</td><td>0x80</td><td>type</td><td>Event packet</td></tr><tr class="header"><td>1</td><td>0x03+</td><td>length</td><td>Variable-length payload (3+)</td></tr><tr class="header"><td>2</td><td>0x01</td><td>class</td><td>Event class: "system"</td></tr><tr class="header"><td>3</td><td>0x04</td><td>id</td><td>Event ID: "capability"</td></tr><tr class="payload"><td>4&nbsp;-&nbsp;5</td><th>uint16_t</th><th>category</th><td>Category that this capability report is included in</td></tr><tr class="payload"><td>6</td><th>uint8_t[]</th><th>record</th><td>Capability record(s) in type-length-value format</td></tr></tbody></table></div><h5><span class="headingtab">2.2.4.1</span> Example Usage (Python)</h5><pre><code class="python"># create callback for event
+kglib.kg_evt_system_error += my_kg_evt_system_error</code></pre><h4><span class="headingtab">2.2.4</span> system_capability <code style="color: #F00;">[ 80 02+ 01 04 ... ]</code></h4><p>Provides a record describing specific capabilities designed into this unit.</p><div class="breakauto"><table class="event"><thead><tr><th colspan="4" class="tabletitle">INCOMING EVENT PACKET STRUCTURE</th></tr><tr><th>Byte</th><th>Type</th><th>Name</th><th>Description</th></tr></thead><tbody><tr class="header"><td>0</td><td>0x80</td><td>type</td><td>Event packet</td></tr><tr class="header"><td>1</td><td>0x02+</td><td>length</td><td>Variable-length payload (2+)</td></tr><tr class="header"><td>2</td><td>0x01</td><td>class</td><td>Event class: "system"</td></tr><tr class="header"><td>3</td><td>0x04</td><td>id</td><td>Event ID: "capability"</td></tr><tr class="payload"><td>4</td><th>uint8_t</th><th>category</th><td>Category that this capability report is included in</td></tr><tr class="payload"><td>5</td><th>uint8_t[]</th><th>record</th><td>Capability record(s) in type-length-value format</td></tr></tbody></table></div><h5><span class="headingtab">2.2.4.1</span> Example Usage (Python)</h5><pre><code class="python"># create callback for event
 def my_kg_evt_system_capability(sender, args):
-    print("kg_evt_system_capability: { category: %04X, record: %s }" % (args['category'], \
+    print("kg_evt_system_capability: { category: %02X, record: %s }" % (args['category'], \
             ' '.join(['%02X' % b for b in args['record']])))
     
 # assign callback function to appropriate KGLib event handler collection

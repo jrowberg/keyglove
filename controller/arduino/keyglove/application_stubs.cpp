@@ -1,5 +1,5 @@
 // Keyglove controller source code - Custom application behavior stub/reference implementations
-// 2014-12-13 by Jeff Rowberg <jeff@rowberg.net>
+// 2014-12-14 by Jeff Rowberg <jeff@rowberg.net>
 
 /*
 ================================================================================
@@ -31,7 +31,7 @@ THE SOFTWARE.
  * @file application_stubs.cpp
  * @brief **USER-DEFINED:** Custom application behavior stub/reference implementations
  * @author Jeff Rowberg
- * @date 2014-12-13
+ * @date 2014-12-14
  *
  * This file contains empty "stub" implementations of all existing API events.
  * It is also not included in the compile process. It is intended only that you
@@ -106,7 +106,7 @@ uint8_t my_kg_evt_system_error(uint16_t code) {
  * @param[in] record_data Capability record(s) in type-length-value format
  * @return KGAPI event packet fallthrough, zero allows and non-zero prevents
  */
-uint8_t my_kg_evt_system_capability(uint16_t category, uint8_t record_len, uint8_t *record_data) {
+uint8_t my_kg_evt_system_capability(uint8_t category, uint8_t record_len, uint8_t *record_data) {
     // TODO: special event handler code here
     // ...
 

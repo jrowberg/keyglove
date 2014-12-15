@@ -41,7 +41,7 @@ THE SOFTWARE.
 
 __author__ = "Jeff Rowberg"
 __license__ = "MIT"
-__version__ = "2014-12-13"
+__version__ = "2014-12-14"
 __email__ = "jeff@rowberg.net"
 
 import struct, platform, sys, threading, time
@@ -786,8 +786,8 @@ class KGAPI(object):
                         self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'code': code }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_evt_system_error(self.last_event['payload'])
                     elif packet_command == 4: # kg_evt_system_capability
-                        category, record_len, = struct.unpack('<HB', self.kgapi_rx_payload[:3])
-                        record_data = [ord(b) for b in self.kgapi_rx_payload[3:]]
+                        category, record_len, = struct.unpack('<BB', self.kgapi_rx_payload[:2])
+                        record_data = [ord(b) for b in self.kgapi_rx_payload[2:]]
                         self.last_event = { 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'category': category, 'record': record_data }, 'raw': self.kgapi_last_rx_packet }
                         self.kg_evt_system_capability(self.last_event['payload'])
                     elif packet_command == 5: # kg_evt_system_battery_status
@@ -920,7 +920,7 @@ class KGAPI(object):
                     return { 'type': 'command', 'name': 'kg_cmd_system_get_info', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
                 elif packet_command == 4: # kg_cmd_system_get_capabilities
                     category, = struct.unpack('<B', payload[:1])
-                    return { 'type': 'command', 'name': 'kg_cmd_system_get_capabilities', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'category': ('%02X' % category) }, 'payload_keys': [ 'category' ] }
+                    return { 'type': 'command', 'name': 'kg_cmd_system_get_capabilities', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': { 'category': ('%d' % (category)) }, 'payload_keys': [ 'category' ] }
                 elif packet_command == 5: # kg_cmd_system_get_memory
                     return { 'type': 'command', 'name': 'kg_cmd_system_get_memory', 'length': payload_length, 'class_id': packet_class, 'command_id': packet_command, 'payload': {  }, 'payload_keys': [  ] }
                 elif packet_command == 6: # kg_cmd_system_get_battery_status
@@ -1113,9 +1113,9 @@ class KGAPI(object):
                         code, = struct.unpack('<H', payload[:2])
                         return { 'type': 'event', 'name': 'kg_evt_system_error', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'code': ('%04X' % code) }, 'payload_keys': [ 'code' ] }
                     elif packet_command == 4: # kg_evt_system_capability
-                        category, record_len, = struct.unpack('<HB', payload[:3])
-                        record_data = [ord(b) for b in payload[3:]]
-                        return { 'type': 'event', 'name': 'kg_evt_system_capability', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'category': ('%04X' % category), 'record': ' '.join(['%02X' % b for b in record_data]) }, 'payload_keys': [ 'category', 'record' ] }
+                        category, record_len, = struct.unpack('<BB', payload[:2])
+                        record_data = [ord(b) for b in payload[2:]]
+                        return { 'type': 'event', 'name': 'kg_evt_system_capability', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'category': ('%d' % (category)), 'record': ' '.join(['%02X' % b for b in record_data]) }, 'payload_keys': [ 'category', 'record' ] }
                     elif packet_command == 5: # kg_evt_system_battery_status
                         status, level, = struct.unpack('<BB', payload[:2])
                         return { 'type': 'event', 'name': 'kg_evt_system_battery_status', 'length': payload_length, 'class_id': packet_class, 'event_id': packet_command, 'payload': { 'status': ('%02X' % status), 'level': ('%02X' % level) }, 'payload_keys': [ 'status', 'level' ] }
