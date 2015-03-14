@@ -1,5 +1,5 @@
 // Keyglove controller source code - Host MCU implementations specific to Teensy++ v2.0 / Touch:19
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-03-14 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_board_teensypp2_t19.cpp
  * @brief Host MCU implementations specific to Teensy++ v2.0 / Touch:19
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-03-14
  *
  * This file defines all of the hardware-specific parts of the firmware that are
  * unique to the Teensy++ v2.0 platform. Any other hardware-specific code should
@@ -133,7 +133,8 @@ ISR(TIMER1_COMPA_vect) {
 ISR(PCINT0_vect) {
     keygloveBatteryStatus0 = (~PINB) & 0x07;
     if (keygloveBatteryStatus0 != (keygloveBatteryStatus & 0x07)) {
-        keygloveBatteryStatus &= (0xF8 | keygloveBatteryStatus0);
+        keygloveBatteryStatus &= 0xF8;
+        keygloveBatteryStatus |= keygloveBatteryStatus0;
         keygloveBatteryInterrupt = 1;
     }
 }
