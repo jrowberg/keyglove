@@ -1,5 +1,5 @@
 // Keyglove Controller source code - Main setup/loop controller implementations
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-03-14 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file keyglove.cpp
  * @brief Main setup/loop controller implementations
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-03-14
  *
  * This is the main entry point and program flow control code for the entire
  * Keyglove Arduino firmware project, including the setup() and loop()
@@ -220,29 +220,16 @@ void loop() {
             keygloveTick = 0;
             keygloveTock++;
 
-            /*
-            // read battery voltage once per second
-            // need to scale [700, 880] to [0, 100]
-            int16_t rawBat = analogRead(0);
-            uint8_t newBat = min(100, max(0, (rawBat - 700) * 9 / 5));
-
+            // read 0x04 SOC register from MAX17048 battery gauge to check for change
+            uint8_t newBat;
+            I2Cdev::readByte(0x36, 0x04, &newBat);
+            newBat = min(100, max(0, newBat));
+            
             if (newBat != keygloveBatteryLevel) {
-                keygloveBatteryLevel = newBat;
-
-                // update battery presence bit
-                if (rawBat > 100) keygloveBatteryStatus |= 0x80;    // battery present
-                else keygloveBatteryStatus &= 0x7F;                 // battery not present
-
-                // send system_battery_status event
-                uint8_t payload[2] = {
-                    keygloveBatteryStatus,
-                    keygloveBatteryLevel
-                };
-                skipPacket = 0;
-                if (kg_evt_system_battery_status) skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel);
-                if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload);
+                // percentage changed, trigger "interrupt" behavior below
+                // TODO: CHANGE THIS TO USE THE /ALRT PIN ON MAX17048
+                keygloveBatteryInterrupt = 1;
             }
-            */
         }
 
         // check for soft timer ticks
@@ -281,19 +268,17 @@ void loop() {
         update_touch();
     }
 
-    /*
     // check for battery interrupt (status changed)
     if (keygloveBatteryInterrupt) {
         keygloveBatteryInterrupt = 0;
 
-        // read battery voltage and update status
-        // need to scale [700, 880] to [0, 100]
-        int16_t rawBat = analogRead(0);
-        keygloveBatteryLevel = min(100, max(0, (rawBat - 700) * 9 / 5));
+        // read 0x04 SOC register from MAX17048 battery gauge
+        I2Cdev::readByte(0x36, 0x04, &keygloveBatteryLevel);
+        keygloveBatteryLevel = min(100, max(0, keygloveBatteryLevel));
 
         // update battery presence bit
-        if (rawBat > 100) keygloveBatteryStatus |= 0x80;    // battery present
-        else keygloveBatteryStatus &= 0x7F;                 // battery not present
+        //if (rawBat > 100) keygloveBatteryStatus |= 0x80;    // battery present
+        //else keygloveBatteryStatus &= 0x7F;                 // battery not present
 
         // send system_battery_status event
         uint8_t payload[2] = {
@@ -304,7 +289,6 @@ void loop() {
         if (kg_evt_system_battery_status) skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel);
         if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload);
     }
-    */
     
     // MOTION
     #if (KG_MOTION & KG_MOTION_MPU6050_HAND)
