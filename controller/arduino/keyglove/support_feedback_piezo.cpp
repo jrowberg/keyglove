@@ -44,7 +44,7 @@ THE SOFTWARE.
 #include "support_board.h"
 #include "support_protocol.h"
 #include "support_feedback.h"
-//#include "support_feedback_piezo.h"     // <-- included by support_feedback.h
+#include "support_feedback_piezo.h"
 
 feedback_piezo_mode_t feedbackPiezoMode;    ///< Piezo sound mode
 uint16_t feedbackPiezoTick;                 ///< Piezo tick reference

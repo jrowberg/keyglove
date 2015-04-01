@@ -44,7 +44,7 @@ THE SOFTWARE.
 #include "support_board.h"
 #include "support_protocol.h"
 #include "support_feedback.h"
-//#include "support_feedback_blink.h"     // <-- included by support_feedback.h
+#include "support_feedback_blink.h"
 
 feedback_blink_mode_t feedbackBlinkMode;    ///< LED blink mode
 uint8_t feedbackBlinkTick;                  ///< LED blink tick reference

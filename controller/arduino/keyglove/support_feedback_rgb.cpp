@@ -44,7 +44,7 @@ THE SOFTWARE.
 #include "support_board.h"
 #include "support_protocol.h"
 #include "support_feedback.h"
-//#include "support_feedback_rgb.h"       // <-- included by support_feedback.h
+#include "support_feedback_rgb.h"
 
 feedback_rgb_mode_t feedbackRGBMode[3];     ///< RGB feedback red component mode
 int16_t feedbackRGBTick[3];                 ///< RGB fade tick reference (signed because of abs equations)
