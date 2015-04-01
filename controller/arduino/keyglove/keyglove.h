@@ -52,6 +52,7 @@ THE SOFTWARE.
 
 // UNIVERSAL INCLUDES
 #include <Arduino.h>
+#include <I2Cdev.h>
 #include "version.h"
 #include "hardware.h"
 #include "config.h"
