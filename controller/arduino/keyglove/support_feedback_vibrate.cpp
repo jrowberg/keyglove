@@ -44,7 +44,7 @@ THE SOFTWARE.
 #include "support_board.h"
 #include "support_protocol.h"
 #include "support_feedback.h"
-//#include "support_feedback_vibrate.h"   // <-- included by support_feedback.h
+#include "support_feedback_vibrate.h"
 
 feedback_vibrate_mode_t feedbackVibrateMode;    ///< Vibration mode
 uint16_t feedbackVibrateTick;                   ///< Vibration tick reference
@@ -133,7 +133,7 @@ uint16_t kg_cmd_feedback_set_vibrate_mode(uint8_t index, uint8_t mode, uint8_t d
         if (!inBinPacket) {
             uint8_t payload[3] = { index, mode, duration };
             skipPacket = 0;
-            if (kg_evt_feedback_piezo_mode) skipPacket = kg_evt_feedback_vibrate_mode(index, mode, duration);
+            if (kg_evt_feedback_vibrate_mode) skipPacket = kg_evt_feedback_vibrate_mode(index, mode, duration);
             if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 3, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_PIEZO_MODE, payload);
         }
     }
