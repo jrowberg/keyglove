@@ -125,8 +125,10 @@ uint8_t my_kg_evt_motion_data(uint8_t index, uint8_t flags, uint8_t data_len, ui
  * have been requested and parsed.
  */
 uint8_t my_kg_evt_bluetooth_ready() {
-    // set the Bluetooth mode to autocall paired devices
-    kg_cmd_bluetooth_set_mode(KG_BLUETOOTH_MODE_AUTOCALL);
+    #if (KG_HOSTIF & HG_HOSTIF_BT2_SPP) || (KG_HOSTIF & KG_HOSTIF_BT2_HID) || (KG_HOSTIF & KG_HOSTIF_BT2_RAWHID) || (KG_HOSTIF & KG_HOSTIF_BT2_IAP)
+        // set the Bluetooth mode to autocall paired devices
+        kg_cmd_bluetooth_set_mode(KG_BLUETOOTH_MODE_AUTOCALL);
+    #endif
 
     // allow KGAPI event packet transmission
     return 0;
