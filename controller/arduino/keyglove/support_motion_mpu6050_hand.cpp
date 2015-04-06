@@ -45,6 +45,7 @@ THE SOFTWARE.
 #include "support_motion.h"
 //#include "support_motion_mpu6050_hand.h"    // <-- included by "support_motion.h"
 
+#if (KG_MOTION > 0)
 MPU6050 mpuHand = MPU6050(0x68);        ///< MPU-6050 motion sensor I2Cdevlib object
 bool mpuHandInterrupt;                  ///< Interrupt flag for motion data availability
 
@@ -192,3 +193,4 @@ void update_motion_mpu6050_hand() {
         send_keyglove_log(KG_LOG_LEVEL_VERBOSE, 10, F("ZEROMO INT"));
     }
 }
+#endif

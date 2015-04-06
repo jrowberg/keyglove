@@ -73,9 +73,11 @@ uint16_t kg_cmd_motion_set_mode(uint8_t index, uint8_t mode) {
         return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
     } else {
         //motion_set_mode((motion_mode_t)mode);
-        if (index == 0) {
-            motion_set_mpu6050_hand_mode(mode);
-        }
+#if (KG_MOTION > 0)
+            if (index == 0) {
+                motion_set_mpu6050_hand_mode(mode);
+            }
+#endif
 
         // send kg_evt_feedback_vibrate_mode packet (if we aren't setting it from an API command)
         if (!inBinPacket) {

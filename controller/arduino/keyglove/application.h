@@ -38,7 +38,9 @@ THE SOFTWARE.
 uint8_t my_kg_evt_system_ready();
 uint8_t my_kg_evt_system_timer_tick(uint8_t handle, uint32_t seconds, uint8_t subticks);
 uint8_t my_kg_evt_motion_data(uint8_t index, uint8_t flags, uint8_t data_len, uint8_t *data_data);
+#if (KG_HOSTIF & HG_HOSTIF_BT2_SPP) || (KG_HOSTIF & KG_HOSTIF_BT2_HID) || (KG_HOSTIF & KG_HOSTIF_BT2_RAWHID) || (KG_HOSTIF & KG_HOSTIF_BT2_IAP)
 uint8_t my_kg_evt_bluetooth_ready();
+#endif
 uint8_t my_kg_evt_touch_status(uint8_t status_len, uint8_t *status_data);
 
 void setup_application();

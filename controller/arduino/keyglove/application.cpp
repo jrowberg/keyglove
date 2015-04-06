@@ -124,6 +124,7 @@ uint8_t my_kg_evt_motion_data(uint8_t index, uint8_t flags, uint8_t data_len, ui
  * expected communication response over UART, and all relevant module settings
  * have been requested and parsed.
  */
+#if (KG_HOSTIF & HG_HOSTIF_BT2_SPP) || (KG_HOSTIF & KG_HOSTIF_BT2_HID) || (KG_HOSTIF & KG_HOSTIF_BT2_RAWHID) || (KG_HOSTIF & KG_HOSTIF_BT2_IAP)
 uint8_t my_kg_evt_bluetooth_ready() {
     // set the Bluetooth mode to autocall paired devices
     kg_cmd_bluetooth_set_mode(KG_BLUETOOTH_MODE_AUTOCALL);
@@ -131,6 +132,7 @@ uint8_t my_kg_evt_bluetooth_ready() {
     // allow KGAPI event packet transmission
     return 0;
 }
+#endif
 
 /**
  * @brief Indicates that the touch sensor status has changed
@@ -189,6 +191,8 @@ void setup_application() {
     kg_evt_system_ready = my_kg_evt_system_ready;
     kg_evt_system_timer_tick = my_kg_evt_system_timer_tick;
     kg_evt_motion_data = my_kg_evt_motion_data;
+#if (KG_HOSTIF & HG_HOSTIF_BT2_SPP) || (KG_HOSTIF & KG_HOSTIF_BT2_HID) || (KG_HOSTIF & KG_HOSTIF_BT2_RAWHID) || (KG_HOSTIF & KG_HOSTIF_BT2_IAP)
     kg_evt_bluetooth_ready = my_kg_evt_bluetooth_ready;
+#endif
     kg_evt_touch_status = my_kg_evt_touch_status;
 }
