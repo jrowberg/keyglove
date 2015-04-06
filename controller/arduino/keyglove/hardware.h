@@ -109,6 +109,13 @@ THE SOFTWARE.
 
 
 
+/* Battery options.(defined in KG_BATTERY) */
+
+#define KG_BATTERY_NONE                 0x00        ///< No motion support
+#define KG_BATTERY_MAX17048             0x01        ///< Battery connected in I2C for status
+
+
+
 /* Sensory feedback. Multiple options may be enabled. (defined in KG_FEEDBACK) */
 
 #define KG_FEEDBACK_NONE                0x00        ///< No feedback support

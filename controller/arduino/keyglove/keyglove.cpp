@@ -60,6 +60,11 @@ THE SOFTWARE.
     #include "support_motion.h"
 #endif
 
+// BATTERY
+#if (KG_BATTERY > 0)
+    #include "I2CDev.h"
+#endif
+
 // BLUETOOTH SUPPORT
 #if (KG_HOSTIF & HG_HOSTIF_BT2_SPP) || (KG_HOSTIF & KG_HOSTIF_BT2_HID) || (KG_HOSTIF & KG_HOSTIF_BT2_RAWHID) || (KG_HOSTIF & KG_HOSTIF_BT2_IAP)
     #include "support_bluetooth.h"
@@ -221,6 +226,7 @@ void loop() {
             keygloveTock++;
 
             // read 0x04 SOC register from MAX17048 battery gauge to check for change
+#if KG_BATTERY
             uint8_t newBat;
             I2Cdev::readByte(0x36, 0x04, &newBat);
             newBat = min(100, max(0, newBat));
@@ -230,6 +236,7 @@ void loop() {
                 // TODO: CHANGE THIS TO USE THE /ALRT PIN ON MAX17048
                 keygloveBatteryInterrupt = 1;
             }
+#endif
         }
 
         // check for soft timer ticks
@@ -269,26 +276,28 @@ void loop() {
     }
 
     // check for battery interrupt (status changed)
-    if (keygloveBatteryInterrupt) {
-        keygloveBatteryInterrupt = 0;
-
-        // read 0x04 SOC register from MAX17048 battery gauge
-        I2Cdev::readByte(0x36, 0x04, &keygloveBatteryLevel);
-        keygloveBatteryLevel = min(100, max(0, keygloveBatteryLevel));
-
-        // update battery presence bit
-        //if (rawBat > 100) keygloveBatteryStatus |= 0x80;    // battery present
-        //else keygloveBatteryStatus &= 0x7F;                 // battery not present
-
-        // send system_battery_status event
-        uint8_t payload[2] = {
-            keygloveBatteryStatus,
-            keygloveBatteryLevel
-        };
-        skipPacket = 0;
-        if (kg_evt_system_battery_status) skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel);
-        if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload);
-    }
+#if KG_BATTERY
+        if (keygloveBatteryInterrupt) {
+            keygloveBatteryInterrupt = 0;
+    
+            // read 0x04 SOC register from MAX17048 battery gauge
+            I2Cdev::readByte(0x36, 0x04, &keygloveBatteryLevel);
+            keygloveBatteryLevel = min(100, max(0, keygloveBatteryLevel));
+    
+            // update battery presence bit
+            //if (rawBat > 100) keygloveBatteryStatus |= 0x80;    // battery present
+            //else keygloveBatteryStatus &= 0x7F;                 // battery not present
+    
+            // send system_battery_status event
+            uint8_t payload[2] = {
+                keygloveBatteryStatus,
+                keygloveBatteryLevel
+            };
+            skipPacket = 0;
+            if (kg_evt_system_battery_status) skipPacket = kg_evt_system_battery_status(keygloveBatteryStatus, keygloveBatteryLevel);
+            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, KG_PACKET_CLASS_SYSTEM, KG_PACKET_ID_EVT_SYSTEM_BATTERY_STATUS, payload);
+        }
+#endif
     
     // MOTION
     #if (KG_MOTION & KG_MOTION_MPU6050_HAND)
