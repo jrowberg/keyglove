@@ -218,6 +218,16 @@ THE SOFTWARE.
 //#define KG_MOTION           KG_MOTION_NONE
 #define KG_MOTION           KG_MOTION_MPU6050_HAND
 
+
+/**
+ * @brief Battery support selection
+ * @see KG_BATTERY_NONE
+ * @see KG_BATTERY_MAX17048
+ */
+//#define KG_BATTERY           KG_BATTERY_NONE
+#define KG_BATTERY           KG_BATTERY_MAX17048
+
+
 /**
  * @brief Feedback generator selection
  * @see KG_FEEBACK_BLINK
