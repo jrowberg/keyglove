@@ -1,0 +1,5 @@
+#OS auto-generated files
+.DS_Store
+
+#Python compiled
+*.pyc
