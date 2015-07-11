@@ -1,9 +1,9 @@
 // Keyglove controller source code - Custom application behavior implementaions
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file application.cpp
  * @brief **USER-DEFINED:** Custom application behavior definition
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * Use this file to define any autonomous behavior the firmware should have. By
  * default, the processor will boot into what would be considered "idle" mode,
@@ -93,7 +93,7 @@ uint8_t my_kg_evt_system_ready() {
 uint8_t my_kg_evt_system_timer_tick(uint8_t handle, uint32_t seconds, uint8_t subticks) {
     // read raw battery voltage
     int16_t rawBat = analogRead(0);
-    uint8_t payload[2] = { rawBat & 0xFF, (rawBat >> 8) & 0xFF };
+    uint8_t payload[2] = { (uint8_t)(rawBat & 0xFF), (uint8_t)((rawBat >> 8) & 0xFF) };
     send_keyglove_packet(KG_PACKET_TYPE_EVENT, 2, 0xFE, 0xFE, payload);
 
     // prevent KGAPI event packet transmission

@@ -130,7 +130,21 @@ class BTMouseWrapper {
 extern BTKeyboardWrapper BTKeyboard;
 extern BTMouseWrapper BTMouse;
 
-// Bluetooth link/interface readiness
+extern uint8_t bluetoothSPPDeviceIndex;
+extern uint8_t bluetoothIAPDeviceIndex;
+extern uint8_t bluetoothHIDDeviceIndex;
+extern uint8_t bluetoothRawHIDDeviceIndex;
+extern uint8_t bluetoothHFPDeviceIndex;
+extern uint8_t bluetoothAVRCPDeviceIndex;
+
+extern bluetooth_mode_t bluetoothMode;
+extern uint32_t bluetoothTock;
+
+extern uint16_t bluetoothPendingConnectionStatus;
+extern uint8_t bluetoothPendingCallPairIndex;
+extern uint8_t bluetoothPendingCallProfile;
+extern uint16_t bluetoothActiveLinkMask;
+
 extern bool interfaceBT2Ready;
 extern bool interfaceBT2SerialReady;
 extern uint8_t interfaceBT2SerialMode;
@@ -141,6 +155,24 @@ extern uint8_t interfaceBT2RawHIDMode;
 extern bool interfaceBT2HIDReady;
 extern bool interfaceBT2HFPReady;
 extern bool interfaceBT2AVRCPReady;
+
+extern iwrap_pairing_t *iwrap_connection_map[IWRAP_MAX_PAIRINGS];
+
+extern uint8_t iwrap_mode;
+extern uint8_t iwrap_state;
+extern uint8_t iwrap_initialized;
+//extern uint32_t iwrap_time_ref;
+extern uint8_t iwrap_page_mode;
+extern uint8_t iwrap_pairings;
+extern uint8_t iwrap_pending_calls;
+extern uint8_t iwrap_pending_call_link_id;
+extern uint8_t iwrap_connected_devices;
+extern uint8_t iwrap_active_connections;
+extern uint8_t iwrap_autocall_target;
+//extern uint16_t iwrap_autocall_delay_ms;
+//extern uint32_t iwrap_autocall_last_time;
+extern uint8_t iwrap_autocall_index;
+extern iwrap_address_t iwrap_module_mac;
 
 // iWRAP callbacks necessary for application
 void my_iwrap_callback_txcommand(uint16_t length, const uint8_t *data);

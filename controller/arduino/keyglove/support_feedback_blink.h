@@ -1,9 +1,9 @@
 // Keyglove controller source code - Feedback declarations for single LED
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_feedback_blink.h
  * @brief Feedback declarations for single LED
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  */
 
 #ifndef _SUPPORT_FEEDBACK_BLINK_H_
@@ -54,13 +54,12 @@ typedef enum {
     KG_BLINK_MODE_MAX
 } feedback_blink_mode_t;
 
+extern feedback_blink_mode_t feedbackBlinkMode;
+
 void feedback_set_blink_logic(uint8_t logic);
 void feedback_set_blink_mode(feedback_blink_mode_t mode);
 
 void setup_feedback_blink();
 void update_feedback_blink();
-
-uint16_t kg_cmd_feedback_get_blink_mode(uint8_t *mode);
-uint16_t kg_cmd_feedback_set_blink_mode(uint8_t mode);
 
 #endif // _SUPPORT_FEEDBACK_BLINK_H_

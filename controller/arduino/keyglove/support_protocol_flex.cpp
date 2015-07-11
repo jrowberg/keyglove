@@ -1,10 +1,10 @@
 // Keyglove controller source code - KGAPI "flex" protocol command parser implementation
-// 2014-12-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /*
 ================================================================================
 Keyglove source code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ THE SOFTWARE.
  * @file support_protocol_flex.cpp
  * @brief KGAPI "flex" protocol command parser implementation
  * @author Jeff Rowberg
- * @date 2014-12-07
+ * @date 2015-07-03
  *
  * This file implements subsystem-specific command processing functions for the
  * "flex" part of the KGAPI protocol.
@@ -41,7 +41,7 @@ THE SOFTWARE.
 
 #include "keyglove.h"
 #include "support_protocol.h"
-//#include "support_protocol_flex.h"
+#include "support_protocol_flex.h"
 
 /**
  * @brief Command processing routine for "flex" packet class
@@ -60,4 +60,10 @@ uint8_t process_protocol_command_flex(uint8_t *rxPacket) {
     return protocol_error;
 }
 
+/* ============================= */
+/* KGAPI COMMAND IMPLEMENTATIONS */
+/* ============================= */
 
+/* ==================== */
+/* KGAPI EVENT POINTERS */
+/* ==================== */

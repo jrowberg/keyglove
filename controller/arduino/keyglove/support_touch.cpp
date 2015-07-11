@@ -1,9 +1,9 @@
 // Keyglove controller source code - General touch support implementations
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_touch.cpp
  * @brief General touch support implementations
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * This file provides the structural framework for touch implementations in the
  * overall Keyglove architecture.
@@ -185,28 +185,4 @@ void touch_toggle_mode(uint8_t mode) {
         // not enabled, so turn it on
         touch_push_mode(mode);
     }
-}
-
-/* ============================= */
-/* KGAPI COMMAND IMPLEMENTATIONS */
-/* ============================= */
-
-/**
- * @brief Get the current touch mode
- * @param[out] mode Current touch mode setting
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_touch_get_mode(uint8_t *mode) {
-    *mode = touchMode;
-    return 0; // success
-}
-
-/**
- * @brief Set a new touch mode
- * @param[in] mode New touch mode to set
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_touch_set_mode(uint8_t mode) {
-    touch_set_mode(mode);
-    return 0; // success
 }

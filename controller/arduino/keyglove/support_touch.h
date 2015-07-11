@@ -1,9 +1,9 @@
 // Keyglove controller source code - General touch support declarations
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,11 +29,13 @@ THE SOFTWARE.
  * @file support_touch.h
  * @brief General touch support declarations
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  */
 
 #ifndef _SUPPORT_TOUCH_H_
 #define _SUPPORT_TOUCH_H_
+
+#include "support_board.h"
 
 void touch_set_mode(uint8_t mode);
 

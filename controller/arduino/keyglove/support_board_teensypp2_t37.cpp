@@ -1,9 +1,9 @@
 // Keyglove controller source code - Host MCU implementations specific to Teensy++ v2.0 / Touch:37
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_board_teensypp2_t37.cpp
  * @brief Host MCU implementations specific to Teensy++ v2.0 / Touch:37
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * This file defines all of the hardware-specific parts of the firmware that are
  * unique to the Teensy++ v2.0 platform. Any other hardware-specific code should
@@ -140,11 +140,11 @@ void setup_board() {
     //    http://www.atmel.com/Images/doc7593.pdf
 
     // set up Timer1
-    //   WGM13 = 0  \
+    //   WGM13 = 0  \_
     //   WGM12 = 1   | --> CTC mode, TOP=OCR1A
     //   WGM11 = 0   |
     //   WGM10 = 0  /
-    //   CS12 = 1   \
+    //   CS12 = 1   \_
     //   CS11 = 0    | --> clk/256 prescaler
     //   CS10 = 0   /
 

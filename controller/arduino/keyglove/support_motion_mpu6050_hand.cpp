@@ -1,9 +1,9 @@
 // Keyglove controller source code - Motion support implementations for hand-mounted MPU-6050 sensor
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_motion_mpu6050_hand.cpp
  * @brief Motion support implementations for hand-mounted MPU-6050 sensor
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * This file provides a communications layer and capture interface for using the
  * InvenSense MPU-6050 motions sensor, mounted on the back of the hand. Only the
@@ -43,7 +43,7 @@ THE SOFTWARE.
 #include "support_board.h"
 #include "support_protocol.h"
 #include "support_motion.h"
-//#include "support_motion_mpu6050_hand.h"    // <-- included by "support_motion.h"
+#include "support_motion_mpu6050_hand.h"
 
 MPU6050 mpuHand = MPU6050(0x68);        ///< MPU-6050 motion sensor I2Cdevlib object
 bool mpuHandInterrupt;                  ///< Interrupt flag for motion data availability

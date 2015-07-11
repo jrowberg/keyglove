@@ -1,9 +1,9 @@
 // Keyglove controller source code - KGAPI protocol core implementations
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_protocol.cpp
  * @brief KGAPI protocol core implementations
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * This file implements the structure behind the Keyglove binary API protocol.
  * The incoming data stream parsing routines, error detection, timeout handling,
@@ -262,7 +262,7 @@ uint8_t check_incoming_protocol_data() {
  * @return Result, zero for success or non-zero for error
  */
 uint8_t send_keyglove_log(uint8_t level, uint8_t length, const char *message) {
-    uint8_t beginning[] = { 0x80, length + 1, 0xFF, 0xFF, level };
+    uint8_t beginning[] = { 0x80, (uint8_t)(length + 1), 0xFF, 0xFF, level };
     Serial.write(beginning, 5);
     Serial.println((const char *)message);
     return 0;
@@ -276,7 +276,7 @@ uint8_t send_keyglove_log(uint8_t level, uint8_t length, const char *message) {
  * @return Result, zero for success or non-zero for error
  */
 uint8_t send_keyglove_log(uint8_t level, uint8_t length, const __FlashStringHelper *message) {
-    uint8_t beginning[] = { 0x80, length + 1, 0xFF, 0xFF, level };
+    uint8_t beginning[] = { 0x80, (uint8_t)(length + 1), 0xFF, 0xFF, level };
     Serial.write(beginning, 5);
     Serial.println((const __FlashStringHelper *)message);
     return 0;
@@ -365,7 +365,7 @@ uint8_t send_keyglove_packet(uint8_t packetType, uint8_t payloadLength, uint8_t 
             // send packet out over wired custom HID interface (USB raw HID)
             // 64-byte packets, formatted where byte 0 is [0-64] and bytes 1-63 are data
             if (interfaceUSBRawHIDReady && (interfaceUSBRawHIDMode & KG_INTERFACE_MODE_OUTGOING_API) != 0) {
-                int8_t bytes;
+                //int8_t bytes;
                 for (uint8_t i = 0; i < length; i += (USB_RAWHID_TX_SIZE - 1)) {
                     memset(txRawHIDPacket, 0, USB_RAWHID_TX_SIZE);
                     txRawHIDPacket[0] = min(USB_RAWHID_TX_SIZE - 1, length - i);
@@ -373,7 +373,7 @@ uint8_t send_keyglove_packet(uint8_t packetType, uint8_t payloadLength, uint8_t 
                         if (i + j >= length) break;
                         txRawHIDPacket[j + 1] = buffer[i + j];
                     }
-                    bytes = RawHID.send(txRawHIDPacket, 2);
+                    /*bytes = */ RawHID.send(txRawHIDPacket, 2);
                 }
             }
         }
@@ -401,7 +401,7 @@ uint16_t send_keyglove_queue() {
     // check for queued packets
     if (txQueueLength) {
         send_keyglove_packet(txQueue[0], txQueue[1], txQueue[2], txQueue[3], txQueue + 4);
-        if (txQueueLength > txQueue[1] + 4) {
+        if (txQueueLength > (uint16_t)(txQueue[1] + 4)) {
             // queue has more left, so move it into position
             txQueueLength -= (txQueue[1] + 4);
             memmove(txQueue, txQueue + (txQueue[1] + 4), txQueueLength);

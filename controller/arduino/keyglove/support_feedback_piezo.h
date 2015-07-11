@@ -1,9 +1,9 @@
 // Keyglove controller source code - Feedback declarations for piezo buzzer
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_feedback_piezo.h
  * @brief Feedback declarations for piezo buzzer
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  */
 
 #ifndef _SUPPORT_FEEDBACK_PIEZO_H_
@@ -51,6 +51,10 @@ typedef enum {
     KG_PIEZO_MODE_TINYPULSE,    ///< (7) Buzzer alternating at 100ms period, 20ms pulse
     KG_PIEZO_MODE_MAX
 } feedback_piezo_mode_t;
+
+extern feedback_piezo_mode_t feedbackPiezoMode;
+extern uint16_t feedbackPiezoDuration;
+extern uint16_t feedbackPiezoFrequency;
 
 void feedback_set_piezo_tone(uint16_t frequency);
 void feedback_set_piezo_mode(feedback_piezo_mode_t mode, uint8_t duration, uint16_t frequency);

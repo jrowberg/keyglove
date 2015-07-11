@@ -1,10 +1,10 @@
 // Keyglove controller source code - KGAPI "touch" protocol command parser implementation
-// 2014-12-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /*
 ================================================================================
 Keyglove source code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ THE SOFTWARE.
  * @file support_protocol_touch.cpp
  * @brief KGAPI "touch" protocol command parser implementation
  * @author Jeff Rowberg
- * @date 2014-12-07
+ * @date 2015-07-03
  *
  * This file implements subsystem-specific command processing functions for the
  * "touch" part of the KGAPI protocol.
@@ -40,8 +40,9 @@ THE SOFTWARE.
  */
 
 #include "keyglove.h"
+#include "support_touch.h"
 #include "support_protocol.h"
-//#include "support_protocol_touch.h"
+#include "support_protocol_touch.h"
 
 /**
  * @brief Command processing routine for "touch" packet class
@@ -64,7 +65,7 @@ uint8_t process_protocol_command_touch(uint8_t *rxPacket) {
             } else {
                 // run command
                 uint8_t mode;
-                uint16_t result = kg_cmd_touch_get_mode(&mode);
+                /*uint16_t result =*/ kg_cmd_touch_get_mode(&mode);
         
                 // build response
                 uint8_t payload[1] = { mode };
@@ -85,7 +86,7 @@ uint8_t process_protocol_command_touch(uint8_t *rxPacket) {
                 uint16_t result = kg_cmd_touch_set_mode(rxPacket[4]);
         
                 // build response
-                uint8_t payload[2] = { result & 0xFF, (result >> 8) & 0xFF };
+                uint8_t payload[2] = { (uint8_t)(result & 0xFF), (uint8_t)((result >> 8) & 0xFF) };
         
                 // send response
                 send_keyglove_packet(KG_PACKET_TYPE_COMMAND, 2, rxPacket[2], rxPacket[3], payload);
@@ -97,6 +98,34 @@ uint8_t process_protocol_command_touch(uint8_t *rxPacket) {
     }
     return protocol_error;
 }
+
+/* ============================= */
+/* KGAPI COMMAND IMPLEMENTATIONS */
+/* ============================= */
+
+/**
+ * @brief Get the current touch mode
+ * @param[out] mode Current touch mode setting
+ * @return Result code (0=success)
+ */
+uint16_t kg_cmd_touch_get_mode(uint8_t *mode) {
+    *mode = touchMode;
+    return 0; // success
+}
+
+/**
+ * @brief Set a new touch mode
+ * @param[in] mode New touch mode to set
+ * @return Result code (0=success)
+ */
+uint16_t kg_cmd_touch_set_mode(uint8_t mode) {
+    touch_set_mode(mode);
+    return 0; // success
+}
+
+/* ==================== */
+/* KGAPI EVENT POINTERS */
+/* ==================== */
 
 /* 0x01 */ uint8_t (*kg_evt_touch_mode)(uint8_t mode);
 /* 0x02 */ uint8_t (*kg_evt_touch_status)(uint8_t status_len, uint8_t *status_data);

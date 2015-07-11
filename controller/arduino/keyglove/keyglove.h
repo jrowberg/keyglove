@@ -1,9 +1,9 @@
 // Keyglove Controller source code - Main setup/loop controller declarations
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ THE SOFTWARE.
  * @file keyglove.h
  * @brief Main setup/loop controller declarations
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * Essentially every .cpp (implementation) file in the Keyglove project should
  * include this header file.
@@ -51,7 +51,6 @@ THE SOFTWARE.
 #define _KEYGLOVE_H_
 
 // UNIVERSAL INCLUDES
-#include <Arduino.h>
 #include <I2Cdev.h>
 #include "version.h"
 #include "hardware.h"

@@ -1,9 +1,9 @@
 // Keyglove controller source code - Feedback declarations for RGB LED
-// 8/9/2014 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_feedback_rgb.h
  * @brief Feedback declarations for RGB LED
  * @author Jeff Rowberg
- * @date 2014-08-09
+ * @date 2015-07-03
  *
  * This file defines the feeback functionality for the RGB LED that may be
  * included as an optional module in a Keyglove modular hardware design. This
@@ -73,6 +73,8 @@ typedef enum {
     KG_RGB_MODE_F3000_100_3X, ///< (23) LED fading with 3sec period, 100ms pulse 3x
     KG_RGB_MODE_MAX
 } feedback_rgb_mode_t;
+
+extern feedback_rgb_mode_t feedbackRGBMode[3];
 
 void feedback_set_rgb_digital(uint8_t r, uint8_t g, uint8_t b);
 void feedback_set_rgb_digital_channel(uint8_t channel, uint8_t value);

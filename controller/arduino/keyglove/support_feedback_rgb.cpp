@@ -1,9 +1,9 @@
 // Keyglove controller source code - Feedback implementations for RGB LED
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_feedback_rgb.cpp
  * @brief Feedback implementations for RGB LED
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * This file defines the feeback functionality for the RGB LED that may be
  * included as an optional module in a Keyglove modular hardware design. This
@@ -157,7 +157,7 @@ void setup_feedback_rgb() {
  */
 void update_feedback_rgb() {
     // each "keygloveTick" is 10ms, loops at 100 (1 second)
-    // each "RGBTick" is also 10ms, loops at cycle period (can be greater than 1 second, actually 6553 seconds)
+    // each "RGBTick" is also 10ms, loops at cycle period (can be greater than 1 second, actually 327.67 seconds)
     for (uint8_t i = 0; i < 3; i++) {
         if (feedbackRGBMode[i] == KG_RGB_MODE_B200_100) {
             feedback_set_rgb_digital_channel(i, square_wave(feedbackRGBTick[i], 20, 50));
@@ -193,52 +193,6 @@ void update_feedback_rgb() {
         }
 
         feedbackRGBTick[i]++;
-        if (feedbackRGBTick[i] == feedbackRGBLoop[i]) feedbackRGBTick[i] = 0;
+        if (feedbackRGBTick[i] == (int16_t)feedbackRGBLoop[i]) feedbackRGBTick[i] = 0;
     }
-}
-
-/* ============================= */
-/* KGAPI COMMAND IMPLEMENTATIONS */
-/* ============================= */
-
-/**
- * @brief Get current feedback mode for an RGB LED
- * @param[in] index Index of RGB device for which to get the current mode
- * @param[out] mode_red Current feedback mode for specified RGB device red LED
- * @param[out] mode_green Current feedback mode for specified RGB device green LED
- * @param[out] mode_blue Current feedback mode for specified RGB device blue LED
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_feedback_get_rgb_mode(uint8_t index, uint8_t *mode_red, uint8_t *mode_green, uint8_t *mode_blue) {
-    // "index" is currently ignored, as there is only one RGB device in the design
-    *mode_red = feedbackRGBMode[0];
-    *mode_green = feedbackRGBMode[1];
-    *mode_blue = feedbackRGBMode[2];
-    return 0; // success
-}
-
-/**
- * @brief Set a new RGB LED feedback mode
- * @param[in] index Index of RGB device for which to set a new mode
- * @param[in] mode_red New feedback mode to set for specified RGB device red LED
- * @param[in] mode_green New feedback mode to set for specified RGB device green LED
- * @param[in] mode_blue New feedback mode to set for specified RGB device blue LED
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_feedback_set_rgb_mode(uint8_t index, uint8_t mode_red, uint8_t mode_green, uint8_t mode_blue) {
-    if (mode_red >= KG_RGB_MODE_MAX || mode_green >= KG_RGB_MODE_MAX || mode_blue >= KG_RGB_MODE_MAX) {
-        return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
-    } else {
-        // "index" is currently ignored, as there is only one RGB device in the design
-        feedback_set_rgb_mode((feedback_rgb_mode_t)mode_red, (feedback_rgb_mode_t)mode_green, (feedback_rgb_mode_t)mode_blue);
-
-        // send kg_evt_feedback_rgb_mode packet (if we aren't setting it from an API command)
-        if (!inBinPacket) {
-            uint8_t payload[4] = { index, mode_red, mode_green, mode_blue };
-            skipPacket = 0;
-            if (kg_evt_feedback_rgb_mode) skipPacket = kg_evt_feedback_rgb_mode(index, mode_red, mode_green, mode_blue);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 4, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_RGB_MODE, payload);
-        }
-    }
-    return 0; // success
 }

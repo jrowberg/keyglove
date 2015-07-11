@@ -80,6 +80,10 @@ void setup_hid_mouse() {
 void update_hid_mouse() {
     #if KG_MOTION > 0
         switch (opt_hid_mouse_mode) {
+            case MOUSE_MODE_OFF:
+            case MOUSE_MODE_MAX:
+                // do nothing for these values (explicit case avoids compiler warning)
+                break;
             case MOUSE_MODE_TILT_VELOCITY:
                 hidMouseDX += ((gv.y < 0) ? -pow(-(float)gv.y/30, 1.3)*3 : pow((float)gv.y/30, 1.3)*3) - ((gv.z < 0) ? -pow(-(float)gv.z/30, 1.3)*3 : pow((float)gv.z/30, 1.3)*3);
                 hidMouseDY += (gv.x < 0) ? -pow(-(float)gv.x/30, 1.3)*3 : pow((float)gv.x/30, 1.3)*3;
@@ -110,6 +114,10 @@ void update_hid_mouse() {
                 break;
         }
         switch (opt_hid_scroll_mode) {
+            case SCROLL_MODE_OFF:
+            case SCROLL_MODE_MAX:
+                // do nothing for these values (explicit case avoids compiler warning)
+                break;
             case SCROLL_MODE_TILT_VELOCITY: // gyro
                 break;
             case SCROLL_MODE_TILT_POSITION: // gyro

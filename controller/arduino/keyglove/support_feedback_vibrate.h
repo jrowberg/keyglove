@@ -1,9 +1,9 @@
 // Keyglove controller source code - Feedback declarations for vibration motor
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_feedback_vibrate.h
  * @brief Feedback declarations for vibration motor
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * This file defines the feeback functionality for the vibration motor that may
  * be included as an optional module in a Keyglove modular hardware design. This
@@ -56,6 +56,9 @@ typedef enum {
     KG_VIBRATE_MODE_TINYBUZZ,   ///< (6) Vibration alternating at 100ms period, 50ms pulse
     KG_VIBRATE_MODE_MAX
 } feedback_vibrate_mode_t;
+
+extern feedback_vibrate_mode_t feedbackVibrateMode;
+extern uint16_t feedbackVibrateDuration;
 
 void feedback_set_vibrate_logic(uint8_t logic);
 void feedback_set_vibrate_mode(feedback_vibrate_mode_t mode, uint8_t duration);

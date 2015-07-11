@@ -1,9 +1,9 @@
 // Keyglove controller source code - Feedback implementations for vibration motor
-// 2014-11-07 by Jeff Rowberg <jeff@rowberg.net>
+// 2015-07-03 by Jeff Rowberg <jeff@rowberg.net>
 
 /* ============================================
 Controller code is placed under the MIT license
-Copyright (c) 2014 Jeff Rowberg
+Copyright (c) 2015 Jeff Rowberg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ THE SOFTWARE.
  * @file support_feedback_vibrate.cpp
  * @brief Feedback implementations for vibration motor
  * @author Jeff Rowberg
- * @date 2014-11-07
+ * @date 2015-07-03
  *
  * This file defines the feeback functionality for the vibration motor that may
  * be included as an optional module in a Keyglove modular hardware design. This
@@ -95,47 +95,4 @@ void update_feedback_vibrate() {
          else if (feedbackVibrateMode == KG_VIBRATE_MODE_TINYBUZZ   && feedbackVibrateTick %  5 == 0) feedback_set_vibrate_logic(feedbackVibrateTick %  10 >=  5 ? 0 : 1);
          if (++feedbackVibrateTick >= feedbackVibrateDuration && feedbackVibrateDuration > 0) feedback_set_vibrate_mode(KG_VIBRATE_MODE_OFF, 0);
      }
-}
-
-/* ============================= */
-/* KGAPI COMMAND IMPLEMENTATIONS */
-/* ============================= */
-
-/**
- * @brief Get current feedback mode for a vibration motor
- * @param[in] index Index of vibration device for which to get the current mode
- * @param[out] mode Current feedback mode for specified vibration device
- * @param[out] duration Duration to maintain vibration
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_feedback_get_vibrate_mode(uint8_t index, uint8_t *mode, uint8_t *duration) {
-    // "index" is currently ignored, as there is only one vibration device in the design
-    *mode = feedbackVibrateMode;
-    *duration = feedbackVibrateDuration;
-    return 0; // success
-}
-
-/**
- * @brief Set a new vibration motor feedback mode
- * @param[in] index Index of vibration device for which to set a new mode
- * @param[in] mode New feedback mode to set for specified vibration device
- * @param[in] duration Duration to maintain vibration
- * @return Result code (0=success)
- */
-uint16_t kg_cmd_feedback_set_vibrate_mode(uint8_t index, uint8_t mode, uint8_t duration) {
-    if (mode >= KG_VIBRATE_MODE_MAX) {
-        return KG_PROTOCOL_ERROR_PARAMETER_RANGE;
-    } else {
-        // "index" is currently ignored, as there is only one vibration device in the design
-        feedback_set_vibrate_mode((feedback_vibrate_mode_t)mode, duration);
-
-        // send kg_evt_feedback_vibrate_mode packet (if we aren't setting it from an API command)
-        if (!inBinPacket) {
-            uint8_t payload[3] = { index, mode, duration };
-            skipPacket = 0;
-            if (kg_evt_feedback_vibrate_mode) skipPacket = kg_evt_feedback_vibrate_mode(index, mode, duration);
-            if (!skipPacket) send_keyglove_packet(KG_PACKET_TYPE_EVENT, 3, KG_PACKET_CLASS_FEEDBACK, KG_PACKET_ID_EVT_FEEDBACK_PIEZO_MODE, payload);
-        }
-    }
-    return 0; // success
 }
